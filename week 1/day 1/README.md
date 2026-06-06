@@ -5,8 +5,12 @@
 
 ## Установка
 
+Создайте виртуальное окружение и установите зависимости:
+
 ```bash
-pip install openai
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
 ```
 
 ## Настройка
@@ -20,6 +24,7 @@ export DEEPSEEK_API_KEY="ваш_ключ"
 ## Запуск
 
 ```bash
+source venv/bin/activate
 python deepseek_chat.py
 ```
 

@@ -4,6 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>LLM Agent</title>
+  <!-- Markdown renderer -->
+  <script src="https://cdn.jsdelivr.net/npm/marked@12/marked.min.js"></script>
+  <!-- Syntax highlighting -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11/styles/github-dark.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11/lib/core.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11/lib/languages/python.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11/lib/languages/javascript.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11/lib/languages/bash.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11/lib/languages/sql.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -71,10 +80,75 @@
       border-radius: 12px;
       line-height: 1.6;
       max-width: 90%;
-      white-space: pre-wrap;
       word-break: break-word;
       font-size: .95rem;
     }
+
+    /* ---------- Markdown styles inside agent bubbles ---------- */
+    .bubble.agent .md p        { margin: .4rem 0; }
+    .bubble.agent .md p:first-child { margin-top: 0; }
+    .bubble.agent .md p:last-child  { margin-bottom: 0; }
+    .bubble.agent .md h1,
+    .bubble.agent .md h2,
+    .bubble.agent .md h3       { margin: .8rem 0 .3rem; font-weight: 700; color: #c4c9ff; }
+    .bubble.agent .md ul,
+    .bubble.agent .md ol       { padding-left: 1.4rem; margin: .4rem 0; }
+    .bubble.agent .md li       { margin: .2rem 0; }
+    .bubble.agent .md strong   { color: #d4d8ff; font-weight: 700; }
+    .bubble.agent .md em       { color: #b0b8e0; }
+    .bubble.agent .md a        { color: #a78bfa; }
+    .bubble.agent .md blockquote {
+      border-left: 3px solid #3b4060;
+      margin: .5rem 0;
+      padding: .3rem .8rem;
+      color: #8890b0;
+    }
+    .bubble.agent .md code {   /* inline code */
+      background: #1e2235;
+      border: 1px solid #2e3454;
+      border-radius: 4px;
+      padding: .1em .4em;
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+      font-size: .88em;
+      color: #c4c9ff;
+    }
+    .bubble.agent .md pre {    /* code block */
+      background: #111520 !important;
+      border: 1px solid #222840;
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      overflow-x: auto;
+      margin: .6rem 0;
+      position: relative;
+    }
+    .bubble.agent .md pre code { /* reset inline style inside block */
+      background: transparent;
+      border: none;
+      padding: 0;
+      font-size: .87em;
+      line-height: 1.6;
+    }
+    .bubble.agent .md hr {
+      border: none;
+      border-top: 1px solid #2e3050;
+      margin: .8rem 0;
+    }
+    .bubble.agent .md table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: .6rem 0;
+      font-size: .9em;
+    }
+    .bubble.agent .md th,
+    .bubble.agent .md td {
+      border: 1px solid #2e3050;
+      padding: .4rem .7rem;
+      text-align: left;
+    }
+    .bubble.agent .md th { background: #1a1d2e; color: #a78bfa; }
+
+    /* user bubble stays plain text */
+    .bubble.user { white-space: pre-wrap; }
 
     .bubble.user {
       background: #1e1f2e;
@@ -177,6 +251,16 @@
   </div>
 
   <script>
+    // Configure marked: use highlight.js for code blocks
+    marked.use({
+      gfm: true,
+      breaks: true,
+      highlight(code, lang) {
+        const language = hljs.getLanguage(lang) ? lang : "plaintext";
+        return hljs.highlight(code, { language }).value;
+      },
+    });
+
     const messagesEl = document.getElementById("messages");
     const inputEl    = document.getElementById("input");
     const sendBtn    = document.getElementById("send-btn");
@@ -191,16 +275,27 @@
       sendBtn.disabled = on;
     }
 
-    function addBubble(text, cls, meta) {
+    function addBubble(text, cls, meta, renderMarkdown = false) {
       const div = document.createElement("div");
       div.className = `bubble ${cls}`;
-      div.textContent = text;
+
+      if (renderMarkdown) {
+        // Render markdown into a wrapper so CSS selectors stay scoped
+        const md = document.createElement("div");
+        md.className = "md";
+        md.innerHTML = marked.parse(text);
+        div.appendChild(md);
+      } else {
+        div.textContent = text;
+      }
+
       if (meta) {
         const m = document.createElement("div");
         m.className = "meta";
         m.textContent = meta;
         div.appendChild(m);
       }
+
       messagesEl.appendChild(div);
       div.scrollIntoView({ behavior: "smooth", block: "end" });
       return div;
@@ -238,7 +333,7 @@
           const meta = `Ход ${data.turn} · Модель: ${data.model} · `
                      + `Токены: ${data.prompt_tokens} → ${data.completion_tokens} · `
                      + `Время: ${data.elapsed_sec} с`;
-          addBubble(data.answer, "agent", meta);
+          addBubble(data.answer, "agent", meta, true);
           turnBadge.textContent = `Ход ${data.turn}`;
         }
       } catch (err) {

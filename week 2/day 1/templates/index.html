@@ -18,13 +18,37 @@
       padding: 2rem 1rem;
     }
 
-    h1 {
-      font-size: 1.6rem;
-      font-weight: 700;
-      margin-bottom: 2rem;
-      color: #a78bfa;
-      letter-spacing: .02em;
+    header {
+      width: 100%;
+      max-width: 720px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
     }
+
+    h1 { font-size: 1.6rem; font-weight: 700; color: #a78bfa; letter-spacing: .02em; }
+
+    #turn-badge {
+      font-size: .8rem;
+      color: #555f80;
+      background: #1a1d2e;
+      border: 1px solid #2e3050;
+      border-radius: 20px;
+      padding: .25rem .75rem;
+    }
+
+    #clear-btn {
+      background: transparent;
+      border: 1px solid #3b2f6e;
+      color: #a78bfa;
+      border-radius: 8px;
+      padding: .35rem .9rem;
+      font-size: .85rem;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    #clear-btn:hover { background: #1e1535; }
 
     #chat {
       width: 100%;
@@ -86,6 +110,13 @@
       font-style: italic;
     }
 
+    .divider {
+      text-align: center;
+      font-size: .75rem;
+      color: #3b4060;
+      margin: .25rem 0;
+    }
+
     .input-row {
       display: flex;
       gap: .5rem;
@@ -104,12 +135,10 @@
       font-family: inherit;
       outline: none;
       transition: border-color .2s;
-      rows: 3;
     }
-
     textarea:focus { border-color: #7c5cfa; }
 
-    button {
+    button#send-btn {
       background: #7c5cfa;
       color: #fff;
       border: none;
@@ -121,13 +150,18 @@
       transition: background .2s;
       white-space: nowrap;
     }
-
-    button:hover:not(:disabled) { background: #6246ea; }
-    button:disabled { opacity: .45; cursor: not-allowed; }
+    button#send-btn:hover:not(:disabled) { background: #6246ea; }
+    button#send-btn:disabled { opacity: .45; cursor: not-allowed; }
   </style>
 </head>
 <body>
-  <h1>🤖 LLM Agent</h1>
+  <header>
+    <h1>🤖 LLM Agent</h1>
+    <div style="display:flex;gap:.75rem;align-items:center">
+      <span id="turn-badge">Ход 0</span>
+      <button id="clear-btn" onclick="clearHistory()">🗑 Очистить</button>
+    </div>
+  </header>
 
   <div id="chat">
     <div class="messages" id="messages"></div>
@@ -136,7 +170,7 @@
       <textarea
         id="input"
         rows="3"
-        placeholder="Введите запрос и нажмите Enter или кнопку…"
+        placeholder="Введите запрос… Enter — отправить, Shift+Enter — перенос строки"
       ></textarea>
       <button id="send-btn" onclick="sendMessage()">Отправить</button>
     </div>
@@ -146,14 +180,16 @@
     const messagesEl = document.getElementById("messages");
     const inputEl    = document.getElementById("input");
     const sendBtn    = document.getElementById("send-btn");
+    const turnBadge  = document.getElementById("turn-badge");
 
-    // Enter = отправить, Shift+Enter = перенос строки
     inputEl.addEventListener("keydown", e => {
-      if (e.key === "Enter" && !e.shiftKey) {
-        e.preventDefault();
-        sendMessage();
-      }
+      if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); }
     });
+
+    function setLoading(on) {
+      inputEl.disabled = on;
+      sendBtn.disabled = on;
+    }
 
     function addBubble(text, cls, meta) {
       const div = document.createElement("div");
@@ -170,43 +206,56 @@
       return div;
     }
 
+    function addDivider(text) {
+      const d = document.createElement("div");
+      d.className = "divider";
+      d.textContent = `— ${text} —`;
+      messagesEl.appendChild(d);
+    }
+
     async function sendMessage() {
       const text = inputEl.value.trim();
       if (!text) return;
 
       inputEl.value = "";
-      inputEl.disabled = true;
-      sendBtn.disabled = true;
+      setLoading(true);
 
       addBubble(text, "user");
       const thinking = addBubble("Агент думает…", "thinking");
 
       try {
-        const res = await fetch("/ask", {
+        const res  = await fetch("/ask", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ message: text }),
         });
-
         const data = await res.json();
         thinking.remove();
 
         if (!res.ok) {
           addBubble(data.error || "Неизвестная ошибка", "error");
         } else {
-          const meta = `Модель: ${data.model} · `
+          const meta = `Ход ${data.turn} · Модель: ${data.model} · `
                      + `Токены: ${data.prompt_tokens} → ${data.completion_tokens} · `
                      + `Время: ${data.elapsed_sec} с`;
           addBubble(data.answer, "agent", meta);
+          turnBadge.textContent = `Ход ${data.turn}`;
         }
       } catch (err) {
         thinking.remove();
         addBubble("Сетевая ошибка: " + err.message, "error");
       } finally {
-        inputEl.disabled = false;
-        sendBtn.disabled = false;
+        setLoading(false);
         inputEl.focus();
       }
+    }
+
+    async function clearHistory() {
+      await fetch("/clear", { method: "POST" });
+      messagesEl.innerHTML = "";
+      turnBadge.textContent = "Ход 0";
+      addDivider("история очищена");
+      inputEl.focus();
     }
   </script>
 </body>

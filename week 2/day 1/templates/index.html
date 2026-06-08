@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LLM Agent</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #0f1117;
+      color: #e8eaf0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem;
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 2rem;
+      color: #a78bfa;
+      letter-spacing: .02em;
+    }
+
+    #chat {
+      width: 100%;
+      max-width: 720px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .messages {
+      display: flex;
+      flex-direction: column;
+      gap: .75rem;
+      min-height: 200px;
+    }
+
+    .bubble {
+      padding: .75rem 1rem;
+      border-radius: 12px;
+      line-height: 1.6;
+      max-width: 90%;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-size: .95rem;
+    }
+
+    .bubble.user {
+      background: #1e1f2e;
+      border: 1px solid #2e3050;
+      align-self: flex-end;
+      color: #c4c9ff;
+    }
+
+    .bubble.agent {
+      background: #161b27;
+      border: 1px solid #283048;
+      align-self: flex-start;
+    }
+
+    .bubble.agent .meta {
+      margin-top: .5rem;
+      font-size: .75rem;
+      color: #555f80;
+    }
+
+    .bubble.error {
+      background: #2a1010;
+      border: 1px solid #5a2020;
+      color: #ff7070;
+      align-self: flex-start;
+    }
+
+    .bubble.thinking {
+      background: #161b27;
+      border: 1px solid #283048;
+      align-self: flex-start;
+      color: #555f80;
+      font-style: italic;
+    }
+
+    .input-row {
+      display: flex;
+      gap: .5rem;
+      margin-top: .5rem;
+    }
+
+    textarea {
+      flex: 1;
+      resize: none;
+      background: #1a1d2e;
+      border: 1px solid #2e3050;
+      border-radius: 10px;
+      color: #e8eaf0;
+      padding: .7rem 1rem;
+      font-size: .95rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color .2s;
+      rows: 3;
+    }
+
+    textarea:focus { border-color: #7c5cfa; }
+
+    button {
+      background: #7c5cfa;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: .7rem 1.4rem;
+      font-size: .95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .2s;
+      white-space: nowrap;
+    }
+
+    button:hover:not(:disabled) { background: #6246ea; }
+    button:disabled { opacity: .45; cursor: not-allowed; }
+  </style>
+</head>
+<body>
+  <h1>🤖 LLM Agent</h1>
+
+  <div id="chat">
+    <div class="messages" id="messages"></div>
+
+    <div class="input-row">
+      <textarea
+        id="input"
+        rows="3"
+        placeholder="Введите запрос и нажмите Enter или кнопку…"
+      ></textarea>
+      <button id="send-btn" onclick="sendMessage()">Отправить</button>
+    </div>
+  </div>
+
+  <script>
+    const messagesEl = document.getElementById("messages");
+    const inputEl    = document.getElementById("input");
+    const sendBtn    = document.getElementById("send-btn");
+
+    // Enter = отправить, Shift+Enter = перенос строки
+    inputEl.addEventListener("keydown", e => {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+
+    function addBubble(text, cls, meta) {
+      const div = document.createElement("div");
+      div.className = `bubble ${cls}`;
+      div.textContent = text;
+      if (meta) {
+        const m = document.createElement("div");
+        m.className = "meta";
+        m.textContent = meta;
+        div.appendChild(m);
+      }
+      messagesEl.appendChild(div);
+      div.scrollIntoView({ behavior: "smooth", block: "end" });
+      return div;
+    }
+
+    async function sendMessage() {
+      const text = inputEl.value.trim();
+      if (!text) return;
+
+      inputEl.value = "";
+      inputEl.disabled = true;
+      sendBtn.disabled = true;
+
+      addBubble(text, "user");
+      const thinking = addBubble("Агент думает…", "thinking");
+
+      try {
+        const res = await fetch("/ask", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: text }),
+        });
+
+        const data = await res.json();
+        thinking.remove();
+
+        if (!res.ok) {
+          addBubble(data.error || "Неизвестная ошибка", "error");
+        } else {
+          const meta = `Модель: ${data.model} · `
+                     + `Токены: ${data.prompt_tokens} → ${data.completion_tokens} · `
+                     + `Время: ${data.elapsed_sec} с`;
+          addBubble(data.answer, "agent", meta);
+        }
+      } catch (err) {
+        thinking.remove();
+        addBubble("Сетевая ошибка: " + err.message, "error");
+      } finally {
+        inputEl.disabled = false;
+        sendBtn.disabled = false;
+        inputEl.focus();
+      }
+    }
+  </script>
+</body>
+</html>

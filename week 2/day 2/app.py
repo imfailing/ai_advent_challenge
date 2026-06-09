@@ -36,10 +36,8 @@ def get_agent() -> LLMAgent:
 
 @app.route("/")
 def index():
-    agent = get_agent()
-    # Передаём историю в шаблон, чтобы восстановить чат на странице
-    history = db.load_history(agent.session_id)
-    return render_template("index.html", history=history, turn=agent.turn_count)
+    get_agent()  # убедиться, что сессия и агент инициализированы
+    return render_template("index.html")
 
 
 @app.route("/ask", methods=["POST"])

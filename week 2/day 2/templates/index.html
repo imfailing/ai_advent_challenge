@@ -78,14 +78,6 @@
     .bubble.error  { background: #2a1010; border: 1px solid #5a2020; color: #ff7070; align-self: flex-start; }
     .bubble.thinking { background: #161b27; border: 1px solid #283048; align-self: flex-start; color: #555f80; font-style: italic; }
 
-    /* restored-from-db indicator */
-    .bubble.restored { opacity: .75; }
-    .bubble.restored::before {
-      content: "💾 ";
-      font-style: normal;
-      font-size: .8em;
-    }
-
     .divider { text-align: center; font-size: .75rem; color: #3b4060; margin: .25rem 0; }
 
     /* Markdown */
@@ -131,34 +123,13 @@
     <h1>🤖 LLM Agent</h1>
     <div class="header-right">
       <span id="db-badge">💾 SQLite</span>
-      <span id="turn-badge">Ход {{ turn }}</span>
+      <span id="turn-badge">Ход 0</span>
       <button id="clear-btn" onclick="clearHistory()">🗑 Очистить</button>
     </div>
   </header>
 
   <div id="chat">
-    <div class="messages" id="messages">
-      {# Восстанавливаем историю из БД при загрузке страницы #}
-      {% if history %}
-        <div class="divider">— история восстановлена из базы данных —</div>
-        {% for msg in history %}
-          {% if msg.role == "user" %}
-            <div class="bubble user restored">{{ msg.content }}</div>
-          {% else %}
-            <div class="bubble agent restored">
-              <div class="md"><!-- will be rendered by JS --></div>
-              <script>
-                (function() {
-                  var el = document.currentScript.previousElementSibling;
-                  el.innerHTML = marked.parse({{ msg.content | tojson }});
-                })();
-              </script>
-            </div>
-          {% endif %}
-        {% endfor %}
-        <div class="divider">— продолжение —</div>
-      {% endif %}
-    </div>
+    <div class="messages" id="messages"></div>
 
     <div class="input-row">
       <textarea id="input" rows="3"
@@ -174,11 +145,6 @@
     const inputEl    = document.getElementById("input");
     const sendBtn    = document.getElementById("send-btn");
     const turnBadge  = document.getElementById("turn-badge");
-
-    // Прокрутить вниз при загрузке (если есть восстановленная история)
-    window.addEventListener("load", () => {
-      messagesEl.lastElementChild?.scrollIntoView({ block: "end" });
-    });
 
     inputEl.addEventListener("keydown", e => {
       if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); }

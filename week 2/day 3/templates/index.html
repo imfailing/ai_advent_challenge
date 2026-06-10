@@ -72,7 +72,7 @@
 
     /* ── Token panel ── */
     #token-panel {
-      width: 220px;
+      width: 230px;
       flex-shrink: 0;
       display: flex;
       flex-direction: column;
@@ -170,6 +170,41 @@
     .bubble.agent .md th,.bubble.agent .md td { border: 1px solid #2e3050; padding: .4rem .7rem; }
     .bubble.agent .md th       { background: #1a1d2e; color: #a78bfa; }
 
+    /* ── File upload card ── */
+    #upload-btn {
+      width: 100%;
+      background: #13161f;
+      border: 1px dashed #2e3454;
+      border-radius: 10px;
+      color: #7080a0;
+      padding: .6rem;
+      font-size: .82rem;
+      cursor: pointer;
+      transition: border-color .2s, color .2s;
+      text-align: center;
+    }
+    #upload-btn:hover { border-color: #7c5cfa; color: #a78bfa; }
+    #file-input { display: none; }
+
+    .file-item {
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+      background: #0f1220;
+      border: 1px solid #1e2235;
+      border-radius: 8px;
+      padding: .4rem .6rem;
+      font-size: .78rem;
+    }
+    .file-item .fname { color: #a0aac0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
+    .file-item .fsize { color: #555f80; flex-shrink: 0; }
+    .file-item .del-btn {
+      background: none; border: none; color: #5a3040;
+      cursor: pointer; font-size: .9rem; flex-shrink: 0; transition: color .15s;
+    }
+    .file-item .del-btn:hover { color: #ff7070; }
+    .upload-error { font-size: .78rem; color: #ff7070; padding: .3rem .1rem; }
+
     .input-row { display: flex; gap: .5rem; }
     textarea {
       flex: 1; resize: none;
@@ -228,6 +263,19 @@
           <span class="leg-in">вход</span>
           <span class="leg-out">выход</span>
         </div>
+      </div>
+
+      <!-- Файлы контекста -->
+      <div class="panel-card">
+        <h3>📎 Файлы контекста</h3>
+        <input type="file" id="file-input" multiple
+               accept=".txt,.md,.py,.js,.ts,.json,.csv,.yaml,.yml,.html,.xml,.sql,.pdf"
+               onchange="uploadFiles(this.files)" />
+        <button id="upload-btn" onclick="document.getElementById('file-input').click()">
+          + Загрузить файл
+        </button>
+        <div id="file-list" style="margin-top:.5rem;display:flex;flex-direction:column;gap:.4rem;"></div>
+        <div id="upload-error" class="upload-error" style="display:none"></div>
       </div>
 
       <!-- Сессия суммарно -->
@@ -312,6 +360,59 @@
 
       turnBadge.textContent = `Ход ${s.turns}`;
     }
+
+    // ── File context ────────────────────────────────────────────────
+    const fileListEl   = document.getElementById("file-list");
+    const uploadErrEl  = document.getElementById("upload-error");
+
+    async function uploadFiles(files) {
+      uploadErrEl.style.display = "none";
+      for (const file of files) {
+        const fd = new FormData();
+        fd.append("file", file);
+        try {
+          const res  = await fetch("/upload", { method: "POST", body: fd });
+          const data = await res.json();
+          if (!res.ok) {
+            uploadErrEl.textContent = data.error;
+            uploadErrEl.style.display = "block";
+          } else {
+            addFileChip(data.id, data.filename, data.size_chars);
+            addDivider(`📎 добавлен файл «${data.filename}»`);
+          }
+        } catch (e) {
+          uploadErrEl.textContent = "Ошибка загрузки: " + e.message;
+          uploadErrEl.style.display = "block";
+        }
+      }
+      document.getElementById("file-input").value = "";
+    }
+
+    function addFileChip(id, filename, sizeChars) {
+      const div = document.createElement("div");
+      div.className = "file-item";
+      div.dataset.fileId = id;
+      const kb = sizeChars > 1000 ? (sizeChars / 1000).toFixed(1) + " k" : sizeChars;
+      div.innerHTML =
+        `<span class="fname" title="${filename}">${filename}</span>` +
+        `<span class="fsize">${kb}ch</span>` +
+        `<button class="del-btn" title="Удалить" onclick="deleteFile(${id}, this)">✕</button>`;
+      fileListEl.appendChild(div);
+    }
+
+    async function deleteFile(id, btn) {
+      const res = await fetch(`/context/${id}`, { method: "DELETE" });
+      if (res.ok) {
+        btn.closest(".file-item").remove();
+        addDivider("файл контекста удалён");
+      }
+    }
+
+    // Загрузить список файлов при старте (если сессия уже имела файлы)
+    fetch("/context").then(r => r.json()).then(files => {
+      files.forEach(f => addFileChip(f.id, f.filename, f.size_chars));
+    });
+    // ────────────────────────────────────────────────────────────────
 
     async function sendMessage() {
       const text = inputEl.value.trim();

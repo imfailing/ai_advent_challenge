@@ -10,6 +10,7 @@ from dataclasses import asdict
 from flask import Flask, jsonify, render_template, request, session
 
 import database as db
+import file_parser
 from agent import LLMAgent
 
 app = Flask(__name__)
@@ -57,6 +58,54 @@ def ask():
 @app.route("/clear", methods=["POST"])
 def clear():
     get_agent().clear_history()
+    return jsonify({"status": "ok"})
+
+
+@app.route("/upload", methods=["POST"])
+def upload():
+    """Загрузить файл контекста и добавить его в сессию агента."""
+    if "file" not in request.files:
+        return jsonify({"error": "Файл не передан"}), 400
+
+    f = request.files["file"]
+    if not f.filename:
+        return jsonify({"error": "Пустое имя файла"}), 400
+
+    try:
+        content = file_parser.extract_text(f.filename, f.read())
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 422
+
+    sid = get_agent().session_id
+    file_id = db.save_context_file(sid, f.filename, content)
+    return jsonify({
+        "id":         file_id,
+        "filename":   f.filename,
+        "size_chars": len(content),
+        "preview":    content[:200].replace("\n", " "),
+    })
+
+
+@app.route("/context", methods=["GET"])
+def list_context():
+    """Список загруженных файлов контекста текущей сессии."""
+    sid = get_agent().session_id
+    files = db.load_context_files(sid)
+    # Не возвращаем полный content в листинге — только метаданные
+    return jsonify([
+        {"id": f["id"], "filename": f["filename"],
+         "size_chars": f["size_chars"], "created_at": f["created_at"]}
+        for f in files
+    ])
+
+
+@app.route("/context/<int:file_id>", methods=["DELETE"])
+def delete_context(file_id: int):
+    """Удалить файл контекста по id."""
+    sid = get_agent().session_id
+    found = db.delete_context_file(file_id, sid)
+    if not found:
+        return jsonify({"error": "Файл не найден"}), 404
     return jsonify({"status": "ok"})
 
 

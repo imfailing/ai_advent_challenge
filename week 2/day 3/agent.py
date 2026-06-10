@@ -77,9 +77,21 @@ class LLMAgent:
         self._history.append({"role": "user", "content": user_message})
         db.save_user_message(self._session_id, user_message)
 
-        # 2. Формируем запрос с полной историей
+        # 2. Формируем запрос: системный промпт + файлы контекста + история
+        context_files = db.load_context_files(self._session_id)
+        extra_context = ""
+        if context_files:
+            blocks = [
+                f"### Файл: {f['filename']}\n\n{f['content']}"
+                for f in context_files
+            ]
+            extra_context = (
+                "\n\nПользователь предоставил следующие файлы в качестве контекста:\n\n"
+                + "\n\n---\n\n".join(blocks)
+            )
+
         messages = [
-            {"role": "system", "content": self._system_prompt},
+            {"role": "system", "content": self._system_prompt + extra_context},
             *self._history,
         ]
 

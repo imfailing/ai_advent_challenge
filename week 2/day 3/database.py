@@ -4,11 +4,11 @@
 Схема:
   sessions(id, created_at, updated_at)
   messages(id, session_id, role, content,
-           prompt_tokens, completion_tokens,  -- заполняются только для role='assistant'
+           prompt_tokens, completion_tokens,
            created_at)
-
-Функции агрегации токенов позволяют считать стоимость как за отдельный
-запрос, так и накопленным итогом по всей истории сессии.
+  context_files(id, session_id, filename, content, size_chars, created_at)
+    -- файлы, загруженные пользователем как внешний контекст;
+    -- их содержимое инжектируется в начало каждого запроса к LLM.
 """
 
 import sqlite3
@@ -45,9 +45,18 @@ def init_db() -> None:
                 session_id        TEXT NOT NULL REFERENCES sessions(id),
                 role              TEXT NOT NULL,
                 content           TEXT NOT NULL,
-                prompt_tokens     INTEGER,       -- входные токены (только для assistant)
-                completion_tokens INTEGER,       -- выходные токены (только для assistant)
+                prompt_tokens     INTEGER,
+                completion_tokens INTEGER,
                 created_at        TEXT NOT NULL
+            );
+
+            CREATE TABLE IF NOT EXISTS context_files (
+                id         INTEGER PRIMARY KEY AUTOINCREMENT,
+                session_id TEXT NOT NULL REFERENCES sessions(id),
+                filename   TEXT NOT NULL,
+                content    TEXT NOT NULL,
+                size_chars INTEGER NOT NULL,
+                created_at TEXT NOT NULL
             );
         """)
 
@@ -172,6 +181,48 @@ def cost_usd(prompt_tokens: int, completion_tokens: int) -> float:
 
 def _cost(prompt_tokens: int, completion_tokens: int) -> float:
     return cost_usd(prompt_tokens, completion_tokens)
+
+
+# ------------------------------------------------------------------
+# Context files
+# ------------------------------------------------------------------
+
+def save_context_file(session_id: str, filename: str, content: str) -> int:
+    """Сохранить файл контекста, вернуть его id."""
+    with _conn() as con:
+        cur = con.execute(
+            "INSERT INTO context_files (session_id, filename, content, size_chars, created_at)"
+            " VALUES (?, ?, ?, ?, ?)",
+            (session_id, filename, content, len(content), _now()),
+        )
+        return cur.lastrowid
+
+
+def load_context_files(session_id: str) -> list[dict]:
+    """Загрузить все файлы контекста сессии."""
+    with _conn() as con:
+        rows = con.execute(
+            "SELECT id, filename, content, size_chars, created_at"
+            " FROM context_files WHERE session_id = ? ORDER BY id",
+            (session_id,),
+        ).fetchall()
+    return [dict(r) for r in rows]
+
+
+def delete_context_file(file_id: int, session_id: str) -> bool:
+    """Удалить файл контекста. Возвращает True, если запись была найдена."""
+    with _conn() as con:
+        cur = con.execute(
+            "DELETE FROM context_files WHERE id = ? AND session_id = ?",
+            (file_id, session_id),
+        )
+    return cur.rowcount > 0
+
+
+def clear_context_files(session_id: str) -> None:
+    """Удалить все файлы контекста сессии."""
+    with _conn() as con:
+        con.execute("DELETE FROM context_files WHERE session_id = ?", (session_id,))
 
 
 def _now() -> str:

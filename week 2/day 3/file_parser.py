@@ -14,7 +14,7 @@ SUPPORTED_TEXT_EXTENSIONS = {
     ".txt", ".md", ".py", ".js", ".ts", ".json",
     ".csv", ".yaml", ".yml", ".html", ".xml", ".sql",
 }
-MAX_FILE_SIZE = 512 * 1024  # 512 KB
+MAX_FILE_SIZE = 5 * 1024 * 1024  # 5 MB
 
 
 def extract_text(filename: str, data: bytes) -> str:
@@ -35,8 +35,8 @@ def extract_text(filename: str, data: bytes) -> str:
     """
     if len(data) > MAX_FILE_SIZE:
         raise ValueError(
-            f"Файл слишком большой ({len(data) // 1024} KB). "
-            f"Максимум — {MAX_FILE_SIZE // 1024} KB."
+            f"Файл слишком большой ({len(data) / 1024 / 1024:.1f} MB). "
+            f"Максимум — {MAX_FILE_SIZE // 1024 // 1024} MB."
         )
 
     ext = Path(filename).suffix.lower()

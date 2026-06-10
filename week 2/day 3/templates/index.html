@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LLM Agent — счётчик токенов</title>
+  <script src="https://cdn.jsdelivr.net/npm/marked@12/marked.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11/styles/github-dark.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11/lib/core.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11/lib/languages/python.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11/lib/languages/javascript.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11/lib/languages/bash.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #0f1117;
+      color: #e8eaf0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem;
+      gap: 1rem;
+    }
+
+    header {
+      width: 100%;
+      max-width: 960px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    h1 { font-size: 1.5rem; font-weight: 700; color: #a78bfa; }
+
+    .header-right { display: flex; gap: .75rem; align-items: center; }
+
+    .badge {
+      font-size: .8rem;
+      color: #555f80;
+      background: #1a1d2e;
+      border: 1px solid #2e3050;
+      border-radius: 20px;
+      padding: .25rem .75rem;
+    }
+    .badge.green { color: #4ade80; border-color: #1a3a28; background: #0f1f17; }
+
+    #clear-btn {
+      background: transparent;
+      border: 1px solid #3b2f6e;
+      color: #a78bfa;
+      border-radius: 8px;
+      padding: .35rem .9rem;
+      font-size: .85rem;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    #clear-btn:hover { background: #1e1535; }
+
+    /* ── Layout: chat + token panel side by side ── */
+    .layout {
+      width: 100%;
+      max-width: 960px;
+      display: flex;
+      gap: 1.25rem;
+      align-items: flex-start;
+    }
+
+    #chat { flex: 1; display: flex; flex-direction: column; gap: 1rem; min-width: 0; }
+
+    /* ── Token panel ── */
+    #token-panel {
+      width: 220px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: .75rem;
+      position: sticky;
+      top: 2rem;
+    }
+
+    .panel-card {
+      background: #13161f;
+      border: 1px solid #1e2235;
+      border-radius: 12px;
+      padding: .85rem 1rem;
+    }
+
+    .panel-card h3 {
+      font-size: .7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: #555f80;
+      margin-bottom: .6rem;
+    }
+
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: .82rem;
+      margin-bottom: .3rem;
+      line-height: 1.4;
+    }
+    .stat-row .label { color: #7080a0; }
+    .stat-row .value { color: #c4c9ff; font-variant-numeric: tabular-nums; }
+    .stat-row .value.cost { color: #fbbf24; }
+
+    /* token bar */
+    .token-bar-wrap {
+      margin-top: .5rem;
+      height: 6px;
+      background: #1e2235;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .token-bar-in  { height: 100%; background: #6366f1; float: left; transition: width .4s; }
+    .token-bar-out { height: 100%; background: #a78bfa; float: left; transition: width .4s; }
+
+    .bar-legend {
+      display: flex;
+      gap: .6rem;
+      margin-top: .35rem;
+      font-size: .72rem;
+      color: #555f80;
+    }
+    .bar-legend span::before {
+      content: "●";
+      margin-right: .25rem;
+    }
+    .bar-legend .leg-in::before  { color: #6366f1; }
+    .bar-legend .leg-out::before { color: #a78bfa; }
+
+    /* ── Chat ── */
+    .messages { display: flex; flex-direction: column; gap: .75rem; min-height: 200px; }
+
+    .bubble {
+      padding: .75rem 1rem;
+      border-radius: 12px;
+      line-height: 1.6;
+      max-width: 92%;
+      word-break: break-word;
+      font-size: .95rem;
+    }
+    .bubble.user    { background: #1e1f2e; border: 1px solid #2e3050; align-self: flex-end; color: #c4c9ff; white-space: pre-wrap; }
+    .bubble.agent   { background: #161b27; border: 1px solid #283048; align-self: flex-start; }
+    .bubble.agent .meta { margin-top: .5rem; font-size: .72rem; color: #555f80; }
+    .bubble.error   { background: #2a1010; border: 1px solid #5a2020; color: #ff7070; align-self: flex-start; }
+    .bubble.thinking{ background: #161b27; border: 1px solid #283048; align-self: flex-start; color: #555f80; font-style: italic; }
+
+    .divider { text-align: center; font-size: .75rem; color: #3b4060; margin: .25rem 0; }
+
+    /* Markdown */
+    .bubble.agent .md p        { margin: .4rem 0; }
+    .bubble.agent .md p:first-child { margin-top: 0; }
+    .bubble.agent .md p:last-child  { margin-bottom: 0; }
+    .bubble.agent .md h1,.bubble.agent .md h2,.bubble.agent .md h3
+                               { margin: .8rem 0 .3rem; font-weight: 700; color: #c4c9ff; }
+    .bubble.agent .md ul,.bubble.agent .md ol { padding-left: 1.4rem; margin: .4rem 0; }
+    .bubble.agent .md li       { margin: .2rem 0; }
+    .bubble.agent .md strong   { color: #d4d8ff; font-weight: 700; }
+    .bubble.agent .md em       { color: #b0b8e0; }
+    .bubble.agent .md blockquote { border-left: 3px solid #3b4060; margin: .5rem 0; padding: .3rem .8rem; color: #8890b0; }
+    .bubble.agent .md code     { background: #1e2235; border: 1px solid #2e3454; border-radius: 4px; padding: .1em .4em; font-size: .88em; color: #c4c9ff; }
+    .bubble.agent .md pre      { background: #111520 !important; border: 1px solid #222840; border-radius: 8px; padding: .9rem 1rem; overflow-x: auto; margin: .6rem 0; }
+    .bubble.agent .md pre code { background: transparent; border: none; padding: 0; font-size: .87em; line-height: 1.6; }
+    .bubble.agent .md table    { border-collapse: collapse; width: 100%; margin: .6rem 0; font-size: .9em; }
+    .bubble.agent .md th,.bubble.agent .md td { border: 1px solid #2e3050; padding: .4rem .7rem; }
+    .bubble.agent .md th       { background: #1a1d2e; color: #a78bfa; }
+
+    .input-row { display: flex; gap: .5rem; }
+    textarea {
+      flex: 1; resize: none;
+      background: #1a1d2e; border: 1px solid #2e3050; border-radius: 10px;
+      color: #e8eaf0; padding: .7rem 1rem; font-size: .95rem; font-family: inherit;
+      outline: none; transition: border-color .2s;
+    }
+    textarea:focus { border-color: #7c5cfa; }
+    button#send-btn {
+      background: #7c5cfa; color: #fff; border: none; border-radius: 10px;
+      padding: .7rem 1.4rem; font-size: .95rem; font-weight: 600;
+      cursor: pointer; transition: background .2s; white-space: nowrap;
+    }
+    button#send-btn:hover:not(:disabled) { background: #6246ea; }
+    button#send-btn:disabled { opacity: .45; cursor: not-allowed; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🤖 LLM Agent</h1>
+    <div class="header-right">
+      <span class="badge green">💾 SQLite</span>
+      <span class="badge" id="turn-badge">Ход 0</span>
+      <button id="clear-btn" onclick="clearHistory()">🗑 Очистить</button>
+    </div>
+  </header>
+
+  <div class="layout">
+
+    <!-- Чат -->
+    <div id="chat">
+      <div class="messages" id="messages"></div>
+      <div class="input-row">
+        <textarea id="input" rows="3"
+          placeholder="Введите запрос… Enter — отправить, Shift+Enter — перенос"></textarea>
+        <button id="send-btn" onclick="sendMessage()">Отправить</button>
+      </div>
+    </div>
+
+    <!-- Панель токенов -->
+    <div id="token-panel">
+
+      <!-- Текущий запрос -->
+      <div class="panel-card" id="card-request">
+        <h3>Текущий запрос</h3>
+        <div class="stat-row"><span class="label">Вход (контекст)</span><span class="value" id="r-prompt">—</span></div>
+        <div class="stat-row"><span class="label">Выход (ответ)</span> <span class="value" id="r-compl">—</span></div>
+        <div class="stat-row"><span class="label">Итого токенов</span> <span class="value" id="r-total">—</span></div>
+        <div class="stat-row"><span class="label">Стоимость</span>     <span class="value cost" id="r-cost">—</span></div>
+        <div class="stat-row"><span class="label">Время</span>         <span class="value" id="r-time">—</span></div>
+        <div class="token-bar-wrap">
+          <div class="token-bar-in"  id="bar-in"  style="width:0%"></div>
+          <div class="token-bar-out" id="bar-out" style="width:0%"></div>
+        </div>
+        <div class="bar-legend">
+          <span class="leg-in">вход</span>
+          <span class="leg-out">выход</span>
+        </div>
+      </div>
+
+      <!-- Сессия суммарно -->
+      <div class="panel-card" id="card-session">
+        <h3>Сессия (итого)</h3>
+        <div class="stat-row"><span class="label">Ходов</span>        <span class="value" id="s-turns">0</span></div>
+        <div class="stat-row"><span class="label">Вход всего</span>   <span class="value" id="s-prompt">0</span></div>
+        <div class="stat-row"><span class="label">Выход всего</span>  <span class="value" id="s-compl">0</span></div>
+        <div class="stat-row"><span class="label">Токенов всего</span><span class="value" id="s-total">0</span></div>
+        <div class="stat-row"><span class="label">Стоимость</span>    <span class="value cost" id="s-cost">$0.000000</span></div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    marked.use({ gfm: true, breaks: true });
+
+    const messagesEl = document.getElementById("messages");
+    const inputEl    = document.getElementById("input");
+    const sendBtn    = document.getElementById("send-btn");
+    const turnBadge  = document.getElementById("turn-badge");
+
+    inputEl.addEventListener("keydown", e => {
+      if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+    });
+
+    function setLoading(on) { inputEl.disabled = on; sendBtn.disabled = on; }
+
+    function addBubble(text, cls, meta, renderMarkdown = false) {
+      const div = document.createElement("div");
+      div.className = `bubble ${cls}`;
+      if (renderMarkdown) {
+        const md = document.createElement("div");
+        md.className = "md";
+        md.innerHTML = marked.parse(text);
+        div.appendChild(md);
+      } else {
+        div.textContent = text;
+      }
+      if (meta) {
+        const m = document.createElement("div");
+        m.className = "meta";
+        m.textContent = meta;
+        div.appendChild(m);
+      }
+      messagesEl.appendChild(div);
+      div.scrollIntoView({ behavior: "smooth", block: "end" });
+      return div;
+    }
+
+    function addDivider(text) {
+      const d = document.createElement("div");
+      d.className = "divider";
+      d.textContent = `— ${text} —`;
+      messagesEl.appendChild(d);
+    }
+
+    function updatePanel(data) {
+      const u = data.usage;
+      const s = data.session;
+
+      // Текущий запрос
+      document.getElementById("r-prompt").textContent = u.prompt_tokens.toLocaleString();
+      document.getElementById("r-compl").textContent  = u.completion_tokens.toLocaleString();
+      document.getElementById("r-total").textContent  = u.total_tokens.toLocaleString();
+      document.getElementById("r-cost").textContent   = "$" + u.cost_usd.toFixed(6);
+      document.getElementById("r-time").textContent   = data.elapsed_sec + " с";
+
+      // Полоса: соотношение вход/выход
+      const pct = u.total_tokens > 0
+        ? Math.round(u.prompt_tokens / u.total_tokens * 100) : 0;
+      document.getElementById("bar-in").style.width  = pct + "%";
+      document.getElementById("bar-out").style.width = (100 - pct) + "%";
+
+      // Сессия
+      document.getElementById("s-turns").textContent  = s.turns;
+      document.getElementById("s-prompt").textContent = s.total_prompt.toLocaleString();
+      document.getElementById("s-compl").textContent  = s.total_completion.toLocaleString();
+      document.getElementById("s-total").textContent  = s.total_tokens.toLocaleString();
+      document.getElementById("s-cost").textContent   = "$" + s.total_cost_usd.toFixed(6);
+
+      turnBadge.textContent = `Ход ${s.turns}`;
+    }
+
+    async function sendMessage() {
+      const text = inputEl.value.trim();
+      if (!text) return;
+      inputEl.value = "";
+      setLoading(true);
+      addBubble(text, "user");
+      const thinking = addBubble("Агент думает…", "thinking");
+
+      try {
+        const res  = await fetch("/ask", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: text }),
+        });
+        const data = await res.json();
+        thinking.remove();
+        if (!res.ok) {
+          addBubble(data.error || "Ошибка", "error");
+        } else {
+          const meta = `${data.model} · вход ${data.usage.prompt_tokens} · выход ${data.usage.completion_tokens} · ${data.elapsed_sec} с`;
+          addBubble(data.answer, "agent", meta, true);
+          updatePanel(data);
+        }
+      } catch (err) {
+        thinking.remove();
+        addBubble("Сетевая ошибка: " + err.message, "error");
+      } finally {
+        setLoading(false);
+        inputEl.focus();
+      }
+    }
+
+    async function clearHistory() {
+      await fetch("/clear", { method: "POST" });
+      messagesEl.innerHTML = "";
+      // Сбросить панель
+      ["r-prompt","r-compl","r-total","r-cost","r-time"].forEach(id => {
+        document.getElementById(id).textContent = "—";
+      });
+      ["s-turns","s-prompt","s-compl","s-total"].forEach(id => {
+        document.getElementById(id).textContent = "0";
+      });
+      document.getElementById("s-cost").textContent = "$0.000000";
+      document.getElementById("bar-in").style.width  = "0%";
+      document.getElementById("bar-out").style.width = "0%";
+      turnBadge.textContent = "Ход 0";
+      addDivider("история очищена");
+      inputEl.focus();
+    }
+  </script>
+</body>
+</html>

@@ -247,6 +247,25 @@
     <!-- Панель токенов -->
     <div id="token-panel">
 
+      <!-- Выбор модели -->
+      <div class="panel-card">
+        <h3>🧠 Модель</h3>
+        <select id="model-select" onchange="switchModel(this.value)"
+          style="width:100%;background:#1a1d2e;border:1px solid #2e3050;border-radius:8px;
+                 color:#e8eaf0;padding:.4rem .6rem;font-size:.82rem;outline:none;cursor:pointer;margin-bottom:.6rem;">
+        </select>
+        <div class="stat-row"><span class="label">Описание</span></div>
+        <div id="m-desc" style="font-size:.78rem;color:#7080a0;line-height:1.4;margin-bottom:.5rem;"></div>
+        <div class="stat-row"><span class="label">Контекст</span>     <span class="value" id="m-ctx">—</span></div>
+        <div class="stat-row"><span class="label">Макс. ответ</span>  <span class="value" id="m-out">—</span></div>
+        <div class="stat-row"><span class="label">Цена вход</span>    <span class="value" id="m-pin">—</span></div>
+        <div class="stat-row"><span class="label">Цена выход</span>   <span class="value" id="m-pout">—</span></div>
+        <div id="m-thinking" style="display:none;margin-top:.4rem;font-size:.75rem;
+             color:#a78bfa;background:#1a1535;border-radius:6px;padding:.3rem .5rem;">
+          ✨ Поддерживает chain-of-thought
+        </div>
+      </div>
+
       <!-- Текущий запрос -->
       <div class="panel-card" id="card-request">
         <h3>Текущий запрос</h3>
@@ -360,6 +379,47 @@
 
       turnBadge.textContent = `Ход ${s.turns}`;
     }
+
+    // ── Model selector ───────────────────────────────────────────────
+    const modelSelect = document.getElementById("model-select");
+
+    function renderModelInfo(m) {
+      document.getElementById("m-desc").textContent  = m.description;
+      document.getElementById("m-ctx").textContent   = (m.context_window / 1000).toFixed(0) + "K токенов";
+      document.getElementById("m-out").textContent   = (m.max_output / 1000).toFixed(0) + "K токенов";
+      document.getElementById("m-pin").textContent   = "$" + m.price_input_1m + " / 1M";
+      document.getElementById("m-pout").textContent  = "$" + m.price_output_1m + " / 1M";
+      document.getElementById("m-thinking").style.display = m.supports_thinking ? "block" : "none";
+    }
+
+    async function switchModel(modelId) {
+      const res  = await fetch("/model", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ model_id: modelId }),
+      });
+      const data = await safeJson(res);
+      if (res.ok) {
+        renderModelInfo(data);
+        addDivider(`🧠 модель переключена на ${data.name}`);
+      }
+    }
+
+    // Загрузить список моделей и активную модель при старте
+    Promise.all([
+      fetch("/models").then(r => r.json()),
+      fetch("/model").then(r => r.json()),
+    ]).then(([models, active]) => {
+      models.forEach(m => {
+        const opt = document.createElement("option");
+        opt.value = m.id;
+        opt.textContent = m.name;
+        if (m.id === active.id) opt.selected = true;
+        modelSelect.appendChild(opt);
+      });
+      renderModelInfo(active);
+    });
+    // ────────────────────────────────────────────────────────────────
 
     // Безопасный парсинг JSON: если тело не JSON (например HTML-ошибка Flask),
     // возвращает объект с полем error вместо выброса исключения.

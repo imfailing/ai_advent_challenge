@@ -1,10 +1,6 @@
 """
-LLMAgent с персистентной памятью и детальным учётом токенов и стоимости.
-
-Считает токены и стоимость:
-  - для текущего запроса (prompt + completion отдельно)
-  - для ответа модели (completion_tokens)
-  - накопленным итогом по всей истории сессии
+LLMAgent с персистентной памятью, учётом токенов/стоимости и
+возможностью переключения модели на лету.
 """
 
 import os
@@ -14,20 +10,19 @@ from dataclasses import dataclass
 from openai import OpenAI
 
 import database as db
+from models import DEFAULT_MODEL, ModelInfo, get_model
 
 
 @dataclass
 class TokenUsage:
-    """Статистика токенов и стоимости одного запроса."""
-    prompt_tokens:     int      # входные токены (запрос + вся история)
-    completion_tokens: int      # выходные токены (только ответ модели)
-    total_tokens:      int      # сумма
-    cost_usd:          float    # стоимость этого запроса в USD
+    prompt_tokens:     int
+    completion_tokens: int
+    total_tokens:      int
+    cost_usd:          float
 
 
 @dataclass
 class SessionStats:
-    """Накопленная статистика по всей истории сессии."""
     turns:            int
     total_prompt:     int
     total_completion: int
@@ -41,12 +36,11 @@ class AgentResponse:
     elapsed_sec: float
     model:       str
     turn:        int
-    usage:       TokenUsage    # метрики текущего запроса
-    session:     SessionStats  # накопленные метрики сессии
+    usage:       TokenUsage
+    session:     SessionStats
 
 
 class LLMAgent:
-    DEFAULT_MODEL = "deepseek-chat"
     DEFAULT_SYSTEM = (
         "Ты полезный ИИ-ассистент. Отвечай чётко, по существу, "
         "на том же языке, на котором задан вопрос. "
@@ -57,27 +51,34 @@ class LLMAgent:
         self,
         session_id: str,
         api_key: str | None = None,
-        model: str = DEFAULT_MODEL,
+        model_id: str = DEFAULT_MODEL,
         system_prompt: str = DEFAULT_SYSTEM,
     ) -> None:
         self._session_id = session_id
-        self._model = model
         self._system_prompt = system_prompt
         self._client = OpenAI(
             api_key=api_key or os.environ["DEEPSEEK_API_KEY"],
             base_url="https://api.deepseek.com",
         )
+        self._model: ModelInfo = get_model(model_id)
         db.ensure_session(session_id)
         self._history: list[dict] = db.load_history(session_id)
 
     # ------------------------------------------------------------------
 
+    def set_model(self, model_id: str) -> ModelInfo:
+        """Переключить модель. Возвращает новый ModelInfo."""
+        self._model = get_model(model_id)
+        return self._model
+
+    @property
+    def model_info(self) -> ModelInfo:
+        return self._model
+
     def ask(self, user_message: str) -> AgentResponse:
-        # 1. Сохраняем сообщение пользователя
         self._history.append({"role": "user", "content": user_message})
         db.save_user_message(self._session_id, user_message)
 
-        # 2. Формируем запрос: системный промпт + файлы контекста + история
         context_files = db.load_context_files(self._session_id)
         extra_context = ""
         if context_files:
@@ -97,28 +98,31 @@ class LLMAgent:
 
         started = time.perf_counter()
         response = self._client.chat.completions.create(
-            model=self._model,
+            model=self._model.id,
             messages=messages,
         )
         elapsed = round(time.perf_counter() - started, 2)
 
-        # 3. Разбираем ответ и токены
         reply             = response.choices[0].message.content
         prompt_tokens     = response.usage.prompt_tokens
         completion_tokens = response.usage.completion_tokens
 
-        # 4. Сохраняем ответ вместе с токенами
         self._history.append({"role": "assistant", "content": reply})
         db.save_assistant_message(
             self._session_id, reply, prompt_tokens, completion_tokens
         )
 
-        # 5. Собираем метрики
+        # Стоимость считаем по тарифам активной модели
+        cost = round(
+            prompt_tokens     * self._model.price_input_1m  / 1_000_000
+            + completion_tokens * self._model.price_output_1m / 1_000_000,
+            6,
+        )
         usage = TokenUsage(
             prompt_tokens=prompt_tokens,
             completion_tokens=completion_tokens,
             total_tokens=prompt_tokens + completion_tokens,
-            cost_usd=db.cost_usd(prompt_tokens, completion_tokens),
+            cost_usd=cost,
         )
         totals  = db.get_session_token_totals(self._session_id)
         session = SessionStats(**totals)
@@ -126,7 +130,7 @@ class LLMAgent:
         return AgentResponse(
             answer=reply,
             elapsed_sec=elapsed,
-            model=response.model,
+            model=self._model.id,
             turn=session.turns,
             usage=usage,
             session=session,

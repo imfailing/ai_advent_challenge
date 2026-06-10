@@ -12,6 +12,7 @@ from flask import Flask, jsonify, render_template, request, session
 import database as db
 import file_parser
 from agent import LLMAgent
+from models import MODELS
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("FLASK_SECRET", "dev-secret-change-in-prod")
@@ -118,6 +119,32 @@ def delete_context(file_id: int):
     if not found:
         return jsonify({"error": "Файл не найден"}), 404
     return jsonify({"status": "ok"})
+
+
+@app.route("/models")
+def list_models():
+    """Список доступных моделей с параметрами."""
+    return jsonify([m.to_dict() for m in MODELS.values()])
+
+
+@app.route("/model", methods=["GET"])
+def get_model_route():
+    """Параметры активной модели текущей сессии."""
+    return jsonify(get_agent().model_info.to_dict())
+
+
+@app.route("/model", methods=["POST"])
+def set_model_route():
+    """Переключить модель для текущей сессии."""
+    data = request.get_json(force=True)
+    model_id = (data.get("model_id") or "").strip()
+    if not model_id:
+        return jsonify({"error": "Не передан model_id"}), 400
+    try:
+        info = get_agent().set_model(model_id)
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 422
+    return jsonify(info.to_dict())
 
 
 @app.route("/sessions")

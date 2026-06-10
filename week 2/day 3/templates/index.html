@@ -361,6 +361,15 @@
       turnBadge.textContent = `Ход ${s.turns}`;
     }
 
+    // Безопасный парсинг JSON: если тело не JSON (например HTML-ошибка Flask),
+    // возвращает объект с полем error вместо выброса исключения.
+    async function safeJson(res) {
+      const ct = res.headers.get("content-type") || "";
+      if (ct.includes("application/json")) return res.json();
+      const text = await res.text();
+      return { error: `Сервер вернул ошибку ${res.status}: ${text.slice(0, 120)}` };
+    }
+
     // ── File context ────────────────────────────────────────────────
     const fileListEl   = document.getElementById("file-list");
     const uploadErrEl  = document.getElementById("upload-error");
@@ -372,9 +381,9 @@
         fd.append("file", file);
         try {
           const res  = await fetch("/upload", { method: "POST", body: fd });
-          const data = await res.json();
+          const data = await safeJson(res);
           if (!res.ok) {
-            uploadErrEl.textContent = data.error;
+            uploadErrEl.textContent = data.error || `Ошибка ${res.status}`;
             uploadErrEl.style.display = "block";
           } else {
             addFileChip(data.id, data.filename, data.size_chars);
@@ -401,17 +410,27 @@
     }
 
     async function deleteFile(id, btn) {
-      const res = await fetch(`/context/${id}`, { method: "DELETE" });
-      if (res.ok) {
-        btn.closest(".file-item").remove();
-        addDivider("файл контекста удалён");
+      try {
+        const res = await fetch(`/context/${id}`, { method: "DELETE" });
+        if (res.ok) {
+          btn.closest(".file-item").remove();
+          addDivider("файл контекста удалён");
+        } else {
+          const data = await safeJson(res);
+          uploadErrEl.textContent = data.error || `Ошибка ${res.status}`;
+          uploadErrEl.style.display = "block";
+        }
+      } catch (e) {
+        uploadErrEl.textContent = "Ошибка удаления: " + e.message;
+        uploadErrEl.style.display = "block";
       }
     }
 
     // Загрузить список файлов при старте (если сессия уже имела файлы)
-    fetch("/context").then(r => r.json()).then(files => {
-      files.forEach(f => addFileChip(f.id, f.filename, f.size_chars));
-    });
+    fetch("/context")
+      .then(r => r.ok ? r.json() : [])
+      .then(files => files.forEach(f => addFileChip(f.id, f.filename, f.size_chars)))
+      .catch(() => {});
     // ────────────────────────────────────────────────────────────────
 
     async function sendMessage() {
@@ -428,7 +447,7 @@
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ message: text }),
         });
-        const data = await res.json();
+        const data = await safeJson(res);
         thinking.remove();
         if (!res.ok) {
           addBubble(data.error || "Ошибка", "error");

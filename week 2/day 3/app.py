@@ -22,6 +22,16 @@ db.init_db()
 _agents: dict[str, LLMAgent] = {}
 
 
+@app.errorhandler(413)
+def too_large(e):
+    return jsonify({"error": "Файл слишком большой. Максимум — 5 MB."}), 413
+
+
+@app.errorhandler(500)
+def server_error(e):
+    return jsonify({"error": "Внутренняя ошибка сервера."}), 500
+
+
 def get_agent() -> LLMAgent:
     sid = session.get("id")
     if not sid:

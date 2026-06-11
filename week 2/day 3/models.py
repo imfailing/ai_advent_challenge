@@ -1,7 +1,11 @@
 """
 Реестр доступных моделей и их параметры.
 
-Данные взяты из официальной документации DeepSeek (platform.deepseek.com/docs).
+Данные взяты из официальной документации DeepSeek (api-docs.deepseek.com).
+Актуально на июнь 2026. Тарифы — cache miss.
+
+Устаревшие алиасы deepseek-chat и deepseek-reasoner будут удалены 24.07.2026
+и соответствуют режимам (non-thinking / thinking) модели deepseek-v4-flash.
 """
 
 from dataclasses import dataclass
@@ -32,29 +36,29 @@ class ModelInfo:
 
 
 MODELS: dict[str, ModelInfo] = {
-    "deepseek-chat": ModelInfo(
-        id="deepseek-chat",
-        name="DeepSeek V3",
-        description="Основная модель общего назначения. Быстрая, недорогая, хорошо справляется с большинством задач.",
-        context_window=65_536,
-        max_output=8_192,
-        price_input_1m=0.27,
-        price_output_1m=1.10,
+    "deepseek-v4-flash": ModelInfo(
+        id="deepseek-v4-flash",
+        name="DeepSeek V4 Flash",
+        description="Основная модель общего назначения. Быстрая, недорогая, поддерживает thinking-режим. Контекст до 1M токенов.",
+        context_window=1_000_000,
+        max_output=384_000,
+        price_input_1m=0.14,
+        price_output_1m=0.28,
         supports_thinking=False,
     ),
-    "deepseek-reasoner": ModelInfo(
-        id="deepseek-reasoner",
-        name="DeepSeek R1",
-        description="Модель с цепочкой рассуждений (chain-of-thought). Медленнее и дороже, но значительно точнее на сложных логических, математических и аналитических задачах.",
-        context_window=65_536,
-        max_output=8_192,
-        price_input_1m=0.55,
-        price_output_1m=2.19,
+    "deepseek-v4-pro": ModelInfo(
+        id="deepseek-v4-pro",
+        name="DeepSeek V4 Pro",
+        description="Продвинутая модель с цепочкой рассуждений (chain-of-thought). Точнее на сложных логических, математических и аналитических задачах. Контекст до 1M токенов.",
+        context_window=1_000_000,
+        max_output=384_000,
+        price_input_1m=0.435,
+        price_output_1m=0.87,
         supports_thinking=True,
     ),
 }
 
-DEFAULT_MODEL = "deepseek-chat"
+DEFAULT_MODEL = "deepseek-v4-flash"
 
 
 def get_model(model_id: str) -> ModelInfo:

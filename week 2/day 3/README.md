@@ -16,10 +16,12 @@
 
 | Модель | ID | Контекст | Макс. ответ | Вход | Выход |
 |---|---|---|---|---|---|
-| DeepSeek V3 | `deepseek-chat` | 64K | 8K | $0.27/1M | $1.10/1M |
-| DeepSeek R1 | `deepseek-reasoner` | 64K | 8K | $0.55/1M | $2.19/1M |
+| DeepSeek V4 Flash | `deepseek-v4-flash` | 1M | 384K | $0.14/1M | $0.28/1M |
+| DeepSeek V4 Pro | `deepseek-v4-pro` | 1M | 384K | $0.435/1M | $0.87/1M |
 
-R1 поддерживает chain-of-thought — медленнее и дороже, но точнее на сложных задачах.
+Тарифы — cache miss. Pro поддерживает chain-of-thought — точнее на сложных задачах.
+
+> **Устаревшие алиасы** `deepseek-chat` и `deepseek-reasoner` соответствуют режимам V4 Flash и будут удалены 24.07.2026.
 
 ## Что считается
 

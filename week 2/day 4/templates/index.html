@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LLM Agent — компрессия контекста</title>
+  <script src="https://cdn.jsdelivr.net/npm/marked@12/marked.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11/styles/github-dark.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11/lib/core.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11/lib/languages/python.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11/lib/languages/javascript.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11/lib/languages/bash.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #0f1117;
+      color: #e8eaf0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem;
+      gap: 1rem;
+    }
+
+    header {
+      width: 100%;
+      max-width: 960px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    h1 { font-size: 1.5rem; font-weight: 700; color: #a78bfa; }
+
+    .header-right { display: flex; gap: .75rem; align-items: center; }
+
+    .badge {
+      font-size: .8rem;
+      color: #555f80;
+      background: #1a1d2e;
+      border: 1px solid #2e3050;
+      border-radius: 20px;
+      padding: .25rem .75rem;
+    }
+    .badge.green  { color: #4ade80; border-color: #1a3a28; background: #0f1f17; }
+    .badge.purple { color: #a78bfa; border-color: #2e1a5e; background: #130f2a; }
+
+    #clear-btn {
+      background: transparent;
+      border: 1px solid #3b2f6e;
+      color: #a78bfa;
+      border-radius: 8px;
+      padding: .35rem .9rem;
+      font-size: .85rem;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    #clear-btn:hover { background: #1e1535; }
+
+    /* ── Layout ── */
+    .layout {
+      width: 100%;
+      max-width: 960px;
+      display: flex;
+      gap: 1.25rem;
+      align-items: flex-start;
+    }
+
+    #chat { flex: 1; display: flex; flex-direction: column; gap: 1rem; min-width: 0; }
+
+    #token-panel {
+      width: 230px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: .75rem;
+      position: sticky;
+      top: 2rem;
+    }
+
+    .panel-card {
+      background: #13161f;
+      border: 1px solid #1e2235;
+      border-radius: 12px;
+      padding: .85rem 1rem;
+    }
+
+    .panel-card h3 {
+      font-size: .7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: #555f80;
+      margin-bottom: .6rem;
+    }
+
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: .82rem;
+      margin-bottom: .3rem;
+      line-height: 1.4;
+    }
+    .stat-row .label { color: #7080a0; }
+    .stat-row .value { color: #c4c9ff; font-variant-numeric: tabular-nums; }
+    .stat-row .value.cost    { color: #fbbf24; }
+    .stat-row .value.accent  { color: #a78bfa; }
+    .stat-row .value.green   { color: #4ade80; }
+
+    /* token bar */
+    .token-bar-wrap {
+      margin-top: .5rem;
+      height: 6px;
+      background: #1e2235;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .token-bar-in  { height: 100%; background: #6366f1; float: left; transition: width .4s; }
+    .token-bar-out { height: 100%; background: #a78bfa; float: left; transition: width .4s; }
+
+    .bar-legend {
+      display: flex;
+      gap: .6rem;
+      margin-top: .35rem;
+      font-size: .72rem;
+      color: #555f80;
+    }
+    .bar-legend span::before { content: "●"; margin-right: .25rem; }
+    .bar-legend .leg-in::before  { color: #6366f1; }
+    .bar-legend .leg-out::before { color: #a78bfa; }
+
+    /* compression bar */
+    .comp-bar-wrap {
+      margin: .5rem 0 .25rem;
+      height: 6px;
+      background: #1e2235;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .comp-bar-sum  { height: 100%; background: #7c3aed; float: left; transition: width .4s; }
+    .comp-bar-raw  { height: 100%; background: #6366f1; float: left; transition: width .4s; }
+
+    .bar-legend .leg-sum::before { color: #7c3aed; }
+    .bar-legend .leg-raw::before { color: #6366f1; }
+
+    /* ── Chat ── */
+    .messages { display: flex; flex-direction: column; gap: .75rem; min-height: 200px; }
+
+    .bubble {
+      padding: .75rem 1rem;
+      border-radius: 12px;
+      line-height: 1.6;
+      max-width: 92%;
+      word-break: break-word;
+      font-size: .95rem;
+    }
+    .bubble.user    { background: #1e1f2e; border: 1px solid #2e3050; align-self: flex-end; color: #c4c9ff; white-space: pre-wrap; }
+    .bubble.agent   { background: #161b27; border: 1px solid #283048; align-self: flex-start; }
+    .bubble.agent .meta { margin-top: .5rem; font-size: .72rem; color: #555f80; }
+    .bubble.error   { background: #2a1010; border: 1px solid #5a2020; color: #ff7070; align-self: flex-start; }
+    .bubble.thinking{ background: #161b27; border: 1px solid #283048; align-self: flex-start; color: #555f80; font-style: italic; }
+    .bubble.summary-notice {
+      background: #130f2a; border: 1px solid #2e1a5e;
+      align-self: center; color: #a78bfa;
+      font-size: .8rem; padding: .5rem .9rem; border-radius: 20px;
+    }
+
+    .divider { text-align: center; font-size: .75rem; color: #3b4060; margin: .25rem 0; }
+
+    /* Markdown */
+    .bubble.agent .md p        { margin: .4rem 0; }
+    .bubble.agent .md p:first-child { margin-top: 0; }
+    .bubble.agent .md p:last-child  { margin-bottom: 0; }
+    .bubble.agent .md h1,.bubble.agent .md h2,.bubble.agent .md h3
+                               { margin: .8rem 0 .3rem; font-weight: 700; color: #c4c9ff; }
+    .bubble.agent .md ul,.bubble.agent .md ol { padding-left: 1.4rem; margin: .4rem 0; }
+    .bubble.agent .md li       { margin: .2rem 0; }
+    .bubble.agent .md strong   { color: #d4d8ff; font-weight: 700; }
+    .bubble.agent .md em       { color: #b0b8e0; }
+    .bubble.agent .md blockquote { border-left: 3px solid #3b4060; margin: .5rem 0; padding: .3rem .8rem; color: #8890b0; }
+    .bubble.agent .md code     { background: #1e2235; border: 1px solid #2e3454; border-radius: 4px; padding: .1em .4em; font-size: .88em; color: #c4c9ff; }
+    .bubble.agent .md pre      { background: #111520 !important; border: 1px solid #222840; border-radius: 8px; padding: .9rem 1rem; overflow-x: auto; margin: .6rem 0; }
+    .bubble.agent .md pre code { background: transparent; border: none; padding: 0; font-size: .87em; line-height: 1.6; }
+    .bubble.agent .md table    { border-collapse: collapse; width: 100%; margin: .6rem 0; font-size: .9em; }
+    .bubble.agent .md th,.bubble.agent .md td { border: 1px solid #2e3050; padding: .4rem .7rem; }
+    .bubble.agent .md th       { background: #1a1d2e; color: #a78bfa; }
+
+    /* ── File upload ── */
+    #upload-btn {
+      width: 100%;
+      background: #13161f;
+      border: 1px dashed #2e3454;
+      border-radius: 10px;
+      color: #7080a0;
+      padding: .6rem;
+      font-size: .82rem;
+      cursor: pointer;
+      transition: border-color .2s, color .2s;
+      text-align: center;
+    }
+    #upload-btn:hover { border-color: #7c5cfa; color: #a78bfa; }
+    #file-input { display: none; }
+
+    .file-item {
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+      background: #0f1220;
+      border: 1px solid #1e2235;
+      border-radius: 8px;
+      padding: .4rem .6rem;
+      font-size: .78rem;
+    }
+    .file-item .fname { color: #a0aac0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
+    .file-item .fsize { color: #555f80; flex-shrink: 0; }
+    .file-item .del-btn {
+      background: none; border: none; color: #5a3040;
+      cursor: pointer; font-size: .9rem; flex-shrink: 0; transition: color .15s;
+    }
+    .file-item .del-btn:hover { color: #ff7070; }
+    .upload-error { font-size: .78rem; color: #ff7070; padding: .3rem .1rem; }
+
+    .input-row { display: flex; gap: .5rem; }
+    textarea {
+      flex: 1; resize: none;
+      background: #1a1d2e; border: 1px solid #2e3050; border-radius: 10px;
+      color: #e8eaf0; padding: .7rem 1rem; font-size: .95rem; font-family: inherit;
+      outline: none; transition: border-color .2s;
+    }
+    textarea:focus { border-color: #7c5cfa; }
+    button#send-btn {
+      background: #7c5cfa; color: #fff; border: none; border-radius: 10px;
+      padding: .7rem 1.4rem; font-size: .95rem; font-weight: 600;
+      cursor: pointer; transition: background .2s; white-space: nowrap;
+    }
+    button#send-btn:hover:not(:disabled) { background: #6246ea; }
+    button#send-btn:disabled { opacity: .45; cursor: not-allowed; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🤖 LLM Agent</h1>
+    <div class="header-right">
+      <span class="badge green">💾 SQLite</span>
+      <span class="badge purple" id="compress-badge">🗜 0 суммари</span>
+      <span class="badge" id="turn-badge">Ход 0</span>
+      <button id="clear-btn" onclick="clearHistory()">🗑 Очистить</button>
+    </div>
+  </header>
+
+  <div class="layout">
+
+    <!-- Чат -->
+    <div id="chat">
+      <div class="messages" id="messages"></div>
+      <div class="input-row">
+        <textarea id="input" rows="3"
+          placeholder="Введите запрос… Enter — отправить, Shift+Enter — перенос"></textarea>
+        <button id="send-btn" onclick="sendMessage()">Отправить</button>
+      </div>
+    </div>
+
+    <!-- Панель -->
+    <div id="token-panel">
+
+      <!-- Выбор модели -->
+      <div class="panel-card">
+        <h3>🧠 Модель</h3>
+        <select id="model-select" onchange="switchModel(this.value)"
+          style="width:100%;background:#1a1d2e;border:1px solid #2e3050;border-radius:8px;
+                 color:#e8eaf0;padding:.4rem .6rem;font-size:.82rem;outline:none;cursor:pointer;margin-bottom:.6rem;">
+        </select>
+        <div class="stat-row"><span class="label">Описание</span></div>
+        <div id="m-desc" style="font-size:.78rem;color:#7080a0;line-height:1.4;margin-bottom:.5rem;"></div>
+        <div class="stat-row"><span class="label">Контекст</span>    <span class="value" id="m-ctx">—</span></div>
+        <div class="stat-row"><span class="label">Макс. ответ</span> <span class="value" id="m-out">—</span></div>
+        <div class="stat-row"><span class="label">Цена вход</span>   <span class="value" id="m-pin">—</span></div>
+        <div class="stat-row"><span class="label">Цена выход</span>  <span class="value" id="m-pout">—</span></div>
+        <div id="m-thinking" style="display:none;margin-top:.4rem;font-size:.75rem;
+             color:#a78bfa;background:#1a1535;border-radius:6px;padding:.3rem .5rem;">
+          ✨ Поддерживает chain-of-thought
+        </div>
+      </div>
+
+      <!-- Текущий запрос -->
+      <div class="panel-card">
+        <h3>Текущий запрос</h3>
+        <div class="stat-row"><span class="label">Вход (контекст)</span><span class="value" id="r-prompt">—</span></div>
+        <div class="stat-row"><span class="label">Выход (ответ)</span> <span class="value" id="r-compl">—</span></div>
+        <div class="stat-row"><span class="label">Итого токенов</span> <span class="value" id="r-total">—</span></div>
+        <div class="stat-row"><span class="label">Стоимость</span>     <span class="value cost" id="r-cost">—</span></div>
+        <div class="stat-row"><span class="label">Время</span>         <span class="value" id="r-time">—</span></div>
+        <div class="token-bar-wrap">
+          <div class="token-bar-in"  id="bar-in"  style="width:0%"></div>
+          <div class="token-bar-out" id="bar-out" style="width:0%"></div>
+        </div>
+        <div class="bar-legend">
+          <span class="leg-in">вход</span>
+          <span class="leg-out">выход</span>
+        </div>
+      </div>
+
+      <!-- Компрессия контекста -->
+      <div class="panel-card">
+        <h3>🗜 Компрессия контекста</h3>
+        <div class="stat-row"><span class="label">Всего сообщений</span>  <span class="value" id="c-total">0</span></div>
+        <div class="stat-row"><span class="label">Сжато в суммари</span>  <span class="value accent" id="c-summed">0</span></div>
+        <div class="stat-row"><span class="label">Блоков суммари</span>   <span class="value accent" id="c-blocks">0</span></div>
+        <div class="stat-row"><span class="label">Сырых в запросе</span>  <span class="value" id="c-raw">0</span></div>
+        <div class="comp-bar-wrap">
+          <div class="comp-bar-sum" id="cbar-sum" style="width:0%"></div>
+          <div class="comp-bar-raw" id="cbar-raw" style="width:0%"></div>
+        </div>
+        <div class="bar-legend">
+          <span class="leg-sum">суммари</span>
+          <span class="leg-raw">сырые</span>
+        </div>
+      </div>
+
+      <!-- Файлы контекста -->
+      <div class="panel-card">
+        <h3>📎 Файлы контекста</h3>
+        <input type="file" id="file-input" multiple
+               accept=".txt,.md,.py,.js,.ts,.json,.csv,.yaml,.yml,.html,.xml,.sql,.pdf"
+               onchange="uploadFiles(this.files)" />
+        <button id="upload-btn" onclick="document.getElementById('file-input').click()">
+          + Загрузить файл
+        </button>
+        <div id="file-list" style="margin-top:.5rem;display:flex;flex-direction:column;gap:.4rem;"></div>
+        <div id="upload-error" class="upload-error" style="display:none"></div>
+      </div>
+
+      <!-- Сессия суммарно -->
+      <div class="panel-card">
+        <h3>Сессия (итого)</h3>
+        <div class="stat-row"><span class="label">Ходов</span>        <span class="value" id="s-turns">0</span></div>
+        <div class="stat-row"><span class="label">Вход всего</span>   <span class="value" id="s-prompt">0</span></div>
+        <div class="stat-row"><span class="label">Выход всего</span>  <span class="value" id="s-compl">0</span></div>
+        <div class="stat-row"><span class="label">Токенов всего</span><span class="value" id="s-total">0</span></div>
+        <div class="stat-row"><span class="label">Стоимость</span>    <span class="value cost" id="s-cost">$0.000000</span></div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    marked.use({ gfm: true, breaks: true });
+
+    const messagesEl = document.getElementById("messages");
+    const inputEl    = document.getElementById("input");
+    const sendBtn    = document.getElementById("send-btn");
+    const turnBadge  = document.getElementById("turn-badge");
+    const compBadge  = document.getElementById("compress-badge");
+
+    inputEl.addEventListener("keydown", e => {
+      if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+    });
+
+    function setLoading(on) { inputEl.disabled = on; sendBtn.disabled = on; }
+
+    function addBubble(text, cls, meta, renderMarkdown = false) {
+      const div = document.createElement("div");
+      div.className = `bubble ${cls}`;
+      if (renderMarkdown) {
+        const md = document.createElement("div");
+        md.className = "md";
+        md.innerHTML = marked.parse(text);
+        div.appendChild(md);
+      } else {
+        div.textContent = text;
+      }
+      if (meta) {
+        const m = document.createElement("div");
+        m.className = "meta";
+        m.textContent = meta;
+        div.appendChild(m);
+      }
+      messagesEl.appendChild(div);
+      div.scrollIntoView({ behavior: "smooth", block: "end" });
+      return div;
+    }
+
+    function addDivider(text) {
+      const d = document.createElement("div");
+      d.className = "divider";
+      d.textContent = `— ${text} —`;
+      messagesEl.appendChild(d);
+    }
+
+    function addSummaryNotice(blocksCount, summarizedCount) {
+      const d = document.createElement("div");
+      d.className = "bubble summary-notice";
+      d.textContent = `🗜 сжато ${summarizedCount} сообщений → ${blocksCount} ${blocksCount === 1 ? "суммари" : "блока суммари"}`;
+      messagesEl.appendChild(d);
+      d.scrollIntoView({ behavior: "smooth", block: "end" });
+    }
+
+    // Предыдущие значения компрессии для определения момента сжатия
+    let prevSummariesCount = 0;
+
+    function updatePanel(data) {
+      const u = data.usage;
+      const s = data.session;
+      const c = data.context;
+
+      // Текущий запрос
+      document.getElementById("r-prompt").textContent = u.prompt_tokens.toLocaleString();
+      document.getElementById("r-compl").textContent  = u.completion_tokens.toLocaleString();
+      document.getElementById("r-total").textContent  = u.total_tokens.toLocaleString();
+      document.getElementById("r-cost").textContent   = "$" + u.cost_usd.toFixed(6);
+      document.getElementById("r-time").textContent   = data.elapsed_sec + " с";
+
+      const pct = u.total_tokens > 0
+        ? Math.round(u.prompt_tokens / u.total_tokens * 100) : 0;
+      document.getElementById("bar-in").style.width  = pct + "%";
+      document.getElementById("bar-out").style.width = (100 - pct) + "%";
+
+      // Компрессия
+      document.getElementById("c-total").textContent  = c.total_messages;
+      document.getElementById("c-summed").textContent = c.summarized_messages;
+      document.getElementById("c-blocks").textContent = c.summaries_count;
+      document.getElementById("c-raw").textContent    = c.raw_in_context;
+
+      const total = c.total_messages || 1;
+      const sumPct = Math.round(c.summarized_messages / total * 100);
+      const rawPct = Math.round(c.raw_in_context / total * 100);
+      document.getElementById("cbar-sum").style.width = sumPct + "%";
+      document.getElementById("cbar-raw").style.width = rawPct + "%";
+
+      compBadge.textContent = `🗜 ${c.summaries_count} суммари`;
+
+      // Уведомление в чате при появлении нового суммари
+      if (c.summaries_count > prevSummariesCount) {
+        addSummaryNotice(c.summaries_count, c.summarized_messages);
+        prevSummariesCount = c.summaries_count;
+      }
+
+      // Сессия
+      document.getElementById("s-turns").textContent  = s.turns;
+      document.getElementById("s-prompt").textContent = s.total_prompt.toLocaleString();
+      document.getElementById("s-compl").textContent  = s.total_completion.toLocaleString();
+      document.getElementById("s-total").textContent  = s.total_tokens.toLocaleString();
+      document.getElementById("s-cost").textContent   = "$" + s.total_cost_usd.toFixed(6);
+
+      turnBadge.textContent = `Ход ${s.turns}`;
+    }
+
+    // ── Model selector ──────────────────────────────────────────────
+    const modelSelect = document.getElementById("model-select");
+
+    function renderModelInfo(m) {
+      document.getElementById("m-desc").textContent  = m.description;
+      const ctxK = m.context_window >= 1_000_000
+        ? (m.context_window / 1_000_000).toFixed(0) + "M"
+        : (m.context_window / 1000).toFixed(0) + "K";
+      const outK = m.max_output >= 1_000_000
+        ? (m.max_output / 1_000_000).toFixed(0) + "M"
+        : (m.max_output / 1000).toFixed(0) + "K";
+      document.getElementById("m-ctx").textContent   = ctxK + " токенов";
+      document.getElementById("m-out").textContent   = outK + " токенов";
+      document.getElementById("m-pin").textContent   = "$" + m.price_input_1m + " / 1M";
+      document.getElementById("m-pout").textContent  = "$" + m.price_output_1m + " / 1M";
+      document.getElementById("m-thinking").style.display = m.supports_thinking ? "block" : "none";
+    }
+
+    async function switchModel(modelId) {
+      const res  = await fetch("/model", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ model_id: modelId }),
+      });
+      const data = await safeJson(res);
+      if (res.ok) {
+        renderModelInfo(data);
+        addDivider(`🧠 модель переключена на ${data.name}`);
+      }
+    }
+
+    Promise.all([
+      fetch("/models").then(r => r.json()),
+      fetch("/model").then(r => r.json()),
+    ]).then(([models, active]) => {
+      models.forEach(m => {
+        const opt = document.createElement("option");
+        opt.value = m.id;
+        opt.textContent = m.name;
+        if (m.id === active.id) opt.selected = true;
+        modelSelect.appendChild(opt);
+      });
+      renderModelInfo(active);
+    });
+    // ────────────────────────────────────────────────────────────────
+
+    async function safeJson(res) {
+      const ct = res.headers.get("content-type") || "";
+      if (ct.includes("application/json")) return res.json();
+      const text = await res.text();
+      return { error: `Сервер вернул ошибку ${res.status}: ${text.slice(0, 120)}` };
+    }
+
+    // ── File context ────────────────────────────────────────────────
+    const fileListEl   = document.getElementById("file-list");
+    const uploadErrEl  = document.getElementById("upload-error");
+
+    async function uploadFiles(files) {
+      uploadErrEl.style.display = "none";
+      for (const file of files) {
+        const fd = new FormData();
+        fd.append("file", file);
+        try {
+          const res  = await fetch("/upload", { method: "POST", body: fd });
+          const data = await safeJson(res);
+          if (!res.ok) {
+            uploadErrEl.textContent = data.error || `Ошибка ${res.status}`;
+            uploadErrEl.style.display = "block";
+          } else {
+            addFileChip(data.id, data.filename, data.size_chars);
+            addDivider(`📎 добавлен файл «${data.filename}»`);
+          }
+        } catch (e) {
+          uploadErrEl.textContent = "Ошибка загрузки: " + e.message;
+          uploadErrEl.style.display = "block";
+        }
+      }
+      document.getElementById("file-input").value = "";
+    }
+
+    function addFileChip(id, filename, sizeChars) {
+      const div = document.createElement("div");
+      div.className = "file-item";
+      div.dataset.fileId = id;
+      const kb = sizeChars > 1000 ? (sizeChars / 1000).toFixed(1) + " k" : sizeChars;
+      div.innerHTML =
+        `<span class="fname" title="${filename}">${filename}</span>` +
+        `<span class="fsize">${kb}ch</span>` +
+        `<button class="del-btn" title="Удалить" onclick="deleteFile(${id}, this)">✕</button>`;
+      fileListEl.appendChild(div);
+    }
+
+    async function deleteFile(id, btn) {
+      try {
+        const res = await fetch(`/context/${id}`, { method: "DELETE" });
+        if (res.ok) {
+          btn.closest(".file-item").remove();
+          addDivider("файл контекста удалён");
+        } else {
+          const data = await safeJson(res);
+          uploadErrEl.textContent = data.error || `Ошибка ${res.status}`;
+          uploadErrEl.style.display = "block";
+        }
+      } catch (e) {
+        uploadErrEl.textContent = "Ошибка удаления: " + e.message;
+        uploadErrEl.style.display = "block";
+      }
+    }
+
+    fetch("/context")
+      .then(r => r.ok ? r.json() : [])
+      .then(files => files.forEach(f => addFileChip(f.id, f.filename, f.size_chars)))
+      .catch(() => {});
+    // ────────────────────────────────────────────────────────────────
+
+    async function sendMessage() {
+      const text = inputEl.value.trim();
+      if (!text) return;
+      inputEl.value = "";
+      setLoading(true);
+      addBubble(text, "user");
+      const thinking = addBubble("Агент думает…", "thinking");
+
+      try {
+        const res  = await fetch("/ask", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: text }),
+        });
+        const data = await safeJson(res);
+        thinking.remove();
+        if (!res.ok) {
+          addBubble(data.error || "Ошибка", "error");
+        } else {
+          const c    = data.context;
+          const meta = `${data.model} · вход ${data.usage.prompt_tokens} · выход ${data.usage.completion_tokens} · ${data.elapsed_sec} с`
+                     + (c.summaries_count > 0 ? ` · 🗜 ${c.summaries_count} суммари` : "");
+          addBubble(data.answer, "agent", meta, true);
+          updatePanel(data);
+        }
+      } catch (err) {
+        thinking.remove();
+        addBubble("Сетевая ошибка: " + err.message, "error");
+      } finally {
+        setLoading(false);
+        inputEl.focus();
+      }
+    }
+
+    async function clearHistory() {
+      await fetch("/clear", { method: "POST" });
+      messagesEl.innerHTML = "";
+      prevSummariesCount = 0;
+      compBadge.textContent = "🗜 0 суммари";
+      ["r-prompt","r-compl","r-total","r-cost","r-time"].forEach(id =>
+        document.getElementById(id).textContent = "—");
+      ["s-turns","s-prompt","s-compl","s-total"].forEach(id =>
+        document.getElementById(id).textContent = "0");
+      ["c-total","c-summed","c-blocks","c-raw"].forEach(id =>
+        document.getElementById(id).textContent = "0");
+      document.getElementById("s-cost").textContent = "$0.000000";
+      document.getElementById("bar-in").style.width  = "0%";
+      document.getElementById("bar-out").style.width = "0%";
+      document.getElementById("cbar-sum").style.width = "0%";
+      document.getElementById("cbar-raw").style.width = "0%";
+      turnBadge.textContent = "Ход 0";
+      addDivider("история очищена");
+      inputEl.focus();
+    }
+  </script>
+</body>
+</html>

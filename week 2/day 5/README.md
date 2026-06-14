@@ -64,17 +64,36 @@ Messages: [последние 10 сообщений]
 
 ---
 
+## Результаты сравнения стратегий
+
+Протестированы на сценарии «сбор ТЗ» (12 ходов пользователя, 24 сообщения в истории).  
+Подробный отчёт → [STRATEGY_COMPARISON.md](STRATEGY_COMPARISON.md)
+
+| Стратегия | Стоимость (12 ходов) | Потеря фактов | Лучше всего для |
+|---|---|---|---|
+| Sliding Window | $0.007 | ⚠️ теряет за окном | Чат-поддержка, FAQ, короткие диалоги |
+| **Sticky Facts** | **$0.007** | **✅ нет** | **Сбор требований, брифы, длинные сессии** |
+| Branching | $0.011 | ✅ нет | Исследование вариантов, A/B диалоги |
+
+**Вывод:** Sticky Facts — лучший баланс цены и качества для задач с накоплением знаний.  
+Branching даёт максимальную полноту ответов, но стоимость растёт линейно с длиной диалога.  
+Sliding Window теряет факты за границей окна — не подходит для структурированных сессий.
+
+---
+
 ## Структура
 
 ```
 day 5/
-├── models.py         # Реестр моделей
-├── database.py       # SQLite: sessions + messages(branch_id) + facts + branches
-├── file_parser.py    # Извлечение текста из файлов
-├── agent.py          # LLMAgent: set_strategy, create_branch, switch_branch
-├── app.py            # Flask: /strategy, /branches, /branches/switch, /facts
+├── models.py               # Реестр моделей
+├── database.py             # SQLite: sessions + messages(branch_id) + facts + branches
+├── file_parser.py          # Извлечение текста из файлов
+├── agent.py                # LLMAgent: set_strategy, create_branch, switch_branch
+├── app.py                  # Flask: /strategy, /branches, /branches/switch, /facts
 ├── templates/
-│   └── index.html    # Переключатель стратегий + панели Window/Facts/Branches
+│   └── index.html          # Переключатель стратегий + панели Window/Facts/Branches
+├── test_strategies.py      # Автоматизированный сравнительный тест
+├── STRATEGY_COMPARISON.md  # Отчёт по результатам теста
 ├── requirements.txt
 └── README.md
 ```

@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LLM Agent — стратегии контекста</title>
+  <script src="https://cdn.jsdelivr.net/npm/marked@12/marked.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11/styles/github-dark.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11/lib/core.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11/lib/languages/python.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11/lib/languages/javascript.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #0f1117; color: #e8eaf0;
+      min-height: 100vh; display: flex; flex-direction: column;
+      align-items: center; padding: 2rem 1rem; gap: 1rem;
+    }
+    header {
+      width: 100%; max-width: 1020px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    h1 { font-size: 1.5rem; font-weight: 700; color: #a78bfa; }
+    .header-right { display: flex; gap: .6rem; align-items: center; }
+    .badge {
+      font-size: .78rem; color: #555f80; background: #1a1d2e;
+      border: 1px solid #2e3050; border-radius: 20px; padding: .2rem .65rem;
+    }
+    .badge.green  { color: #4ade80; border-color: #1a3a28; background: #0f1f17; }
+    .badge.purple { color: #a78bfa; border-color: #2e1a5e; background: #130f2a; }
+    #clear-btn {
+      background: transparent; border: 1px solid #3b2f6e; color: #a78bfa;
+      border-radius: 8px; padding: .3rem .8rem; font-size: .82rem; cursor: pointer;
+    }
+    #clear-btn:hover { background: #1e1535; }
+
+    /* Layout */
+    .layout {
+      width: 100%; max-width: 1020px;
+      display: flex; gap: 1.25rem; align-items: flex-start;
+    }
+    #chat { flex: 1; display: flex; flex-direction: column; gap: 1rem; min-width: 0; }
+    #panel {
+      width: 240px; flex-shrink: 0; display: flex; flex-direction: column;
+      gap: .7rem; position: sticky; top: 2rem;
+    }
+
+    /* Cards */
+    .card {
+      background: #13161f; border: 1px solid #1e2235;
+      border-radius: 12px; padding: .8rem 1rem;
+    }
+    .card h3 {
+      font-size: .68rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: .06em; color: #555f80; margin-bottom: .55rem;
+    }
+    .stat-row {
+      display: flex; justify-content: space-between;
+      font-size: .8rem; margin-bottom: .28rem; line-height: 1.4;
+    }
+    .stat-row .label { color: #7080a0; }
+    .stat-row .value { color: #c4c9ff; font-variant-numeric: tabular-nums; }
+    .stat-row .value.cost   { color: #fbbf24; }
+    .stat-row .value.accent { color: #a78bfa; }
+    .stat-row .value.green  { color: #4ade80; }
+    .stat-row .value.red    { color: #f87171; }
+
+    /* Strategy switcher */
+    .strategy-btns { display: flex; gap: .4rem; flex-wrap: wrap; }
+    .strat-btn {
+      flex: 1; min-width: 60px;
+      background: #1a1d2e; border: 1px solid #2e3050;
+      color: #7080a0; border-radius: 8px; padding: .35rem .4rem;
+      font-size: .72rem; cursor: pointer; text-align: center; line-height: 1.3;
+      transition: all .18s;
+    }
+    .strat-btn:hover    { border-color: #7c5cfa; color: #a78bfa; }
+    .strat-btn.active   { background: #1e1535; border-color: #7c5cfa; color: #c4a8ff; font-weight: 600; }
+
+    /* Facts table */
+    .facts-table { width: 100%; font-size: .76rem; border-collapse: collapse; margin-top: .3rem; }
+    .facts-table td { padding: .2rem .3rem; vertical-align: top; }
+    .facts-table .fkey { color: #7080a0; width: 45%; word-break: break-word; }
+    .facts-table .fval { color: #c4c9ff; }
+    .facts-empty { font-size: .76rem; color: #3b4060; text-align: center; padding: .5rem 0; }
+
+    /* Branch list */
+    .branch-item {
+      display: flex; align-items: center; gap: .4rem;
+      background: #0f1220; border: 1px solid #1e2235;
+      border-radius: 8px; padding: .35rem .55rem;
+      font-size: .76rem; cursor: pointer; margin-bottom: .3rem;
+      transition: border-color .15s;
+    }
+    .branch-item:hover   { border-color: #4b3080; }
+    .branch-item.current { border-color: #7c5cfa; background: #130f2a; }
+    .branch-item .bname  { flex: 1; color: #a0aac0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .branch-item .bcheck { color: #a78bfa; flex-shrink: 0; }
+    .branch-main {
+      display: flex; align-items: center; gap: .4rem;
+      font-size: .76rem; color: #7080a0; padding: .3rem 0 .4rem;
+      cursor: pointer;
+    }
+    .branch-main:hover { color: #a0aac0; }
+    .branch-main.current { color: #a78bfa; font-weight: 600; }
+    .create-branch-row { display: flex; gap: .35rem; margin-top: .4rem; }
+    .branch-input {
+      flex: 1; background: #1a1d2e; border: 1px solid #2e3050; border-radius: 6px;
+      color: #e8eaf0; padding: .3rem .5rem; font-size: .76rem; outline: none;
+    }
+    .branch-input:focus { border-color: #7c5cfa; }
+    .branch-create-btn {
+      background: #1e1535; border: 1px solid #4b3080; color: #a78bfa;
+      border-radius: 6px; padding: .3rem .6rem; font-size: .76rem; cursor: pointer;
+      white-space: nowrap;
+    }
+    .branch-create-btn:hover { background: #2a1d4a; }
+
+    /* Token bar */
+    .tbar-wrap { margin-top: .45rem; height: 5px; background: #1e2235; border-radius: 3px; overflow: hidden; }
+    .tbar-in   { height: 100%; background: #6366f1; float: left; transition: width .4s; }
+    .tbar-out  { height: 100%; background: #a78bfa; float: left; transition: width .4s; }
+    .tbar-drop { height: 100%; background: #374151; float: left; transition: width .4s; }
+    .bar-legend { display: flex; gap: .5rem; margin-top: .3rem; font-size: .68rem; color: #555f80; }
+    .bar-legend span::before { content: "●"; margin-right: .2rem; }
+    .bar-legend .leg-in::before   { color: #6366f1; }
+    .bar-legend .leg-out::before  { color: #a78bfa; }
+    .bar-legend .leg-drop::before { color: #374151; }
+
+    /* Chat */
+    .messages { display: flex; flex-direction: column; gap: .75rem; min-height: 200px; }
+    .bubble {
+      padding: .7rem 1rem; border-radius: 12px; line-height: 1.6;
+      max-width: 92%; word-break: break-word; font-size: .93rem;
+    }
+    .bubble.user     { background: #1e1f2e; border: 1px solid #2e3050; align-self: flex-end; color: #c4c9ff; white-space: pre-wrap; }
+    .bubble.agent    { background: #161b27; border: 1px solid #283048; align-self: flex-start; }
+    .bubble.agent .meta { margin-top: .45rem; font-size: .7rem; color: #555f80; }
+    .bubble.error    { background: #2a1010; border: 1px solid #5a2020; color: #ff7070; align-self: flex-start; }
+    .bubble.thinking { background: #161b27; border: 1px solid #283048; align-self: flex-start; color: #555f80; font-style: italic; }
+    .bubble.branch-notice { background: #130f2a; border: 1px solid #2e1a5e; align-self: center; color: #a78bfa; font-size: .78rem; padding: .4rem .85rem; border-radius: 20px; }
+    .divider { text-align: center; font-size: .73rem; color: #3b4060; margin: .2rem 0; }
+
+    /* Markdown */
+    .bubble.agent .md p        { margin: .4rem 0; }
+    .bubble.agent .md p:first-child,.bubble.agent .md p:last-child { margin-top:0;margin-bottom:0 }
+    .bubble.agent .md h1,.bubble.agent .md h2,.bubble.agent .md h3 { margin: .7rem 0 .3rem; color: #c4c9ff; font-weight: 700; }
+    .bubble.agent .md ul,.bubble.agent .md ol { padding-left: 1.4rem; margin: .35rem 0; }
+    .bubble.agent .md li  { margin: .18rem 0; }
+    .bubble.agent .md strong { color: #d4d8ff; font-weight: 700; }
+    .bubble.agent .md code   { background: #1e2235; border: 1px solid #2e3454; border-radius: 4px; padding: .1em .4em; font-size: .86em; color: #c4c9ff; }
+    .bubble.agent .md pre    { background: #111520 !important; border: 1px solid #222840; border-radius: 8px; padding: .85rem 1rem; overflow-x: auto; margin: .55rem 0; }
+    .bubble.agent .md pre code { background: transparent; border: none; padding: 0; font-size: .86em; line-height: 1.6; }
+    .bubble.agent .md table  { border-collapse: collapse; width: 100%; margin: .55rem 0; font-size: .88em; }
+    .bubble.agent .md th,.bubble.agent .md td { border: 1px solid #2e3050; padding: .35rem .65rem; }
+    .bubble.agent .md th     { background: #1a1d2e; color: #a78bfa; }
+
+    /* Upload */
+    #upload-btn {
+      width: 100%; background: #13161f; border: 1px dashed #2e3454;
+      border-radius: 8px; color: #7080a0; padding: .5rem;
+      font-size: .78rem; cursor: pointer; text-align: center;
+    }
+    #upload-btn:hover { border-color: #7c5cfa; color: #a78bfa; }
+    #file-input { display: none; }
+    .file-item {
+      display: flex; align-items: center; gap: .35rem;
+      background: #0f1220; border: 1px solid #1e2235;
+      border-radius: 7px; padding: .35rem .55rem; font-size: .74rem; margin-top: .3rem;
+    }
+    .file-item .fname { color: #a0aac0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
+    .file-item .fsize { color: #555f80; flex-shrink: 0; }
+    .file-item .del-btn { background: none; border: none; color: #5a3040; cursor: pointer; font-size: .85rem; flex-shrink: 0; }
+    .file-item .del-btn:hover { color: #ff7070; }
+    .upload-error { font-size: .74rem; color: #ff7070; padding: .25rem .1rem; }
+
+    /* Model select */
+    #model-select {
+      width: 100%; background: #1a1d2e; border: 1px solid #2e3050;
+      border-radius: 7px; color: #e8eaf0; padding: .35rem .55rem;
+      font-size: .78rem; outline: none; cursor: pointer; margin-bottom: .55rem;
+    }
+
+    /* Input */
+    .input-row { display: flex; gap: .5rem; }
+    textarea {
+      flex: 1; resize: none; background: #1a1d2e; border: 1px solid #2e3050;
+      border-radius: 10px; color: #e8eaf0; padding: .65rem 1rem;
+      font-size: .93rem; font-family: inherit; outline: none;
+    }
+    textarea:focus { border-color: #7c5cfa; }
+    #send-btn {
+      background: #7c5cfa; color: #fff; border: none; border-radius: 10px;
+      padding: .65rem 1.3rem; font-size: .93rem; font-weight: 600;
+      cursor: pointer; white-space: nowrap;
+    }
+    #send-btn:hover:not(:disabled) { background: #6246ea; }
+    #send-btn:disabled { opacity: .4; cursor: not-allowed; }
+  </style>
+</head>
+<body>
+<header>
+  <h1>🤖 LLM Agent</h1>
+  <div class="header-right">
+    <span class="badge green">💾 SQLite</span>
+    <span class="badge purple" id="strat-badge">⚡ Sliding Window</span>
+    <span class="badge" id="branch-badge" style="display:none">🌿 ветка</span>
+    <span class="badge" id="turn-badge">Ход 0</span>
+    <button id="clear-btn" onclick="clearHistory()">🗑 Очистить</button>
+  </div>
+</header>
+
+<div class="layout">
+
+  <!-- Чат -->
+  <div id="chat">
+    <div class="messages" id="messages"></div>
+    <div class="input-row">
+      <textarea id="input" rows="3"
+        placeholder="Введите запрос… Enter — отправить, Shift+Enter — перенос"></textarea>
+      <button id="send-btn" onclick="sendMessage()">Отправить</button>
+    </div>
+  </div>
+
+  <!-- Панель -->
+  <div id="panel">
+
+    <!-- Стратегия -->
+    <div class="card">
+      <h3>🎛 Стратегия контекста</h3>
+      <div class="strategy-btns">
+        <button class="strat-btn active" data-s="sliding_window"
+                onclick="switchStrategy('sliding_window')">
+          🪟<br>Sliding<br>Window
+        </button>
+        <button class="strat-btn" data-s="sticky_facts"
+                onclick="switchStrategy('sticky_facts')">
+          📌<br>Sticky<br>Facts
+        </button>
+        <button class="strat-btn" data-s="branching"
+                onclick="switchStrategy('branching')">
+          🌿<br>Branch&shy;ing
+        </button>
+      </div>
+    </div>
+
+    <!-- Контекст: Sliding Window -->
+    <div class="card" id="ctx-sliding">
+      <h3>🪟 Скользящее окно</h3>
+      <div class="stat-row"><span class="label">Всего сообщений</span><span class="value" id="sw-total">0</span></div>
+      <div class="stat-row"><span class="label">В контексте</span>    <span class="value green" id="sw-ctx">0</span></div>
+      <div class="stat-row"><span class="label">Отброшено</span>      <span class="value red"   id="sw-drop">0</span></div>
+      <div class="tbar-wrap">
+        <div class="tbar-in"   id="sw-bar-ctx"  style="width:0%"></div>
+        <div class="tbar-drop" id="sw-bar-drop" style="width:0%"></div>
+      </div>
+      <div class="bar-legend">
+        <span class="leg-in">в контексте</span>
+        <span class="leg-drop">отброшено</span>
+      </div>
+    </div>
+
+    <!-- Контекст: Sticky Facts -->
+    <div class="card" id="ctx-facts" style="display:none">
+      <h3>📌 Sticky Facts</h3>
+      <div class="stat-row"><span class="label">Всего сообщений</span><span class="value" id="sf-total">0</span></div>
+      <div class="stat-row"><span class="label">В контексте</span>    <span class="value green" id="sf-ctx">0</span></div>
+      <div class="stat-row"><span class="label">Фактов</span>         <span class="value accent" id="sf-nfacts">0</span></div>
+      <div id="facts-list" style="margin-top:.5rem;">
+        <div class="facts-empty">Факты появятся после первого сообщения</div>
+      </div>
+    </div>
+
+    <!-- Контекст: Branching -->
+    <div class="card" id="ctx-branching" style="display:none">
+      <h3>🌿 Ветки диалога</h3>
+      <div class="stat-row"><span class="label">Текущая ветка</span><span class="value accent" id="br-cur-name">Основная</span></div>
+      <div class="stat-row"><span class="label">Сообщений в контексте</span><span class="value" id="br-ctx">0</span></div>
+      <div style="margin-top:.5rem;">
+        <div class="branch-main" id="main-branch-item" onclick="doSwitchBranch(null)">
+          <span>📍 Основная ветка</span>
+          <span class="bcheck" id="main-check">✓</span>
+        </div>
+        <div id="branch-list"></div>
+      </div>
+      <div class="create-branch-row">
+        <input class="branch-input" id="branch-name-input" placeholder="Название ветки…" />
+        <button class="branch-create-btn" onclick="doCreateBranch()">🌿 Создать</button>
+      </div>
+      <div id="branch-error" style="font-size:.72rem;color:#f87171;margin-top:.3rem;display:none;"></div>
+    </div>
+
+    <!-- Модель -->
+    <div class="card">
+      <h3>🧠 Модель</h3>
+      <select id="model-select" onchange="switchModel(this.value)"></select>
+      <div id="m-desc" style="font-size:.74rem;color:#7080a0;line-height:1.4;margin-bottom:.45rem;"></div>
+      <div class="stat-row"><span class="label">Контекст</span>   <span class="value" id="m-ctx">—</span></div>
+      <div class="stat-row"><span class="label">Макс. ответ</span><span class="value" id="m-out">—</span></div>
+      <div class="stat-row"><span class="label">Цена вход</span>  <span class="value" id="m-pin">—</span></div>
+      <div class="stat-row"><span class="label">Цена выход</span> <span class="value" id="m-pout">—</span></div>
+      <div id="m-cot" style="display:none;margin-top:.35rem;font-size:.72rem;color:#a78bfa;background:#1a1535;border-radius:5px;padding:.25rem .45rem;">
+        ✨ chain-of-thought
+      </div>
+    </div>
+
+    <!-- Текущий запрос -->
+    <div class="card">
+      <h3>Текущий запрос</h3>
+      <div class="stat-row"><span class="label">Вход</span>   <span class="value" id="r-prompt">—</span></div>
+      <div class="stat-row"><span class="label">Выход</span>  <span class="value" id="r-compl">—</span></div>
+      <div class="stat-row"><span class="label">Итого</span>  <span class="value" id="r-total">—</span></div>
+      <div class="stat-row"><span class="label">Стоимость</span><span class="value cost" id="r-cost">—</span></div>
+      <div class="stat-row"><span class="label">Время</span>  <span class="value" id="r-time">—</span></div>
+      <div class="tbar-wrap">
+        <div class="tbar-in"  id="bar-in"  style="width:0%"></div>
+        <div class="tbar-out" id="bar-out" style="width:0%"></div>
+      </div>
+      <div class="bar-legend"><span class="leg-in">вход</span><span class="leg-out">выход</span></div>
+    </div>
+
+    <!-- Файлы -->
+    <div class="card">
+      <h3>📎 Файлы контекста</h3>
+      <input type="file" id="file-input" multiple
+             accept=".txt,.md,.py,.js,.ts,.json,.csv,.yaml,.yml,.html,.xml,.sql,.pdf"
+             onchange="uploadFiles(this.files)" />
+      <button id="upload-btn" onclick="document.getElementById('file-input').click()">+ Загрузить файл</button>
+      <div id="file-list"></div>
+      <div id="upload-error" class="upload-error" style="display:none"></div>
+    </div>
+
+    <!-- Сессия -->
+    <div class="card">
+      <h3>Сессия (итого)</h3>
+      <div class="stat-row"><span class="label">Ходов</span>        <span class="value" id="s-turns">0</span></div>
+      <div class="stat-row"><span class="label">Вход всего</span>   <span class="value" id="s-prompt">0</span></div>
+      <div class="stat-row"><span class="label">Выход всего</span>  <span class="value" id="s-compl">0</span></div>
+      <div class="stat-row"><span class="label">Токенов всего</span><span class="value" id="s-total">0</span></div>
+      <div class="stat-row"><span class="label">Стоимость</span>    <span class="value cost" id="s-cost">$0.000000</span></div>
+    </div>
+
+  </div><!-- /panel -->
+</div>
+
+<script>
+marked.use({ gfm: true, breaks: true });
+
+const messagesEl = document.getElementById("messages");
+const inputEl    = document.getElementById("input");
+const sendBtn    = document.getElementById("send-btn");
+
+inputEl.addEventListener("keydown", e => {
+  if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+});
+
+function setLoading(on) { inputEl.disabled = on; sendBtn.disabled = on; }
+
+function addBubble(text, cls, meta, renderMd = false) {
+  const div = document.createElement("div");
+  div.className = `bubble ${cls}`;
+  if (renderMd) {
+    const md = document.createElement("div"); md.className = "md";
+    md.innerHTML = marked.parse(text); div.appendChild(md);
+  } else { div.textContent = text; }
+  if (meta) { const m = document.createElement("div"); m.className = "meta"; m.textContent = meta; div.appendChild(m); }
+  messagesEl.appendChild(div);
+  div.scrollIntoView({ behavior: "smooth", block: "end" });
+  return div;
+}
+function addDivider(t) {
+  const d = document.createElement("div"); d.className = "divider"; d.textContent = `— ${t} —`;
+  messagesEl.appendChild(d);
+}
+
+async function safeJson(res) {
+  const ct = res.headers.get("content-type") || "";
+  if (ct.includes("application/json")) return res.json();
+  const t = await res.text();
+  return { error: `Сервер вернул ошибку ${res.status}: ${t.slice(0, 120)}` };
+}
+
+// ── Strategy ──────────────────────────────────────────────────────
+let currentStrategy = "sliding_window";
+
+const stratLabels = {
+  sliding_window: "⚡ Sliding Window",
+  sticky_facts:   "📌 Sticky Facts",
+  branching:      "🌿 Branching",
+};
+
+function applyStrategy(strategy) {
+  currentStrategy = strategy;
+  document.getElementById("strat-badge").textContent = stratLabels[strategy] || strategy;
+  document.querySelectorAll(".strat-btn").forEach(b =>
+    b.classList.toggle("active", b.dataset.s === strategy));
+  document.getElementById("ctx-sliding").style.display  = strategy === "sliding_window" ? "" : "none";
+  document.getElementById("ctx-facts").style.display    = strategy === "sticky_facts"   ? "" : "none";
+  document.getElementById("ctx-branching").style.display = strategy === "branching"      ? "" : "none";
+}
+
+async function switchStrategy(strategy) {
+  const res  = await fetch("/strategy", {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ strategy }),
+  });
+  const data = await safeJson(res);
+  if (res.ok) { applyStrategy(strategy); addDivider(`стратегия: ${stratLabels[strategy]}`); }
+  else { addBubble(data.error || "Ошибка", "error"); }
+}
+
+// ── Branches ──────────────────────────────────────────────────────
+let currentBranchId = null;
+
+function renderBranches(branches) {
+  const listEl = document.getElementById("branch-list");
+  listEl.innerHTML = "";
+  branches.forEach(b => {
+    const div = document.createElement("div");
+    div.className = "branch-item" + (b.id === currentBranchId ? " current" : "");
+    div.innerHTML = `<span class="bname">🌿 ${b.name}</span>`
+                  + (b.id === currentBranchId ? `<span class="bcheck">✓</span>` : "");
+    div.onclick = () => doSwitchBranch(b.id);
+    listEl.appendChild(div);
+  });
+  // подсветить основную
+  const mainItem = document.getElementById("main-branch-item");
+  mainItem.classList.toggle("current", currentBranchId === null);
+  document.getElementById("main-check").style.display = currentBranchId === null ? "" : "none";
+  // бейдж в header
+  const badge = document.getElementById("branch-badge");
+  if (currentBranchId !== null) {
+    const cur = branches.find(b => b.id === currentBranchId);
+    badge.textContent = "🌿 " + (cur ? cur.name : "ветка");
+    badge.style.display = "";
+  } else {
+    badge.style.display = "none";
+  }
+}
+
+async function refreshBranches() {
+  const res = await fetch("/branches");
+  if (res.ok) { const branches = await res.json(); renderBranches(branches); }
+}
+
+async function doCreateBranch() {
+  const name = document.getElementById("branch-name-input").value.trim();
+  if (!name) { document.getElementById("branch-name-input").focus(); return; }
+  const errEl = document.getElementById("branch-error");
+  errEl.style.display = "none";
+  const res  = await fetch("/branches", {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name }),
+  });
+  const data = await safeJson(res);
+  if (!res.ok) { errEl.textContent = data.error; errEl.style.display = ""; return; }
+  currentBranchId = data.id;
+  document.getElementById("branch-name-input").value = "";
+  addBubble(`🌿 Создана ветка «${data.name}» — теперь вы в ней`, "branch-notice");
+  document.getElementById("br-cur-name").textContent = data.name;
+  await refreshBranches();
+}
+
+async function doSwitchBranch(branchId) {
+  const res  = await fetch("/branches/switch", {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ branch_id: branchId }),
+  });
+  const data = await safeJson(res);
+  if (!res.ok) { addBubble(data.error || "Ошибка", "error"); return; }
+  currentBranchId = branchId;
+  document.getElementById("br-cur-name").textContent = data.name || "Основная ветка";
+  addDivider(`🌿 переключились на: ${data.name || "Основная ветка"}`);
+  await refreshBranches();
+}
+
+// ── Facts ─────────────────────────────────────────────────────────
+function renderFacts(facts) {
+  const listEl = document.getElementById("facts-list");
+  const keys   = Object.keys(facts);
+  document.getElementById("sf-nfacts").textContent = keys.length;
+  if (keys.length === 0) {
+    listEl.innerHTML = '<div class="facts-empty">Факты появятся после первого сообщения</div>';
+    return;
+  }
+  const table = document.createElement("table");
+  table.className = "facts-table";
+  keys.forEach(k => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td class="fkey">${k}</td><td class="fval">${facts[k]}</td>`;
+    table.appendChild(tr);
+  });
+  listEl.innerHTML = "";
+  listEl.appendChild(table);
+}
+
+// ── Panel update ──────────────────────────────────────────────────
+function updatePanel(data) {
+  const u = data.usage, s = data.session, c = data.context;
+
+  // Запрос
+  document.getElementById("r-prompt").textContent = u.prompt_tokens.toLocaleString();
+  document.getElementById("r-compl").textContent  = u.completion_tokens.toLocaleString();
+  document.getElementById("r-total").textContent  = u.total_tokens.toLocaleString();
+  document.getElementById("r-cost").textContent   = "$" + u.cost_usd.toFixed(6);
+  document.getElementById("r-time").textContent   = data.elapsed_sec + " с";
+  const pct = u.total_tokens > 0 ? Math.round(u.prompt_tokens / u.total_tokens * 100) : 0;
+  document.getElementById("bar-in").style.width  = pct + "%";
+  document.getElementById("bar-out").style.width = (100 - pct) + "%";
+
+  // Сессия
+  document.getElementById("s-turns").textContent  = s.turns;
+  document.getElementById("s-prompt").textContent = s.total_prompt.toLocaleString();
+  document.getElementById("s-compl").textContent  = s.total_completion.toLocaleString();
+  document.getElementById("s-total").textContent  = s.total_tokens.toLocaleString();
+  document.getElementById("s-cost").textContent   = "$" + s.total_cost_usd.toFixed(6);
+  document.getElementById("turn-badge").textContent = `Ход ${s.turns}`;
+
+  // Стратегия-специфичные данные
+  const total = c.total_messages;
+  if (c.strategy === "sliding_window") {
+    document.getElementById("sw-total").textContent = total;
+    document.getElementById("sw-ctx").textContent   = c.messages_in_context;
+    document.getElementById("sw-drop").textContent  = c.dropped_messages;
+    const ctxPct  = total > 0 ? Math.round(c.messages_in_context / total * 100) : 0;
+    const dropPct = total > 0 ? Math.round(c.dropped_messages     / total * 100) : 0;
+    document.getElementById("sw-bar-ctx").style.width  = ctxPct  + "%";
+    document.getElementById("sw-bar-drop").style.width = dropPct + "%";
+
+  } else if (c.strategy === "sticky_facts") {
+    document.getElementById("sf-total").textContent = total;
+    document.getElementById("sf-ctx").textContent   = c.messages_in_context;
+    renderFacts(c.facts || {});
+
+  } else if (c.strategy === "branching") {
+    document.getElementById("br-ctx").textContent = c.messages_in_context;
+    if (c.branch_name) document.getElementById("br-cur-name").textContent = c.branch_name;
+    refreshBranches();
+  }
+}
+
+// ── Model ─────────────────────────────────────────────────────────
+function renderModelInfo(m) {
+  document.getElementById("m-desc").textContent = m.description;
+  const fmtK = n => n >= 1_000_000 ? (n/1_000_000).toFixed(0)+"M" : (n/1000).toFixed(0)+"K";
+  document.getElementById("m-ctx").textContent  = fmtK(m.context_window) + " токенов";
+  document.getElementById("m-out").textContent  = fmtK(m.max_output) + " токенов";
+  document.getElementById("m-pin").textContent  = "$" + m.price_input_1m + " / 1M";
+  document.getElementById("m-pout").textContent = "$" + m.price_output_1m + " / 1M";
+  document.getElementById("m-cot").style.display = m.supports_thinking ? "" : "none";
+}
+async function switchModel(modelId) {
+  const res  = await fetch("/model", { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({model_id: modelId}) });
+  const data = await safeJson(res);
+  if (res.ok) { renderModelInfo(data); addDivider(`🧠 модель: ${data.name}`); }
+}
+
+// ── File upload ───────────────────────────────────────────────────
+async function uploadFiles(files) {
+  const errEl = document.getElementById("upload-error"); errEl.style.display="none";
+  for (const file of files) {
+    const fd = new FormData(); fd.append("file", file);
+    try {
+      const res  = await fetch("/upload", { method:"POST", body: fd });
+      const data = await safeJson(res);
+      if (!res.ok) { errEl.textContent = data.error || `Ошибка ${res.status}`; errEl.style.display=""; }
+      else { addFileChip(data.id, data.filename, data.size_chars); addDivider(`📎 «${data.filename}»`); }
+    } catch(e) { errEl.textContent = "Ошибка: " + e.message; errEl.style.display=""; }
+  }
+  document.getElementById("file-input").value = "";
+}
+function addFileChip(id, filename, size) {
+  const div = document.createElement("div"); div.className = "file-item"; div.dataset.fileId = id;
+  const kb = size > 1000 ? (size/1000).toFixed(1)+"k" : size;
+  div.innerHTML = `<span class="fname" title="${filename}">${filename}</span><span class="fsize">${kb}ch</span><button class="del-btn" onclick="deleteFile(${id},this)">✕</button>`;
+  document.getElementById("file-list").appendChild(div);
+}
+async function deleteFile(id, btn) {
+  try {
+    const res = await fetch(`/context/${id}`, { method:"DELETE" });
+    if (res.ok) { btn.closest(".file-item").remove(); addDivider("файл удалён"); }
+    else { const d = await safeJson(res); document.getElementById("upload-error").textContent = d.error||"Ошибка"; document.getElementById("upload-error").style.display=""; }
+  } catch(e) { document.getElementById("upload-error").textContent="Ошибка: "+e.message; document.getElementById("upload-error").style.display=""; }
+}
+
+// ── Send message ──────────────────────────────────────────────────
+async function sendMessage() {
+  const text = inputEl.value.trim(); if (!text) return;
+  inputEl.value = ""; setLoading(true);
+  addBubble(text, "user");
+  const thinking = addBubble("Агент думает…", "thinking");
+  try {
+    const res  = await fetch("/ask", { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ message: text }) });
+    const data = await safeJson(res);
+    thinking.remove();
+    if (!res.ok) { addBubble(data.error || "Ошибка", "error"); }
+    else {
+      const c    = data.context;
+      const strat = { sliding_window:"🪟", sticky_facts:"📌", branching:"🌿" }[c.strategy] || "";
+      const meta  = `${data.model} · ${strat} · вход ${data.usage.prompt_tokens} · выход ${data.usage.completion_tokens} · ${data.elapsed_sec} с`;
+      addBubble(data.answer, "agent", meta, true);
+      updatePanel(data);
+    }
+  } catch(err) { thinking.remove(); addBubble("Сетевая ошибка: " + err.message, "error"); }
+  finally { setLoading(false); inputEl.focus(); }
+}
+
+// ── Clear ─────────────────────────────────────────────────────────
+async function clearHistory() {
+  await fetch("/clear", { method:"POST" });
+  messagesEl.innerHTML = "";
+  currentBranchId = null;
+  document.getElementById("branch-badge").style.display = "none";
+  document.getElementById("br-cur-name").textContent = "Основная ветка";
+  document.getElementById("branch-list").innerHTML = "";
+  document.getElementById("main-branch-item").classList.add("current");
+  document.getElementById("main-check").style.display = "";
+  document.getElementById("facts-list").innerHTML = '<div class="facts-empty">Факты появятся после первого сообщения</div>';
+  ["r-prompt","r-compl","r-total","r-cost","r-time"].forEach(id => document.getElementById(id).textContent="—");
+  ["s-turns","s-prompt","s-compl","s-total"].forEach(id => document.getElementById(id).textContent="0");
+  document.getElementById("s-cost").textContent="$0.000000";
+  ["sw-total","sw-ctx","sw-drop","sf-total","sf-ctx","sf-nfacts","br-ctx"].forEach(id => document.getElementById(id).textContent="0");
+  document.getElementById("turn-badge").textContent="Ход 0";
+  addDivider("история очищена");
+  inputEl.focus();
+}
+
+// ── Init ──────────────────────────────────────────────────────────
+Promise.all([
+  fetch("/models").then(r => r.json()),
+  fetch("/model").then(r => r.json()),
+  fetch("/strategy").then(r => r.json()),
+]).then(([models, active, strat]) => {
+  const sel = document.getElementById("model-select");
+  models.forEach(m => {
+    const opt = document.createElement("option");
+    opt.value = m.id; opt.textContent = m.name;
+    if (m.id === active.id) opt.selected = true;
+    sel.appendChild(opt);
+  });
+  renderModelInfo(active);
+  applyStrategy(strat.strategy || "sliding_window");
+  if (strat.branch_id != null) { currentBranchId = strat.branch_id; }
+});
+
+fetch("/context").then(r => r.ok ? r.json() : [])
+  .then(files => files.forEach(f => addFileChip(f.id, f.filename, f.size_chars)))
+  .catch(() => {});
+
+fetch("/branches").then(r => r.ok ? r.json() : [])
+  .then(branches => renderBranches(branches))
+  .catch(() => {});
+</script>
+</body>
+</html>

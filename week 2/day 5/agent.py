@@ -198,7 +198,12 @@ class LLMAgent:
             branch_id=self._branch_id,
         )
 
-        # 5. Обновить факты после сохранения ответа
+        # 5. Обновить total_messages — считаем ПОСЛЕ сохранения ответа,
+        #    чтобы цифра отражала реальное состояние БД (user + assistant).
+        history_after = db.get_history(self._session_id, self._branch_id)
+        ctx_stats.total_messages = len(history_after)
+
+        # 6. Обновить факты после сохранения ответа
         if self._strategy == STRATEGY_STICKY_FACTS:
             self._extract_facts()
             ctx_stats.facts = db.load_facts(self._session_id)

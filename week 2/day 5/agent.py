@@ -198,10 +198,20 @@ class LLMAgent:
             branch_id=self._branch_id,
         )
 
-        # 5. Обновить total_messages — считаем ПОСЛЕ сохранения ответа,
-        #    чтобы цифра отражала реальное состояние БД (user + assistant).
+        # 5. Пересчитать все три поля контекста ПОСЛЕ сохранения ответа,
+        #    чтобы total / in_ctx / dropped отражали одно и то же состояние БД.
         history_after = db.get_history(self._session_id, self._branch_id)
-        ctx_stats.total_messages = len(history_after)
+        total = len(history_after)
+        ctx_stats.total_messages = total
+        if self._strategy == STRATEGY_BRANCHING:
+            # Branching не обрезает историю
+            ctx_stats.messages_in_context = total
+            ctx_stats.dropped_messages    = 0
+        else:
+            # Sliding Window и Sticky Facts: окно WINDOW_SIZE
+            in_ctx = min(total, WINDOW_SIZE)
+            ctx_stats.messages_in_context = in_ctx
+            ctx_stats.dropped_messages    = total - in_ctx
 
         # 6. Обновить факты после сохранения ответа
         if self._strategy == STRATEGY_STICKY_FACTS:

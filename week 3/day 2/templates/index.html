@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LLM Agent — персонализация</title>
+  <script src="https://cdn.jsdelivr.net/npm/marked@12/marked.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: system-ui, -apple-system, sans-serif; background: #0f1117; color: #e8eaf0;
+      min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 2rem 1rem; gap: 1rem; }
+    header { width: 100%; max-width: 1120px; display: flex; align-items: center; justify-content: space-between; }
+    h1 { font-size: 1.5rem; font-weight: 700; color: #a78bfa; }
+    .header-right { display: flex; gap: .6rem; align-items: center; }
+    .badge { font-size: .78rem; color: #555f80; background: #1a1d2e; border: 1px solid #2e3050; border-radius: 20px; padding: .2rem .65rem; }
+    .badge.pink { color: #f0a8d0; border-color: #4a1f3a; background: #20121b; }
+    #clear-btn { background: transparent; border: 1px solid #3b2f6e; color: #a78bfa; border-radius: 8px; padding: .3rem .8rem; font-size: .82rem; cursor: pointer; }
+    #clear-btn:hover { background: #1e1535; }
+
+    .layout { width: 100%; max-width: 1120px; display: flex; gap: 1.25rem; align-items: flex-start; }
+    #chat { flex: 1; display: flex; flex-direction: column; gap: 1rem; min-width: 0; }
+    #panel { width: 330px; flex-shrink: 0; display: flex; flex-direction: column; gap: .7rem; position: sticky; top: 2rem; max-height: calc(100vh - 4rem); overflow-y: auto; }
+
+    .card { background: #13161f; border: 1px solid #1e2235; border-radius: 12px; padding: .8rem 1rem; }
+    .card.profile { border-left: 3px solid #ec4899; }
+    .card h3 { font-size: .68rem; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: #7080a0; margin-bottom: .55rem; }
+    .stat-row { display: flex; justify-content: space-between; font-size: .8rem; margin-bottom: .28rem; line-height: 1.4; }
+    .stat-row .label { color: #7080a0; }
+    .stat-row .value { color: #c4c9ff; font-variant-numeric: tabular-nums; }
+    .stat-row .value.cost { color: #fbbf24; }
+
+    /* Profile chips */
+    .prof-chips { display: flex; flex-wrap: wrap; gap: .35rem; margin-bottom: .55rem; }
+    .prof-chip { background: #1a1d2e; border: 1px solid #2e3050; color: #9aa3c0; border-radius: 18px;
+      padding: .25rem .7rem; font-size: .76rem; cursor: pointer; transition: all .15s; }
+    .prof-chip:hover { border-color: #ec4899; color: #f0a8d0; }
+    .prof-chip.active { background: #20121b; border-color: #ec4899; color: #f7b8da; font-weight: 600; }
+    .prof-chip.add { border-style: dashed; color: #7080a0; }
+
+    /* Profile form */
+    .pf-field { margin-bottom: .5rem; }
+    .pf-field label { display: block; font-size: .68rem; color: #7080a0; margin-bottom: .2rem; }
+    .pf-field input, .pf-field select, .pf-field textarea {
+      width: 100%; background: #1a1d2e; border: 1px solid #2e3050; border-radius: 6px;
+      color: #e8eaf0; padding: .32rem .5rem; font-size: .8rem; outline: none; font-family: inherit; }
+    .pf-field input:focus, .pf-field select:focus, .pf-field textarea:focus { border-color: #ec4899; }
+    .pf-field textarea { resize: vertical; min-height: 2.2rem; }
+    .pf-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .4rem; }
+    .pf-actions { display: flex; gap: .4rem; margin-top: .5rem; }
+    .btn { border-radius: 7px; padding: .4rem .7rem; font-size: .78rem; cursor: pointer; border: 1px solid; white-space: nowrap; }
+    .btn.primary { background: #ec4899; border-color: #ec4899; color: #fff; font-weight: 600; }
+    .btn.primary:hover { background: #db2777; }
+    .btn.ghost { background: transparent; border-color: #3b2f4e; color: #b08aa0; }
+    .btn.ghost:hover { background: #1e1320; }
+    .btn.danger { background: transparent; border-color: #5a2030; color: #d06a7a; }
+    .btn.danger:hover { background: #2a1015; }
+    .pf-hint { font-size: .68rem; color: #4b5475; margin-top: .35rem; line-height: 1.4; }
+    .no-profile { font-size: .78rem; color: #6070a0; text-align: center; padding: .6rem 0; }
+
+    /* memory compact */
+    .mem-compact { font-size: .74rem; color: #8a93b0; line-height: 1.5; }
+    .mem-compact b { color: #a0aac0; }
+
+    /* chat */
+    .messages { display: flex; flex-direction: column; gap: .75rem; min-height: 200px; }
+    .bubble { padding: .7rem 1rem; border-radius: 12px; line-height: 1.6; max-width: 92%; word-break: break-word; font-size: .93rem; }
+    .bubble.user { background: #1e1f2e; border: 1px solid #2e3050; align-self: flex-end; color: #c4c9ff; white-space: pre-wrap; }
+    .bubble.agent { background: #161b27; border: 1px solid #283048; align-self: flex-start; }
+    .bubble.agent .meta { margin-top: .45rem; font-size: .7rem; color: #555f80; }
+    .bubble.error { background: #2a1010; border: 1px solid #5a2020; color: #ff7070; align-self: flex-start; }
+    .bubble.thinking { background: #161b27; border: 1px solid #283048; align-self: flex-start; color: #555f80; font-style: italic; }
+    .divider { text-align: center; font-size: .73rem; color: #3b4060; margin: .2rem 0; }
+    .prof-notice { align-self: center; background: #20121b; border: 1px solid #4a1f3a; color: #f0a8d0; font-size: .76rem; padding: .35rem .8rem; border-radius: 18px; }
+
+    .bubble.agent .md p { margin: .4rem 0; }
+    .bubble.agent .md p:first-child,.bubble.agent .md p:last-child { margin-top:0;margin-bottom:0 }
+    .bubble.agent .md ul,.bubble.agent .md ol { padding-left: 1.4rem; margin: .35rem 0; }
+    .bubble.agent .md strong { color: #d4d8ff; font-weight: 700; }
+    .bubble.agent .md code { background: #1e2235; border-radius: 4px; padding: .1em .4em; font-size: .86em; color: #c4c9ff; }
+    .bubble.agent .md pre { background: #111520; border: 1px solid #222840; border-radius: 8px; padding: .8rem 1rem; overflow-x: auto; margin: .5rem 0; }
+    .bubble.agent .md pre code { background: transparent; padding: 0; }
+
+    .input-row { display: flex; gap: .5rem; }
+    textarea#input { flex: 1; resize: none; background: #1a1d2e; border: 1px solid #2e3050; border-radius: 10px;
+      color: #e8eaf0; padding: .65rem 1rem; font-size: .93rem; font-family: inherit; outline: none; }
+    textarea#input:focus { border-color: #7c5cfa; }
+    #send-btn { background: #7c5cfa; color: #fff; border: none; border-radius: 10px; padding: .65rem 1.3rem; font-size: .93rem; font-weight: 600; cursor: pointer; }
+    #send-btn:hover:not(:disabled) { background: #6246ea; }
+    #send-btn:disabled { opacity: .4; cursor: not-allowed; }
+    #model-select { width: 100%; background: #1a1d2e; border: 1px solid #2e3050; border-radius: 7px; color: #e8eaf0; padding: .35rem .55rem; font-size: .78rem; outline: none; cursor: pointer; }
+  </style>
+</head>
+<body>
+<header>
+  <h1>🎭 Persona Agent</h1>
+  <div class="header-right">
+    <span class="badge pink" id="active-prof-badge">профиль не выбран</span>
+    <span class="badge" id="turn-badge">Ход 0</span>
+    <button id="clear-btn" onclick="clearDialog()">🗑 Очистить диалог</button>
+  </div>
+</header>
+
+<div class="layout">
+  <div id="chat">
+    <div class="messages" id="messages"></div>
+    <div class="input-row">
+      <textarea id="input" rows="3" placeholder="Введите запрос… Enter — отправить, Shift+Enter — перенос"></textarea>
+      <button id="send-btn" onclick="sendMessage()">Отправить</button>
+    </div>
+  </div>
+
+  <div id="panel">
+    <!-- Профиль -->
+    <div class="card profile">
+      <h3>🎭 Профиль пользователя</h3>
+      <div class="prof-chips" id="prof-chips"></div>
+      <div id="prof-form"></div>
+    </div>
+
+    <!-- Модель -->
+    <div class="card">
+      <h3>🧠 Модель</h3>
+      <select id="model-select" onchange="switchModel(this.value)"></select>
+    </div>
+
+    <!-- Память (компактно) -->
+    <div class="card">
+      <h3>🧠 Память</h3>
+      <div class="mem-compact" id="mem-compact">
+        <div>🔵 диалог: <b id="m-st">0</b> сообщ.</div>
+        <div>🟡 задача: <b id="m-task">—</b> (<b id="m-wk">0</b> полей)</div>
+        <div>🟢 долговременная: <b id="m-lt">0</b> записей</div>
+      </div>
+    </div>
+
+    <!-- Запрос -->
+    <div class="card">
+      <h3>Текущий запрос</h3>
+      <div class="stat-row"><span class="label">Вход</span><span class="value" id="r-prompt">—</span></div>
+      <div class="stat-row"><span class="label">Выход</span><span class="value" id="r-compl">—</span></div>
+      <div class="stat-row"><span class="label">Стоимость</span><span class="value cost" id="r-cost">—</span></div>
+      <div class="stat-row"><span class="label">Время</span><span class="value" id="r-time">—</span></div>
+    </div>
+
+    <!-- Сессия -->
+    <div class="card">
+      <h3>Сессия (итого)</h3>
+      <div class="stat-row"><span class="label">Ходов</span><span class="value" id="s-turns">0</span></div>
+      <div class="stat-row"><span class="label">Токенов</span><span class="value" id="s-total">0</span></div>
+      <div class="stat-row"><span class="label">Стоимость</span><span class="value cost" id="s-cost">$0.000000</span></div>
+    </div>
+  </div>
+</div>
+
+<script>
+marked.use({ gfm: true, breaks: true });
+const messagesEl = document.getElementById("messages");
+const inputEl = document.getElementById("input");
+const sendBtn = document.getElementById("send-btn");
+inputEl.addEventListener("keydown", e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); } });
+function setLoading(on) { inputEl.disabled = on; sendBtn.disabled = on; }
+
+function addBubble(text, cls, meta, renderMd = false) {
+  const div = document.createElement("div"); div.className = `bubble ${cls}`;
+  if (renderMd) { const md = document.createElement("div"); md.className = "md"; md.innerHTML = marked.parse(text); div.appendChild(md); }
+  else { div.textContent = text; }
+  if (meta) { const m = document.createElement("div"); m.className = "meta"; m.textContent = meta; div.appendChild(m); }
+  messagesEl.appendChild(div); div.scrollIntoView({ behavior: "smooth", block: "end" }); return div;
+}
+function addDivider(t) { const d = document.createElement("div"); d.className = "divider"; d.textContent = `— ${t} —`; messagesEl.appendChild(d); }
+function addProfNotice(t) { const d = document.createElement("div"); d.className = "prof-notice"; d.textContent = t; messagesEl.appendChild(d); d.scrollIntoView({behavior:"smooth",block:"end"}); }
+async function safeJson(res) { const ct = res.headers.get("content-type")||""; if (ct.includes("application/json")) return res.json(); const t = await res.text(); return { error: `Ошибка ${res.status}: ${t.slice(0,120)}` }; }
+
+// ── State ─────────────────────────────────────────────────────────
+let profiles = [], activeId = null, enums = {}, fieldDefs = {}, editingId = null;
+
+const FIELD_LABELS = { name:"Имя", role:"Роль", expertise:"Уровень", tone:"Тон",
+  verbosity:"Развёрнутость", answer_format:"Формат ответа", language:"Язык", constraints:"Ограничения" };
+
+// ── Render profile chips ──────────────────────────────────────────
+function renderChips() {
+  const el = document.getElementById("prof-chips"); el.innerHTML = "";
+  profiles.forEach(p => {
+    const c = document.createElement("div");
+    c.className = "prof-chip" + (p.id === activeId ? " active" : "");
+    c.textContent = p.name;
+    c.onclick = () => activateProfile(p.id);
+    el.appendChild(c);
+  });
+  const add = document.createElement("div");
+  add.className = "prof-chip add"; add.textContent = "+ новый";
+  add.onclick = () => openForm(null);
+  el.appendChild(add);
+
+  const badge = document.getElementById("active-prof-badge");
+  const ap = profiles.find(p => p.id === activeId);
+  badge.textContent = ap ? `🎭 ${ap.name}` : "профиль не выбран";
+}
+
+// ── Profile form ──────────────────────────────────────────────────
+function selField(name, val) {
+  const opts = (enums[name]||[]).map(o => `<option value="${o}" ${o===val?"selected":""}>${o}</option>`).join("");
+  return `<select id="f-${name}">${opts}</select>`;
+}
+function openForm(id) {
+  editingId = id;
+  const p = id ? profiles.find(x => x.id === id) : { ...fieldDefs, name:"" };
+  const el = document.getElementById("prof-form");
+  el.innerHTML = `
+    <div class="pf-field"><label>Имя профиля</label><input id="f-name" value="${p.name||""}" placeholder="напр. Новичок-дизайнер" /></div>
+    <div class="pf-field"><label>Роль</label><input id="f-role" value="${p.role||""}" placeholder="напр. студент, тимлид" /></div>
+    <div class="pf-grid">
+      <div class="pf-field"><label>Уровень</label>${selField("expertise", p.expertise)}</div>
+      <div class="pf-field"><label>Язык</label>${selField("language", p.language)}</div>
+      <div class="pf-field"><label>Тон</label>${selField("tone", p.tone)}</div>
+      <div class="pf-field"><label>Развёрнутость</label>${selField("verbosity", p.verbosity)}</div>
+    </div>
+    <div class="pf-field"><label>Формат ответа</label><input id="f-answer_format" value="${p.answer_format||""}" placeholder="напр. с примерами кода, списками" /></div>
+    <div class="pf-field"><label>Ограничения</label><textarea id="f-constraints" placeholder="напр. без жаргона, не длиннее 5 предложений">${p.constraints||""}</textarea></div>
+    <div class="pf-actions">
+      <button class="btn primary" onclick="saveProfile()">${id?"Сохранить":"Создать"}</button>
+      ${id?`<button class="btn danger" onclick="deleteProfile(${id})">Удалить</button>`:""}
+    </div>
+    <div class="pf-hint">Профиль подключается к каждому запросу. Активный профиль определяет стиль, формат и ограничения ответов.</div>
+  `;
+}
+
+function readForm() {
+  const get = n => { const e = document.getElementById("f-"+n); return e ? e.value.trim() : ""; };
+  return { name:get("name"), role:get("role"), expertise:get("expertise"), language:get("language"),
+    tone:get("tone"), verbosity:get("verbosity"), answer_format:get("answer_format"), constraints:get("constraints") };
+}
+
+async function saveProfile() {
+  const body = readForm();
+  if (!body.name) { document.getElementById("f-name").focus(); return; }
+  let res, data;
+  if (editingId) {
+    res = await fetch(`/profiles/${editingId}`, { method:"PUT", headers:{"Content-Type":"application/json"}, body: JSON.stringify(body) });
+    data = await safeJson(res);
+    addProfNotice(`профиль «${body.name}» обновлён`);
+  } else {
+    res = await fetch("/profiles", { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify(body) });
+    data = await safeJson(res);
+    addProfNotice(`создан профиль «${body.name}»`);
+  }
+  if (res.ok) await loadProfiles(data.id || activeId);
+}
+
+async function activateProfile(id) {
+  const res = await fetch("/profiles/activate", { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ profile_id: id }) });
+  if (res.ok) { activeId = id; renderChips(); openForm(id);
+    const p = profiles.find(x => x.id === id);
+    addProfNotice(`🎭 активен профиль «${p.name}» — стиль ответов адаптирован`); }
+}
+
+async function deleteProfile(id) {
+  const res = await fetch(`/profiles/${id}`, { method:"DELETE" });
+  if (res.ok) { addDivider("профиль удалён"); await loadProfiles(null); }
+}
+
+async function loadProfiles(selectId) {
+  const res = await fetch("/profiles"); const data = await res.json();
+  profiles = data.profiles; activeId = data.active_id; enums = data.enums; fieldDefs = data.fields;
+  renderChips();
+  const target = selectId || activeId || (profiles[0] && profiles[0].id) || null;
+  if (target) openForm(target);
+  else document.getElementById("prof-form").innerHTML = '<div class="no-profile">Профилей нет. Создайте первый ↑</div>';
+}
+
+// ── Memory compact ────────────────────────────────────────────────
+function renderMem(m) {
+  document.getElementById("m-st").textContent = m.short_term_total ?? 0;
+  document.getElementById("m-task").textContent = m.working_task || "—";
+  document.getElementById("m-wk").textContent = Object.keys(m.working||{}).length;
+  let lt = 0; Object.values(m.long_term||{}).forEach(a => lt += a.length);
+  document.getElementById("m-lt").textContent = lt;
+}
+
+// ── Stats ─────────────────────────────────────────────────────────
+function updateStats(data) {
+  const u = data.usage, s = data.session;
+  document.getElementById("r-prompt").textContent = u.prompt_tokens.toLocaleString();
+  document.getElementById("r-compl").textContent = u.completion_tokens.toLocaleString();
+  document.getElementById("r-cost").textContent = "$" + u.cost_usd.toFixed(6);
+  document.getElementById("r-time").textContent = data.elapsed_sec + " с";
+  document.getElementById("s-turns").textContent = s.turns;
+  document.getElementById("s-total").textContent = s.total_tokens.toLocaleString();
+  document.getElementById("s-cost").textContent = "$" + s.total_cost_usd.toFixed(6);
+  document.getElementById("turn-badge").textContent = `Ход ${s.turns}`;
+}
+
+async function switchModel(modelId) {
+  const res = await fetch("/model", { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ model_id: modelId }) });
+  const data = await safeJson(res);
+  if (res.ok) addDivider(`🧠 модель: ${data.name}`);
+}
+
+// ── Send ──────────────────────────────────────────────────────────
+async function sendMessage() {
+  const text = inputEl.value.trim(); if (!text) return;
+  inputEl.value = ""; setLoading(true);
+  addBubble(text, "user");
+  const thinking = addBubble("Агент думает…", "thinking");
+  try {
+    const res = await fetch("/ask", { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ message: text }) });
+    const data = await safeJson(res);
+    thinking.remove();
+    if (!res.ok) { addBubble(data.error || "Ошибка", "error"); }
+    else {
+      const pname = data.profile ? data.profile.name : "без профиля";
+      const meta = `${data.model} · 🎭 ${pname} · вход ${data.usage.prompt_tokens} · выход ${data.usage.completion_tokens} · ${data.elapsed_sec} с`;
+      addBubble(data.answer, "agent", meta, true);
+      updateStats(data); renderMem(data.memory);
+      // если профиль авто-обновился — перечитать
+      if ((data.memory.last_writes||[]).some(w => w.layer === "profile")) {
+        const changed = data.memory.last_writes.filter(w => w.layer==="profile").map(w => `${FIELD_LABELS[w.key]||w.key}: ${w.content}`).join(", ");
+        addProfNotice(`🎭 автонастройка профиля → ${changed}`);
+        loadProfiles(activeId);
+      }
+    }
+  } catch (err) { thinking.remove(); addBubble("Сетевая ошибка: " + err.message, "error"); }
+  finally { setLoading(false); inputEl.focus(); }
+}
+
+async function clearDialog() {
+  await fetch("/clear", { method:"POST" });
+  messagesEl.innerHTML = ""; document.getElementById("m-st").textContent = "0";
+  addDivider("диалог очищен (профиль и память сохранены)"); inputEl.focus();
+}
+
+// ── Init ──────────────────────────────────────────────────────────
+Promise.all([
+  fetch("/models").then(r => r.json()),
+  fetch("/model").then(r => r.json()),
+  fetch("/memory").then(r => r.json()),
+]).then(([models, active, mem]) => {
+  const sel = document.getElementById("model-select");
+  models.forEach(m => { const o = document.createElement("option"); o.value = m.id; o.textContent = m.name; if (m.id===active.id) o.selected = true; sel.appendChild(o); });
+  renderMem(mem);
+});
+loadProfiles(null);
+</script>
+</body>
+</html>

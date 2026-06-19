@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LLM Agent — модель памяти</title>
+  <script src="https://cdn.jsdelivr.net/npm/marked@12/marked.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #0f1117; color: #e8eaf0;
+      min-height: 100vh; display: flex; flex-direction: column;
+      align-items: center; padding: 2rem 1rem; gap: 1rem;
+    }
+    header { width: 100%; max-width: 1120px; display: flex; align-items: center; justify-content: space-between; }
+    h1 { font-size: 1.5rem; font-weight: 700; color: #a78bfa; }
+    .header-right { display: flex; gap: .6rem; align-items: center; }
+    .badge {
+      font-size: .78rem; color: #555f80; background: #1a1d2e;
+      border: 1px solid #2e3050; border-radius: 20px; padding: .2rem .65rem;
+    }
+    .badge.green  { color: #4ade80; border-color: #1a3a28; background: #0f1f17; }
+    #clear-btn {
+      background: transparent; border: 1px solid #3b2f6e; color: #a78bfa;
+      border-radius: 8px; padding: .3rem .8rem; font-size: .82rem; cursor: pointer;
+    }
+    #clear-btn:hover { background: #1e1535; }
+
+    .layout { width: 100%; max-width: 1120px; display: flex; gap: 1.25rem; align-items: flex-start; }
+    #chat { flex: 1; display: flex; flex-direction: column; gap: 1rem; min-width: 0; }
+    #panel { width: 320px; flex-shrink: 0; display: flex; flex-direction: column; gap: .7rem; position: sticky; top: 2rem; max-height: calc(100vh - 4rem); overflow-y: auto; }
+
+    .card { background: #13161f; border: 1px solid #1e2235; border-radius: 12px; padding: .8rem 1rem; }
+    .card.short  { border-left: 3px solid #38bdf8; }
+    .card.work   { border-left: 3px solid #fbbf24; }
+    .card.long   { border-left: 3px solid #4ade80; }
+    .card h3 {
+      font-size: .68rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: .06em; color: #7080a0; margin-bottom: .55rem;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .card .sub { font-size: .68rem; color: #4b5475; font-weight: 400; text-transform: none; letter-spacing: 0; }
+    .stat-row { display: flex; justify-content: space-between; font-size: .8rem; margin-bottom: .28rem; line-height: 1.4; }
+    .stat-row .label { color: #7080a0; }
+    .stat-row .value { color: #c4c9ff; font-variant-numeric: tabular-nums; }
+    .stat-row .value.cost   { color: #fbbf24; }
+
+    /* memory entries */
+    .mem-empty { font-size: .74rem; color: #3b4060; text-align: center; padding: .4rem 0; }
+    .kv-table { width: 100%; font-size: .76rem; border-collapse: collapse; margin-top: .2rem; }
+    .kv-table td { padding: .22rem .3rem; vertical-align: top; }
+    .kv-table .kk { color: #d6a93a; width: 42%; word-break: break-word; }
+    .kv-table .kv { color: #d8dcff; }
+    .kv-table .kx { width: 1%; }
+    .lt-group { margin-top: .45rem; }
+    .lt-group .lt-title { font-size: .68rem; color: #4ade80; font-weight: 600; margin-bottom: .2rem; }
+    .lt-item {
+      display: flex; gap: .35rem; align-items: flex-start;
+      font-size: .76rem; color: #c8d4c0; padding: .18rem 0; line-height: 1.4;
+    }
+    .lt-item .bullet { color: #2e6b42; flex-shrink: 0; }
+    .lt-item .txt { flex: 1; }
+    .del-x { background: none; border: none; color: #4b3040; cursor: pointer; font-size: .8rem; flex-shrink: 0; padding: 0 .1rem; }
+    .del-x:hover { color: #ff7070; }
+
+    .add-row { display: flex; gap: .3rem; margin-top: .4rem; }
+    .mini-input {
+      flex: 1; min-width: 0; background: #1a1d2e; border: 1px solid #2e3050; border-radius: 6px;
+      color: #e8eaf0; padding: .28rem .45rem; font-size: .74rem; outline: none;
+    }
+    .mini-input:focus { border-color: #7c5cfa; }
+    .mini-select {
+      background: #1a1d2e; border: 1px solid #2e3050; border-radius: 6px;
+      color: #e8eaf0; padding: .28rem .35rem; font-size: .72rem; outline: none; cursor: pointer;
+    }
+    .mini-btn {
+      background: #1e1535; border: 1px solid #4b3080; color: #a78bfa;
+      border-radius: 6px; padding: .28rem .5rem; font-size: .74rem; cursor: pointer; white-space: nowrap;
+    }
+    .mini-btn:hover { background: #2a1d4a; }
+    .task-row { display: flex; gap: .3rem; margin-bottom: .4rem; }
+
+    /* toggle */
+    .toggle-row { display: flex; align-items: center; justify-content: space-between; font-size: .76rem; color: #7080a0; }
+    .switch { position: relative; width: 34px; height: 18px; }
+    .switch input { display: none; }
+    .slider { position: absolute; inset: 0; background: #2e3050; border-radius: 18px; transition: .2s; cursor: pointer; }
+    .slider::before { content: ""; position: absolute; width: 14px; height: 14px; left: 2px; top: 2px; background: #7080a0; border-radius: 50%; transition: .2s; }
+    .switch input:checked + .slider { background: #4b3080; }
+    .switch input:checked + .slider::before { transform: translateX(16px); background: #a78bfa; }
+
+    /* chat */
+    .messages { display: flex; flex-direction: column; gap: .75rem; min-height: 200px; }
+    .bubble { padding: .7rem 1rem; border-radius: 12px; line-height: 1.6; max-width: 92%; word-break: break-word; font-size: .93rem; }
+    .bubble.user  { background: #1e1f2e; border: 1px solid #2e3050; align-self: flex-end; color: #c4c9ff; white-space: pre-wrap; }
+    .bubble.agent { background: #161b27; border: 1px solid #283048; align-self: flex-start; }
+    .bubble.agent .meta { margin-top: .45rem; font-size: .7rem; color: #555f80; }
+    .bubble.error { background: #2a1010; border: 1px solid #5a2020; color: #ff7070; align-self: flex-start; }
+    .bubble.thinking { background: #161b27; border: 1px solid #283048; align-self: flex-start; color: #555f80; font-style: italic; }
+    .divider { text-align: center; font-size: .73rem; color: #3b4060; margin: .2rem 0; }
+
+    /* routing notice */
+    .route-notice {
+      align-self: center; background: #0f1622; border: 1px solid #1f3450;
+      border-radius: 10px; padding: .5rem .8rem; font-size: .75rem; color: #9fb4d0; max-width: 92%;
+    }
+    .route-notice .rn-title { color: #38bdf8; font-weight: 600; margin-bottom: .3rem; }
+    .route-tag {
+      display: inline-block; font-size: .68rem; padding: .08rem .4rem; border-radius: 5px; margin-right: .3rem;
+    }
+    .route-tag.work { background: #2a2410; color: #fbbf24; border: 1px solid #4a3d10; }
+    .route-tag.profile   { background: #0f2417; color: #4ade80; border: 1px solid #1a4a2c; }
+    .route-tag.decision  { background: #0f1f24; color: #38d9d0; border: 1px solid #16404a; }
+    .route-tag.knowledge { background: #14210f; color: #a3e635; border: 1px solid #2c4a16; }
+    .route-line { padding: .12rem 0; }
+
+    .bubble.agent .md p { margin: .4rem 0; }
+    .bubble.agent .md p:first-child,.bubble.agent .md p:last-child { margin-top:0;margin-bottom:0 }
+    .bubble.agent .md ul,.bubble.agent .md ol { padding-left: 1.4rem; margin: .35rem 0; }
+    .bubble.agent .md strong { color: #d4d8ff; font-weight: 700; }
+    .bubble.agent .md code { background: #1e2235; border-radius: 4px; padding: .1em .4em; font-size: .86em; color: #c4c9ff; }
+
+    .input-row { display: flex; gap: .5rem; }
+    textarea {
+      flex: 1; resize: none; background: #1a1d2e; border: 1px solid #2e3050;
+      border-radius: 10px; color: #e8eaf0; padding: .65rem 1rem; font-size: .93rem; font-family: inherit; outline: none;
+    }
+    textarea:focus { border-color: #7c5cfa; }
+    #send-btn {
+      background: #7c5cfa; color: #fff; border: none; border-radius: 10px;
+      padding: .65rem 1.3rem; font-size: .93rem; font-weight: 600; cursor: pointer; white-space: nowrap;
+    }
+    #send-btn:hover:not(:disabled) { background: #6246ea; }
+    #send-btn:disabled { opacity: .4; cursor: not-allowed; }
+    #model-select { width: 100%; background: #1a1d2e; border: 1px solid #2e3050; border-radius: 7px; color: #e8eaf0; padding: .35rem .55rem; font-size: .78rem; outline: none; cursor: pointer; }
+  </style>
+</head>
+<body>
+<header>
+  <h1>🧠 Agent Memory</h1>
+  <div class="header-right">
+    <span class="badge green">💾 3 слоя</span>
+    <span class="badge" id="turn-badge">Ход 0</span>
+    <button id="clear-btn" onclick="clearDialog()">🗑 Очистить диалог</button>
+  </div>
+</header>
+
+<div class="layout">
+
+  <!-- Чат -->
+  <div id="chat">
+    <div class="messages" id="messages"></div>
+    <div class="input-row">
+      <textarea id="input" rows="3"
+        placeholder="Введите запрос… Enter — отправить, Shift+Enter — перенос"></textarea>
+      <button id="send-btn" onclick="sendMessage()">Отправить</button>
+    </div>
+  </div>
+
+  <!-- Панель памяти -->
+  <div id="panel">
+
+    <!-- Авто-маршрутизация -->
+    <div class="card">
+      <div class="toggle-row">
+        <span>🧭 Авто-маршрутизация памяти</span>
+        <label class="switch">
+          <input type="checkbox" id="auto-route" checked onchange="toggleAutoRoute(this.checked)" />
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <!-- КРАТКОСРОЧНАЯ -->
+    <div class="card short">
+      <h3>🔵 Краткосрочная <span class="sub">текущий диалог</span></h3>
+      <div class="stat-row"><span class="label">Сообщений в диалоге</span><span class="value" id="st-total">0</span></div>
+      <div class="stat-row"><span class="label">В контексте (окно 10)</span><span class="value" id="st-ctx">0</span></div>
+    </div>
+
+    <!-- РАБОЧАЯ -->
+    <div class="card work">
+      <h3>🟡 Рабочая <span class="sub">данные задачи</span></h3>
+      <div class="task-row">
+        <input class="mini-input" id="task-input" placeholder="Текущая задача…" />
+        <button class="mini-btn" onclick="saveTask()">✓</button>
+      </div>
+      <div id="working-list"><div class="mem-empty">Пусто</div></div>
+      <div class="add-row">
+        <input class="mini-input" id="wk-key" placeholder="ключ" style="flex:.7" />
+        <input class="mini-input" id="wk-val" placeholder="значение" />
+        <button class="mini-btn" onclick="addWorking()">+</button>
+      </div>
+      <div class="add-row" style="margin-top:.25rem">
+        <button class="mini-btn" style="flex:1;border-color:#3a2a10;color:#d6a93a" onclick="finishTask()">↺ Завершить задачу (очистить)</button>
+      </div>
+    </div>
+
+    <!-- ДОЛГОВРЕМЕННАЯ -->
+    <div class="card long">
+      <h3>🟢 Долговременная <span class="sub">профиль · решения · знания</span></h3>
+      <div id="long-list"><div class="mem-empty">Пусто</div></div>
+      <div class="add-row">
+        <select class="mini-select" id="lt-cat">
+          <option value="profile">профиль</option>
+          <option value="decision">решение</option>
+          <option value="knowledge">знание</option>
+        </select>
+        <input class="mini-input" id="lt-content" placeholder="что запомнить…" />
+        <button class="mini-btn" onclick="addLongTerm()">+</button>
+      </div>
+    </div>
+
+    <!-- Модель -->
+    <div class="card">
+      <h3>🧠 Модель</h3>
+      <select id="model-select" onchange="switchModel(this.value)"></select>
+    </div>
+
+    <!-- Запрос -->
+    <div class="card">
+      <h3>Текущий запрос</h3>
+      <div class="stat-row"><span class="label">Вход</span>   <span class="value" id="r-prompt">—</span></div>
+      <div class="stat-row"><span class="label">Выход</span>  <span class="value" id="r-compl">—</span></div>
+      <div class="stat-row"><span class="label">Стоимость</span><span class="value cost" id="r-cost">—</span></div>
+      <div class="stat-row"><span class="label">Время</span>  <span class="value" id="r-time">—</span></div>
+    </div>
+
+    <!-- Сессия -->
+    <div class="card">
+      <h3>Сессия (итого)</h3>
+      <div class="stat-row"><span class="label">Ходов</span>        <span class="value" id="s-turns">0</span></div>
+      <div class="stat-row"><span class="label">Токенов всего</span><span class="value" id="s-total">0</span></div>
+      <div class="stat-row"><span class="label">Стоимость</span>    <span class="value cost" id="s-cost">$0.000000</span></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+marked.use({ gfm: true, breaks: true });
+
+const messagesEl = document.getElementById("messages");
+const inputEl = document.getElementById("input");
+const sendBtn = document.getElementById("send-btn");
+
+inputEl.addEventListener("keydown", e => {
+  if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+});
+function setLoading(on) { inputEl.disabled = on; sendBtn.disabled = on; }
+
+function addBubble(text, cls, meta, renderMd = false) {
+  const div = document.createElement("div");
+  div.className = `bubble ${cls}`;
+  if (renderMd) { const md = document.createElement("div"); md.className = "md"; md.innerHTML = marked.parse(text); div.appendChild(md); }
+  else { div.textContent = text; }
+  if (meta) { const m = document.createElement("div"); m.className = "meta"; m.textContent = meta; div.appendChild(m); }
+  messagesEl.appendChild(div);
+  div.scrollIntoView({ behavior: "smooth", block: "end" });
+  return div;
+}
+function addDivider(t) { const d = document.createElement("div"); d.className = "divider"; d.textContent = `— ${t} —`; messagesEl.appendChild(d); }
+
+async function safeJson(res) {
+  const ct = res.headers.get("content-type") || "";
+  if (ct.includes("application/json")) return res.json();
+  const t = await res.text();
+  return { error: `Сервер вернул ошибку ${res.status}: ${t.slice(0, 120)}` };
+}
+
+const catLabel = { profile: "профиль", decision: "решение", knowledge: "знание" };
+
+// ── Routing notice ────────────────────────────────────────────────
+function showRouting(writes) {
+  if (!writes || writes.length === 0) return;
+  const div = document.createElement("div");
+  div.className = "route-notice";
+  let html = '<div class="rn-title">🧭 Маршрутизация памяти</div>';
+  writes.forEach(w => {
+    if (w.layer === "working") {
+      html += `<div class="route-line"><span class="route-tag work">рабочая</span><b>${w.key}</b>: ${w.content}</div>`;
+    } else {
+      html += `<div class="route-line"><span class="route-tag ${w.category}">${catLabel[w.category] || w.category}</span>${w.content}</div>`;
+    }
+  });
+  div.innerHTML = html;
+  messagesEl.appendChild(div);
+  div.scrollIntoView({ behavior: "smooth", block: "end" });
+}
+
+// ── Render memory layers ──────────────────────────────────────────
+function renderWorking(working, task) {
+  document.getElementById("task-input").value = task || "";
+  const el = document.getElementById("working-list");
+  const keys = Object.keys(working || {});
+  if (keys.length === 0) { el.innerHTML = '<div class="mem-empty">Пусто</div>'; return; }
+  const table = document.createElement("table"); table.className = "kv-table";
+  keys.forEach(k => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td class="kk">${k}</td><td class="kv">${working[k]}</td>`
+      + `<td class="kx"><button class="del-x" onclick="delWorking('${encodeURIComponent(k)}')">✕</button></td>`;
+    table.appendChild(tr);
+  });
+  el.innerHTML = ""; el.appendChild(table);
+}
+
+function renderLongTerm(lt) {
+  const el = document.getElementById("long-list");
+  const titles = { profile: "👤 Профиль", decision: "✓ Решения", knowledge: "💡 Знания" };
+  let total = 0; el.innerHTML = "";
+  ["profile", "decision", "knowledge"].forEach(cat => {
+    const items = (lt && lt[cat]) || [];
+    if (items.length === 0) return;
+    total += items.length;
+    const g = document.createElement("div"); g.className = "lt-group";
+    let html = `<div class="lt-title">${titles[cat]}</div>`;
+    items.forEach(it => {
+      html += `<div class="lt-item"><span class="bullet">●</span><span class="txt">${it.content}</span>`
+        + `<button class="del-x" onclick="delLongTerm(${it.id})">✕</button></div>`;
+    });
+    g.innerHTML = html; el.appendChild(g);
+  });
+  if (total === 0) el.innerHTML = '<div class="mem-empty">Пусто</div>';
+}
+
+function renderMemory(m) {
+  if (m.short_term_total != null) document.getElementById("st-total").textContent = m.short_term_total;
+  if (m.short_term_in_context != null) document.getElementById("st-ctx").textContent = m.short_term_in_context;
+  renderWorking(m.working || {}, m.working_task);
+  renderLongTerm(m.long_term || {});
+}
+
+// ── Working memory actions ────────────────────────────────────────
+async function saveTask() {
+  const task = document.getElementById("task-input").value.trim();
+  await fetch("/memory/task", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ task }) });
+  addDivider(task ? `задача: ${task}` : "задача снята");
+}
+async function addWorking() {
+  const key = document.getElementById("wk-key").value.trim();
+  const value = document.getElementById("wk-val").value.trim();
+  if (!key || !value) return;
+  const res = await fetch("/memory/working", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ key, value }) });
+  const data = await safeJson(res);
+  if (res.ok) { renderWorking(data.working, document.getElementById("task-input").value); document.getElementById("wk-key").value = ""; document.getElementById("wk-val").value = ""; }
+}
+async function delWorking(key) {
+  const res = await fetch(`/memory/working/${key}`, { method: "DELETE" });
+  const data = await safeJson(res);
+  if (res.ok) renderWorking(data.working, document.getElementById("task-input").value);
+}
+async function finishTask() {
+  await fetch("/memory/working", { method: "DELETE" });
+  renderWorking({}, ""); document.getElementById("task-input").value = "";
+  addDivider("задача завершена — рабочая память очищена");
+}
+
+// ── Long-term actions ─────────────────────────────────────────────
+async function addLongTerm() {
+  const category = document.getElementById("lt-cat").value;
+  const content = document.getElementById("lt-content").value.trim();
+  if (!content) return;
+  const res = await fetch("/memory/long-term", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ category, content }) });
+  const data = await safeJson(res);
+  if (res.ok) { renderLongTerm(data.long_term); document.getElementById("lt-content").value = ""; }
+}
+async function delLongTerm(id) {
+  const res = await fetch(`/memory/long-term/${id}`, { method: "DELETE" });
+  const data = await safeJson(res);
+  if (res.ok) renderLongTerm(data.long_term);
+}
+
+// ── Auto-route toggle ─────────────────────────────────────────────
+async function toggleAutoRoute(enabled) {
+  await fetch("/memory/auto-route", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ enabled }) });
+  addDivider(enabled ? "авто-маршрутизация включена" : "авто-маршрутизация выключена");
+}
+
+// ── Panel (tokens) ────────────────────────────────────────────────
+function updateStats(data) {
+  const u = data.usage, s = data.session;
+  document.getElementById("r-prompt").textContent = u.prompt_tokens.toLocaleString();
+  document.getElementById("r-compl").textContent = u.completion_tokens.toLocaleString();
+  document.getElementById("r-cost").textContent = "$" + u.cost_usd.toFixed(6);
+  document.getElementById("r-time").textContent = data.elapsed_sec + " с";
+  document.getElementById("s-turns").textContent = s.turns;
+  document.getElementById("s-total").textContent = s.total_tokens.toLocaleString();
+  document.getElementById("s-cost").textContent = "$" + s.total_cost_usd.toFixed(6);
+  document.getElementById("turn-badge").textContent = `Ход ${s.turns}`;
+}
+
+// ── Model ─────────────────────────────────────────────────────────
+async function switchModel(modelId) {
+  const res = await fetch("/model", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ model_id: modelId }) });
+  const data = await safeJson(res);
+  if (res.ok) addDivider(`🧠 модель: ${data.name}`);
+}
+
+// ── Send ──────────────────────────────────────────────────────────
+async function sendMessage() {
+  const text = inputEl.value.trim(); if (!text) return;
+  inputEl.value = ""; setLoading(true);
+  addBubble(text, "user");
+  const thinking = addBubble("Агент думает…", "thinking");
+  try {
+    const res = await fetch("/ask", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ message: text }) });
+    const data = await safeJson(res);
+    thinking.remove();
+    if (!res.ok) { addBubble(data.error || "Ошибка", "error"); }
+    else {
+      const meta = `${data.model} · вход ${data.usage.prompt_tokens} · выход ${data.usage.completion_tokens} · ${data.elapsed_sec} с`;
+      addBubble(data.answer, "agent", meta, true);
+      updateStats(data);
+      renderMemory(data.memory);
+      showRouting(data.memory.last_writes);
+    }
+  } catch (err) { thinking.remove(); addBubble("Сетевая ошибка: " + err.message, "error"); }
+  finally { setLoading(false); inputEl.focus(); }
+}
+
+// ── Clear dialog (краткосрочная only) ─────────────────────────────
+async function clearDialog() {
+  await fetch("/clear", { method: "POST" });
+  messagesEl.innerHTML = "";
+  document.getElementById("st-total").textContent = "0";
+  document.getElementById("st-ctx").textContent = "0";
+  addDivider("диалог очищен (рабочая и долговременная память сохранены)");
+  inputEl.focus();
+}
+
+// ── Init ──────────────────────────────────────────────────────────
+Promise.all([
+  fetch("/models").then(r => r.json()),
+  fetch("/model").then(r => r.json()),
+  fetch("/memory").then(r => r.json()),
+]).then(([models, active, mem]) => {
+  const sel = document.getElementById("model-select");
+  models.forEach(m => {
+    const opt = document.createElement("option");
+    opt.value = m.id; opt.textContent = m.name;
+    if (m.id === active.id) opt.selected = true;
+    sel.appendChild(opt);
+  });
+  document.getElementById("auto-route").checked = mem.auto_route !== false;
+  document.getElementById("st-total").textContent = mem.short_term_total || 0;
+  renderMemory(mem);
+});
+</script>
+</body>
+</html>

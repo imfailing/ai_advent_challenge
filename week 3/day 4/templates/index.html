@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LLM Agent — инварианты</title>
+  <script src="https://cdn.jsdelivr.net/npm/marked@12/marked.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: system-ui, -apple-system, sans-serif; background: #0f1117; color: #e8eaf0;
+      min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 2rem 1rem; gap: 1rem; }
+    header { width: 100%; max-width: 1140px; display: flex; align-items: center; justify-content: space-between; }
+    h1 { font-size: 1.5rem; font-weight: 700; color: #a78bfa; }
+    .header-right { display: flex; gap: .6rem; align-items: center; }
+    .badge { font-size: .78rem; color: #555f80; background: #1a1d2e; border: 1px solid #2e3050; border-radius: 20px; padding: .2rem .65rem; }
+    .badge.red { color: #f87171; border-color: #5a2020; background: #1f1012; }
+    #clear-btn { background: transparent; border: 1px solid #3b2f6e; color: #a78bfa; border-radius: 8px; padding: .3rem .8rem; font-size: .82rem; cursor: pointer; }
+    #clear-btn:hover { background: #1e1535; }
+
+    .layout { width: 100%; max-width: 1140px; display: flex; gap: 1.25rem; align-items: flex-start; }
+    #chat { flex: 1; display: flex; flex-direction: column; gap: 1rem; min-width: 0; }
+    #panel { width: 340px; flex-shrink: 0; display: flex; flex-direction: column; gap: .7rem; position: sticky; top: 2rem; max-height: calc(100vh - 4rem); overflow-y: auto; }
+    .card { background: #13161f; border: 1px solid #1e2235; border-radius: 12px; padding: .8rem 1rem; }
+    .card.inv { border-left: 3px solid #f87171; }
+    .card h3 { font-size: .68rem; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: #7080a0; margin-bottom: .55rem; display: flex; justify-content: space-between; align-items: center; }
+    .stat-row { display: flex; justify-content: space-between; font-size: .8rem; margin-bottom: .28rem; }
+    .stat-row .label { color: #7080a0; }
+    .stat-row .value { color: #c4c9ff; }
+    .stat-row .value.cost { color: #fbbf24; }
+
+    /* invariants */
+    .inv-group { margin-bottom: .5rem; }
+    .inv-cat { font-size: .66rem; text-transform: uppercase; letter-spacing: .04em; font-weight: 600; margin-bottom: .25rem; }
+    .inv-cat.architecture  { color: #60a5fa; }
+    .inv-cat.tech_decision { color: #c084fc; }
+    .inv-cat.stack         { color: #fb923c; }
+    .inv-cat.business_rule { color: #4ade80; }
+    .inv-item { display: flex; gap: .4rem; align-items: flex-start; font-size: .78rem; padding: .22rem 0; line-height: 1.4; color: #cdd3e8; }
+    .inv-item.off { opacity: .4; text-decoration: line-through; }
+    .inv-item .ic-tog { cursor: pointer; flex-shrink: 0; font-size: .85rem; }
+    .inv-item .ic-txt { flex: 1; }
+    .inv-item .ic-del { background: none; border: none; color: #4b3040; cursor: pointer; flex-shrink: 0; }
+    .inv-item .ic-del:hover { color: #ff7070; }
+    .inv-empty { font-size: .76rem; color: #3b4060; text-align: center; padding: .4rem 0; }
+
+    .inv-add { margin-top: .5rem; display: flex; flex-direction: column; gap: .35rem; }
+    .inv-add select, .inv-add textarea { background: #1a1d2e; border: 1px solid #2e3050; border-radius: 6px; color: #e8eaf0; padding: .35rem .5rem; font-size: .78rem; outline: none; font-family: inherit; }
+    .inv-add textarea { resize: vertical; min-height: 2.4rem; }
+    .inv-add select:focus, .inv-add textarea:focus { border-color: #f87171; }
+    .inv-add button { background: #b91c3c; border: none; color: #fff; border-radius: 6px; padding: .4rem; font-size: .78rem; font-weight: 600; cursor: pointer; }
+    .inv-add button:hover { background: #9f1239; }
+
+    .toggle-row { display: flex; align-items: center; justify-content: space-between; font-size: .76rem; color: #7080a0; }
+    .switch { position: relative; width: 34px; height: 18px; }
+    .switch input { display: none; }
+    .slider { position: absolute; inset: 0; background: #2e3050; border-radius: 18px; transition: .2s; cursor: pointer; }
+    .slider::before { content: ""; position: absolute; width: 14px; height: 14px; left: 2px; top: 2px; background: #7080a0; border-radius: 50%; transition: .2s; }
+    .switch input:checked + .slider { background: #7f1d2d; }
+    .switch input:checked + .slider::before { transform: translateX(16px); background: #f87171; }
+
+    .messages { display: flex; flex-direction: column; gap: .75rem; min-height: 200px; }
+    .bubble { padding: .7rem 1rem; border-radius: 12px; line-height: 1.6; max-width: 92%; word-break: break-word; font-size: .93rem; }
+    .bubble.user { background: #1e1f2e; border: 1px solid #2e3050; align-self: flex-end; color: #c4c9ff; white-space: pre-wrap; }
+    .bubble.agent { background: #161b27; border: 1px solid #283048; align-self: flex-start; }
+    .bubble.agent.refused   { border-color: #7a5a1a; background: #1b1810; }
+    .bubble.agent.violation  { border-color: #7a2020; background: #1d1112; }
+    .bubble.agent .meta { margin-top: .45rem; font-size: .7rem; color: #555f80; }
+    .bubble.error { background: #2a1010; border: 1px solid #5a2020; color: #ff7070; align-self: flex-start; }
+    .bubble.thinking { background: #161b27; border: 1px solid #283048; align-self: flex-start; color: #555f80; font-style: italic; }
+    .divider { text-align: center; font-size: .73rem; color: #3b4060; margin: .2rem 0; }
+
+    /* compliance verdict */
+    .verdict { display: inline-flex; align-items: center; gap: .35rem; font-size: .72rem; padding: .2rem .55rem; border-radius: 6px; margin-top: .5rem; }
+    .verdict.ok      { color: #4ade80; background: #0f1f17; border: 1px solid #1a3a28; }
+    .verdict.refused { color: #fbbf24; background: #1f1a0f; border: 1px solid #4a3d10; }
+    .verdict.bad     { color: #f87171; background: #1f1012; border: 1px solid #5a2020; }
+    .verdict.skip    { color: #5a6585; background: #14161f; border: 1px solid #232842; }
+    .violation-box { margin-top: .4rem; font-size: .78rem; color: #f3a0a0; background: #1a0f10; border: 1px solid #5a2020; border-radius: 8px; padding: .5rem .7rem; }
+    .violation-box b { color: #ff9090; }
+
+    .input-row { display: flex; gap: .5rem; }
+    textarea#input { flex: 1; resize: none; background: #1a1d2e; border: 1px solid #2e3050; border-radius: 10px; color: #e8eaf0; padding: .65rem 1rem; font-size: .93rem; font-family: inherit; outline: none; }
+    textarea#input:focus { border-color: #7c5cfa; }
+    #send-btn { background: #7c5cfa; color: #fff; border: none; border-radius: 10px; padding: .65rem 1.3rem; font-size: .93rem; font-weight: 600; cursor: pointer; }
+    #send-btn:hover:not(:disabled) { background: #6246ea; }
+    #send-btn:disabled { opacity: .4; cursor: not-allowed; }
+    #model-select { width: 100%; background: #1a1d2e; border: 1px solid #2e3050; border-radius: 7px; color: #e8eaf0; padding: .35rem .55rem; font-size: .78rem; outline: none; cursor: pointer; }
+  </style>
+</head>
+<body>
+<header>
+  <h1>🛡 Invariant Agent</h1>
+  <div class="header-right">
+    <span class="badge" id="inv-badge">0 инвариантов</span>
+    <span class="badge" id="turn-badge">Ход 0</span>
+    <button id="clear-btn" onclick="clearDialog()">🗑 Очистить диалог</button>
+  </div>
+</header>
+
+<div class="layout">
+  <div id="chat">
+    <div class="messages" id="messages"></div>
+    <div class="input-row">
+      <textarea id="input" rows="3" placeholder="Введите запрос… Enter — отправить, Shift+Enter — перенос"></textarea>
+      <button id="send-btn" onclick="sendMessage()">Отправить</button>
+    </div>
+  </div>
+
+  <div id="panel">
+    <!-- Инварианты -->
+    <div class="card inv">
+      <h3>⛔ Инварианты проекта</h3>
+      <div id="inv-list"><div class="inv-empty">Инвариантов нет</div></div>
+      <div class="inv-add">
+        <select id="inv-cat"></select>
+        <textarea id="inv-content" placeholder="напр. «Только PostgreSQL, другие БД запрещены»"></textarea>
+        <button onclick="addInvariant()">+ Добавить инвариант</button>
+      </div>
+    </div>
+
+    <!-- Страж -->
+    <div class="card">
+      <div class="toggle-row">
+        <span>🛡 Страж-проверка ответов</span>
+        <label class="switch"><input type="checkbox" id="guard" checked onchange="toggleGuard(this.checked)" /><span class="slider"></span></label>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🧠 Модель</h3>
+      <select id="model-select" onchange="switchModel(this.value)"></select>
+    </div>
+
+    <div class="card">
+      <h3>Текущий запрос</h3>
+      <div class="stat-row"><span class="label">Вход</span><span class="value" id="r-prompt">—</span></div>
+      <div class="stat-row"><span class="label">Выход</span><span class="value" id="r-compl">—</span></div>
+      <div class="stat-row"><span class="label">Стоимость</span><span class="value cost" id="r-cost">—</span></div>
+    </div>
+    <div class="card">
+      <h3>Сессия</h3>
+      <div class="stat-row"><span class="label">Ходов</span><span class="value" id="s-turns">0</span></div>
+      <div class="stat-row"><span class="label">Токенов</span><span class="value" id="s-total">0</span></div>
+      <div class="stat-row"><span class="label">Стоимость</span><span class="value cost" id="s-cost">$0.000000</span></div>
+    </div>
+  </div>
+</div>
+
+<script>
+marked.use({ gfm: true, breaks: true });
+const messagesEl = document.getElementById("messages");
+const inputEl = document.getElementById("input");
+const sendBtn = document.getElementById("send-btn");
+inputEl.addEventListener("keydown", e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); } });
+function setLoading(on) { inputEl.disabled = on; sendBtn.disabled = on; }
+function addDivider(t) { const d = document.createElement("div"); d.className = "divider"; d.textContent = `— ${t} —`; messagesEl.appendChild(d); }
+async function safeJson(res) { const ct = res.headers.get("content-type")||""; if (ct.includes("application/json")) return res.json(); const t = await res.text(); return { error: `Ошибка ${res.status}: ${t.slice(0,120)}` }; }
+
+let categories = {};
+
+// ── Invariants ────────────────────────────────────────────────────
+function renderInvariants(list) {
+  const el = document.getElementById("inv-list");
+  document.getElementById("inv-badge").textContent = `${list.filter(i=>i.active).length} инвариантов`;
+  if (!list.length) { el.innerHTML = '<div class="inv-empty">Инвариантов нет</div>'; return; }
+  const byCat = {};
+  list.forEach(i => { (byCat[i.category] = byCat[i.category] || []).push(i); });
+  el.innerHTML = "";
+  Object.keys(categories).forEach(cat => {
+    const items = byCat[cat]; if (!items) return;
+    const g = document.createElement("div"); g.className = "inv-group";
+    let html = `<div class="inv-cat ${cat}">${categories[cat]}</div>`;
+    items.forEach(i => {
+      html += `<div class="inv-item ${i.active?"":"off"}">`
+        + `<span class="ic-tog" onclick="toggleInv(${i.id}, ${i.active?0:1})">${i.active?"🔒":"⭕"}</span>`
+        + `<span class="ic-txt">${i.content}</span>`
+        + `<button class="ic-del" onclick="deleteInv(${i.id})">✕</button></div>`;
+    });
+    g.innerHTML = html; el.appendChild(g);
+  });
+}
+async function loadInvariants() {
+  const data = await fetch("/invariants").then(r => r.json());
+  categories = data.categories;
+  const sel = document.getElementById("inv-cat");
+  if (!sel.options.length) Object.entries(categories).forEach(([v,l]) => { const o=document.createElement("option"); o.value=v; o.textContent=l; sel.appendChild(o); });
+  document.getElementById("guard").checked = data.guard !== false;
+  renderInvariants(data.invariants);
+}
+async function addInvariant() {
+  const category = document.getElementById("inv-cat").value;
+  const content = document.getElementById("inv-content").value.trim();
+  if (!content) return;
+  const res = await fetch("/invariants", { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ category, content }) });
+  if (res.ok) { document.getElementById("inv-content").value = ""; addDivider(`⛔ добавлен инвариант: ${categories[category]}`); loadInvariants(); }
+}
+async function toggleInv(id, active) { await fetch(`/invariants/${id}/active`, { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ active: !!active }) }); loadInvariants(); }
+async function deleteInv(id) { await fetch(`/invariants/${id}`, { method:"DELETE" }); loadInvariants(); }
+async function toggleGuard(on) { await fetch("/guard", { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ enabled: on }) }); addDivider(on?"страж включён":"страж выключен"); }
+
+// ── Verdict ───────────────────────────────────────────────────────
+function verdictHtml(c) {
+  if (!c.checked) return `<div class="verdict skip">○ проверка не выполнялась</div>`;
+  if (c.refused)  return `<div class="verdict refused">⛔ отказ — инвариант защищён</div>`;
+  if (c.compliant) return `<div class="verdict ok">✓ соответствует инвариантам</div>`;
+  return `<div class="verdict bad">⚠ обнаружено нарушение инварианта</div>`;
+}
+function bubbleClass(c) {
+  if (!c.checked) return "agent";
+  if (c.refused) return "agent refused";
+  if (!c.compliant) return "agent violation";
+  return "agent";
+}
+
+// ── Stats ─────────────────────────────────────────────────────────
+function updateStats(data) {
+  const u = data.usage, s = data.session;
+  document.getElementById("r-prompt").textContent = u.prompt_tokens.toLocaleString();
+  document.getElementById("r-compl").textContent = u.completion_tokens.toLocaleString();
+  document.getElementById("r-cost").textContent = "$" + u.cost_usd.toFixed(6);
+  document.getElementById("s-turns").textContent = s.turns;
+  document.getElementById("s-total").textContent = s.total_tokens.toLocaleString();
+  document.getElementById("s-cost").textContent = "$" + s.total_cost_usd.toFixed(6);
+  document.getElementById("turn-badge").textContent = `Ход ${s.turns}`;
+}
+async function switchModel(modelId) {
+  const res = await fetch("/model", { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ model_id: modelId }) });
+  const data = await safeJson(res); if (res.ok) addDivider(`🧠 модель: ${data.name}`);
+}
+
+// ── Send ──────────────────────────────────────────────────────────
+async function sendMessage() {
+  const text = inputEl.value.trim(); if (!text) return;
+  inputEl.value = ""; setLoading(true);
+  const u = document.createElement("div"); u.className = "bubble user"; u.textContent = text; messagesEl.appendChild(u);
+  const thinking = document.createElement("div"); thinking.className = "bubble thinking"; thinking.textContent = "Агент думает…"; messagesEl.appendChild(thinking); thinking.scrollIntoView({behavior:"smooth",block:"end"});
+  try {
+    const res = await fetch("/ask", { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ message: text }) });
+    const data = await safeJson(res);
+    thinking.remove();
+    if (!res.ok) { const e = document.createElement("div"); e.className="bubble error"; e.textContent = data.error||"Ошибка"; messagesEl.appendChild(e); }
+    else {
+      const c = data.compliance;
+      const div = document.createElement("div"); div.className = "bubble " + bubbleClass(c);
+      const md = document.createElement("div"); md.className = "md"; md.innerHTML = marked.parse(data.answer); div.appendChild(md);
+      // вердикт
+      const v = document.createElement("div"); v.innerHTML = verdictHtml(c); div.appendChild(v.firstChild);
+      // нарушения
+      if (c.checked && !c.compliant && c.violations && c.violations.length) {
+        c.violations.forEach(vio => {
+          const vb = document.createElement("div"); vb.className = "violation-box";
+          vb.innerHTML = `<b>Нарушен инвариант:</b> ${vio.invariant || ""}<br>${vio.reason || ""}`;
+          div.appendChild(vb);
+        });
+      }
+      const meta = document.createElement("div"); meta.className = "meta";
+      meta.textContent = `${data.model} · вход ${data.usage.prompt_tokens} · выход ${data.usage.completion_tokens} · ${data.elapsed_sec} с`;
+      div.appendChild(meta);
+      messagesEl.appendChild(div); div.scrollIntoView({behavior:"smooth",block:"end"});
+      updateStats(data);
+    }
+  } catch (err) { thinking.remove(); const e = document.createElement("div"); e.className="bubble error"; e.textContent = "Сетевая ошибка: " + err.message; messagesEl.appendChild(e); }
+  finally { setLoading(false); inputEl.focus(); }
+}
+
+async function clearDialog() {
+  await fetch("/clear", { method:"POST" });
+  messagesEl.innerHTML = "";
+  addDivider("диалог очищен (инварианты сохранены)"); inputEl.focus();
+}
+
+// ── Init ──────────────────────────────────────────────────────────
+Promise.all([ fetch("/models").then(r=>r.json()), fetch("/model").then(r=>r.json()) ]).then(([models, active]) => {
+  const sel = document.getElementById("model-select");
+  models.forEach(m => { const o=document.createElement("option"); o.value=m.id; o.textContent=m.name; if (m.id===active.id) o.selected=true; sel.appendChild(o); });
+});
+loadInvariants();
+</script>
+</body>
+</html>

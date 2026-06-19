@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LLM Agent — состояние задачи (FSM)</title>
+  <script src="https://cdn.jsdelivr.net/npm/marked@12/marked.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: system-ui, -apple-system, sans-serif; background: #0f1117; color: #e8eaf0;
+      min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 2rem 1rem; gap: 1rem; }
+    header { width: 100%; max-width: 1140px; display: flex; align-items: center; justify-content: space-between; }
+    h1 { font-size: 1.5rem; font-weight: 700; color: #a78bfa; }
+    .header-right { display: flex; gap: .6rem; align-items: center; }
+    .badge { font-size: .78rem; color: #555f80; background: #1a1d2e; border: 1px solid #2e3050; border-radius: 20px; padding: .2rem .65rem; }
+    .badge.active { color: #4ade80; border-color: #1a3a28; background: #0f1f17; }
+    .badge.paused { color: #fbbf24; border-color: #4a3d10; background: #211c0f; }
+    #clear-btn { background: transparent; border: 1px solid #3b2f6e; color: #a78bfa; border-radius: 8px; padding: .3rem .8rem; font-size: .82rem; cursor: pointer; }
+    #clear-btn:hover { background: #1e1535; }
+
+    /* FSM pipeline */
+    .fsm-bar { width: 100%; max-width: 1140px; background: #13161f; border: 1px solid #1e2235; border-radius: 12px; padding: 1rem 1.2rem; }
+    .pipeline { display: flex; align-items: center; gap: .3rem; }
+    .stage { flex: 1; text-align: center; padding: .55rem .4rem; border-radius: 9px; border: 1px solid #232842;
+      background: #161a28; font-size: .82rem; color: #6b7595; position: relative; transition: all .2s; }
+    .stage .st-num { font-size: .66rem; color: #3b4366; display: block; }
+    .stage.done-stage { color: #4ade80; border-color: #1c3a2a; background: #0f1d16; }
+    .stage.current { color: #c4a8ff; border-color: #7c5cfa; background: #1a1535; font-weight: 700; box-shadow: 0 0 0 1px #7c5cfa55; }
+    .stage.current.paused { color: #fbbf24; border-color: #b8860b; background: #211c0f; box-shadow: 0 0 0 1px #b8860b55; }
+    .arrow { color: #2e3450; font-size: 1.1rem; flex-shrink: 0; }
+    .fsm-detail { display: flex; gap: 1.5rem; margin-top: .85rem; font-size: .82rem; flex-wrap: wrap; }
+    .fsm-detail .d-item { display: flex; flex-direction: column; gap: .15rem; }
+    .fsm-detail .d-label { font-size: .66rem; text-transform: uppercase; letter-spacing: .05em; color: #555f80; }
+    .fsm-detail .d-value { color: #d4d8ff; }
+    .fsm-detail .d-value.step { color: #7dd3fc; }
+    .fsm-detail .d-value.expect { color: #fcd34d; }
+    .fsm-controls { display: flex; gap: .5rem; margin-top: .9rem; flex-wrap: wrap; align-items: center; }
+    .fsm-btn { background: #1a1d2e; border: 1px solid #2e3050; color: #9aa3c0; border-radius: 8px; padding: .4rem .8rem; font-size: .8rem; cursor: pointer; }
+    .fsm-btn:hover:not(:disabled) { border-color: #7c5cfa; color: #c4a8ff; }
+    .fsm-btn:disabled { opacity: .35; cursor: not-allowed; }
+    .fsm-btn.pause { border-color: #4a3d10; color: #fbbf24; }
+    .fsm-btn.pause:hover { background: #211c0f; }
+    .fsm-btn.resume { border-color: #1a3a28; color: #4ade80; }
+    .fsm-btn.resume:hover { background: #0f1f17; }
+    .task-start { display: flex; gap: .5rem; flex: 1; min-width: 220px; }
+    .task-start input { flex: 1; background: #1a1d2e; border: 1px solid #2e3050; border-radius: 8px; color: #e8eaf0; padding: .4rem .7rem; font-size: .82rem; outline: none; }
+    .task-start input:focus { border-color: #7c5cfa; }
+    .task-start button { background: #7c5cfa; color: #fff; border: none; border-radius: 8px; padding: .4rem .9rem; font-size: .82rem; font-weight: 600; cursor: pointer; }
+    .no-task { font-size: .82rem; color: #6070a0; }
+
+    .layout { width: 100%; max-width: 1140px; display: flex; gap: 1.25rem; align-items: flex-start; }
+    #chat { flex: 1; display: flex; flex-direction: column; gap: 1rem; min-width: 0; }
+    #panel { width: 290px; flex-shrink: 0; display: flex; flex-direction: column; gap: .7rem; position: sticky; top: 2rem; }
+    .card { background: #13161f; border: 1px solid #1e2235; border-radius: 12px; padding: .8rem 1rem; }
+    .card h3 { font-size: .68rem; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: #7080a0; margin-bottom: .55rem; }
+    .stat-row { display: flex; justify-content: space-between; font-size: .8rem; margin-bottom: .28rem; line-height: 1.4; }
+    .stat-row .label { color: #7080a0; }
+    .stat-row .value { color: #c4c9ff; }
+    .stat-row .value.cost { color: #fbbf24; }
+
+    /* transitions log */
+    .trans-item { font-size: .74rem; color: #8a93b0; padding: .25rem 0; border-bottom: 1px solid #1a1d2e; line-height: 1.35; }
+    .trans-item:last-child { border-bottom: none; }
+    .trans-item .tr-path { color: #a78bfa; font-weight: 600; }
+    .trans-item .tr-note { color: #5a6585; }
+    .mem-compact { font-size: .74rem; color: #8a93b0; line-height: 1.5; }
+    .mem-compact b { color: #a0aac0; }
+
+    .messages { display: flex; flex-direction: column; gap: .75rem; min-height: 200px; }
+    .bubble { padding: .7rem 1rem; border-radius: 12px; line-height: 1.6; max-width: 92%; word-break: break-word; font-size: .93rem; }
+    .bubble.user { background: #1e1f2e; border: 1px solid #2e3050; align-self: flex-end; color: #c4c9ff; white-space: pre-wrap; }
+    .bubble.agent { background: #161b27; border: 1px solid #283048; align-self: flex-start; }
+    .bubble.agent .meta { margin-top: .45rem; font-size: .7rem; color: #555f80; }
+    .bubble.error { background: #2a1010; border: 1px solid #5a2020; color: #ff7070; align-self: flex-start; }
+    .bubble.thinking { background: #161b27; border: 1px solid #283048; align-self: flex-start; color: #555f80; font-style: italic; }
+    .divider { text-align: center; font-size: .73rem; color: #3b4060; margin: .2rem 0; }
+    .fsm-notice { align-self: center; background: #1a1535; border: 1px solid #3b2f6e; color: #c4a8ff; font-size: .76rem; padding: .35rem .85rem; border-radius: 18px; }
+    .fsm-notice.pause { background: #211c0f; border-color: #4a3d10; color: #fbbf24; }
+
+    .bubble.agent .md p { margin: .4rem 0; }
+    .bubble.agent .md p:first-child,.bubble.agent .md p:last-child { margin-top:0;margin-bottom:0 }
+    .bubble.agent .md ul,.bubble.agent .md ol { padding-left: 1.4rem; margin: .35rem 0; }
+    .bubble.agent .md strong { color: #d4d8ff; }
+    .bubble.agent .md code { background: #1e2235; border-radius: 4px; padding: .1em .4em; font-size: .86em; color: #c4c9ff; }
+    .bubble.agent .md pre { background: #111520; border: 1px solid #222840; border-radius: 8px; padding: .8rem 1rem; overflow-x: auto; margin: .5rem 0; }
+    .bubble.agent .md pre code { background: transparent; padding: 0; }
+
+    .input-row { display: flex; gap: .5rem; }
+    textarea#input { flex: 1; resize: none; background: #1a1d2e; border: 1px solid #2e3050; border-radius: 10px; color: #e8eaf0; padding: .65rem 1rem; font-size: .93rem; font-family: inherit; outline: none; }
+    textarea#input:focus { border-color: #7c5cfa; }
+    #send-btn { background: #7c5cfa; color: #fff; border: none; border-radius: 10px; padding: .65rem 1.3rem; font-size: .93rem; font-weight: 600; cursor: pointer; }
+    #send-btn:hover:not(:disabled) { background: #6246ea; }
+    #send-btn:disabled { opacity: .4; cursor: not-allowed; }
+    #model-select { width: 100%; background: #1a1d2e; border: 1px solid #2e3050; border-radius: 7px; color: #e8eaf0; padding: .35rem .55rem; font-size: .78rem; outline: none; cursor: pointer; }
+  </style>
+</head>
+<body>
+<header>
+  <h1>⚙️ Task State Agent</h1>
+  <div class="header-right">
+    <span class="badge" id="status-badge">нет задачи</span>
+    <span class="badge" id="turn-badge">Ход 0</span>
+    <button id="clear-btn" onclick="clearDialog()">🗑 Очистить диалог</button>
+  </div>
+</header>
+
+<!-- FSM bar -->
+<div class="fsm-bar">
+  <div class="pipeline" id="pipeline">
+    <div class="stage" data-stage="planning"><span class="st-num">1</span>Планирование</div>
+    <span class="arrow">→</span>
+    <div class="stage" data-stage="execution"><span class="st-num">2</span>Выполнение</div>
+    <span class="arrow">→</span>
+    <div class="stage" data-stage="validation"><span class="st-num">3</span>Проверка</div>
+    <span class="arrow">→</span>
+    <div class="stage" data-stage="done"><span class="st-num">4</span>Готово</div>
+  </div>
+
+  <div class="fsm-detail" id="fsm-detail" style="display:none">
+    <div class="d-item"><span class="d-label">Задача</span><span class="d-value" id="d-task">—</span></div>
+    <div class="d-item"><span class="d-label">Текущий шаг</span><span class="d-value step" id="d-step">—</span></div>
+    <div class="d-item"><span class="d-label">Ожидаемое действие</span><span class="d-value expect" id="d-expect">—</span></div>
+  </div>
+
+  <div class="fsm-controls" id="fsm-controls">
+    <div class="task-start" id="task-start-row">
+      <input id="task-name" placeholder="Опишите задачу… напр. «Сделать парсер логов»" />
+      <button onclick="startTask()">▶ Начать</button>
+    </div>
+    <button class="fsm-btn pause"  id="btn-pause"  onclick="pauseTask()"  style="display:none">⏸ Пауза</button>
+    <button class="fsm-btn resume" id="btn-resume" onclick="resumeTask()" style="display:none">▶ Продолжить</button>
+    <button class="fsm-btn"        id="btn-advance" onclick="advanceNext()" style="display:none">⏭ Следующий этап</button>
+    <button class="fsm-btn"        id="btn-reset"  onclick="resetTask()"  style="display:none">↺ Сброс</button>
+  </div>
+</div>
+
+<div class="layout">
+  <div id="chat">
+    <div class="messages" id="messages"></div>
+    <div class="input-row">
+      <textarea id="input" rows="3" placeholder="Введите запрос… Enter — отправить, Shift+Enter — перенос"></textarea>
+      <button id="send-btn" onclick="sendMessage()">Отправить</button>
+    </div>
+  </div>
+
+  <div id="panel">
+    <div class="card">
+      <h3>🧠 Модель</h3>
+      <select id="model-select" onchange="switchModel(this.value)"></select>
+    </div>
+    <div class="card">
+      <h3>🔀 История переходов</h3>
+      <div id="trans-log"><div class="mem-compact">Переходов пока нет</div></div>
+    </div>
+    <div class="card">
+      <h3>🧠 Память</h3>
+      <div class="mem-compact">
+        <div>🔵 диалог: <b id="m-st">0</b> сообщ.</div>
+        <div>🟡 рабочая: <b id="m-wk">0</b> полей</div>
+        <div>🟢 долговременная: <b id="m-lt">0</b> записей</div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Текущий запрос</h3>
+      <div class="stat-row"><span class="label">Вход</span><span class="value" id="r-prompt">—</span></div>
+      <div class="stat-row"><span class="label">Выход</span><span class="value" id="r-compl">—</span></div>
+      <div class="stat-row"><span class="label">Стоимость</span><span class="value cost" id="r-cost">—</span></div>
+    </div>
+    <div class="card">
+      <h3>Сессия</h3>
+      <div class="stat-row"><span class="label">Ходов</span><span class="value" id="s-turns">0</span></div>
+      <div class="stat-row"><span class="label">Токенов</span><span class="value" id="s-total">0</span></div>
+      <div class="stat-row"><span class="label">Стоимость</span><span class="value cost" id="s-cost">$0.000000</span></div>
+    </div>
+  </div>
+</div>
+
+<script>
+marked.use({ gfm: true, breaks: true });
+const messagesEl = document.getElementById("messages");
+const inputEl = document.getElementById("input");
+const sendBtn = document.getElementById("send-btn");
+inputEl.addEventListener("keydown", e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); } });
+function setLoading(on) { inputEl.disabled = on; sendBtn.disabled = on; }
+
+function addBubble(text, cls, meta, renderMd = false) {
+  const div = document.createElement("div"); div.className = `bubble ${cls}`;
+  if (renderMd) { const md = document.createElement("div"); md.className = "md"; md.innerHTML = marked.parse(text); div.appendChild(md); }
+  else { div.textContent = text; }
+  if (meta) { const m = document.createElement("div"); m.className = "meta"; m.textContent = meta; div.appendChild(m); }
+  messagesEl.appendChild(div); div.scrollIntoView({ behavior: "smooth", block: "end" }); return div;
+}
+function addDivider(t) { const d = document.createElement("div"); d.className = "divider"; d.textContent = `— ${t} —`; messagesEl.appendChild(d); }
+function addFsmNotice(t, paused) { const d = document.createElement("div"); d.className = "fsm-notice" + (paused?" pause":""); d.textContent = t; messagesEl.appendChild(d); d.scrollIntoView({behavior:"smooth",block:"end"}); }
+async function safeJson(res) { const ct = res.headers.get("content-type")||""; if (ct.includes("application/json")) return res.json(); const t = await res.text(); return { error: `Ошибка ${res.status}: ${t.slice(0,120)}` }; }
+
+const STAGES = ["planning","execution","validation","done"];
+const LABELS = { planning:"Планирование", execution:"Выполнение", validation:"Проверка", done:"Готово" };
+let state = null;
+
+// ── Render FSM ────────────────────────────────────────────────────
+function renderState(s) {
+  state = s;
+  const hasTask = !!s;
+  document.getElementById("fsm-detail").style.display = hasTask ? "" : "none";
+  document.getElementById("task-start-row").style.display = hasTask ? "none" : "";
+  ["btn-pause","btn-resume","btn-advance","btn-reset"].forEach(id => document.getElementById(id).style.display = "none");
+
+  const badge = document.getElementById("status-badge");
+  // подсветка конвейера
+  const curIdx = hasTask ? STAGES.indexOf(s.stage) : -1;
+  document.querySelectorAll(".stage").forEach(el => {
+    const idx = STAGES.indexOf(el.dataset.stage);
+    el.classList.remove("current","done-stage","paused");
+    if (!hasTask) return;
+    if (idx < curIdx) el.classList.add("done-stage");
+    else if (idx === curIdx) { el.classList.add("current"); if (s.status === "paused") el.classList.add("paused"); }
+  });
+
+  if (!hasTask) { badge.textContent = "нет задачи"; badge.className = "badge"; return; }
+
+  document.getElementById("d-task").textContent = s.task_name || "—";
+  document.getElementById("d-step").textContent = s.current_step || "—";
+  document.getElementById("d-expect").textContent = s.expected_action || "—";
+
+  const paused = s.status === "paused";
+  badge.textContent = paused ? "⏸ пауза" : "▶ активна";
+  badge.className = "badge " + (paused ? "paused" : "active");
+
+  const done = s.stage === "done";
+  document.getElementById("btn-reset").style.display = "";
+  if (!done) {
+    document.getElementById("btn-pause").style.display  = paused ? "none" : "";
+    document.getElementById("btn-resume").style.display = paused ? "" : "none";
+    document.getElementById("btn-advance").style.display = paused ? "none" : "";
+  }
+}
+
+function renderTransitions(trans) {
+  const el = document.getElementById("trans-log");
+  if (!trans || trans.length === 0) { el.innerHTML = '<div class="mem-compact">Переходов пока нет</div>'; return; }
+  el.innerHTML = "";
+  trans.forEach(t => {
+    const div = document.createElement("div"); div.className = "trans-item";
+    const from = t.from_stage ? (LABELS[t.from_stage]||t.from_stage) : "—";
+    const to = LABELS[t.to_stage]||t.to_stage;
+    div.innerHTML = `<span class="tr-path">${from} → ${to}</span>` + (t.note ? `<br><span class="tr-note">${t.note}</span>` : "");
+    el.appendChild(div);
+  });
+}
+
+async function refreshTask() {
+  const res = await fetch("/task"); const data = await res.json();
+  renderState(data.state); renderTransitions(data.transitions);
+}
+
+// ── FSM actions ───────────────────────────────────────────────────
+async function startTask() {
+  const name = document.getElementById("task-name").value.trim();
+  if (!name) { document.getElementById("task-name").focus(); return; }
+  const res = await fetch("/task/start", { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ task_name: name }) });
+  const s = await safeJson(res);
+  if (res.ok) { renderState(s); await refreshTask(); addFsmNotice(`⚙️ задача начата · этап: Планирование`); }
+}
+async function pauseTask() {
+  const res = await fetch("/task/pause", { method:"POST" });
+  const s = await safeJson(res);
+  if (res.ok) { renderState(s); addFsmNotice(`⏸ пауза на этапе «${LABELS[s.stage]}» — состояние сохранено`, true); }
+}
+async function resumeTask() {
+  const res = await fetch("/task/resume", { method:"POST" });
+  const s = await safeJson(res);
+  if (res.ok) { renderState(s); addFsmNotice(`▶ продолжаем с этапа «${LABELS[s.stage]}», шаг: ${s.current_step||"—"}`); }
+}
+async function advanceNext() {
+  const idx = STAGES.indexOf(state.stage);
+  const to = STAGES[idx+1]; if (!to) return;
+  const res = await fetch("/task/advance", { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ to_stage: to }) });
+  const s = await safeJson(res);
+  if (res.ok) { renderState(s); await refreshTask(); addFsmNotice(`⏭ переход → «${LABELS[to]}»`); }
+  else addBubble(s.error || "Ошибка перехода", "error");
+}
+async function resetTask() {
+  await fetch("/task/reset", { method:"POST" });
+  renderState(null); await refreshTask(); addDivider("задача сброшена");
+}
+
+// ── Stats / memory ────────────────────────────────────────────────
+function updateStats(data) {
+  const u = data.usage, s = data.session;
+  document.getElementById("r-prompt").textContent = u.prompt_tokens.toLocaleString();
+  document.getElementById("r-compl").textContent = u.completion_tokens.toLocaleString();
+  document.getElementById("r-cost").textContent = "$" + u.cost_usd.toFixed(6);
+  document.getElementById("s-turns").textContent = s.turns;
+  document.getElementById("s-total").textContent = s.total_tokens.toLocaleString();
+  document.getElementById("s-cost").textContent = "$" + s.total_cost_usd.toFixed(6);
+  document.getElementById("turn-badge").textContent = `Ход ${s.turns}`;
+}
+async function refreshMemory() {
+  const m = await fetch("/memory").then(r => r.json());
+  document.getElementById("m-st").textContent = m.short_term_total ?? 0;
+  document.getElementById("m-wk").textContent = Object.keys(m.working||{}).length;
+  let lt = 0; Object.values(m.long_term||{}).forEach(a => lt += a.length);
+  document.getElementById("m-lt").textContent = lt;
+}
+
+async function switchModel(modelId) {
+  const res = await fetch("/model", { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ model_id: modelId }) });
+  const data = await safeJson(res);
+  if (res.ok) addDivider(`🧠 модель: ${data.name}`);
+}
+
+// ── Send ──────────────────────────────────────────────────────────
+async function sendMessage() {
+  const text = inputEl.value.trim(); if (!text) return;
+  inputEl.value = ""; setLoading(true);
+  addBubble(text, "user");
+  const thinking = addBubble("Агент думает…", "thinking");
+  try {
+    const res = await fetch("/ask", { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ message: text }) });
+    const data = await safeJson(res);
+    thinking.remove();
+    if (!res.ok) { addBubble(data.error || "Ошибка", "error"); }
+    else {
+      const st = data.task_state;
+      const stLabel = st ? LABELS[st.stage] : "—";
+      const meta = `${data.model} · этап: ${stLabel} · вход ${data.usage.prompt_tokens} · выход ${data.usage.completion_tokens} · ${data.elapsed_sec} с`;
+      addBubble(data.answer, "agent", meta, true);
+      updateStats(data); refreshMemory();
+      // показать переходы автомата
+      (data.last_writes||[]).forEach(w => {
+        if (w.type === "transition") addFsmNotice(`⚙️ автомат: ${LABELS[w.from]} → ${LABELS[w.to]}${w.note?" · "+w.note:""}`);
+        if (w.type === "rejected") addFsmNotice(`⚠️ ${w.note}: ${LABELS[w.from]} → ${LABELS[w.to]}`, true);
+      });
+      renderState(st); refreshTask();
+    }
+  } catch (err) { thinking.remove(); addBubble("Сетевая ошибка: " + err.message, "error"); }
+  finally { setLoading(false); inputEl.focus(); }
+}
+
+async function clearDialog() {
+  await fetch("/clear", { method:"POST" });
+  messagesEl.innerHTML = ""; refreshMemory();
+  addDivider("диалог очищен (состояние задачи и память сохранены)"); inputEl.focus();
+}
+
+// ── Init ──────────────────────────────────────────────────────────
+Promise.all([
+  fetch("/models").then(r => r.json()),
+  fetch("/model").then(r => r.json()),
+]).then(([models, active]) => {
+  const sel = document.getElementById("model-select");
+  models.forEach(m => { const o = document.createElement("option"); o.value = m.id; o.textContent = m.name; if (m.id===active.id) o.selected = true; sel.appendChild(o); });
+});
+refreshTask(); refreshMemory();
+</script>
+</body>
+</html>

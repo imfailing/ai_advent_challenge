@@ -98,7 +98,10 @@ def create_profile():
     if not name:
         return jsonify({"error": "Нужно имя профиля"}), 400
     sid     = get_agent().session_id
-    fields  = {k: v for k, v in data.items() if k in db.PROFILE_FIELDS}
+    # name передаётся позиционно, поэтому исключаем его из **fields,
+    # иначе create_profile() получит несколько значений для 'name'.
+    fields  = {k: v for k, v in data.items()
+               if k in db.PROFILE_FIELDS and k != "name"}
     profile = db.create_profile(sid, name, **fields)
     # Первый созданный профиль делаем активным автоматически
     if db.get_active_profile_id(sid) is None:

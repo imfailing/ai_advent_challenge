@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.env
+venv/
+index.db
+index_fixed.json
+index_structural.json
+.fastembed_cache/

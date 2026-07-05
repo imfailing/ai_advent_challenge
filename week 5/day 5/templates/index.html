@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RAG-чат с памятью задачи</title>
+  <script src="https://cdn.jsdelivr.net/npm/marked@12/marked.min.js"></script>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:system-ui,-apple-system,sans-serif;background:#0f1117;color:#e8eaf0;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:2rem 1rem;gap:1rem}
+    header{width:100%;max-width:1120px;display:flex;align-items:center;justify-content:space-between}
+    h1{font-size:1.5rem;font-weight:700;color:#38bdf8}
+    .badge{font-size:.78rem;color:#555f80;background:#1a1d2e;border:1px solid #2e3050;border-radius:20px;padding:.2rem .65rem}
+    #clear-btn{background:transparent;border:1px solid #2e4a5e;color:#38bdf8;border-radius:8px;padding:.3rem .8rem;font-size:.82rem;cursor:pointer}
+    #clear-btn:hover{background:#12222e}
+    .layout{width:100%;max-width:1120px;display:flex;gap:1.25rem;align-items:flex-start}
+    #chat{flex:1;display:flex;flex-direction:column;gap:1rem;min-width:0}
+    #panel{width:320px;flex-shrink:0;display:flex;flex-direction:column;gap:.7rem;position:sticky;top:2rem;max-height:calc(100vh - 4rem);overflow-y:auto}
+    .card{background:#13161f;border:1px solid #1e2235;border-radius:12px;padding:.8rem 1rem}
+    .card.task{border-left:3px solid #38bdf8}
+    .card h3{font-size:.68rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:#7080a0;margin-bottom:.55rem}
+    .tm-goal{font-size:.9rem;color:#7dd3fc;font-weight:600;line-height:1.4;margin-bottom:.5rem}
+    .tm-empty{font-size:.78rem;color:#3b4060}
+    .tm-label{font-size:.66rem;text-transform:uppercase;letter-spacing:.04em;color:#555f80;margin:.5rem 0 .2rem}
+    .tm-item{font-size:.78rem;color:#c8d0e0;padding:.14rem 0;line-height:1.35;display:flex;gap:.35rem}
+    .tm-item::before{content:"•";color:#38bdf8;flex-shrink:0}
+    .tm-term{font-size:.76rem;color:#c8d0e0;padding:.14rem 0;line-height:1.35}
+    .tm-term b{color:#7dd3fc}
+    .messages{display:flex;flex-direction:column;gap:.75rem;min-height:200px}
+    .bubble{padding:.7rem 1rem;border-radius:12px;line-height:1.6;max-width:92%;word-break:break-word;font-size:.93rem}
+    .bubble.user{background:#1e1f2e;border:1px solid #2e3050;align-self:flex-end;color:#c4c9ff;white-space:pre-wrap}
+    .bubble.agent{background:#131b22;border:1px solid #24384a;align-self:flex-start}
+    .bubble.agent.notfound{border-color:#5a4a20;background:#1c1810}
+    .bubble.thinking{background:#131b22;border:1px solid #24384a;align-self:flex-start;color:#555f80;font-style:italic}
+    .bubble.error{background:#2a1010;border:1px solid #5a2020;color:#ff7070;align-self:flex-start}
+    .sources{margin-top:.55rem;padding-top:.5rem;border-top:1px solid #24384a}
+    .sources .st{font-size:.66rem;text-transform:uppercase;letter-spacing:.04em;color:#4a7a95;margin-bottom:.25rem}
+    .src{display:inline-flex;align-items:center;gap:.3rem;font-size:.72rem;color:#9fd3e8;background:#10202b;border:1px solid #1d3a4a;border-radius:6px;padding:.15rem .5rem;margin:.15rem .25rem .15rem 0}
+    .src .sc{color:#4a7a95}
+    .bubble.agent .md p{margin:.4rem 0}
+    .bubble.agent .md p:first-child,.bubble.agent .md p:last-child{margin-top:0;margin-bottom:0}
+    .bubble.agent .md ul,.bubble.agent .md ol{padding-left:1.4rem;margin:.35rem 0}
+    .bubble.agent .md strong{color:#d4e8ff}
+    .bubble.agent .md code{background:#1e2235;border-radius:4px;padding:.1em .4em;font-size:.86em;color:#9fd3e8}
+    .bubble.agent .md table{border-collapse:collapse;width:100%;margin:.5rem 0;font-size:.86em}
+    .bubble.agent .md th,.bubble.agent .md td{border:1px solid #2e3050;padding:.3rem .6rem}
+    .bubble.agent .md th{background:#1a2530;color:#38bdf8}
+    .input-row{display:flex;gap:.5rem}
+    textarea#input{flex:1;resize:none;background:#1a1d2e;border:1px solid #2e3050;border-radius:10px;color:#e8eaf0;padding:.65rem 1rem;font-size:.93rem;font-family:inherit;outline:none}
+    textarea#input:focus{border-color:#38bdf8}
+    #send-btn{background:#38bdf8;color:#04222e;border:none;border-radius:10px;padding:.65rem 1.3rem;font-size:.93rem;font-weight:700;cursor:pointer}
+    #send-btn:hover:not(:disabled){background:#0ea5e0}
+    #send-btn:disabled{opacity:.4;cursor:not-allowed}
+  </style>
+</head>
+<body>
+<header>
+  <h1>📚 RAG-чат</h1>
+  <div style="display:flex;gap:.6rem;align-items:center">
+    <span class="badge">RAG + источники + память задачи</span>
+    <button id="clear-btn" onclick="clearChat()">🗑 Новый диалог</button>
+  </div>
+</header>
+
+<div class="layout">
+  <div id="chat">
+    <div class="messages" id="messages"></div>
+    <div class="input-row">
+      <textarea id="input" rows="3" placeholder="Спросите по документации проекта… Enter — отправить"></textarea>
+      <button id="send-btn" onclick="send()">Отправить</button>
+    </div>
+  </div>
+
+  <div id="panel">
+    <div class="card task">
+      <h3>🎯 Память задачи</h3>
+      <div id="tm-goal" class="tm-empty">Цель ещё не определена</div>
+      <div id="tm-body"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+marked.use({gfm:true,breaks:true});
+const messagesEl=document.getElementById("messages");
+const inputEl=document.getElementById("input");
+const sendBtn=document.getElementById("send-btn");
+inputEl.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();send();}});
+function setLoading(on){inputEl.disabled=on;sendBtn.disabled=on;}
+async function safeJson(res){const ct=res.headers.get("content-type")||"";if(ct.includes("application/json"))return res.json();return{error:"Ошибка "+res.status};}
+
+function addUser(t){const d=document.createElement("div");d.className="bubble user";d.textContent=t;messagesEl.appendChild(d);d.scrollIntoView({behavior:"smooth",block:"end"});}
+function addAgent(data){
+  const d=document.createElement("div");d.className="bubble agent"+(data.found?"":" notfound");
+  const md=document.createElement("div");md.className="md";md.innerHTML=marked.parse(data.answer);d.appendChild(md);
+  if(data.sources&&data.sources.length){
+    const s=document.createElement("div");s.className="sources";
+    let html='<div class="st">📎 Источники</div>';
+    data.sources.forEach(x=>{html+=`<span class="src">${x.source} <span class="sc">→ ${(x.section||'').slice(0,28)}</span></span>`;});
+    s.innerHTML=html;d.appendChild(s);
+  }
+  messagesEl.appendChild(d);d.scrollIntoView({behavior:"smooth",block:"end"});
+}
+
+function renderMemory(m){
+  const goal=document.getElementById("tm-goal");
+  if(m.goal){goal.className="tm-goal";goal.textContent="🎯 "+m.goal;}
+  else{goal.className="tm-empty";goal.textContent="Цель ещё не определена";}
+  const body=document.getElementById("tm-body");let html="";
+  if(m.clarifications&&m.clarifications.length){
+    html+='<div class="tm-label">Уже уточнено</div>';
+    m.clarifications.slice(-6).forEach(c=>html+=`<div class="tm-item">${c}</div>`);
+  }
+  if(m.constraints&&m.constraints.length){
+    html+='<div class="tm-label">Ограничения</div>';
+    m.constraints.forEach(c=>html+=`<div class="tm-item">${c}</div>`);
+  }
+  const terms=m.terms||{};
+  if(Object.keys(terms).length){
+    html+='<div class="tm-label">Термины</div>';
+    Object.entries(terms).forEach(([k,v])=>html+=`<div class="tm-term"><b>${k}</b> — ${v}</div>`);
+  }
+  body.innerHTML=html;
+}
+
+async function send(){
+  const text=inputEl.value.trim();if(!text)return;
+  inputEl.value="";setLoading(true);addUser(text);
+  const th=document.createElement("div");th.className="bubble thinking";th.textContent="Ищу в базе и формулирую ответ…";messagesEl.appendChild(th);th.scrollIntoView({behavior:"smooth",block:"end"});
+  try{
+    const res=await fetch("/ask",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({message:text})});
+    const data=await safeJson(res);th.remove();
+    if(!res.ok){const e=document.createElement("div");e.className="bubble error";e.textContent=data.error||"Ошибка";messagesEl.appendChild(e);}
+    else{addAgent(data);renderMemory(data.task_memory||{});}
+  }catch(err){th.remove();const e=document.createElement("div");e.className="bubble error";e.textContent="Сеть: "+err.message;messagesEl.appendChild(e);}
+  finally{setLoading(false);inputEl.focus();}
+}
+
+async function clearChat(){
+  await fetch("/clear",{method:"POST"});
+  messagesEl.innerHTML="";renderMemory({});
+}
+
+// восстановить историю + память
+Promise.all([fetch("/history").then(r=>r.json()),fetch("/memory").then(r=>r.json())])
+  .then(([hist,mem])=>{
+    hist.forEach(m=>{if(m.role==="user")addUser(m.content);else addAgent({answer:m.content,sources:m.sources,found:true});});
+    renderMemory(mem);
+  });
+</script>
+</body>
+</html>

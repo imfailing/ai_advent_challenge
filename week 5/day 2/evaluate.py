@@ -33,9 +33,14 @@ def main() -> None:
     plain_pass = rag_pass = src_ok = 0
     rows = []
 
+    def short(text: str, n: int = 220) -> str:
+        text = " ".join(text.split())
+        return text if len(text) <= n else text[:n] + "…"
+
     for i, item in enumerate(EVAL, 1):
         q = item["question"]
-        print(f"[{i}/10] {q}")
+        print("\n" + "─" * 70)
+        print(f"[{i}/10] ❓ {q}")
 
         plain = agent.ask_plain(q)
         rag   = agent.ask_with_rag(q, k=4)
@@ -52,9 +57,12 @@ def main() -> None:
 
         rows.append((i, h_plain, p_plain, h_rag, p_rag, recall,
                      [s["file"] for s in rag.sources]))
-        print(f"      без RAG: hit={h_plain:.0%} {'✓' if p_plain else '✗'}   "
-              f"с RAG: hit={h_rag:.0%} {'✓' if p_rag else '✗'}   "
-              f"источники {'✓' if recall else '✗'}")
+
+        # выводим сами ответы модели
+        print(f"  🟥 без RAG [{h_plain:.0%} {'✓' if p_plain else '✗'}]: {short(plain.answer)}")
+        print(f"  🟩 с RAG   [{h_rag:.0%} {'✓' if p_rag else '✗'}]: {short(rag.answer)}")
+        srcs = ", ".join(sorted({s['file'] for s in rag.sources})) or "—"
+        print(f"     📎 источники [{'✓' if recall else '✗'}]: {srcs}")
 
     print("\n" + "=" * 70)
     print("  СВОДКА")

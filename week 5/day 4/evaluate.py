@@ -36,6 +36,10 @@ def main() -> None:
 
     has_src = has_quo = grounded_ok = meaning_ok = 0
     print("КОНТРОЛЬНЫЕ ВОПРОСЫ (in-domain):")
+    def short(text: str, n: int = 200) -> str:
+        text = " ".join(text.split())
+        return text if len(text) <= n else text[:n] + "…"
+
     for i, item in enumerate(EVAL, 1):
         r = agent.ask(item["question"], cfg)
         n_src   = len(r.sources)
@@ -50,7 +54,16 @@ def main() -> None:
         has_quo     += quo_ok
         grounded_ok += grnd_ok
         meaning_ok  += mean_ok
-        print(f"  {i:>2}. источники {'✓' if src_ok else '✗'}({n_src})  "
+        print("\n" + "─" * 68)
+        print(f"[{i:>2}/10] ❓ {item['question']}")
+        print(f"  🤖 {short(r.answer) if r.know else '(не знаю: ' + short(r.clarification, 80) + ')'}")
+        print(f"  📎 источники: " +
+              (", ".join(f"{s['source']}→{(s.get('section') or '')[:22]}" for s in r.sources) or "—"))
+        if r.quotes:
+            print("  💬 цитаты:")
+            for qt in r.quotes:
+                print(f"     [{'✓' if qt['grounded'] else '✗'}] «{short(qt['text'], 90)}»")
+        print(f"  ▸ источники {'✓' if src_ok else '✗'}({n_src})  "
               f"цитаты {'✓' if quo_ok else '✗'}({n_quo}, заземл. {n_grnd})  "
               f"смысл↔цитаты {'✓' if mean_ok else '✗'}")
 

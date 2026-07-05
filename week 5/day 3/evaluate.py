@@ -37,9 +37,14 @@ def main() -> None:
     results = {name: {"pass": 0, "recall": 0, "before": [], "after": [], "per_q": []}
                for name in CONFIGS}
 
+    def short(text: str, n: int = 200) -> str:
+        text = " ".join(text.split())
+        return text if len(text) <= n else text[:n] + "…"
+
     for i, item in enumerate(EVAL, 1):
         q = item["question"]
-        print(f"[{i}/10] {q[:60]}…")
+        print("\n" + "─" * 72)
+        print(f"[{i}/10] ❓ {q}")
         for name, cfg in CONFIGS.items():
             r = agent.ask(q, cfg)
             hit    = keyword_hit(r.answer, item["expected"])
@@ -50,9 +55,10 @@ def main() -> None:
             results[name]["before"].append(r.retrieved_n)
             results[name]["after"].append(len(r.kept))
             results[name]["per_q"].append((passed, recall))
-            print(f"      {name:<18} hit={hit:.0%} {'✓' if passed else '✗'}  "
+            print(f"  ▸ {name:<18} hit={hit:.0%} {'✓' if passed else '✗'}  "
                   f"src {'✓' if recall else '✗'}  "
                   f"(до фильтра {r.retrieved_n} → после {len(r.kept)})")
+            print(f"      ↳ {short(r.answer)}")
 
     print("\n" + "=" * 72)
     print("  СВОДКА ПО КОНФИГУРАЦИЯМ")

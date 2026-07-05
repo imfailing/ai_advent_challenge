@@ -73,8 +73,10 @@ class ChatAgent:
     # RAG-поиск (rewrite → retrieve → rerank → фильтр)
     # ------------------------------------------------------------------
 
-    def _retrieve(self, question: str, top_n=12, top_k=4, threshold=0.3) -> list[dict]:
-        queries = self._rewriter.rewrite(question)
+    def _retrieve(self, question: str, history: list[dict] | None = None,
+                  top_n=12, top_k=4, threshold=0.3) -> list[dict]:
+        # контекстуализируем вопрос по истории (уточняющие «а почему?», «они»…)
+        queries = self._rewriter.rewrite(question, history=history)
         seen: dict[str, dict] = {}
         for q in queries:
             qv = self._embedder.embed_one(q)
@@ -83,7 +85,10 @@ class ChatAgent:
                 if cid not in seen or hit["score"] > seen[cid]["score"]:
                     seen[cid] = hit
         pool = sorted(seen.values(), key=lambda c: c["score"], reverse=True)
-        kept, _ = self._reranker.rerank(question, pool, top_k=top_k,
+        # реранк по самому информативному (контекстуализированному) запросу,
+        # иначе короткий «Почему?» отсекает релевантные чанки
+        rerank_query = max(queries, key=len) if history else question
+        kept, _ = self._reranker.rerank(rerank_query, pool, top_k=top_k,
                                         threshold=threshold, min_keep=2)
         return kept
 
@@ -100,7 +105,9 @@ class ChatAgent:
         db.add_message(self._sid, "user", question)
         memory = db.get_task_memory(self._sid)
 
-        chunks = self._retrieve(question)
+        # недавняя история (до текущего вопроса) — для контекстуализации поиска
+        prior = db.get_messages(self._sid)[:-1][-HISTORY_TURNS:]
+        chunks = self._retrieve(question, history=prior)
         top = (chunks[0].get("rerank", chunks[0].get("score", 0)) if chunks else 0.0)
         found = bool(chunks) and top >= KNOW_THRESHOLD
 

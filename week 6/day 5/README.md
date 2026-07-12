@@ -87,8 +87,25 @@ python test_service.py
 
 ### Вариант A — Docker Compose (рекомендуется)
 
+**Предусловие — Docker + плагин Compose V2.** Если `docker compose version`
+выдаёт «unknown command»/«'compose' is not a docker command» — плагин не
+установлен:
+
 ```bash
-# на VPS (Ubuntu): установить Docker + compose plugin
+# Ubuntu/Debian, Docker из официального apt-репозитория:
+sudo apt-get update && sudo apt-get install -y docker-compose-plugin
+docker compose version          # должно показать v2.x
+
+# если плагина нет в репо — положить бинарь вручную:
+DEST=/usr/local/lib/docker/cli-plugins; sudo mkdir -p $DEST
+sudo curl -SL "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o $DEST/docker-compose
+sudo chmod +x $DEST/docker-compose && docker compose version
+```
+
+Совсем без Docker — используйте **Вариант B** (systemd) ниже.
+
+```bash
+# на VPS: установить Docker + плагин Compose (см. выше)
 git clone <repo> && cd "week 6/day 5"
 
 cp .env.example .env

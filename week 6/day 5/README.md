@@ -166,9 +166,16 @@ sudo apt install nginx
 sudo cp deploy/nginx.conf /etc/nginx/sites-available/llm && \
   sudo ln -s /etc/nginx/sites-available/llm /etc/nginx/sites-enabled/
 # заменить server_name на свой домен
+
+# certbot + плагин nginx (иначе «requested nginx plugin does not appear to be installed»):
+sudo apt install -y certbot python3-certbot-nginx
 sudo certbot --nginx -d your-domain.example   # Let's Encrypt TLS
 sudo systemctl reload nginx
 ```
+
+> TLS от Let's Encrypt требует **домен** (A-запись на ваш VPS), сертификат на
+> голый IP не выдаётся. Без домена — пропустите certbot и ходите по
+> `http://<IP>` (nginx на :80) или `http://<IP>:5008` напрямую.
 
 ### Firewall
 

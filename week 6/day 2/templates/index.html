@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Локальный LLM-чат</title>
+  <script src="https://cdn.jsdelivr.net/npm/marked@12/marked.min.js"></script>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:system-ui,-apple-system,sans-serif;background:#0f1117;color:#e8eaf0;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:2rem 1rem;gap:1rem}
+    header{width:100%;max-width:820px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem}
+    h1{font-size:1.5rem;font-weight:700;color:#34d399}
+    .right{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap}
+    .badge{font-size:.78rem;color:#555f80;background:#1a1d2e;border:1px solid #2e3050;border-radius:20px;padding:.2rem .65rem}
+    .badge.local{color:#34d399;border-color:#14432f;background:#0d1f18}
+    .badge.off{color:#f87171;border-color:#5a2020;background:#1f1012}
+    select{background:#1a1d2e;border:1px solid #2e3050;border-radius:8px;color:#e8eaf0;padding:.25rem .5rem;font-size:.8rem;outline:none;cursor:pointer}
+    #clear-btn{background:transparent;border:1px solid #2e4a3e;color:#34d399;border-radius:8px;padding:.3rem .8rem;font-size:.82rem;cursor:pointer}
+    #clear-btn:hover{background:#0d1f18}
+    #chat{width:100%;max-width:820px;display:flex;flex-direction:column;gap:1rem}
+    .messages{display:flex;flex-direction:column;gap:.75rem;min-height:220px}
+    .bubble{padding:.7rem 1rem;border-radius:12px;line-height:1.6;max-width:92%;word-break:break-word;font-size:.94rem}
+    .bubble.user{background:#1e1f2e;border:1px solid #2e3050;align-self:flex-end;color:#c4c9ff;white-space:pre-wrap}
+    .bubble.agent{background:#101c17;border:1px solid #1c3a2c;align-self:flex-start}
+    .bubble.agent .meta{margin-top:.45rem;font-size:.7rem;color:#4a6b58}
+    .bubble.error{background:#2a1010;border:1px solid #5a2020;color:#ff7070;align-self:flex-start}
+    .cursor::after{content:"▍";color:#34d399;animation:blink 1s steps(2) infinite}
+    @keyframes blink{0%,50%{opacity:1}50.01%,100%{opacity:0}}
+    .bubble.agent .md p{margin:.4rem 0}.bubble.agent .md p:first-child,.bubble.agent .md p:last-child{margin-top:0;margin-bottom:0}
+    .bubble.agent .md ul,.bubble.agent .md ol{padding-left:1.4rem;margin:.35rem 0}
+    .bubble.agent .md strong{color:#d4f8e4}
+    .bubble.agent .md code{background:#152219;border-radius:4px;padding:.1em .4em;font-size:.86em;color:#8fe8b8}
+    .bubble.agent .md pre{background:#0c1712;border:1px solid #18321f;border-radius:8px;padding:.8rem 1rem;overflow-x:auto;margin:.5rem 0}
+    .bubble.agent .md pre code{background:transparent;padding:0}
+    .input-row{display:flex;gap:.5rem}
+    textarea#input{flex:1;resize:none;background:#1a1d2e;border:1px solid #2e3050;border-radius:10px;color:#e8eaf0;padding:.65rem 1rem;font-size:.94rem;font-family:inherit;outline:none}
+    textarea#input:focus{border-color:#34d399}
+    #send-btn{background:#34d399;color:#04231a;border:none;border-radius:10px;padding:.65rem 1.3rem;font-size:.94rem;font-weight:700;cursor:pointer}
+    #send-btn:hover:not(:disabled){background:#10b981}
+    #send-btn:disabled{opacity:.4;cursor:not-allowed}
+    .hint{width:100%;max-width:820px;font-size:.75rem;color:#4a5568}
+  </style>
+</head>
+<body>
+<header>
+  <h1>🖥 Локальный LLM-чат</h1>
+  <div class="right">
+    <span class="badge local" id="offline-badge">🔒 офлайн · без облака</span>
+    <select id="model-select" title="Локальная модель"></select>
+    <button id="clear-btn" onclick="clearChat()">🗑 Очистить</button>
+  </div>
+</header>
+
+<div id="chat">
+  <div class="messages" id="messages"></div>
+  <div class="input-row">
+    <textarea id="input" rows="3" placeholder="Спросите локальную модель… Enter — отправить"></textarea>
+    <button id="send-btn" onclick="send()">Отправить</button>
+  </div>
+</div>
+<div class="hint">Запросы идут в локальный Ollama (localhost:11434). Ответы стримятся токен за токеном. Ничего не уходит в облако.</div>
+
+<script>
+marked.use({gfm:true,breaks:true});
+const messagesEl=document.getElementById("messages");
+const inputEl=document.getElementById("input");
+const sendBtn=document.getElementById("send-btn");
+const modelSel=document.getElementById("model-select");
+inputEl.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();send();}});
+function setLoading(on){inputEl.disabled=on;sendBtn.disabled=on;}
+
+function addUser(t){const d=document.createElement("div");d.className="bubble user";d.textContent=t;messagesEl.appendChild(d);d.scrollIntoView({behavior:"smooth",block:"end"});}
+function addAgent(){const d=document.createElement("div");d.className="bubble agent";const md=document.createElement("div");md.className="md cursor";d.appendChild(md);messagesEl.appendChild(d);d.scrollIntoView({behavior:"smooth",block:"end"});return d;}
+function addError(t){const d=document.createElement("div");d.className="bubble error";d.textContent=t;messagesEl.appendChild(d);d.scrollIntoView({behavior:"smooth",block:"end"});}
+
+async function send(){
+  const text=inputEl.value.trim();if(!text)return;
+  inputEl.value="";setLoading(true);addUser(text);
+  const bubble=addAgent();const md=bubble.querySelector(".md");
+  let full="",stats=null;
+  try{
+    const res=await fetch("/ask",{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({message:text,model:modelSel.value})});
+    if(!res.ok){md.classList.remove("cursor");const e=await res.json().catch(()=>({error:"Ошибка "+res.status}));bubble.remove();addError(e.error||"Ошибка");return;}
+    const reader=res.body.getReader();const dec=new TextDecoder();let buf="";
+    while(true){
+      const {value,done}=await reader.read();if(done)break;
+      buf+=dec.decode(value,{stream:true});
+      const lines=buf.split("\n");buf=lines.pop();
+      for(const line of lines){
+        if(!line.trim())continue;
+        const obj=JSON.parse(line);
+        if(obj.token){full+=obj.token;md.innerHTML=marked.parse(full);bubble.scrollIntoView({behavior:"smooth",block:"end"});}
+        else if(obj.error){addError(obj.error);}
+        else if(obj.done){stats=obj.stats;}
+      }
+    }
+    md.classList.remove("cursor");md.innerHTML=marked.parse(full);
+    if(stats){const m=document.createElement("div");m.className="meta";
+      m.textContent=`🖥 локально · ${stats.eval_tokens} токенов · ${(stats.total_duration_ms/1000).toFixed(1)} с`;bubble.appendChild(m);}
+  }catch(err){md.classList.remove("cursor");bubble.remove();addError("Сеть: "+err.message);}
+  finally{setLoading(false);inputEl.focus();}
+}
+
+async function clearChat(){await fetch("/clear",{method:"POST"});messagesEl.innerHTML="";}
+
+// здоровье локального сервера + список моделей
+fetch("/health").then(r=>r.json()).then(h=>{
+  const badge=document.getElementById("offline-badge");
+  if(!h.ollama_up){badge.className="badge off";badge.textContent="⚠ Ollama не запущен";}
+  (h.models||[]).forEach(m=>{const o=document.createElement("option");o.value=m;o.textContent=m;if(m===h.default)o.selected=true;modelSel.appendChild(o);});
+  if(!(h.models||[]).length){const o=document.createElement("option");o.textContent=h.default;modelSel.appendChild(o);}
+});
+// восстановить историю
+fetch("/history").then(r=>r.json()).then(hist=>{
+  hist.forEach(m=>{if(m.role==="user")addUser(m.content);else{const b=addAgent();const md=b.querySelector(".md");md.classList.remove("cursor");md.innerHTML=marked.parse(m.content);}});
+});
+</script>
+</body>
+</html>

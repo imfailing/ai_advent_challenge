@@ -1,11 +1,12 @@
 # AI Advent Challenge
 
 Учебный AI-адвент: каждый день — новая задача по работе с LLM. Задачи
-усложняются от простых консольных вызовов до агентов с памятью, MCP-серверов
-и полноценного RAG-чата.
+усложняются от простых консольных вызовов до агентов с памятью, MCP-серверов,
+RAG-чата и приватного AI-сервиса на **локальной** модели (для деплоя на VPS).
 
 **Стек:** Python 3.13 · DeepSeek API (OpenAI-совместимый) · Flask · SQLite ·
-MCP SDK · fastembed. У каждого дня — свой `venv/` и `README.md` с деталями.
+MCP SDK · fastembed · Ollama (локальные LLM) · Docker/nginx.
+У каждого дня — свой `venv/` и `README.md` с деталями.
 
 ---
 
@@ -82,22 +83,37 @@ MCP SDK · fastembed. У каждого дня — свой `venv/` и `README.m
 - **Week 5:** локальные эмбеддинги `fastembed` (ONNX, мультиязычная модель),
   cross-encoder reranker, SQLite/JSON-индекс. DeepSeek не даёт embeddings —
   эмбеддинги считаются локально.
+- **Week 6:** локальные LLM через **Ollama** (`qwen2.5:1.5b`), полностью
+  офлайн; веб-чат со стримингом, локальный RAG, оптимизация (параметры/квант),
+  приватный сервис для VPS (Flask + auth + rate limit + Docker/nginx/systemd).
 
 ---
 
 ## Запуск любого дня
 
+Дни на **DeepSeek** (weeks 1–5, week 6 / day 3 для облачного сравнения) — нужен ключ:
+
 ```bash
 cd "week N/day M"
-python3 -m venv venv
-source venv/bin/activate
+python3 -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
-export DEEPSEEK_API_KEY="ваш_ключ"     # где нужен LLM
+export DEEPSEEK_API_KEY="ваш_ключ"
 
-python app.py         # Flask-приложения (week 2/3/5) — см. порт выше
+python app.py         # Flask-приложения (week 2/3/5) — порт см. в таблицах
 python client.py      # CLI (week 4 MCP)
-python <script>.py    # прочее — см. README дня
 ```
+
+Дни на **локальной LLM** (week 6) — нужен запущенный [Ollama](https://ollama.com):
+
+```bash
+ollama pull qwen2.5:1.5b               # один раз
+cd "week 6/day M" && python3 -m venv venv && source venv/bin/activate
+pip install -r requirements.txt        # без DEEPSEEK_API_KEY
+python app.py                          # или query_local.py / compare.py — см. README дня
+```
+
+> week 6 / day 1 — на чистом stdlib, без venv: `python3 query_local.py`.
+> Деплой приватного сервиса на VPS — гайд в `week 6/day 5/README.md`.
 
 Детали, проверки и результаты — в `README.md` каждого дня.
 

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Приватный AI-сервис (локальная LLM)</title>
+  <script src="https://cdn.jsdelivr.net/npm/marked@12/marked.min.js"></script>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:system-ui,-apple-system,sans-serif;background:#0f1117;color:#e8eaf0;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:2rem 1rem;gap:1rem}
+    header{width:100%;max-width:820px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem}
+    h1{font-size:1.4rem;font-weight:700;color:#818cf8}
+    .badges{display:flex;gap:.5rem;flex-wrap:wrap}
+    .badge{font-size:.75rem;color:#555f80;background:#1a1d2e;border:1px solid #2e3050;border-radius:20px;padding:.2rem .6rem}
+    .badge.priv{color:#a5b4fc;border-color:#312e6e;background:#14132a}
+    .badge.off{color:#f87171;border-color:#5a2020;background:#1f1012}
+    .keyrow{width:100%;max-width:820px;display:flex;gap:.5rem;align-items:center}
+    .keyrow input{flex:1;background:#1a1d2e;border:1px solid #2e3050;border-radius:8px;color:#e8eaf0;padding:.4rem .7rem;font-size:.82rem;outline:none}
+    .keyrow input:focus{border-color:#818cf8}
+    .keyrow label{font-size:.78rem;color:#7080a0;white-space:nowrap}
+    #chat{width:100%;max-width:820px;display:flex;flex-direction:column;gap:1rem}
+    .messages{display:flex;flex-direction:column;gap:.75rem;min-height:220px}
+    .bubble{padding:.7rem 1rem;border-radius:12px;line-height:1.6;max-width:92%;word-break:break-word;font-size:.94rem}
+    .bubble.user{background:#1e1f2e;border:1px solid #2e3050;align-self:flex-end;color:#c4c9ff;white-space:pre-wrap}
+    .bubble.agent{background:#15162a;border:1px solid #272652;align-self:flex-start}
+    .bubble.agent .meta{margin-top:.45rem;font-size:.7rem;color:#5a5b8a}
+    .bubble.error{background:#2a1010;border:1px solid #5a2020;color:#ff7070;align-self:flex-start}
+    .cursor::after{content:"▍";color:#818cf8;animation:blink 1s steps(2) infinite}
+    @keyframes blink{0%,50%{opacity:1}50.01%,100%{opacity:0}}
+    .bubble.agent .md p{margin:.4rem 0}.bubble.agent .md p:first-child,.bubble.agent .md p:last-child{margin-top:0;margin-bottom:0}
+    .bubble.agent .md ul,.bubble.agent .md ol{padding-left:1.4rem;margin:.35rem 0}.bubble.agent .md strong{color:#c7d2fe}
+    .bubble.agent .md code{background:#191a33;border-radius:4px;padding:.1em .4em;font-size:.86em;color:#a5b4fc}
+    .bubble.agent .md pre{background:#0e0f22;border:1px solid #1e1f42;border-radius:8px;padding:.8rem 1rem;overflow-x:auto;margin:.5rem 0}.bubble.agent .md pre code{background:transparent;padding:0}
+    .input-row{display:flex;gap:.5rem}
+    textarea#input{flex:1;resize:none;background:#1a1d2e;border:1px solid #2e3050;border-radius:10px;color:#e8eaf0;padding:.65rem 1rem;font-size:.94rem;font-family:inherit;outline:none}
+    textarea#input:focus{border-color:#818cf8}
+    #send-btn{background:#818cf8;color:#0c1030;border:none;border-radius:10px;padding:.65rem 1.3rem;font-size:.94rem;font-weight:700;cursor:pointer}
+    #send-btn:hover:not(:disabled){background:#6366f1}#send-btn:disabled{opacity:.4;cursor:not-allowed}
+    .hint{width:100%;max-width:820px;font-size:.74rem;color:#4a5568}
+  </style>
+</head>
+<body>
+<header>
+  <h1>🔐 Приватный AI-сервис</h1>
+  <div class="badges">
+    <span class="badge priv" id="badge">локальная LLM · офлайн</span>
+    <span class="badge" id="limits">лимиты…</span>
+  </div>
+</header>
+
+{% if require_auth %}
+<div class="keyrow">
+  <label>API-ключ</label>
+  <input id="apikey" type="password" placeholder="Bearer-ключ для доступа к сервису" />
+</div>
+{% endif %}
+
+<div id="chat">
+  <div class="messages" id="messages"></div>
+  <div class="input-row">
+    <textarea id="input" rows="3" placeholder="Спросите модель… Enter — отправить"></textarea>
+    <button id="send-btn" onclick="send()">Отправить</button>
+  </div>
+</div>
+<div class="hint">Запросы идут на этот сервис → локальный Ollama на VPS. Модель: <b>{{ model }}</b>. История держится в браузере.</div>
+
+<script>
+marked.use({gfm:true,breaks:true});
+const messagesEl=document.getElementById("messages");
+const inputEl=document.getElementById("input");
+const sendBtn=document.getElementById("send-btn");
+const keyEl=document.getElementById("apikey");
+const history=[];
+inputEl.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();send();}});
+function setLoading(on){inputEl.disabled=on;sendBtn.disabled=on;}
+function addUser(t){const d=document.createElement("div");d.className="bubble user";d.textContent=t;messagesEl.appendChild(d);d.scrollIntoView({behavior:"smooth",block:"end"});}
+function addAgent(){const d=document.createElement("div");d.className="bubble agent";const md=document.createElement("div");md.className="md cursor";d.appendChild(md);messagesEl.appendChild(d);d.scrollIntoView({behavior:"smooth",block:"end"});return d;}
+function addError(t){const d=document.createElement("div");d.className="bubble error";d.textContent=t;messagesEl.appendChild(d);d.scrollIntoView({behavior:"smooth",block:"end"});}
+
+async function send(){
+  const text=inputEl.value.trim();if(!text)return;
+  inputEl.value="";setLoading(true);addUser(text);
+  history.push({role:"user",content:text});
+  const bubble=addAgent();const md=bubble.querySelector(".md");let full="",stats=null;
+  const headers={"Content-Type":"application/json"};
+  if(keyEl&&keyEl.value.trim())headers["Authorization"]="Bearer "+keyEl.value.trim();
+  try{
+    const res=await fetch("/v1/chat",{method:"POST",headers,body:JSON.stringify({messages:history})});
+    if(!res.ok){md.classList.remove("cursor");bubble.remove();const e=await res.json().catch(()=>({error:"Ошибка "+res.status}));addError((res.status===429?"⏳ ":res.status===401?"🔒 ":res.status===413?"📏 ":"")+ (e.error||"Ошибка"));setLoading(false);return;}
+    const reader=res.body.getReader();const dec=new TextDecoder();let buf="";
+    while(true){const {value,done}=await reader.read();if(done)break;
+      buf+=dec.decode(value,{stream:true});const lines=buf.split("\n");buf=lines.pop();
+      for(const line of lines){if(!line.trim())continue;const o=JSON.parse(line);
+        if(o.token){full+=o.token;md.innerHTML=marked.parse(full);bubble.scrollIntoView({behavior:"smooth",block:"end"});}
+        else if(o.error){addError(o.error);}else if(o.done){stats=o.stats;}}}
+    md.classList.remove("cursor");md.innerHTML=marked.parse(full);
+    history.push({role:"assistant",content:full});
+    if(stats){const m=document.createElement("div");m.className="meta";m.textContent=`🖥 локально · ${stats.eval_tokens} токенов · ${(stats.total_duration_ms/1000).toFixed(1)} с`;bubble.appendChild(m);}
+  }catch(err){md.classList.remove("cursor");bubble.remove();addError("Сеть: "+err.message);}
+  finally{setLoading(false);inputEl.focus();}
+}
+
+fetch("/v1/health").then(r=>r.json()).then(h=>{
+  const b=document.getElementById("badge");
+  if(!h.ollama_up){b.className="badge off";b.textContent="⚠ модель недоступна";}
+  document.getElementById("limits").textContent=`⏱ ${h.limits.rate_limit} · 📏 ${h.limits.max_input_chars} симв · ctx ${h.limits.num_ctx}`;
+});
+</script>
+</body>
+</html>

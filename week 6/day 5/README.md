@@ -87,18 +87,21 @@ python test_service.py
 
 ### Вариант A — Docker Compose (рекомендуется)
 
-**Предусловие — Docker + плагин Compose V2.** Если `docker compose version`
-выдаёт «unknown command»/«'compose' is not a docker command» — плагин не
-установлен:
+**Предусловие — Docker + Compose.** Если `docker compose version` выдаёт
+«unknown command» — плагин Compose V2 не установлен. Варианты:
 
 ```bash
-# Ubuntu/Debian, Docker из официального apt-репозитория:
-sudo apt-get update && sudo apt-get install -y docker-compose-plugin
-docker compose version          # должно показать v2.x
+# (а) проще всего — standalone V1 из репозитория Ubuntu (команда через дефис):
+sudo apt-get install -y docker-compose
+docker-compose up -d --build          # ← используйте docker-compose, не 'docker compose'
 
-# если плагина нет в репо — положить бинарь вручную:
+# (б) плагин V2 из официального apt-репо Docker (если он подключён):
+sudo apt-get update && sudo apt-get install -y docker-compose-plugin
+#   «Unable to locate package» → репо Docker не подключён, см. (в)
+
+# (в) плагин V2 бинарём вручную — работает при ЛЮБОМ Docker:
 DEST=/usr/local/lib/docker/cli-plugins; sudo mkdir -p $DEST
-sudo curl -SL "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o $DEST/docker-compose
+sudo curl -SL "https://github.com/docker/compose/releases/latest/download/docker-compose-linux-$(uname -m)" -o $DEST/docker-compose
 sudo chmod +x $DEST/docker-compose && docker compose version
 ```
 

@@ -94,11 +94,20 @@ git clone <repo> && cd "week 6/day 5"
 cp .env.example .env
 # отредактировать .env: задать API_KEYS (openssl rand -hex 24), MODEL
 
-docker compose up -d --build              # поднимет ollama + api
+# Compose V2 (плагин, современный Docker):
+docker compose up --build --detach        # поднимет ollama + api
 docker compose exec ollama ollama pull qwen2.5:1.5b   # скачать модель в том
 
 curl http://localhost:5008/v1/health      # проверить
 ```
+
+> **Флаг `-d`/`--detach` идёт ПОСЛЕ `up`.** Если получаете
+> `unknown shorthand flag: 'd' in -d` — флаг попал не в ту команду (неверный
+> порядок вроде `docker compose -d up`). Правильно: `docker compose up -d`
+> (или `--detach`). Проверьте версию: `docker compose version` (V2) или
+> `docker-compose --version` (V1 → команда `docker-compose up -d`). Можно
+> запустить и на переднем плане без флага — `docker compose up --build` —
+> и остановить по Ctrl-C.
 
 Наружу открыт только порт **5008** (API). Ollama — во внутренней сети Docker,
 недоступен извне.

@@ -36,9 +36,11 @@ ollama run qwen2.5:1.5b "сколько будет 2+2?"   # → 4
 
 **3. Обращение через HTTP API** (нативный `/api/chat`, только stdlib):
 ```bash
-python query_local.py            # 3 запроса разной сложности
-python query_local.py "вопрос"   # свой запрос
+python3 query_local.py           # 3 запроса разной сложности
+python3 query_local.py "вопрос"  # свой запрос
 ```
+> В системе может не быть команды `python` — используйте `python3`
+> (зависимостей нет, только stdlib, venv не требуется).
 
 Ollama также даёт **OpenAI-совместимый** эндпоинт
 `http://localhost:11434/v1/chat/completions` — можно ходить тем же

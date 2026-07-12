@@ -87,6 +87,16 @@ python test_service.py
 
 ### Вариант A — Docker Compose (рекомендуется)
 
+**Права доступа к Docker.** Если видите `permission denied ... /var/run/docker.sock`
+— пользователь не в группе `docker`. Либо через `sudo docker compose …`, либо
+добавьте себя в группу (разово):
+
+```bash
+sudo usermod -aG docker $USER
+newgrp docker            # применить сейчас (или перелогиниться в SSH)
+docker ps                # проверка: работает без sudo
+```
+
 **Предусловие — Docker + Compose.** Если `docker compose version` выдаёт
 «unknown command» — плагин Compose V2 не установлен. Варианты:
 

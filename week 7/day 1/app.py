@@ -51,17 +51,25 @@ def ask():
     data = request.get_json(force=True)
     message = (data.get("message") or "").strip()
 
-    # команда /help
-    if message.lower() == "/help" or not message:
+    # О проекте ассистент отвечает ТОЛЬКО по команде /help.
+    first = message.split(maxsplit=1)
+    is_help = bool(first) and first[0].lower() == "/help"
+    if not is_help:
+        return jsonify({
+            "answer": "Я отвечаю на вопросы о проекте только по команде **/help**.\n\n"
+                      "Например: `/help на какой ветке проект?` или `/help про что неделя 5?`\n\n"
+                      "Наберите `/help` без вопроса, чтобы посмотреть, что я умею.",
+            "sources": [], "git_calls": [], "help": True})
+
+    question = first[1].strip() if len(first) > 1 else ""
+    if not question:                       # просто «/help» — показать справку
         return jsonify({"answer": HELP_TEXT, "sources": [], "git_calls": [], "help": True})
-    if message.lower().startswith("/help "):
-        message = message[6:].strip()
 
     if not os.environ.get("DEEPSEEK_API_KEY"):
         return jsonify({"error": "Не задан DEEPSEEK_API_KEY (нужна облачная модель)."}), 503
 
     try:
-        result = asyncio.run(get_assistant().ask(message))
+        result = asyncio.run(get_assistant().ask(question))
     except Exception as e:
         return jsonify({"error": f"Ошибка: {e}"}), 500
     return jsonify(asdict(result))

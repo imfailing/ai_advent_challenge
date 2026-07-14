@@ -52,11 +52,11 @@
 <div id="chat">
   <div class="messages" id="messages"></div>
   <div class="input-row">
-    <textarea id="input" rows="3" placeholder="Спросите о проекте… напр. «/help» или «на какой ветке проект?»"></textarea>
+    <textarea id="input" rows="3" placeholder="Вопрос о проекте — только через /help… напр. «/help на какой ветке проект?»"></textarea>
     <button id="send-btn" onclick="send()">Спросить</button>
   </div>
 </div>
-<div class="hint">Команда <code>/help</code> — что умею. Отвечаю по документации проекта (README + доки дней + claude/) и живому состоянию git.</div>
+<div class="hint">О проекте отвечаю <b>только по команде <code>/help</code></b> (напр. <code>/help про что неделя 5?</code>). Использую документацию проекта (README + доки дней + claude/) и живое состояние git.</div>
 
 <script>
 marked.use({gfm:true,breaks:true});
@@ -100,7 +100,7 @@ async function send(){
 }
 
 // приветствие
-addAgent({answer:"👋 Привет! Я ассистент этого проекта. Напишите **/help**, чтобы узнать, что я умею, или сразу задайте вопрос — например «на какой ветке проект?».",sources:[],git_calls:[]});
+addAgent({answer:"👋 Привет! Я ассистент этого проекта. О проекте отвечаю **только по команде `/help`** — например `/help на какой ветке проект?`. Наберите `/help`, чтобы узнать, что я умею.",sources:[],git_calls:[]});
 </script>
 </body>
 </html>

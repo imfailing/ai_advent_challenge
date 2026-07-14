@@ -26,20 +26,26 @@ def main() -> None:
     assert r.get("help") and "ассистент" in r["answer"].lower()
     print("✅ /help — показывает справку")
 
-    # структура проекта (RAG)
-    r = c.post("/ask", json={"message": "Какие недели есть в проекте и про что они?"}).get_json()
+    # БЕЗ /help — ассистент НЕ отвечает о проекте, просит команду
+    r = c.post("/ask", json={"message": "Какие недели есть в проекте?"}).get_json()
+    assert r.get("help") and not r["sources"] and not r["git_calls"], r
+    assert "/help" in r["answer"]
+    print("✅ без /help — просит использовать команду (о проекте не отвечает)")
+
+    # структура проекта (RAG) — ТОЛЬКО через /help
+    r = c.post("/ask", json={"message": "/help Какие недели есть в проекте и про что они?"}).get_json()
     assert r["sources"], "нет источников из документации"
     files = {s["source"] for s in r["sources"]}
     assert any("README" in f or "claude" in f or "week" in f for f in files), files
     assert "week" in r["answer"].lower() or "недел" in r["answer"].lower()
-    print(f"✅ вопрос о структуре: ответ по докам, источники {sorted(files)[:3]}")
+    print(f"✅ /help <вопрос о структуре>: ответ по докам, источники {sorted(files)[:3]}")
 
-    # git через MCP
-    r = c.post("/ask", json={"message": "На какой git-ветке сейчас проект?"}).get_json()
+    # git через MCP — через /help
+    r = c.post("/ask", json={"message": "/help На какой git-ветке сейчас проект?"}).get_json()
     tools = [g["tool"] for g in r["git_calls"]]
     assert "git_branch" in tools, f"git_branch не вызван: {tools}"
     assert "main" in r["answer"].lower() or "main" in str(r["git_calls"]).lower()
-    print(f"✅ вопрос про git: вызван MCP {tools}, ветка определена")
+    print(f"✅ /help <вопрос про git>: вызван MCP {tools}, ветка определена")
 
     print("\n✅ ВСЕ ПРОВЕРКИ ПРОЙДЕНЫ — ассистент понимает проект")
 

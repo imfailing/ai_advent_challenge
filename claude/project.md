@@ -14,7 +14,7 @@ Week 2+ — Flask-приложения с агентами.
 ```
 ai_advent_challenge/
 ├── README.md            # корневой обзор всего проекта (все 5 недель, порты, стек)
-├── claude/              # контекст для Claude, не попадает в git
+├── claude/              # контекст для Claude (в git; ключи — плейсхолдеры)
 ├── week 1/
 │   ├── day 1/           # базовый вызов DeepSeek API, вывод в консоль
 │   ├── day 2/           # контроль формата: format + max_tokens + stop
@@ -139,8 +139,10 @@ Python SDK `mcp` (на момент задачи — v1.28.1). DeepSeek/API-кл
 
 | День | Добавленный функционал |
 |---|---|
-| 1 | Ассистент, понимающий проект. project_loader.py собирает документацию репо (корневой README + week*/day*/README.md + claude/*.md = 41 файл ~107стр). build_index.py → chunking(structural)+fastembed+index_store (458 чанков). git_mcp_server.py — MCP-сервер с git-инструментами (только чтение, cwd=REPO_ROOT parents[2]): git_branch/git_status/git_log/git_diff/git_recent_files/list_files. assistant.py DevAssistant: RAG-retrieve локально → DeepSeek (AsyncOpenAI) tool-calling с git-инструментами (AsyncExitStack, MCP-сессия на запрос; embedder/reranker persistent) → Answer{answer, sources, git_calls}. app.py (Flask, порт 5009): команда /help (bare=справка, /help <q>=вопрос), asyncio.run(assistant.ask). test_assistant.py: индекс, /help, вопрос о структуре с источниками (README/claude), вопрос про git → вызван git_branch (main). corpus самого проекта индексируется локально; index.db в gitignore. |
+| 1 | Ассистент, понимающий проект. project_loader.py собирает документацию репо (корневой README + week*/day*/README.md + claude/*.md = 41 файл ~107стр). build_index.py → chunking(structural)+fastembed+index_store (458 чанков). git_mcp_server.py — MCP-сервер с git-инструментами (только чтение, cwd=REPO_ROOT parents[2]): git_branch/git_status/git_log/git_diff/git_recent_files/list_files. assistant.py DevAssistant: RAG-retrieve локально → DeepSeek (AsyncOpenAI) tool-calling с git-инструментами (AsyncExitStack, MCP-сессия на запрос; embedder/reranker persistent) → Answer{answer, sources, git_calls}. app.py (Flask, порт 5009): о проекте отвечает ТОЛЬКО по команде /help (bare /help=справка, /help <q>=вопрос, сообщение без /help → просит команду, RAG/git/DeepSeek НЕ вызываются), asyncio.run(assistant.ask). test_assistant.py: индекс, /help справка, без /help → отказ, /help <вопрос о структуре> с источниками (README/claude), /help <про git> → вызван git_branch (main). corpus самого проекта индексируется локально; index.db в gitignore. |
 
 - `venv/` — виртуальное окружение
-- `claude/` — этот контекст
 - `.env`, `__pycache__/`, `*.pyc`
+- индексы/БД: `index.db`, `index_*.json`, `chat.db`, кэш fastembed
+- `claude/` — **в git** (раньше игнорировалась). Ключи в `apis.md` — плейсхолдеры,
+  реальные значения только в окружении.

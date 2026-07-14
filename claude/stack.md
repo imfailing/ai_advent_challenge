@@ -32,10 +32,14 @@ cd "week N/day N"
 ./venv/bin/pip install -q --upgrade pip <deps>
 # ... написать код, запустить, сохранить вывод
 pip freeze > requirements.txt
-git add <конкретные файлы>   # не venv/, не claude/
+git add <конкретные файлы>   # не venv/, не индексы/БД (index.db, chat.db)
 git commit -m "week N/day N: описание"
 git push
 ```
+
+> `claude/` теперь **в git** (контекст-доки). Секреты в них — только плейсхолдеры;
+> реальные ключи — в окружении. Перед коммитом проверять отсутствие ключей:
+> `grep -rnE "sk-[a-z0-9]{20}" .`
 
 ### .gitignore (стандартный для каждого дня)
 

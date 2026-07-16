@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.env
+venv/
+index.db
+index.db-*
+index_*.json
+.fastembed_cache/
+*.diff
+review.md

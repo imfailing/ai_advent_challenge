@@ -1355,6 +1355,19 @@ app.py            — Flask (5009), команда /help; templates/index.html
 /help <git> → вызван git_branch → main.
 ```
 
+### День 2 — AI-ревью PR (GitHub Action)
+
+```
+project_loader.py — доки + КОД (README+claude/*.md+все .py, 181 файл) → индекс 1328 чанков
+reviewer.py: get_diff(--diff-file/--base <ref>...HEAD/stdin) → changed_files
+  (regex ^\+\+\+ b/) → retrieve_context (RAG по diff+файлам, исключая изменённые)
+  → DeepSeek ревью строго по разделам (🐞 баги / 🏛 архитектура / 💡 рекомендации + Вердикт)
+.github/workflows/pr-review.yml (в КОРНЕ репо): on pull_request → checkout fetch-depth 0
+  → cache fastembed → build_index → reviewer --base origin/<base> → gh pr comment
+  permissions pull-requests:write; секрет DEEPSEEK_API_KEY.
+Ловит на тесте: ZeroDivision, KeyError, хардкод ключа, неверный вызов клиента.
+```
+
 ---
 
 ## Паттерны, которые повторяются

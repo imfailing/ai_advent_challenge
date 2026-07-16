@@ -1,0 +1,58 @@
+name: AI-ревью PR
+
+# Запускается на каждый Pull Request. Ассистент получает diff, использует RAG
+# (документация + код проекта) и оставляет ревью комментарием к PR.
+#
+# Требуется секрет репозитория DEEPSEEK_API_KEY (Settings → Secrets → Actions).
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write        # чтобы оставить комментарий с ревью
+
+jobs:
+  ai-review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (с историей для diff)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0       # нужна история, чтобы посчитать diff с базой
+
+      - name: Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Кэш модели fastembed
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/fastembed
+          key: fastembed-${{ runner.os }}
+
+      - name: Установка зависимостей
+        working-directory: "week 7/day 2"
+        run: pip install -r requirements.txt
+
+      - name: Индексация доков и кода проекта
+        working-directory: "week 7/day 2"
+        run: python build_index.py
+
+      - name: Генерация ревью по diff
+        working-directory: "week 7/day 2"
+        env:
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          BASE_REF: ${{ github.event.pull_request.base.ref }}
+        run: |
+          git fetch origin "$BASE_REF" --depth=1 || true
+          python reviewer.py --base "origin/$BASE_REF" --out review.md
+          cat review.md
+
+      - name: Комментарий к PR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR: ${{ github.event.pull_request.number }}
+        run: gh pr comment "$PR" --body-file "week 7/day 2/review.md"

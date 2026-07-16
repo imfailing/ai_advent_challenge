@@ -53,7 +53,8 @@ ai_advent_challenge/
 │   └── day 5/           # приватный AI-сервис на локальной LLM для VPS: HTTP API + auth + rate limit + Docker/systemd/nginx
 └── week 7/             # Ассистент разработчика (RAG по докам + MCP git + DeepSeek)
     ├── day 1/           # /help: RAG по README/docs/claude + git через MCP + веб-интерфейс, порт 5009
-    └── day 2/           # AI-ревью PR: diff → RAG (доки+код) → ревью; GitHub Action на PR
+    ├── day 2/           # AI-ревью PR: diff → RAG (доки+код) → ревью; GitHub Action на PR
+    └── day 3/           # ассистент поддержки: RAG по FAQ/докам + MCP (JSON тикетов) + контекст тикета, порт 5010
 ```
 
 Каждый день — отдельная папка со своим `venv/`.
@@ -142,6 +143,7 @@ Python SDK `mcp` (на момент задачи — v1.28.1). DeepSeek/API-кл
 |---|---|
 | 1 | Ассистент, понимающий проект. project_loader.py собирает документацию репо (корневой README + week*/day*/README.md + claude/*.md = 41 файл ~107стр). build_index.py → chunking(structural)+fastembed+index_store (458 чанков). git_mcp_server.py — MCP-сервер с git-инструментами (только чтение, cwd=REPO_ROOT parents[2]): git_branch/git_status/git_log/git_diff/git_recent_files/list_files. assistant.py DevAssistant: RAG-retrieve локально → DeepSeek (AsyncOpenAI) tool-calling с git-инструментами (AsyncExitStack, MCP-сессия на запрос; embedder/reranker persistent) → Answer{answer, sources, git_calls}. app.py (Flask, порт 5009): о проекте отвечает ТОЛЬКО по команде /help (bare /help=справка, /help <q>=вопрос, сообщение без /help → просит команду, RAG/git/DeepSeek НЕ вызываются), asyncio.run(assistant.ask). test_assistant.py: индекс, /help справка, без /help → отказ, /help <вопрос о структуре> с источниками (README/claude), /help <про git> → вызван git_branch (main). corpus самого проекта индексируется локально; index.db в gitignore. |
 | 2 | Автоматическое AI-ревью PR. project_loader.py собирает доки+КОД (README+claude/*.md+все .py кроме venv/corpus = 181 файл ~416стр). build_index.py → 1328 чанков. reviewer.py: get_diff (--diff-file / --base <ref>...HEAD / stdin) → changed_files (regex по +++ b/) → retrieve_context (RAG по diff+файлам, исключая сами изменённые файлы) → DeepSeek ревью строго по разделам «🐞 Потенциальные баги / 🏛 Архитектурные проблемы / 💡 Рекомендации» + Вердикт. CLI --out. .github/workflows/pr-review.yml (в корне репо): on pull_request → checkout fetch-depth 0 → кэш fastembed → build_index → reviewer --base origin/<base> → gh pr comment (permissions pull-requests:write, секрет DEEPSEEK_API_KEY). test_reviewer.py: ловит ZeroDivision + хардкод ключа, все 3 раздела. |
+| 3 | AI-ассистент поддержки (продукт CloudNote, вымышленный SaaS). product_docs/ — FAQ+доки (auth/plans/sync/faq). data/support.json — users+tickets (тариф, устройства, описание). support_mcp_server.py — MCP над JSON: get_ticket (тикет+пользователь), get_user, list_tickets. assistant.py SupportAssistant.ask(question, ticket_id): если ticket_id → MCP get_ticket → контекст (тариф) → RAG по докам (query=вопрос+описание тикета) → DeepSeek учитывает тариф. app.py (Flask 5010): выбор тикета + вопрос, /tickets /ask. Пример: T-1002 (Pro, про SSO) → ответ «SSO только на Business, обновите тариф»; T-1004 (Free) → «одно устройство, синхрон недоступен». test_support.py: контекст тикета подтянут, тариф учтён, источники есть. |
 
 - `venv/` — виртуальное окружение
 - `.env`, `__pycache__/`, `*.pyc`

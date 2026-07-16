@@ -78,6 +78,7 @@ MCP SDK · fastembed · Ollama (локальные LLM) · Docker/nginx.
 |---|---|---|
 | 1 | Ассистент, понимающий проект: RAG по докам (README/docs/claude) + git через MCP + `/help` | 5009 |
 | 2 | Автоматическое AI-ревью PR: diff → RAG (доки+код) → ревью; GitHub Action на PR | — |
+| 3 | AI-ассистент поддержки: RAG по FAQ/докам + тикеты через MCP + контекст тикета | 5010 |
 
 ---
 

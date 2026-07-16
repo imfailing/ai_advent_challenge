@@ -140,6 +140,7 @@ DEFAULT_MODEL = "deepseek-v4-flash"   # deepseek-chat/-reasoner — устаре
 | week 6 day 2 (локальный LLM-чат) | 5007 |
 | week 6 day 5 (приватный AI-сервис) | 5008 |
 | week 7 day 1 (ассистент разработчика) | 5009 |
+| week 7 day 3 (ассистент поддержки) | 5010 |
 
 Разные порты — чтобы запускать параллельно. week 4 (MCP) и week 6 day 1 — CLI.
 

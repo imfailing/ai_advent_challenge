@@ -1,0 +1,18 @@
+{
+  "users": {
+    "U-1": {"id": "U-1", "name": "Иван Петров", "email": "ivan@example.com", "plan": "Free", "devices": 1},
+    "U-2": {"id": "U-2", "name": "ООО «Ромашка»", "email": "admin@romashka.ru", "plan": "Pro", "devices": 4},
+    "U-3": {"id": "U-3", "name": "Мария Смирнова", "email": "maria@example.com", "plan": "Business", "devices": 3},
+    "U-4": {"id": "U-4", "name": "Алексей Ким", "email": "alex@example.com", "plan": "Free", "devices": 2}
+  },
+  "tickets": {
+    "T-1001": {"id": "T-1001", "user_id": "U-1", "subject": "Не приходит код 2FA", "status": "open", "priority": "high",
+               "description": "Включил двухфакторную аутентификацию, но код на email не приходит, войти не могу."},
+    "T-1002": {"id": "T-1002", "user_id": "U-2", "subject": "Не работает вход через SSO", "status": "open", "priority": "normal",
+               "description": "Хочу настроить вход через Google для сотрудников, но кнопки SSO нет в настройках."},
+    "T-1003": {"id": "T-1003", "user_id": "U-3", "subject": "Не синхронизируются заметки", "status": "open", "priority": "high",
+               "description": "Заметки не синхронизируются между ноутбуком и телефоном уже два дня."},
+    "T-1004": {"id": "T-1004", "user_id": "U-4", "subject": "Почему не работает авторизация?", "status": "open", "priority": "normal",
+               "description": "Пытаюсь открыть заметки на втором устройстве — не пускает, пишет что нужен другой тариф."}
+  }
+}

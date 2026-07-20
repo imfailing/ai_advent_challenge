@@ -80,7 +80,7 @@ MCP SDK · fastembed · Ollama (локальные LLM) · Docker/nginx.
 | 2 | Автоматическое AI-ревью PR: diff → RAG (доки+код) → ревью; GitHub Action на PR | — |
 | 3 | AI-ассистент поддержки: RAG по FAQ/докам + тикеты через MCP + контекст тикета | 5010 |
 | 4 | Ассистент, работающий с файлами: MCP fs (read/search/write) + работа по цели, 2 сценария | — |
-| 5 | Реальное AI-приложение: авто-дайджест изменений репо (git log → DeepSeek → Telegram) + недельный Action | — |
+| 5 | Реальное AI-приложение: авто-дайджест изменений репо (git → DeepSeek → Telegram) + веб-интерфейс + Docker + недельный Action | 5011 |
 
 ---
 
@@ -96,6 +96,9 @@ MCP SDK · fastembed · Ollama (локальные LLM) · Docker/nginx.
 - **Week 6:** локальные LLM через **Ollama** (`qwen2.5:1.5b`), полностью
   офлайн; веб-чат со стримингом, локальный RAG, оптимизация (параметры/квант),
   приватный сервис для VPS (Flask + auth + rate limit + Docker/nginx/systemd).
+- **Week 7:** ассистент разработчика — RAG по докам+коду + MCP (git, файлы,
+  тикеты) + DeepSeek. AI-ревью PR (GitHub Action), поддержка с контекстом тикета,
+  файловый агент, авто-дайджест изменений (веб + Docker + недельный Action).
 
 ---
 

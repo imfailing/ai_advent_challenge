@@ -5,10 +5,13 @@
 Возвращает список коммитов {hash, date, author, subject, body}.
 """
 
+import os
 import subprocess
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
+# Корень репозитория. По умолчанию — на 2 уровня выше файла; в Docker
+# монтируется отдельно и задаётся через REPO_DIR.
+REPO_ROOT = Path(os.environ.get("REPO_DIR") or Path(__file__).resolve().parents[2])
 
 # уникальные разделители, чтобы надёжно распарсить вывод git
 _SEP_FIELD = "\x1f"

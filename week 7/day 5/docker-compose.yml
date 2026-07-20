@@ -1,0 +1,18 @@
+# Веб-сервис AI-дайджеста в Docker.
+# Репозиторий монтируется read-only в /repo — сервис читает его git-историю.
+
+services:
+  digest:
+    build: .
+    restart: unless-stopped
+    environment:
+      REPO_DIR: "/repo"
+      DEEPSEEK_API_KEY:   "${DEEPSEEK_API_KEY}"           # обязателен
+      TELEGRAM_BOT_TOKEN: "${TELEGRAM_BOT_TOKEN:-}"       # опц. — для публикации
+      TELEGRAM_CHAT_ID:   "${TELEGRAM_CHAT_ID:-}"
+      PORT: "5011"
+    volumes:
+      # корень репозитория (на 3 уровня выше этой папки) → /repo только на чтение
+      - ../../..:/repo:ro
+    ports:
+      - "5011:5011"

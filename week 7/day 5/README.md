@@ -46,6 +46,8 @@ digest.md  ──(опц.)──▶  Telegram-канал
 
 ## Запуск
 
+### CLI
+
 ```bash
 python3 -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
@@ -61,6 +63,29 @@ export TELEGRAM_BOT_TOKEN="..."; export TELEGRAM_CHAT_ID="..."
 ```
 
 Дайджест сохраняется в `digest.md` и печатается в консоль.
+
+### Веб-интерфейс
+
+```bash
+python app.py     # http://localhost:5011
+```
+
+Выбираешь диапазон (последние N / за период / base..head) → «Сгенерировать» →
+рендер дайджеста → «Опубликовать в Telegram» (если заданы токены). Маршруты:
+`GET /` UI, `GET /health`, `POST /generate`, `POST /publish`.
+
+### Docker (как приватный сервис)
+
+```bash
+export DEEPSEEK_API_KEY="ваш_ключ"
+# опц.: export TELEGRAM_BOT_TOKEN=...; export TELEGRAM_CHAT_ID=...
+docker compose up --build --detach        # http://localhost:5011
+```
+
+Репозиторий монтируется в контейнер **read-only** (`/repo`, `REPO_DIR=/repo`) —
+сервис читает его git-историю. Наружу открыт только порт 5011. `git` установлен
+в образе; `safe.directory '*'` — чтобы git не ругался на владельца тома.
+(Про грабли Docker/Compose на VPS — см. week 6 / day 5.)
 
 ### Автоматизация (GitHub Action)
 
@@ -102,10 +127,13 @@ _Период: 2026-07-12 — 2026-07-16 · коммитов: 12_
 
 ```
 day 5/
-├── gitlog.py      # сбор коммитов (git log): --last / --since / --range
+├── gitlog.py      # сбор коммитов (git log): --last / --since / --range; REPO_DIR
 ├── digest.py      # AI: коммиты → структурированный дайджест (DeepSeek)
 ├── notify.py      # публикация в Telegram (мягкая деградация без токена)
-├── run.py         # пайплайн: git → AI → digest.md → (опц.) Telegram
+├── run.py         # CLI-пайплайн: git → AI → digest.md → (опц.) Telegram
+├── app.py         # веб-интерфейс (Flask, порт 5011)
+├── templates/index.html
+├── Dockerfile · docker-compose.yml   # деплой (репо монтируется read-only)
 ├── test_digest.py
 ├── requirements.txt
 └── README.md

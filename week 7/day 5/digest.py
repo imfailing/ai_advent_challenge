@@ -10,7 +10,7 @@ import os
 
 MODEL = "deepseek-v4-flash"
 
-SYSTEM = (
+SYSTEM_NEUTRAL = (
     "Ты готовишь дайджест изменений (release notes) по коммитам git для читателя, "
     "который не смотрит код. Сгруппируй изменения и перепиши их понятным языком. "
     "Верни Markdown СТРОГО по шаблону:\n"
@@ -19,6 +19,27 @@ SYSTEM = (
     "## 🔧 Прочее\n- …\n"
     "В разделах — короткие пункты по сути (не копируй хэши и префиксы вроде "
     "'week7/day4:'). Пустой раздел — «— нет». Пиши на русском, дружелюбно и кратко."
+)
+
+# «Токсичный» роаст: язвительный разбор КОДА и коммитов в жанре savage code review.
+# Жжём по коду и коммит-сообщениям, а не по авторам как людям.
+SYSTEM_TOXIC = (
+    "Ты — брутальный код-ревьюер-циник, который РОАСТИТ коммиты в жанре "
+    "'savage code review'. Твой стиль: язвительный, саркастичный, беспощадный, "
+    "с чёрным юмором про качество коммитов, «гениальные» сообщения коммитов, "
+    "отсутствие тестов, полотна изменений и прочий инженерный грех. "
+    "Не стесняйся драмы и гипербол — жги.\n\n"
+    "ЖЁСТКИЕ ПРАВИЛА (не нарушать даже в шутку):\n"
+    "- нападай на КОД, коммиты и инженерные решения, а НЕ на авторов как людей;\n"
+    "- никаких оскорблений по признакам личности (пол, раса, религия, "
+    "национальность, внешность, ориентация и т.п.), угроз и травли;\n"
+    "- не выдумывай факты — только то, что видно в коммитах.\n\n"
+    "Верни Markdown СТРОГО по шаблону:\n"
+    "## 🔥 Вердикт\n<2–4 предложения беспощадного вердикта по периоду>\n\n"
+    "## 💀 Разбор коммитов\n- <язвительный панч по каждому заметному изменению>\n\n"
+    "## 🧯 Что бы сделал нормальный инженер\n- <ядовитые, но по делу советы>\n\n"
+    "## ⭐ Оценка\n<оценка из 10 с саркастичным обоснованием>\n"
+    "Пиши на русском, коротко и хлёстко."
 )
 
 
@@ -31,19 +52,24 @@ def _commits_block(commits: list[dict]) -> str:
 
 
 def generate(commits: list[dict], title: str = "Дайджест изменений",
-             api_key: str | None = None) -> str:
+             tone: str = "neutral", api_key: str | None = None) -> str:
+    """tone: 'neutral' — обычный дайджест; 'toxic' — язвительный роаст коммитов."""
     from openai import OpenAI
     client = OpenAI(api_key=api_key or os.environ["DEEPSEEK_API_KEY"],
                     base_url="https://api.deepseek.com")
-    user = (f"Коммиты ({len(commits)} шт.):\n\n{_commits_block(commits)}\n\n"
-            f"Сделай дайджест по шаблону.")
+    system = SYSTEM_TOXIC if tone == "toxic" else SYSTEM_NEUTRAL
+    # немного «жара» в токсичном режиме
+    temperature = 0.9 if tone == "toxic" else 0.4
+    verb = "Разнеси эти коммиты по шаблону." if tone == "toxic" else "Сделай дайджест по шаблону."
+    user = f"Коммиты ({len(commits)} шт.):\n\n{_commits_block(commits)}\n\n{verb}"
     resp = client.chat.completions.create(
-        model=MODEL,
-        messages=[{"role": "system", "content": SYSTEM},
+        model=MODEL, temperature=temperature,
+        messages=[{"role": "system", "content": system},
                   {"role": "user", "content": user}])
     body = resp.choices[0].message.content or ""
 
-    dates = sorted({c["date"] for c in commits})
+    dates = sorted(d for d in {c["date"] for c in commits} if d)
     period = f"{dates[0]} — {dates[-1]}" if dates else ""
-    header = f"# 📰 {title}\n\n_Период: {period} · коммитов: {len(commits)}_\n\n"
+    emoji = "🔥" if tone == "toxic" else "📰"
+    header = f"# {emoji} {title}\n\n_Период: {period} · коммитов: {len(commits)}_\n\n"
     return header + body

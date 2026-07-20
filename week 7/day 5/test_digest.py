@@ -25,8 +25,20 @@ def main() -> None:
                     "📝 Документация", "🔧 Прочее"]:
         assert section in md, f"нет раздела {section}"
     assert "коммитов: " in md
-    # AI переписывает: сырые префиксы коммитов не должны утекать в текст
-    print("✅ AI-дайджест: все разделы на месте, оформлен по шаблону")
+    print("✅ AI-дайджест (нейтральный): все разделы на месте")
+
+    # токсичный роаст — свой шаблон
+    roast = digest.generate(commits, title="Роаст", tone="toxic")
+    for section in ["🔥 Вердикт", "💀 Разбор коммитов", "⭐ Оценка"]:
+        assert section in roast, f"нет раздела роаста {section}"
+    print("✅ токсичный роаст: разделы вердикт/разбор/оценка на месте")
+
+    # внешний GitHub-репозиторий (публичный, без токена)
+    import github_repo
+    assert github_repo.parse_repo("https://github.com/octocat/Hello-World") == "octocat/Hello-World"
+    ext = github_repo.get_commits("octocat/Hello-World", last=3)
+    assert len(ext) >= 1 and all("hash" in c and "subject" in c for c in ext)
+    print(f"✅ внешний GitHub: прочитано {len(ext)} коммитов octocat/Hello-World")
 
     # без токенов — публикация пропускается, пайплайн не падает
     saved = dict(os.environ)

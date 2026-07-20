@@ -1,7 +1,14 @@
-# Week 7 / Day 5 — AI-дайджест изменений репозитория
+# Week 7 / Day 5 — AI-дайджест / роаст изменений репозитория
 
 Реальное AI-приложение под конкретную задачу, которую я действительно хочу
-автоматизировать.
+автоматизировать. Два режима: нейтральный **дайджест** и 🔥 **токсичный роаст**;
+источник — локальный репозиторий или **внешний GitHub-репозиторий**.
+
+> **Границы токсичного режима.** Роаст жжёт по **коду и коммитам** (жанр
+> savage code review), а не по авторам как людям: без оскорблений по признакам
+> личности, угроз и травли. Сервис **читает** внешние репо и публикует роаст
+> только в **свой** Telegram — он не автопостит комментарии в чужие
+> репозитории (это был бы харассмент мейнтейнеров).
 
 ---
 
@@ -53,13 +60,16 @@ python3 -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
 export DEEPSEEK_API_KEY="ваш_ключ"
 
-python run.py --last 12                       # по последним N коммитам
-python run.py --since "1 week ago"            # за период
-python run.py --range af1211e..HEAD           # по диапазону
-python run.py --since "7 days ago" --notify   # + публикация в Telegram
+python run.py --last 12                          # дайджест локального репо
+python run.py --since "1 week ago"               # за период
+python run.py --range af1211e..HEAD              # по диапазону
+python run.py --repo octocat/Hello-World         # внешний GitHub-репо
+python run.py --repo owner/repo --toxic          # 🔥 токсичный роаст внешнего репо
+python run.py --last 20 --toxic --notify         # роаст + публикация в свой Telegram
 
-# публикация (опционально):
+# публикация / приватные и rate-limit GitHub (опционально):
 export TELEGRAM_BOT_TOKEN="..."; export TELEGRAM_CHAT_ID="..."
+export GITHUB_TOKEN="..."     # для приватных репо и лимитов GitHub API
 ```
 
 Дайджест сохраняется в `digest.md` и печатается в консоль.
@@ -127,8 +137,9 @@ _Период: 2026-07-12 — 2026-07-16 · коммитов: 12_
 
 ```
 day 5/
-├── gitlog.py      # сбор коммитов (git log): --last / --since / --range; REPO_DIR
-├── digest.py      # AI: коммиты → структурированный дайджест (DeepSeek)
+├── gitlog.py      # коммиты локального репо (git log): --last / --since / --range; REPO_DIR
+├── github_repo.py # коммиты внешнего GitHub-репо (REST API, GITHUB_TOKEN опц.)
+├── digest.py      # AI: коммиты → дайджест (нейтральный) или роаст (токсичный)
 ├── notify.py      # публикация в Telegram (мягкая деградация без токена)
 ├── run.py         # CLI-пайплайн: git → AI → digest.md → (опц.) Telegram
 ├── app.py         # веб-интерфейс (Flask, порт 5011)

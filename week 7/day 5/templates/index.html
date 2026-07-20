@@ -43,6 +43,14 @@
 
 <div class="panel">
   <div class="row">
+    <label>Источник:</label>
+    <select id="source" onchange="syncSource()">
+      <option value="local">локальный репозиторий</option>
+      <option value="github">внешний GitHub-репозиторий</option>
+    </select>
+    <input id="repo" class="grow" placeholder="owner/repo или https://github.com/owner/repo" style="display:none" />
+  </div>
+  <div class="row" id="local-range">
     <label>Диапазон:</label>
     <select id="mode" onchange="syncMode()">
       <option value="last">последние N коммитов</option>
@@ -54,11 +62,16 @@
     <input id="range" class="grow" placeholder="af1211e..HEAD" style="display:none" />
   </div>
   <div class="row">
-    <input id="title" class="grow" placeholder="Заголовок дайджеста" value="Дайджест изменений" />
+    <input id="title" class="grow" placeholder="Заголовок (необязательно)" />
+    <label style="display:flex;gap:.3rem;align-items:center;cursor:pointer">
+      <input id="toxic" type="checkbox" style="width:auto" onchange="syncToxic()" /> 🔥 токсичный роаст
+    </label>
+  </div>
+  <div class="row">
     <button class="btn primary" id="gen" onclick="generate()">Сгенерировать</button>
     <button class="btn ghost" id="pub" onclick="publish()" disabled>Опубликовать в Telegram</button>
   </div>
-  <div class="muted">Работает на реальной git-истории. Публикация в Telegram — при заданных токенах.</div>
+  <div class="muted">Читает git-историю (локально или внешний GitHub-репо). Роаст жжёт по коду, а не по авторам. Публикация — в свой Telegram.</div>
 </div>
 
 <div class="status" id="status"></div>
@@ -68,11 +81,13 @@
 marked.use({gfm:true,breaks:true});
 const $=id=>document.getElementById(id);
 function syncMode(){const m=$("mode").value;$("last").style.display=m==="last"?"":"none";$("since").style.display=m==="since"?"":"none";$("range").style.display=m==="range"?"":"none";}
+function syncSource(){const gh=$("source").value==="github";$("repo").style.display=gh?"":"none";$("local-range").style.display=gh?"none":"";}
+function syncToxic(){document.querySelector("h1").textContent=$("toxic").checked?"🔥 Роаст коммитов":"📰 AI-дайджест изменений";}
 function setStatus(t,cls){const s=$("status");s.textContent=t;s.className="status"+(cls?" "+cls:"");}
 
 async function generate(){
   $("gen").disabled=true;$("pub").disabled=true;setStatus("Собираю коммиты и генерирую дайджест…");
-  const body={mode:$("mode").value,last:$("last").value,since:$("since").value,range:$("range").value,title:$("title").value};
+  const body={source:$("source").value,repo:$("repo").value,mode:$("mode").value,last:$("last").value,since:$("since").value,range:$("range").value,title:$("title").value,toxic:$("toxic").checked};
   try{
     const res=await fetch("/generate",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
     const data=await res.json();

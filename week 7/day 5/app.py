@@ -10,6 +10,7 @@ import os
 from flask import Flask, jsonify, render_template, request
 
 import digest
+import github_repo
 import gitlog
 from notify import send_telegram
 
@@ -44,30 +45,46 @@ def health():
 @app.route("/generate", methods=["POST"])
 def generate():
     data = request.get_json(force=True)
-    mode = data.get("mode", "last")
     if not os.environ.get("DEEPSEEK_API_KEY"):
         return jsonify({"error": "Не задан DEEPSEEK_API_KEY."}), 503
+
+    source = data.get("source", "local")   # local | github
+    tone = "toxic" if data.get("toxic") else "neutral"
+    last = int(data.get("last") or 15)
+
     try:
-        if mode == "since":
-            commits = gitlog.get_commits(since=(data.get("since") or "7 days ago"))
-        elif mode == "range":
-            rng = (data.get("range") or "").strip()
-            if not rng:
-                return jsonify({"error": "Укажите диапазон base..head"}), 400
-            commits = gitlog.get_commits(rev_range=rng)
+        if source == "github":
+            repo = (data.get("repo") or "").strip()
+            if not repo:
+                return jsonify({"error": "Укажите GitHub-репозиторий (owner/repo или ссылку)."}), 400
+            commits = github_repo.get_commits(repo, last=last)
+            label = github_repo.repo_label(repo)
         else:
-            commits = gitlog.get_commits(last=int(data.get("last") or 15))
+            mode = data.get("mode", "last")
+            if mode == "since":
+                commits = gitlog.get_commits(since=(data.get("since") or "7 days ago"))
+            elif mode == "range":
+                rng = (data.get("range") or "").strip()
+                if not rng:
+                    return jsonify({"error": "Укажите диапазон base..head"}), 400
+                commits = gitlog.get_commits(rev_range=rng)
+            else:
+                commits = gitlog.get_commits(last=last)
+            label = gitlog.current_branch()
     except Exception as e:
-        return jsonify({"error": f"git: {e}"}), 400
+        return jsonify({"error": str(e)}), 400
 
     if not commits:
-        return jsonify({"error": "Коммитов в диапазоне нет."}), 400
+        return jsonify({"error": "Коммитов не найдено."}), 400
+
+    default_title = ("Роаст коммитов " + label) if tone == "toxic" else ("Дайджест изменений " + label)
+    title = (data.get("title") or "").strip() or default_title
     try:
-        md = digest.generate(commits, title=data.get("title") or "Дайджест изменений")
+        md = digest.generate(commits, title=title, tone=tone)
     except Exception as e:
         return jsonify({"error": f"AI: {e}"}), 500
     _last_digest["md"] = md
-    return jsonify({"digest": md, "commits": len(commits)})
+    return jsonify({"digest": md, "commits": len(commits), "source": label, "tone": tone})
 
 
 @app.route("/publish", methods=["POST"])

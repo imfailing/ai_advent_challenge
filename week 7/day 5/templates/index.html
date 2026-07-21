@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI-дайджест изменений репозитория</title>
+  <title>AI-анализ GitHub-репозитория</title>
   <script src="https://cdn.jsdelivr.net/npm/marked@12/marked.min.js"></script>
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -14,9 +14,9 @@
     .panel{width:100%;max-width:820px;background:#13161f;border:1px solid #1e2235;border-radius:12px;padding:1rem 1.1rem;display:flex;flex-direction:column;gap:.7rem}
     .row{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
     label{font-size:.82rem;color:#9aa3c0}
-    select,input{background:#1a1d2e;border:1px solid #2e3050;border-radius:8px;color:#e8eaf0;padding:.4rem .6rem;font-size:.85rem;outline:none}
-    select:focus,input:focus{border-color:#f472b6}
-    input.grow{flex:1;min-width:160px}
+    input{background:#1a1d2e;border:1px solid #2e3050;border-radius:8px;color:#e8eaf0;padding:.45rem .6rem;font-size:.85rem;outline:none}
+    input:focus{border-color:#f472b6}
+    input.grow{flex:1;min-width:200px}
     .btn{border:none;border-radius:9px;padding:.55rem 1.1rem;font-size:.88rem;font-weight:700;cursor:pointer}
     .btn.primary{background:#f472b6;color:#3a0a24}.btn.primary:hover:not(:disabled){background:#ec4899}
     .btn.ghost{background:transparent;border:1px solid #4a2a3e;color:#f0a8cf}.btn.ghost:hover{background:#1e1320}
@@ -34,65 +34,49 @@
 </head>
 <body>
 <header>
-  <h1>📰 AI-дайджест изменений</h1>
-  <div class="row">
-    <span class="badge">ветка {{ branch }}</span>
-    <span class="badge" id="tg-badge">Telegram…</span>
-  </div>
+  <h1 id="title-h">📰 AI-анализ GitHub-репозитория</h1>
+  <span class="badge" id="tg-badge">Telegram…</span>
 </header>
 
 <div class="panel">
   <div class="row">
-    <label>Источник:</label>
-    <select id="source" onchange="syncSource()">
-      <option value="local">локальный репозиторий</option>
-      <option value="github">внешний GitHub-репозиторий</option>
-    </select>
-    <input id="repo" class="grow" placeholder="owner/repo или https://github.com/owner/repo" style="display:none" />
-  </div>
-  <div class="row" id="local-range">
-    <label>Диапазон:</label>
-    <select id="mode" onchange="syncMode()">
-      <option value="last">последние N коммитов</option>
-      <option value="since">за период</option>
-      <option value="range">диапазон base..head</option>
-    </select>
-    <input id="last" type="number" value="12" min="1" max="100" style="width:80px" />
-    <input id="since" class="grow" placeholder="1 week ago / 2026-07-14" style="display:none" />
-    <input id="range" class="grow" placeholder="af1211e..HEAD" style="display:none" />
+    <label>Репозиторий:</label>
+    <input id="repo" class="grow" placeholder="owner/repo или https://github.com/owner/repo" />
   </div>
   <div class="row">
-    <input id="title" class="grow" placeholder="Заголовок (необязательно)" />
+    <label>Коммитов:</label>
+    <input id="last" type="number" value="15" min="1" max="100" style="width:80px" />
     <label style="display:flex;gap:.3rem;align-items:center;cursor:pointer">
       <input id="toxic" type="checkbox" style="width:auto" onchange="syncToxic()" /> 🔥 токсичный роаст
     </label>
+    <input id="ttl" class="grow" placeholder="Заголовок (необязательно)" />
   </div>
   <div class="row">
-    <button class="btn primary" id="gen" onclick="generate()">Сгенерировать</button>
+    <button class="btn primary" id="gen" onclick="generate()">Анализировать</button>
     <button class="btn ghost" id="pub" onclick="publish()" disabled>Опубликовать в Telegram</button>
   </div>
-  <div class="muted">Читает git-историю (локально или внешний GitHub-репо). Роаст жжёт по коду, а не по авторам. Публикация — в свой Telegram.</div>
+  <div class="muted">Анализирует удалённый GitHub-репозиторий по коммитам. Роаст жжёт по коду, а не по авторам. Публикация — в свой Telegram.</div>
 </div>
 
 <div class="status" id="status"></div>
-<div class="out"><div class="md" id="out"><span class="muted">Дайджест появится здесь…</span></div></div>
+<div class="out"><div class="md" id="out"><span class="muted">Результат появится здесь…</span></div></div>
 
 <script>
 marked.use({gfm:true,breaks:true});
 const $=id=>document.getElementById(id);
-function syncMode(){const m=$("mode").value;$("last").style.display=m==="last"?"":"none";$("since").style.display=m==="since"?"":"none";$("range").style.display=m==="range"?"":"none";}
-function syncSource(){const gh=$("source").value==="github";$("repo").style.display=gh?"":"none";$("local-range").style.display=gh?"none":"";}
-function syncToxic(){document.querySelector("h1").textContent=$("toxic").checked?"🔥 Роаст коммитов":"📰 AI-дайджест изменений";}
+function syncToxic(){$("title-h").textContent=$("toxic").checked?"🔥 Роаст GitHub-репозитория":"📰 AI-анализ GitHub-репозитория";}
 function setStatus(t,cls){const s=$("status");s.textContent=t;s.className="status"+(cls?" "+cls:"");}
 
 async function generate(){
-  $("gen").disabled=true;$("pub").disabled=true;setStatus("Собираю коммиты и генерирую дайджест…");
-  const body={source:$("source").value,repo:$("repo").value,mode:$("mode").value,last:$("last").value,since:$("since").value,range:$("range").value,title:$("title").value,toxic:$("toxic").checked};
+  const repo=$("repo").value.trim();
+  if(!repo){setStatus("Укажите репозиторий",'err');return;}
+  $("gen").disabled=true;$("pub").disabled=true;setStatus("Читаю коммиты и анализирую…");
+  const body={repo,last:$("last").value,toxic:$("toxic").checked,title:$("ttl").value};
   try{
     const res=await fetch("/generate",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
     const data=await res.json();
     if(!res.ok){setStatus(data.error||"Ошибка",'err');}
-    else{$("out").innerHTML=marked.parse(data.digest);setStatus(`Готово · коммитов: ${data.commits}`,'ok');$("pub").disabled=false;}
+    else{$("out").innerHTML=marked.parse(data.digest);setStatus(`Готово · ${data.source} · коммитов: ${data.commits}`,'ok');$("pub").disabled=false;}
   }catch(e){setStatus("Сеть: "+e.message,'err');}
   finally{$("gen").disabled=false;}
 }
@@ -109,8 +93,8 @@ async function publish(){
 }
 
 fetch("/health").then(r=>r.json()).then(h=>{
-  const b=$("tg-badge");b.textContent=h.telegram?"Telegram ✓":"Telegram не настроен";
-  if(!h.deepseek)setStatus("⚠ Не задан DEEPSEEK_API_KEY — генерация недоступна",'err');
+  $("tg-badge").textContent=h.telegram?"Telegram ✓":"Telegram не настроен";
+  if(!h.deepseek)setStatus("⚠ Не задан DEEPSEEK_API_KEY — анализ недоступен",'err');
 });
 </script>
 </body>

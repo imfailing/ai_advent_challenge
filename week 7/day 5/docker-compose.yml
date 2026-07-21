@@ -1,18 +1,15 @@
-# Веб-сервис AI-дайджеста в Docker.
-# Репозиторий монтируется read-only в /repo — сервис читает его git-историю.
+# Веб-сервис анализа удалённого GitHub-репозитория в Docker.
+# Ничего монтировать не нужно — коммиты читаются через GitHub REST API.
 
 services:
   digest:
     build: .
     restart: unless-stopped
     environment:
-      REPO_DIR: "/repo"
       DEEPSEEK_API_KEY:   "${DEEPSEEK_API_KEY}"           # обязателен
-      TELEGRAM_BOT_TOKEN: "${TELEGRAM_BOT_TOKEN:-}"       # опц. — для публикации
+      GITHUB_TOKEN:       "${GITHUB_TOKEN:-}"             # опц. — приватные репо / лимиты
+      TELEGRAM_BOT_TOKEN: "${TELEGRAM_BOT_TOKEN:-}"       # опц. — публикация
       TELEGRAM_CHAT_ID:   "${TELEGRAM_CHAT_ID:-}"
       PORT: "5011"
-    volumes:
-      # корень репозитория (на 3 уровня выше этой папки) → /repo только на чтение
-      - ../../..:/repo:ro
     ports:
       - "5011:5011"

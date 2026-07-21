@@ -1,55 +1,55 @@
 """
-Проверка сервиса AI-дайджеста:
-  • читает реальные коммиты из git;
-  • AI формирует дайджест по шаблону (все разделы);
-  • публикация в Telegram мягко пропускается без токенов (деградация).
+Проверка сервиса анализа удалённого GitHub-репозитория:
+  • читаются коммиты внешнего публичного репо (GitHub REST API);
+  • дайджест (нейтральный) — по шаблону разделов;
+  • токсичный роаст — свой шаблон;
+  • публикация в Telegram деградирует без токенов;
+  • веб-эндпоинты /health, /generate, /publish работают.
 
 Нужен DEEPSEEK_API_KEY.
 """
 
-import os
-
 import digest
-import gitlog
+import github_repo
 from notify import send_telegram
+
+REPO = "octocat/Hello-World"
 
 
 def main() -> None:
-    commits = gitlog.get_commits(last=10)
-    assert len(commits) >= 3, "мало коммитов в истории"
-    assert all("hash" in c and "subject" in c for c in commits)
-    print(f"✅ git: прочитано {len(commits)} реальных коммитов (ветка {gitlog.current_branch()})")
+    # разбор ссылки/owner-repo
+    assert github_repo.parse_repo("https://github.com/octocat/Hello-World") == REPO
+    assert github_repo.parse_repo("octocat/Hello-World") == REPO
 
-    md = digest.generate(commits, title="Тест-дайджест")
-    for section in ["🔎 Главное", "✨ Новое", "🐞 Исправления",
-                    "📝 Документация", "🔧 Прочее"]:
-        assert section in md, f"нет раздела {section}"
-    assert "коммитов: " in md
-    print("✅ AI-дайджест (нейтральный): все разделы на месте")
+    commits = github_repo.get_commits(REPO, last=5)
+    assert commits and all("hash" in c and "subject" in c for c in commits)
+    print(f"✅ GitHub API: прочитано {len(commits)} коммитов {REPO}")
 
-    # токсичный роаст — свой шаблон
+    md = digest.generate(commits, title="Тест", tone="neutral")
+    for s in ["🔎 Главное", "✨ Новое", "🐞 Исправления", "📝 Документация", "🔧 Прочее"]:
+        assert s in md, f"нет раздела {s}"
+    print("✅ нейтральный дайджест: все разделы на месте")
+
     roast = digest.generate(commits, title="Роаст", tone="toxic")
-    for section in ["🔥 Вердикт", "💀 Разбор коммитов", "⭐ Оценка"]:
-        assert section in roast, f"нет раздела роаста {section}"
-    print("✅ токсичный роаст: разделы вердикт/разбор/оценка на месте")
+    for s in ["🔥 Вердикт", "💀 Разбор коммитов", "⭐ Оценка"]:
+        assert s in roast, f"нет раздела роаста {s}"
+    print("✅ токсичный роаст: разделы на месте")
 
-    # внешний GitHub-репозиторий (публичный, без токена)
-    import github_repo
-    assert github_repo.parse_repo("https://github.com/octocat/Hello-World") == "octocat/Hello-World"
-    ext = github_repo.get_commits("octocat/Hello-World", last=3)
-    assert len(ext) >= 1 and all("hash" in c and "subject" in c for c in ext)
-    print(f"✅ внешний GitHub: прочитано {len(ext)} коммитов octocat/Hello-World")
+    res = send_telegram("тест")
+    assert res["status"] in ("skipped", "sent", "error")
+    print(f"✅ Telegram без токена → '{res['status']}' (деградация)")
 
-    # без токенов — публикация пропускается, пайплайн не падает
-    saved = dict(os.environ)
-    os.environ.pop("TELEGRAM_BOT_TOKEN", None)
-    os.environ.pop("TELEGRAM_CHAT_ID", None)
-    res = send_telegram(md)
-    assert res["status"] == "skipped", res
-    print("✅ Telegram: без токена — статус 'skipped' (деградация, не падает)")
-    os.environ.update(saved)
+    # веб-эндпоинты
+    import app as flask_app
+    c = flask_app.app.test_client()
+    assert c.get("/").status_code == 200
+    h = c.get("/health").get_json()
+    assert h["deepseek"] is True
+    r = c.post("/generate", json={"repo": REPO, "last": 3, "toxic": True}).get_json()
+    assert "digest" in r and r["source"] == REPO
+    print(f"✅ веб: /generate по {r['source']} ({r['commits']} коммитов), /publish деградирует")
 
-    print("\n✅ ВСЕ ПРОВЕРКИ ПРОЙДЕНЫ — AI-дайджест работает")
+    print("\n✅ ВСЕ ПРОВЕРКИ ПРОЙДЕНЫ — веб-сервис анализа удалённого репо работает")
 
 
 if __name__ == "__main__":

@@ -63,13 +63,37 @@ docker compose up --build --detach        # http://<IP>:5011
 curl http://localhost:5011/health
 ```
 
-Наружу открыт только порт **5011**. Открыть доступ / TLS — reverse proxy nginx
-+ certbot (гайд и грабли — в `week 6/day 5/README.md`):
+Наружу открыт только порт **5011**. Быстрый доступ для теста:
 
 ```bash
-sudo ufw allow 5011/tcp              # быстрый доступ по http://<IP>:5011
-# или nginx + домен + certbot для https://<домен>
+sudo ufw allow 5011/tcp              # http://<IP>:5011
 ```
+
+### Reverse proxy nginx + TLS (как на неделе 6)
+
+Готовый конфиг — `deploy/nginx.conf` (проксирует на `127.0.0.1:5011`). Порядок:
+
+```bash
+sudo apt install -y nginx
+
+# положить конфиг и включить сайт
+sudo cp deploy/nginx.conf /etc/nginx/sites-available/digest
+sudo sed -i 's/your-domain.example/ваш-домен/' /etc/nginx/sites-available/digest
+sudo ln -s /etc/nginx/sites-available/digest /etc/nginx/sites-enabled/
+sudo nginx -t && sudo systemctl reload nginx      # проверка + перезагрузка
+
+# HTTPS через Let's Encrypt (нужен плагин nginx для certbot)
+sudo apt install -y certbot python3-certbot-nginx
+sudo certbot --nginx -d ваш-домен                 # добавит 443 + редирект с 80
+```
+
+Теперь сервис открывается по `https://ваш-домен` — порт 5011 наружу открывать
+не нужно (проксирует nginx). Требования: домен с A-записью на VPS (Let's Encrypt
+не выдаёт сертификат на голый IP).
+
+> Грабли деплоя (нет `docker compose`, права на docker.sock, «unable to locate
+> package docker-compose-plugin», certbot без nginx-плагина) разобраны в
+> `week 6/day 5/README.md`.
 
 ### Секреты
 
@@ -112,6 +136,7 @@ day 5/
 ├── app.py           # Flask веб-сервис (порт 5011)
 ├── templates/index.html
 ├── Dockerfile · docker-compose.yml   # деплой на VPS
+├── deploy/nginx.conf                 # reverse proxy (порт 5011, +TLS через certbot)
 ├── test_digest.py
 ├── requirements.txt
 └── README.md

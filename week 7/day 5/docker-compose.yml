@@ -1,15 +1,12 @@
 # Веб-сервис анализа удалённого GitHub-репозитория в Docker.
 # Ничего монтировать не нужно — коммиты читаются через GitHub REST API.
+# Токены (DeepSeek / GitHub / Telegram) задаются в интерфейсе, не в окружении.
 
 services:
   digest:
     build: .
     restart: unless-stopped
     environment:
-      DEEPSEEK_API_KEY:   "${DEEPSEEK_API_KEY}"           # обязателен
-      GITHUB_TOKEN:       "${GITHUB_TOKEN:-}"             # опц. — приватные репо / лимиты
-      TELEGRAM_BOT_TOKEN: "${TELEGRAM_BOT_TOKEN:-}"       # опц. — публикация
-      TELEGRAM_CHAT_ID:   "${TELEGRAM_CHAT_ID:-}"
       PORT: "5011"
     ports:
       - "5011:5011"

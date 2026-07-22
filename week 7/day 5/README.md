@@ -1,13 +1,19 @@
 # Week 7 / Day 5 — Веб-сервис AI-анализа GitHub-репозитория
 
 Веб-сервис, который анализирует **удалённый GitHub-репозиторий** по коммитам и
-формирует либо нейтральный **дайджест изменений**, либо 🔥 **токсичный роаст**.
-Опционально публикует результат в Telegram. Готов к деплою на VPS в Docker.
+формирует либо нейтральный **дайджест изменений**, либо 🐓 **rooster-роаст**
+(включён по умолчанию). Опционально публикует результат в Telegram. Готов к
+деплою на VPS в Docker.
 
 Только веб-интерфейс, только удалённые репозитории (GitHub REST API) —
 ни CLI, ни локального git.
 
-> **Границы токсичного режима.** Роаст жжёт по **коду и коммитам** (жанр
+**Токены задаются в интерфейсе** (⚙ Токены), а не через переменные окружения:
+ключ DeepSeek (обязателен), GitHub-токен (опц.), Telegram bot token + chat_id
+(опц.). Токены хранятся в localStorage браузера и уходят на сервер только в
+момент запроса — сервер их не хранит и не читает из окружения.
+
+> **Границы rooster-режима.** Роаст жжёт по **коду и коммитам** (жанр
 > savage code review), а не по авторам как людям: без оскорблений по признакам
 > личности, угроз и травли. Сервис только **читает** внешние репо и публикует
 > роаст только в **свой** Telegram — он не автопостит комментарии в чужие
@@ -29,9 +35,10 @@ digest.py → DeepSeek:
 ```
 
 - **`github_repo.py`** — чтение коммитов внешнего репо (публичные — без токена;
-  `GITHUB_TOKEN` для приватных и лимитов).
-- **`digest.py`** — AI-дайджест / роаст.
-- **`notify.py`** — публикация в Telegram (мягкая деградация без токенов).
+  GitHub-токен из интерфейса для приватных и лимитов).
+- **`digest.py`** — AI-дайджест / роаст (ключ DeepSeek передаётся параметром).
+- **`notify.py`** — публикация в Telegram (токен/chat_id из запроса; мягкая
+  деградация без них).
 - **`app.py`** — Flask (порт 5011): `/`, `/health`, `/generate`, `/publish`.
 
 ---
@@ -41,9 +48,9 @@ digest.py → DeepSeek:
 | Метод | Путь | Описание |
 |---|---|---|
 | GET | `/` | веб-интерфейс |
-| GET | `/health` | статус: наличие ключей (DeepSeek / GitHub / Telegram) |
-| POST | `/generate` | `{repo, last, toxic, title}` → `{digest, commits, source, tone}` |
-| POST | `/publish` | опубликовать последний результат в Telegram |
+| GET | `/health` | статус сервиса (`{status: "ok"}`) |
+| POST | `/generate` | `{repo, last, toxic, deepseek_key, github_token}` → `{digest, commits, source, tone}` |
+| POST | `/publish` | `{telegram_token, telegram_chat_id}` — опубликовать последний результат в Telegram |
 
 ---
 
@@ -56,11 +63,9 @@ digest.py → DeepSeek:
 # на VPS: Docker + плагин Compose (см. week 6/day 5 при проблемах с 'docker compose')
 git clone <repo> && cd "week 7/day 5"
 
-export DEEPSEEK_API_KEY="ваш_ключ"
-# опц.: export GITHUB_TOKEN=...  TELEGRAM_BOT_TOKEN=...  TELEGRAM_CHAT_ID=...
-
 docker compose up --build --detach        # http://<IP>:5011
-curl http://localhost:5011/health
+curl http://localhost:5011/health         # {"status":"ok"}
+# токены (DeepSeek / GitHub / Telegram) вводятся в интерфейсе (⚙ Токены)
 ```
 
 Наружу открыт только порт **5011**. Быстрый доступ для теста:
@@ -95,13 +100,16 @@ sudo certbot --nginx -d ваш-домен                 # добавит 443 +
 > package docker-compose-plugin», certbot без nginx-плагина) разобраны в
 > `week 6/day 5/README.md`.
 
-### Секреты
+### Токены (вводятся в интерфейсе, ⚙ Токены)
 
-| Переменная | Нужна | Зачем |
+| Токен | Нужен | Зачем |
 |---|---|---|
-| `DEEPSEEK_API_KEY` | да | генерация дайджеста/роаста |
-| `GITHUB_TOKEN` | опц. | приватные репо и лимиты GitHub API |
-| `TELEGRAM_BOT_TOKEN` / `TELEGRAM_CHAT_ID` | опц. | публикация в Telegram |
+| DeepSeek ключ | да | генерация дайджеста/роаста |
+| GitHub токен | опц. | приватные репо и лимиты GitHub API |
+| Telegram bot token + chat_id | опц. | публикация в Telegram |
+
+Сервер не читает токены из окружения и не хранит их: они приходят в теле
+запроса и живут только в localStorage браузера пользователя.
 
 ---
 
@@ -110,8 +118,15 @@ sudo certbot --nginx -d ваш-домен                 # добавит 443 +
 ```bash
 python3 -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
-export DEEPSEEK_API_KEY="ваш_ключ"
 python app.py                         # http://localhost:5011
+# ключ DeepSeek и остальные токены — в интерфейсе (⚙ Токены)
+```
+
+Для прогона теста ключ берётся из окружения:
+
+```bash
+export DEEPSEEK_API_KEY="ваш_ключ"
+python test_digest.py
 ```
 
 ---

@@ -1,11 +1,12 @@
 """
 Веб-сервис анализа удалённого GitHub-репозитория.
 
-Вводишь GitHub-репозиторий → AI формирует дайджест изменений или 🔥 токсичный
-роаст по коммитам → можно опубликовать в Telegram (если заданы токены).
+Вводишь GitHub-репозиторий → AI формирует дайджест изменений или 🐓 rooster-роаст
+по коммитам → можно опубликовать в Telegram (если заданы токены).
 
-Работает только с УДАЛЁННЫМИ репозиториями (GitHub REST API) — ни локального
-git, ни CLI. Готов к деплою на VPS в Docker.
+Все токены (DeepSeek, GitHub, Telegram) задаются в интерфейсе и передаются в
+запросе — из окружения ничего не читается. Работает только с УДАЛЁННЫМИ
+репозиториями (GitHub REST API). Готов к деплою на VPS в Docker.
 """
 
 import os
@@ -28,40 +29,36 @@ def index():
 
 @app.route("/health")
 def health():
-    return jsonify({
-        "status":   "ok",
-        "deepseek": bool(os.environ.get("DEEPSEEK_API_KEY")),
-        "github_token": bool(os.environ.get("GITHUB_TOKEN")),   # опц. (приватные/лимиты)
-        "telegram": bool(os.environ.get("TELEGRAM_BOT_TOKEN")
-                         and os.environ.get("TELEGRAM_CHAT_ID")),
-    })
+    return jsonify({"status": "ok"})
 
 
 @app.route("/generate", methods=["POST"])
 def generate():
     data = request.get_json(force=True)
-    if not os.environ.get("DEEPSEEK_API_KEY"):
-        return jsonify({"error": "Не задан DEEPSEEK_API_KEY."}), 503
+
+    deepseek_key = (data.get("deepseek_key") or "").strip()
+    if not deepseek_key:
+        return jsonify({"error": "Укажите ключ DeepSeek API."}), 400
 
     repo = (data.get("repo") or "").strip()
     if not repo:
         return jsonify({"error": "Укажите GitHub-репозиторий (owner/repo или ссылку)."}), 400
+    github_token = (data.get("github_token") or "").strip()
     tone = "toxic" if data.get("toxic") else "neutral"
     last = max(1, min(int(data.get("last") or 15), 100))
 
     try:
-        commits = github_repo.get_commits(repo, last=last)
+        commits = github_repo.get_commits(repo, last=last, token=github_token)
         label = github_repo.repo_label(repo)
     except Exception as e:
         return jsonify({"error": str(e)}), 400
     if not commits:
         return jsonify({"error": "Коммитов не найдено."}), 400
 
-    default_title = (f"Роаст коммитов {label}" if tone == "toxic"
-                     else f"Дайджест изменений {label}")
-    title = (data.get("title") or "").strip() or default_title
+    title = (f"Роаст коммитов {label}" if tone == "toxic"
+             else f"Дайджест изменений {label}")
     try:
-        md = digest.generate(commits, title=title, tone=tone)
+        md = digest.generate(commits, title=title, tone=tone, api_key=deepseek_key)
     except Exception as e:
         return jsonify({"error": f"AI: {e}"}), 500
     _last_digest["md"] = md
@@ -72,7 +69,10 @@ def generate():
 def publish():
     if not _last_digest["md"]:
         return jsonify({"error": "Сначала сгенерируйте результат."}), 400
-    return jsonify(send_telegram(_last_digest["md"]))
+    data = request.get_json(force=True) or {}
+    token = (data.get("telegram_token") or "").strip()
+    chat_id = (data.get("telegram_chat_id") or "").strip()
+    return jsonify(send_telegram(_last_digest["md"], token=token, chat_id=chat_id))
 
 
 if __name__ == "__main__":

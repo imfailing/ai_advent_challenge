@@ -2,7 +2,7 @@
 Чтение коммитов из ВНЕШНЕГО GitHub-репозитория через REST API (только чтение).
 
 Публичные репозитории работают без токена (с лимитом ~60 запросов/час).
-Для приватных / повышенного лимита — GITHUB_TOKEN в окружении.
+Для приватных / повышенного лимита — GitHub-токен задаётся в интерфейсе.
 
 Сервис только ЧИТАЕТ внешние репо. Автопостинг комментариев в чужие репозитории
 не делается (это был бы харассмент мейнтейнеров) — роаст можно опубликовать
@@ -10,7 +10,6 @@
 """
 
 import json
-import os
 import re
 import urllib.error
 import urllib.request
@@ -29,10 +28,9 @@ def parse_repo(value: str) -> str:
     raise ValueError("Ожидается 'owner/repo' или ссылка на GitHub-репозиторий")
 
 
-def _get(url: str) -> list | dict:
+def _get(url: str, token: str = "") -> list | dict:
     headers = {"Accept": "application/vnd.github+json",
                "User-Agent": "ai-advent-digest"}
-    token = os.environ.get("GITHUB_TOKEN")
     if token:
         headers["Authorization"] = f"Bearer {token}"
     req = urllib.request.Request(url, headers=headers)
@@ -40,21 +38,22 @@ def _get(url: str) -> list | dict:
         return json.load(r)
 
 
-def get_commits(repo: str, last: int = 15) -> list[dict]:
+def get_commits(repo: str, last: int = 15, token: str = "") -> list[dict]:
     """
     Последние коммиты внешнего репо. repo — 'owner/repo' или ссылка.
-    Формат совпадает с gitlog: {hash, date, author, subject, body}.
+    token — GitHub-токен (опц., для приватных репо и лимитов).
+    Возвращает {hash, date, author, subject, body}.
     """
     owner_repo = parse_repo(repo)
     n = max(1, min(last, 100))
     try:
-        data = _get(f"{API}/repos/{owner_repo}/commits?per_page={n}")
+        data = _get(f"{API}/repos/{owner_repo}/commits?per_page={n}", token=token.strip())
     except urllib.error.HTTPError as e:
         if e.code == 404:
             raise RuntimeError(f"Репозиторий {owner_repo} не найден или приватный "
-                               f"(нужен GITHUB_TOKEN).")
+                               f"(укажите GitHub-токен).")
         if e.code == 403:
-            raise RuntimeError("Лимит GitHub API исчерпан — задайте GITHUB_TOKEN.")
+            raise RuntimeError("Лимит GitHub API исчерпан — укажите GitHub-токен.")
         raise RuntimeError(f"GitHub API: {e.code} {e.reason}")
 
     commits = []

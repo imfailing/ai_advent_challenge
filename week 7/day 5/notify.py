@@ -1,23 +1,20 @@
 """
-Публикация дайджеста в Telegram-канал (реальная интеграция).
+Публикация результата в Telegram-канал (реальная интеграция).
 
-Это «может быть не полностью рабочим» место: нужны TELEGRAM_BOT_TOKEN и
-TELEGRAM_CHAT_ID. Без них сервис деградирует красиво — возвращает статус
-'skipped', пайплайн не падает (дайджест уже сохранён в файл).
+Токен бота и chat_id задаются пользователем (в интерфейсе). Без них публикация
+деградирует красиво — возвращает статус 'skipped', сервис не падает.
 """
 
 import json
-import os
 import urllib.request
 
 
-def send_telegram(text: str) -> dict:
-    token = os.environ.get("TELEGRAM_BOT_TOKEN")
-    chat_id = os.environ.get("TELEGRAM_CHAT_ID")
+def send_telegram(text: str, token: str = "", chat_id: str = "") -> dict:
+    token = (token or "").strip()
+    chat_id = (chat_id or "").strip()
     if not token or not chat_id:
         return {"status": "skipped",
-                "reason": "нет TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID — "
-                          "публикация пропущена (дайджест сохранён в файл)."}
+                "reason": "не заданы токен бота и chat_id — публикация пропущена."}
 
     # Telegram ограничивает сообщение 4096 символами
     payload = json.dumps({

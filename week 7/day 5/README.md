@@ -135,7 +135,7 @@ python test_digest.py
 
 - ✅ чтение коммитов внешнего репо (`octocat/Hello-World`);
 - ✅ нейтральный дайджест — все разделы;
-- ✅ токсичный роаст — свои разделы;
+- ✅ rooster-роаст (toxic) — свои разделы;
 - ✅ Telegram без токена → `skipped`;
 - ✅ веб `/generate` / `/publish`.
 

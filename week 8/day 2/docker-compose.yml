@@ -1,0 +1,12 @@
+# Веб-сервис анализа удалённого GitHub-репозитория в Docker.
+# Ничего монтировать не нужно — коммиты читаются через GitHub REST API.
+# Токены (DeepSeek / GitHub / Telegram) задаются в интерфейсе, не в окружении.
+
+services:
+  digest:
+    build: .
+    restart: unless-stopped
+    environment:
+      PORT: "5011"
+    ports:
+      - "5011:5011"

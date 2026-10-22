@@ -50,6 +50,7 @@ Week 7 / Day 2   diff → RAG (доки+код) → ревью + Action        +
 Week 7 / Day 3   RAG по FAQ + тикеты через MCP (JSON)          + ассистент поддержки (контекст тикета, 5010)
 Week 7 / Day 4   MCP fs (read/search/write) + работа по цели   + файловый ассистент (реальные операции)
 Week 7 / Day 5   GitHub REST API + дайджест/роаст + Docker     + веб-сервис анализа удалённого репо (5011)
+Week 8 / Day 2   activity.compute_stats(commits) + POST /stats  + статистика активности репо (без AI, 5011)
 ```
 
 ---
@@ -1410,6 +1411,8 @@ github_repo.get_commits(repo, last, token) — коммиты через GitHub 
 notify.send_telegram(text, token, chat_id) — Telegram (без токена/chat_id → skipped).
 app.py Flask 5011: /health ({status:ok}), /generate {repo,last,toxic,deepseek_key,
   github_token}, /publish {telegram_token,telegram_chat_id}.
+  (Week 8 / Day 2: + activity.compute_stats(commits) — топ-5 авторов, коммиты по дням, busiest_day;
+  app.py: POST /stats {repo,last,github_token} → {source,total_commits,top_authors,commits_by_day,busiest_day}, без AI.)
 Docker для VPS: Dockerfile (python-slim+gunicorn, БЕЗ git), docker-compose.yml
   (без монтирования и БЕЗ env-секретов — только PORT; наружу 5011).
   deploy/nginx.conf (proxy на 5011 + TLS certbot). Граница: не автопостит в чужие репо.

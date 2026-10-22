@@ -1,7 +1,7 @@
 # Линтер проекта. Запуск: ruff check "week 8/day 1"
 target-version = "py313"
 line-length = 100
-src = ["week 8/day 1"]   # локальные модули дня = first-party (для сортировки импортов)
+src = ["week 8/day 1", "week 8/day 2"]   # локальные модули дня = first-party (для сортировки импортов)
 extend-exclude = ["venv", "rules-experiment", "corpus", "week 1", "week 2", "week 3", "week 4", "week 5", "week 6"]
 
 [lint]

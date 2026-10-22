@@ -78,3 +78,20 @@ def get_gigachat_token(auth_key: str) -> str:
 - SSL-сертификат Сбера не проходит проверку → `verify=False` обязательно
 - Токен живёт ~30 минут; нужно обновлять при истечении
 - Использовалась как «слабая» модель в day 5 week 1
+
+---
+
+## Сервис week 8/day 2 (HTTP API, порт 5011)
+
+Токены — только в теле запроса (из окружения не читаются): `deepseek_key`, `github_token`, `telegram_token`/`telegram_chat_id` (плейсхолдеры, не хранить в репозитории).
+
+| Метод | Путь | Запрос → ответ |
+|---|---|---|
+| GET | `/` | веб-интерфейс |
+| GET | `/health` | `{"status":"ok"}` |
+| POST | `/generate` | `{repo, last, toxic, deepseek_key, github_token}` → `{digest, commits, source, tone}` |
+| POST | `/stats` | `{repo, last, github_token}` → `{source, total_commits, top_authors, commits_by_day, busiest_day}` (без AI) |
+| POST | `/publish` | `{telegram_token, telegram_chat_id}` → результат отправки последнего дайджеста |
+
+`/stats`: `last` по умолчанию 15, зажимается в 1..100; ошибки — `{"error": "..."}` с кодом 400 (пустой `repo`, нечисловой `last`, ошибка GitHub).
+Пример ответа: `{"source":"o/r","total_commits":4,"top_authors":[{"author":"Ann","commits":3},{"author":"Bob","commits":1}],"commits_by_day":[{"date":"2024-01-01","commits":1},{"date":"2024-01-02","commits":3}],"busiest_day":{"date":"2024-01-02","commits":3}}`

@@ -156,3 +156,5 @@ Python SDK `mcp` (на момент задачи — v1.28.1). DeepSeek/API-кл
   реальные значения только в окружении.
 
 - **Week 8 / Day 1 (Advanced, Rules):** `week 8/day 1/` — CLAUDE.md v2, субагент, скилл, ruff, эксперимент v1→v2 на эндпоинте `/stats` (отчёт: `rules-experiment/REPORT.md`).
+- **Week 8 / Day 2:** `week 8/day 2/` — копия сервиса day 1 (порт 5011) с эндпоинтом `POST /stats` и модулем `activity.py` (топ авторов, коммиты по дням, самый активный день; без AI и сети); тест `test_stats.py`.
+- **Week 8 / Day 2 (Advanced, Profiles):** профили агентов `bug-fix`, `research`, `docs-sync` в `.claude/agents/`; проверка на реальных задачах — `week 8/day 2/profiles-experiment/REPORT.md` (баг `last` в `/generate` исправлен).

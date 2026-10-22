@@ -1,0 +1,130 @@
+--- /private/tmp/claude-501/-Users-asv1337-dev-ai-advent-challenge/8b7c4e11-e1f3-4b4b-9164-e162e5e800af/scratchpad/base2/claude/apis.md	2026-10-22 12:58:11.612498268 +0300
++++ claude/apis.md	2026-10-22 13:00:02.024969282 +0300
+@@ -78,3 +78,19 @@
+ - SSL-сертификат Сбера не проходит проверку → `verify=False` обязательно
+ - Токен живёт ~30 минут; нужно обновлять при истечении
+ - Использовалась как «слабая» модель в day 5 week 1
++
++---
++
++## Сервис week 8/day 2 (HTTP API, порт 5011)
++
++Токены — только в теле запроса (из окружения не читаются): `deepseek_key`, `github_token`, `telegram_token`/`telegram_chat_id` (плейсхолдеры, не хранить в репозитории).
++
++| Метод | Путь | Запрос → ответ |
++|---|---|---|
++| GET | `/health` | `{"status":"ok"}` |
++| POST | `/generate` | `{repo, last, toxic, deepseek_key, github_token}` → `{digest, commits, source, tone}` |
++| POST | `/stats` | `{repo, last, github_token}` → `{source, total_commits, top_authors, commits_by_day, busiest_day}` (без AI) |
++| POST | `/publish` | `{telegram_token, telegram_chat_id}` → результат отправки последнего дайджеста |
++
++`/stats`: `last` по умолчанию 15, зажимается в 1..100; ошибки — `{"error": "..."}` с кодом 400 (пустой `repo`, нечисловой `last`, ошибка GitHub).
++Пример ответа: `{"source":"o/r","total_commits":4,"top_authors":[{"author":"Ann","commits":3},{"author":"Bob","commits":1}],"commits_by_day":[{"date":"2024-01-01","commits":1},{"date":"2024-01-02","commits":3}],"busiest_day":{"date":"2024-01-02","commits":3}}`
+--- /private/tmp/claude-501/-Users-asv1337-dev-ai-advent-challenge/8b7c4e11-e1f3-4b4b-9164-e162e5e800af/scratchpad/base2/claude/architecture.md	2026-10-22 12:58:11.611587146 +0300
++++ claude/architecture.md	2026-10-22 13:00:02.024845116 +0300
+@@ -50,6 +50,7 @@
+ Week 7 / Day 3   RAG по FAQ + тикеты через MCP (JSON)          + ассистент поддержки (контекст тикета, 5010)
+ Week 7 / Day 4   MCP fs (read/search/write) + работа по цели   + файловый ассистент (реальные операции)
+ Week 7 / Day 5   GitHub REST API + дайджест/роаст + Docker     + веб-сервис анализа удалённого репо (5011)
++Week 8 / Day 2   activity.compute_stats(commits) + POST /stats  + статистика активности репо (без AI, 5011)
+ ```
+ 
+ ---
+@@ -1410,6 +1411,8 @@
+ notify.send_telegram(text, token, chat_id) — Telegram (без токена/chat_id → skipped).
+ app.py Flask 5011: /health ({status:ok}), /generate {repo,last,toxic,deepseek_key,
+   github_token}, /publish {telegram_token,telegram_chat_id}.
++  (Week 8 / Day 2: + activity.compute_stats(commits) — топ-5 авторов, коммиты по дням, busiest_day;
++  app.py: POST /stats {repo,last,github_token} → {source,total_commits,top_authors,commits_by_day,busiest_day}, без AI.)
+ Docker для VPS: Dockerfile (python-slim+gunicorn, БЕЗ git), docker-compose.yml
+   (без монтирования и БЕЗ env-секретов — только PORT; наружу 5011).
+   deploy/nginx.conf (proxy на 5011 + TLS certbot). Граница: не автопостит в чужие репо.
+--- /private/tmp/claude-501/-Users-asv1337-dev-ai-advent-challenge/8b7c4e11-e1f3-4b4b-9164-e162e5e800af/scratchpad/base2/claude/project.md	2026-10-22 12:58:11.612796726 +0300
++++ claude/project.md	2026-10-22 13:00:02.024511033 +0300
+@@ -156,3 +156,4 @@
+   реальные значения только в окружении.
+ 
+ - **Week 8 / Day 1 (Advanced, Rules):** `week 8/day 1/` — CLAUDE.md v2, субагент, скилл, ruff, эксперимент v1→v2 на эндпоинте `/stats` (отчёт: `rules-experiment/REPORT.md`).
++- **Week 8 / Day 2:** `week 8/day 2/` — копия сервиса day 1 (порт 5011) с эндпоинтом `POST /stats` и модулем `activity.py` (топ авторов, коммиты по дням, самый активный день; без AI и сети); тест `test_stats.py`.
+--- /private/tmp/claude-501/-Users-asv1337-dev-ai-advent-challenge/8b7c4e11-e1f3-4b4b-9164-e162e5e800af/scratchpad/base2/day2/README.md	2026-10-22 12:58:11.605955950 +0300
++++ "week 8/day 2/README.md"	2026-10-22 13:00:02.024228701 +0300
+@@ -1,20 +1,14 @@
+-# Week 8 / Day 1 — Rules (CLAUDE.md, субагент, скилл) на боевой задаче
++# Week 8 / Day 2 — сервис анализа GitHub-репо + эндпоинт `/stats`
+ 
+-Копия сервиса week 7/day 5 (AI-анализ GitHub-репозитория) + эндпоинт `POST /stats`,
+-созданный ассистентом по правилам v2. Что здесь:
++Копия сервиса week 8/day 1 (AI-анализ GitHub-репозитория) с эндпоинтом `POST /stats`
++и модулем `activity.py` (статистика активности по коммитам, без AI и сети).
+ 
+ | Путь | Что |
+ |---|---|
+-| `app.py`, `activity.py`, `digest.py`, `github_repo.py`, `notify.py` | сервис; `activity.py` + `/stats` — результат генерации 2 |
+-| `test_stats.py`, `test_digest.py` | тесты |
+-| `rules-experiment/` | `REPORT.md`, `generation1.diff`, `generation2.diff`, `rules_v1_to_v2.diff`, снимки правил `CLAUDE.v1.md` / `CLAUDE.v2.md`, `global-CLAUDE.md` |
+-
+-Сами правила лежат **в корне репозитория** (подхватываются автоматически): `CLAUDE.md`,
+-`.claude/agents/py-reviewer.md`, `.claude/skills/new-endpoint/SKILL.md`, `ruff.toml`
+-(`ruff check "week 8/day 1"`), личный `CLAUDE.local.md` (в `.gitignore`).
+-Глобальные правила — `~/.claude/CLAUDE.md` (вне репозитория).
++| `app.py`, `activity.py`, `digest.py`, `github_repo.py`, `notify.py` | сервис; `activity.py` + `/stats` — статистика коммитов |
++| `test_stats.py`, `test_digest.py` | тесты (`test_stats.py` — без сети и ключей) |
+ 
+-Итог эксперимента — `rules-experiment/REPORT.md`.
++Правила проекта — в корне репозитория (`CLAUDE.md`, `.claude/`, `ruff.toml`).
+ 
+ ---
+ 
+@@ -76,15 +70,20 @@
+ | POST | `/stats` | `{repo, last, github_token}` → `{source, total_commits, top_authors, commits_by_day, busiest_day}` (без AI) |
+ | POST | `/publish` | `{telegram_token, telegram_chat_id}` — опубликовать последний результат в Telegram |
+ 
+-Пример `/stats`:
++`top_authors` — до 5 авторов по убыванию коммитов; `busiest_day` — `null`, если коммитов нет.
++`last` по умолчанию 15, ограничен 1..100. Ошибки — JSON `{"error": ...}` с кодом 400
++(пустой `repo`, нечисловой `last`, ошибка GitHub).
++
++Пример `/stats` (ответ получен реальным вызовом с подменой `github_repo.get_commits` на 4 коммита):
+ 
+ ```bash
+ curl -X POST http://localhost:5011/stats -H 'Content-Type: application/json' \
+-  -d '{"repo": "octocat/Hello-World", "last": 30, "github_token": ""}'
+-# {"source":"octocat/Hello-World","total_commits":30,
+-#  "top_authors":[{"author":"The Octocat","commits":2}],
+-#  "commits_by_day":[{"date":"2012-03-06","commits":2}],
+-#  "busiest_day":{"date":"2012-03-06","commits":2}}
++  -d '{"repo": "o/r", "last": 15, "github_token": ""}'
++# {"busiest_day":{"commits":3,"date":"2024-01-02"},
++#  "commits_by_day":[{"commits":1,"date":"2024-01-01"},{"commits":3,"date":"2024-01-02"}],
++#  "source":"o/r",
++#  "top_authors":[{"author":"Ann","commits":3},{"author":"Bob","commits":1}],
++#  "total_commits":4}
+ ```
+ 
+ ---
+@@ -96,7 +95,7 @@
+ 
+ ```bash
+ # на VPS: Docker + плагин Compose (см. week 6/day 5 при проблемах с 'docker compose')
+-git clone <repo> && cd "week 7/day 5"
++git clone <repo> && cd "week 8/day 2"
+ 
+ docker compose up --build --detach        # http://<IP>:5011
+ curl http://localhost:5011/health         # {"status":"ok"}
+@@ -174,12 +173,15 @@
+ - ✅ Telegram без токена → `skipped`;
+ - ✅ веб `/generate` / `/publish`.
+ 
++`test_stats.py` (без сети и ключей): ✅ `compute_stats` (авторы, дни, самый активный день);
++✅ пустой список; ✅ `/stats` успех; ✅ пустой `repo` и нечисловой `last` → 400; ✅ ошибка GitHub → JSON 400.
++
+ ---
+ 
+ ## Структура
+ 
+ ```
+-day 5/
++day 2/
+ ├── github_repo.py   # коммиты удалённого GitHub-репо (REST API)
+ ├── activity.py      # статистика активности (без AI)
+ ├── digest.py        # AI: дайджест (neutral) или роаст (toxic) — DeepSeek

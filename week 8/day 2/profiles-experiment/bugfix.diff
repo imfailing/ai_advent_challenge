@@ -1,0 +1,29 @@
+--- /private/tmp/claude-501/-Users-asv1337-dev-ai-advent-challenge/8b7c4e11-e1f3-4b4b-9164-e162e5e800af/scratchpad/base2/day2/app.py	2026-10-22 12:58:11.607073823 +0300
++++ app.py	2026-10-22 13:01:34.628754119 +0300
+@@ -46,7 +46,10 @@
+         return jsonify({"error": "Укажите GitHub-репозиторий (owner/repo или ссылку)."}), 400
+     github_token = (data.get("github_token") or "").strip()
+     tone = "toxic" if data.get("toxic") else "neutral"
+-    last = max(1, min(int(data.get("last") or 15), 100))
++    try:
++        last = max(1, min(int(data.get("last") or 15), 100))
++    except (TypeError, ValueError):
++        return jsonify({"error": "Параметр last должен быть числом."}), 400
+ 
+     try:
+         commits = github_repo.get_commits(repo, last=last, token=github_token)
+--- /private/tmp/claude-501/-Users-asv1337-dev-ai-advent-challenge/8b7c4e11-e1f3-4b4b-9164-e162e5e800af/scratchpad/base2/day2/test_stats.py	2026-10-22 12:58:11.603926497 +0300
++++ test_stats.py	2026-10-22 13:01:12.346273801 +0300
+@@ -35,6 +35,12 @@
+     assert client.post("/stats", json={"repo": "o/r", "last": "abc"}).status_code == 400
+     print("✅ /stats: пустой repo и нечисловой last -> 400")
+ 
++    for bad in ("abc", "1.5", [1], {"a": 1}):
++        r = client.post("/generate", json={"deepseek_key": "k", "repo": "o/r", "last": bad})
++        assert r.status_code == 400 and r.is_json, bad
++        assert r.get_json()["error"] == "Параметр last должен быть числом."
++    print("✅ /generate: нечисловой last -> JSON 400 (не HTML 500)")
++
+     with mock.patch("github_repo.get_commits", side_effect=RuntimeError("нет репо")):
+         r = client.post("/stats", json={"repo": "o/r"})
+     assert r.status_code == 400 and r.get_json()["error"] == "нет репо"

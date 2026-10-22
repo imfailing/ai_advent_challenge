@@ -1,0 +1,76 @@
+name: Local Boost (ai_advent_challenge)
+version: 1.0.0
+schema: v1
+
+# Локальный код-ассистент на Ollama. Правила проекта (день 1) — в системном промпте чат-моделей.
+# Подобрано замерами в week 8/day 4: см. REPORT.md.
+models:
+  - name: Qwen2.5-Coder 14B (чат, качество)
+    provider: ollama
+    model: qwen2.5-coder:14b
+    apiBase: http://localhost:11434
+    roles: [chat, edit, apply]
+    defaultCompletionOptions:
+      contextLength: 16384     # правила ≈1k + файлы; 4096 обрезает промпт (см. замеры), 32768 не лучше
+      maxTokens: 2048
+      temperature: 0.2         # для кода низкая; 0.1–0.4 по замерам равноценны
+      topP: 0.9
+    chatOptions:
+      baseSystemMessage: |
+        Ты — код-ассистент проекта ai_advent_challenge (Python 3.13, Flask, stdlib urllib). Отвечай по-русски; идентификаторы — по-английски.
+
+        СТРУКТУРА: app.py — только маршруты (разбор запроса → вызов доменного модуля → jsonify); логика — в отдельных модулях без Flask-импортов; тесты — test_<что>.py с assert.
+        СТИЛЬ: у каждого модуля docstring на русском (что делает и роль); типы `str | None`, `list[dict]` (не Optional/List); snake_case; ruff (line-length 100) должен проходить.
+        МАРШРУТЫ: `data = request.get_json(force=True) or {}`; строки `.strip()`; ошибки ВСЕГДА JSON `{"error": "<по-русски>"}` + 400 (ввод) / 500 (внутри); числа ограничивать `max(1, min(int(data.get("last") or 15), 100))` (дефолт last=15), int() оборачивать в try/except (TypeError, ValueError) → 400; переиспользуй github_repo.get_commits и github_repo.repo_label (не пиши второй клиент GitHub).
+        ТЕСТЫ: офлайн; внешние вызовы подменять через `with mock.patch("github_repo.get_commits", return_value=...)`; НИКОГДА `module.func = lambda`; `main()` с assert и `print("✅ …")`, в конце `print("\n✅ ВСЕ ПРОВЕРКИ ПРОЙДЕНЫ — <что>")`, `if __name__ == "__main__": main()`.
+        ЗАПРЕЩЕНО: print() в коде сервиса; хардкод ключей; голый except / `except: pass`; raise внутри except без `from e`; SQL через f-строки; новые зависимости; ошибки в HTML вместо JSON; Optional/List/Dict из typing; бизнес-логика в app.py.
+
+  - name: Qwen2.5-Coder 7B (чат, быстрый)
+    provider: ollama
+    model: qwen2.5-coder:7b
+    apiBase: http://localhost:11434
+    roles: [chat, edit, apply]
+    defaultCompletionOptions:
+      contextLength: 16384
+      maxTokens: 2048
+      temperature: 0.2
+      topP: 0.9
+    chatOptions:
+      baseSystemMessage: |
+        Ты — код-ассистент проекта ai_advent_challenge (Python 3.13, Flask, stdlib urllib). Отвечай по-русски; идентификаторы — по-английски.
+
+        СТРУКТУРА: app.py — только маршруты (разбор запроса → вызов доменного модуля → jsonify); логика — в отдельных модулях без Flask-импортов; тесты — test_<что>.py с assert.
+        СТИЛЬ: у каждого модуля docstring на русском (что делает и роль); типы `str | None`, `list[dict]` (не Optional/List); snake_case; ruff (line-length 100) должен проходить.
+        МАРШРУТЫ: `data = request.get_json(force=True) or {}`; строки `.strip()`; ошибки ВСЕГДА JSON `{"error": "<по-русски>"}` + 400 (ввод) / 500 (внутри); числа ограничивать `max(1, min(int(data.get("last") or 15), 100))` (дефолт last=15), int() оборачивать в try/except (TypeError, ValueError) → 400; переиспользуй github_repo.get_commits и github_repo.repo_label (не пиши второй клиент GitHub).
+        ТЕСТЫ: офлайн; внешние вызовы подменять через `with mock.patch("github_repo.get_commits", return_value=...)`; НИКОГДА `module.func = lambda`; `main()` с assert и `print("✅ …")`, в конце `print("\n✅ ВСЕ ПРОВЕРКИ ПРОЙДЕНЫ — <что>")`, `if __name__ == "__main__": main()`.
+        ЗАПРЕЩЕНО: print() в коде сервиса; хардкод ключей; голый except / `except: pass`; raise внутри except без `from e`; SQL через f-строки; новые зависимости; ошибки в HTML вместо JSON; Optional/List/Dict из typing; бизнес-логика в app.py.
+
+  - name: Qwen2.5-Coder 1.5B (автокомплит)
+    provider: ollama
+    model: qwen2.5-coder:1.5b
+    apiBase: http://localhost:11434
+    roles: [autocomplete]
+    defaultCompletionOptions:
+      temperature: 0.1         # автокомплит — детерминированнее
+      topP: 0.9
+      maxTokens: 128           # короткие подсказки, быстрый отклик
+    autocompleteOptions:
+      maxPromptTokens: 1024    # сколько кода вокруг курсора видит модель
+      debounceDelay: 250
+      modelTimeout: 3000
+      useCache: true
+
+  - name: Nomic Embed (индекс кодовой базы)
+    provider: ollama
+    model: nomic-embed-text
+    apiBase: http://localhost:11434
+    roles: [embed]
+
+context:
+  - provider: code
+  - provider: file
+  - provider: folder
+  - provider: diff
+  - provider: terminal
+  - provider: problems
+  - provider: codebase

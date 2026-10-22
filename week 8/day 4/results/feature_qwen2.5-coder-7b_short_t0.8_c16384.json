@@ -1,0 +1,41 @@
+{
+ "files": [
+  "activity.py",
+  "app.py",
+  "test_stats.py"
+ ],
+ "parsed_3_files": true,
+ "compiles": true,
+ "compile_err": "",
+ "ruff_ok": false,
+ "ruff_out": "I001 [*] Import block is un-sorted or un-formatted\n --> activity.py:5:1\n  |\n3 |   \"\"\"\n4 |\n5 | / from collections import Counter\n6 | | from datetime import datetime\n  | |_____________________________^\n7 |\n8 |   def compute_stats(commits: list[dict], top: int = 5) -> dict:\n  |\nhelp: Organize imports\n  |\n7 |\n8 +\n9 | def compute_stats(commits: list[dict], top: int = 5) -> dict:\n  |\n\nF401 [*] `datetime.datetime` imported but unused\n --> activity.py:6:22\n  |\n5 | from collections import Counter\n6 | from datetime import datetime\n  |                      ^^^^^^^^\n7 |\n8 | def compute_stats(commits: list[dict], top: int = 5) -> dict:\n  |\nhelp: Remove unused import: `datetime.datetime`\n  |\n5 | from collections import Counter\n  - from datetime import datetime\n6 |\n  |\n\nF401 [*] `datetime` imported but unused\n  --> test_stats.py:8:8\n   |\n 6 | \"\"\"\n 7 |\n 8 | import datetime\n   |        ^^^^^^^^\n 9 |\n10 | from activity import compute_stats\n   |\nhelp: Remove unused import: `datetime`\n  |\n7 |\n  - import datetime\n8 |\n  |\n\nFound 3 errors.\n[*] 3 fixable with `--fix`.\n",
+ "own_test_passes": true,
+ "own_test_out": "",
+ "acceptance_200": true,
+ "acceptance_content": true,
+ "empty_body_400_json": true,
+ "style_last_default_15": true,
+ "style_mock_patch": false,
+ "style_module_docstring_ru": true,
+ "style_no_print_in_service": true,
+ "style_typed": true,
+ "checks_passed": 10,
+ "checks_total": 12,
+ "task": "feature",
+ "model": "qwen2.5-coder:7b",
+ "rules": "short",
+ "options": {
+  "temperature": 0.8,
+  "top_p": 0.9,
+  "num_ctx": 16384,
+  "num_predict": 3072
+ },
+ "wall_s": 42.48,
+ "prompt_tokens": 3437,
+ "gen_tokens": 1713,
+ "gen_tps": 40.4,
+ "prefill_tps": 112596.2,
+ "ttft_s": 0.03,
+ "load_s": 0.0,
+ "answer_head": "FILE: activity.py\n```python\n\"\"\"\nЛогика для вычисления статистики активности GitHub-репозитория.\n\"\"\"\n\nfrom collections import Counter\nfrom datetime import datetime\n\ndef compute_stats(commits: list[dict], top: int = 5) -> dict:\n    \"\"\"\n    Вычислить статистику по коммитам:\n    - топ авторов по числу к"
+}

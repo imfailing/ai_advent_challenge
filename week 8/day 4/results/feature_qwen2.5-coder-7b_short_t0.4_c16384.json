@@ -1,0 +1,40 @@
+{
+ "files": [
+  "activity.py",
+  "test_stats.py"
+ ],
+ "parsed_3_files": false,
+ "compiles": true,
+ "compile_err": "",
+ "ruff_ok": false,
+ "ruff_out": "23', 'date': '2023-10-01', 'author': 'Alice', 'subject': 'Fix bug', 'body': ''},\n   |                                                                                                     ^^\n11 |         {'hash': 'def456', 'date': '2023-10-01', 'author': 'Bob', 'subject': 'Add feature', 'body': ''},\n12 |         {'hash': 'ghi789', 'date': '2023-10-02', 'author': 'Alice', 'subject': 'Refactor code', 'body': ''},\n   |\n\nE501 Line too long (104 > 100)\n  --> test_stats.py:11:101\n   |\n 9 |     commits = [\n10 |         {'hash': 'abc123', 'date': '2023-10-01', 'author': 'Alice', 'subject': 'Fix bug', 'body': ''},\n11 |         {'hash': 'def456', 'date': '2023-10-01', 'author': 'Bob', 'subject': 'Add feature', 'body': ''},\n   |                                                                                                     ^^^^\n12 |         {'hash': 'ghi789', 'date': '2023-10-02', 'author': 'Alice', 'subject': 'Refactor code', 'body': ''},\n13 |         {'hash': 'jkl012', 'date': '2023-10-02', 'author': 'Charlie', 'subject': 'Update docs', 'body': ''}\n   |\n\nE501 Line too long (108 > 100)\n  --> test_stats.py:12:101\n   |\n10 |         {'hash': 'abc123', 'date': '2023-10-01', 'author': 'Alice', 'subject': 'Fix bug', 'body': ''},\n11 |         {'hash': 'def456', 'date': '2023-10-01', 'author': 'Bob', 'subject': 'Add feature', 'body': ''},\n12 |         {'hash': 'ghi789', 'date': '2023-10-02', 'author': 'Alice', 'subject': 'Refactor code', 'body': ''},\n   |                                                                                                     ^^^^^^^^\n13 |         {'hash': 'jkl012', 'date': '2023-10-02', 'author': 'Charlie', 'subject': 'Update docs', 'body': ''}\n14 |     ]\n   |\n\nE501 Line too long (107 > 100)\n  --> test_stats.py:13:101\n   |\n11 |         {'hash': 'def456', 'date': '2023-10-01', 'author': 'Bob', 'subject': 'Add feature', 'body': ''},\n12 |         {'hash': 'ghi789', 'date': '2023-10-02', 'author': 'Alice', 'subject': 'Refactor code', 'body': ''},\n13 |         {'hash': 'jkl012', 'date': '2023-10-02', 'author': 'Charlie', 'subject': 'Update docs', 'body': ''}\n   |                                                                                                     ^^^^^^^\n14 |     ]\n   |\n\nE501 Line too long (101 > 100)\n  --> test_stats.py:39:101\n   |\n37 | def test_compute_stats_with_one_commit():\n38 |     commits = [\n39 |         {'hash': 'abc123', 'date': '2023-10-01', 'author': 'Alice', 'subject': 'Fix bug', 'body': ''}\n   |                                                                                                     ^\n40 |     ]\n   |\n\nE501 Line too long (101 > 100)\n  --> test_stats.py:54:101\n   |\n52 | def test_compute_stats_with_top_zero():\n53 |     commits = [\n54 |         {'hash': 'abc123', 'date': '2023-10-01', 'author': 'Alice', 'subject': 'Fix bug', 'body': ''}\n   |                                                                                                     ^\n55 |     ]\n   |\n\nFound 15 errors.\n[*] 6 fixable with `--fix`.\n",
+ "own_test_passes": false,
+ "own_test_out": "Traceback (most recent call last):\n  File \"/private/var/folders/h0/5yq7l44577l_p62wyw0lt8f40000gn/T/day4_feature_base_rdbucuga/proj/test_stats.py\", line 66, in <module>\n    import pytest\nModuleNotFoundError: No module named 'pytest'\n",
+ "acceptance_200": true,
+ "acceptance_content": true,
+ "empty_body_400_json": true,
+ "style_last_default_15": false,
+ "style_mock_patch": false,
+ "style_module_docstring_ru": true,
+ "style_no_print_in_service": true,
+ "style_typed": false,
+ "checks_passed": 6,
+ "checks_total": 12,
+ "task": "feature",
+ "model": "qwen2.5-coder:7b",
+ "rules": "short",
+ "options": {
+  "temperature": 0.4,
+  "top_p": 0.9,
+  "num_ctx": 16384,
+  "num_predict": 3072
+ },
+ "wall_s": 23.46,
+ "prompt_tokens": 3437,
+ "gen_tokens": 1061,
+ "gen_tps": 45.4,
+ "prefill_tps": 93292.8,
+ "ttft_s": 0.04,
+ "load_s": 0.0,
+ "answer_head": "FILE: activity.py\n```python\n\"\"\"\nЛогика анализа активности GitHub-репозитория.\n\nИспользуется для вычисления топ авторов, числа коммитов по дням и самого активного дня.\n\"\"\"\n\nfrom collections import Counter, defaultdict\nfrom typing import List, Dict\n\ndef compute_stats(commits: List[Dict[str, str]], top"
+}

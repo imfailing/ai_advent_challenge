@@ -1,0 +1,16 @@
+# Что Continue не индексирует и не показывает модели (экономия контекста)
+venv/
+__pycache__/
+.ruff_cache/
+corpus/
+*.png
+*.db
+week 1/
+week 2/
+week 3/
+week 4/
+week 5/
+week 6/
+week 8/day 4/results/
+week 8/day 4/fixtures/
+week 8/day 3/smoke/screenshots/

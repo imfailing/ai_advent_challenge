@@ -1,0 +1,41 @@
+{
+ "files": [
+  "activity.py",
+  "app.py",
+  "test_stats.py"
+ ],
+ "parsed_3_files": true,
+ "compiles": true,
+ "compile_err": "",
+ "ruff_ok": false,
+ "ruff_out": "I001 [*] Import block is un-sorted or un-formatted\n --> activity.py:1:1\n  |\n1 | / from collections import Counter\n2 | | from datetime import datetime\n  | |_____________________________^\n3 |\n4 |   def compute_stats(commits, top=5):\n  |\nhelp: Organize imports\n  |\n3 |\n4 +\n5 | def compute_stats(commits, top=5):\n  |\n\nF401 [*] `datetime.datetime` imported but unused\n --> activity.py:2:22\n  |\n1 | from collections import Counter\n2 | from datetime import datetime\n  |                      ^^^^^^^^\n3 |\n4 | def compute_stats(commits, top=5):\n  |\nhelp: Remove unused import: `datetime.datetime`\n  |\n1 | from collections import Counter\n  - from datetime import datetime\n2 |\n  |\n\nI001 [*] Import block is un-sorted or un-formatted\n --> test_stats.py:1:1\n  |\n1 | / import os\n2 | |\n3 | | import github_repo\n4 | | import activity\n  | |_______________^\n5 |\n6 |   REPO = \"octocat/Hello-World\"\n  |\nhelp: Organize imports\n  |\n2 |\n3 + import activity\n4 | import github_repo\n  - import activity\n5 |\n  |\n\nE501 Line too long (104 > 100)\n  --> test_stats.py:24:101\n   |\n22 |     commits_by_day = stats[\"commits_by_day\"]\n23 |     assert isinstance(commits_by_day, dict)\n24 |     assert all(isinstance(day, str) and isinstance(count, int) for day, count in commits_by_day.items())\n   |                                                                                                     ^^^^\n25 |\n26 |     most_active_day = stats[\"most_active_day\"]\n   |\n\nFound 4 errors.\n[*] 3 fixable with `--fix`.\n",
+ "own_test_passes": true,
+ "own_test_out": "",
+ "acceptance_200": true,
+ "acceptance_content": true,
+ "empty_body_400_json": true,
+ "style_last_default_15": true,
+ "style_mock_patch": false,
+ "style_module_docstring_ru": false,
+ "style_no_print_in_service": true,
+ "style_typed": false,
+ "checks_passed": 8,
+ "checks_total": 12,
+ "task": "feature",
+ "model": "qwen2.5-coder:14b",
+ "rules": "none",
+ "options": {
+  "temperature": 0.1,
+  "top_p": 0.9,
+  "num_ctx": 16384,
+  "num_predict": 3072
+ },
+ "wall_s": 109.17,
+ "prompt_tokens": 2964,
+ "gen_tokens": 1490,
+ "gen_tps": 15.5,
+ "prefill_tps": 228.7,
+ "ttft_s": 12.97,
+ "load_s": 0.0,
+ "answer_head": "FILE: activity.py\n```python\nfrom collections import Counter\nfrom datetime import datetime\n\ndef compute_stats(commits, top=5):\n    # Топ авторов по числу коммитов\n    authors = Counter(commit['author'] for commit in commits)\n    top_authors = authors.most_common(top)\n\n    # Число коммитов по дням\n   "
+}

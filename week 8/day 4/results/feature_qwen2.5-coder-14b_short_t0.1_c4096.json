@@ -1,0 +1,41 @@
+{
+ "files": [
+  "activity.py",
+  "app.py",
+  "test_digest.py"
+ ],
+ "parsed_3_files": false,
+ "compiles": false,
+ "compile_err": "[Errno 2] No such file or directory: 'test_stats.py'",
+ "ruff_ok": false,
+ "ruff_out": "otation\n  --> activity.py:11:28\n   |\n 9 | from typing import Any, Dict, List\n10 |\n11 | def compute_stats(commits: List[Dict[str, Any]], top: int = 5) -> Dict[str, Any]:\n   |                            ^^^^\n12 |     \"\"\"\n13 |     Вычисляет статистику активности репозитория.\n   |\nhelp: Replace with `list`\n   |\n10 |\n   - def compute_stats(commits: List[Dict[str, Any]], top: int = 5) -> Dict[str, Any]:\n11 + def compute_stats(commits: list[Dict[str, Any]], top: int = 5) -> Dict[str, Any]:\n12 |     \"\"\"\n   |\n\nUP006 [*] Use `dict` instead of `Dict` for type annotation\n  --> activity.py:11:33\n   |\n 9 | from typing import Any, Dict, List\n10 |\n11 | def compute_stats(commits: List[Dict[str, Any]], top: int = 5) -> Dict[str, Any]:\n   |                                 ^^^^\n12 |     \"\"\"\n13 |     Вычисляет статистику активности репозитория.\n   |\nhelp: Replace with `dict`\n   |\n10 |\n   - def compute_stats(commits: List[Dict[str, Any]], top: int = 5) -> Dict[str, Any]:\n11 + def compute_stats(commits: List[dict[str, Any]], top: int = 5) -> Dict[str, Any]:\n12 |     \"\"\"\n   |\n\nUP006 [*] Use `dict` instead of `Dict` for type annotation\n  --> activity.py:11:67\n   |\n 9 | from typing import Any, Dict, List\n10 |\n11 | def compute_stats(commits: List[Dict[str, Any]], top: int = 5) -> Dict[str, Any]:\n   |                                                                   ^^^^\n12 |     \"\"\"\n13 |     Вычисляет статистику активности репозитория.\n   |\nhelp: Replace with `dict`\n   |\n10 |\n   - def compute_stats(commits: List[Dict[str, Any]], top: int = 5) -> Dict[str, Any]:\n11 + def compute_stats(commits: List[Dict[str, Any]], top: int = 5) -> dict[str, Any]:\n12 |     \"\"\"\n   |\n\nE501 Line too long (101 > 100)\n  --> activity.py:31:101\n   |\n29 |     return {\n30 |         \"top_authors\": [{\"author\": author, \"count\": count} for author, count in top_authors],\n31 |         \"commits_by_day\": [{\"date\": date, \"count\": count} for date, count in commits_by_day.items()],\n   |                                                                                                     ^\n32 |         \"most_active_day\": most_active_day\n33 |     }\n   |\n\nF401 [*] `os` imported but unused\n  --> app.py:12:8\n   |\n10 | \"\"\"\n11 |\n12 | import os\n   |        ^^\n13 |\n14 | from flask import Flask, jsonify, render_template, request\n   |\nhelp: Remove unused import: `os`\n   |\n11 |\n   - import os\n12 |\n   |\n\nE501 Line too long (124 > 100)\n  --> app.py:60:101\n   |\n59 |     try:\n60 |         md = digest.generate(commits, title=\"Repository Digest\", tone=\"toxic\" if toxic else \"neutral\", api_key=deepseek_key)\n   |                                                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^\n61 |     except Exception as e:\n62 |         return jsonify({\"error\": str(e)}), 400\n   |\n\nS201 Use of `debug=True` in Flask app detected\n   --> app.py:115:13\n    |\n114 | if __name__ == \"__main__\":\n115 |     app.run(debug=True)\n    |             ^^^^^^^^^^\n\nFound 11 errors.\n[*] 6 fixable with `--fix`.\n",
+ "own_test_passes": false,
+ "own_test_out": "/opt/homebrew/Cellar/python@3.13/3.13.13_1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python: can't open file '/private/var/folders/h0/5yq7l44577l_p62wyw0lt8f40000gn/T/day4_feature_base_1p2zi_s8/proj/test_stats.py': [Errno 2] No such file or directory\n",
+ "acceptance_200": true,
+ "acceptance_content": true,
+ "empty_body_400_json": true,
+ "style_last_default_15": false,
+ "style_mock_patch": false,
+ "style_module_docstring_ru": true,
+ "style_no_print_in_service": true,
+ "style_typed": false,
+ "checks_passed": 5,
+ "checks_total": 12,
+ "task": "feature",
+ "model": "qwen2.5-coder:14b",
+ "rules": "short",
+ "options": {
+  "temperature": 0.1,
+  "top_p": 0.9,
+  "num_ctx": 4096,
+  "num_predict": 3072
+ },
+ "wall_s": 136.17,
+ "prompt_tokens": 3437,
+ "gen_tokens": 2210,
+ "gen_tps": 18.5,
+ "prefill_tps": 223.1,
+ "ttft_s": 16.54,
+ "load_s": 1.14,
+ "answer_head": "FILE: activity.py\n```python\n\"\"\"\nВычисление статистики активности GitHub-репозитория.\n\nПредоставляет топ авторов по числу коммитов, число коммитов по дням и самый активный день.\n\"\"\"\n\nfrom collections import Counter\nfrom datetime import datetime\nfrom typing import Any, Dict, List\n\ndef compute_stats(co"
+}

@@ -159,3 +159,4 @@ Python SDK `mcp` (на момент задачи — v1.28.1). DeepSeek/API-кл
 - **Week 8 / Day 2:** `week 8/day 2/` — копия сервиса day 1 (порт 5011) с эндпоинтом `POST /stats` и модулем `activity.py` (топ авторов, коммиты по дням, самый активный день; без AI и сети); тест `test_stats.py`.
 - **Week 8 / Day 2 (Advanced, Profiles):** профили агентов `bug-fix`, `research`, `docs-sync` в `.claude/agents/`; проверка на реальных задачах — `week 8/day 2/profiles-experiment/REPORT.md` (баг `last` в `/generate` исправлен).
 - **Week 8 / Day 3 (Advanced, Testing):** код-тесты на 4 модуля + 6 UI smoke-сценариев через браузерный MCP (скриншоты, единый отчёт), агенты `tester`/`smoke-runner`, скиллы `pr-verify`/`post-deploy`, CI `tests.yml` — `week 8/day 3/REPORT.md`.
+- **Week 8 / Day 4 (Advanced, Local Boost):** Ollama + Continue (VS Code), конфиг `~/.continue/config.yaml`, 5 локальных моделей на задачах Дней 1–2, сравнение с облаком — `week 8/day 4/REPORT.md`.

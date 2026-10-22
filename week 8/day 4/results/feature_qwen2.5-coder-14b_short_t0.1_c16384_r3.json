@@ -1,0 +1,41 @@
+{
+ "files": [
+  "activity.py",
+  "app.py",
+  "test_stats.py"
+ ],
+ "parsed_3_files": true,
+ "compiles": true,
+ "compile_err": "",
+ "ruff_ok": false,
+ "ruff_out": "\n   |\n19 |     commits = [\n20 |         {\"hash\": \"1234567\", \"date\": \"2023-10-01\", \"author\": \"Alice\", \"subject\": \"Fix bug\", \"body\": \"\"},\n21 |         {\"hash\": \"2345678\", \"date\": \"2023-10-01\", \"author\": \"Bob\", \"subject\": \"Add feature\", \"body\": \"\"},\n   |                                                                                                     ^^^^^\n22 |         {\"hash\": \"3456789\", \"date\": \"2023-10-02\", \"author\": \"Alice\", \"subject\": \"Update docs\", \"body\": \"\"},\n23 |         {\"hash\": \"4567890\", \"date\": \"2023-10-02\", \"author\": \"Bob\", \"subject\": \"Refactor code\", \"body\": \"\"},\n   |\n\nE501 Line too long (107 > 100)\n  --> test_stats.py:22:101\n   |\n20 |         {\"hash\": \"1234567\", \"date\": \"2023-10-01\", \"author\": \"Alice\", \"subject\": \"Fix bug\", \"body\": \"\"},\n21 |         {\"hash\": \"2345678\", \"date\": \"2023-10-01\", \"author\": \"Bob\", \"subject\": \"Add feature\", \"body\": \"\"},\n22 |         {\"hash\": \"3456789\", \"date\": \"2023-10-02\", \"author\": \"Alice\", \"subject\": \"Update docs\", \"body\": \"\"},\n   |                                                                                                     ^^^^^^^\n23 |         {\"hash\": \"4567890\", \"date\": \"2023-10-02\", \"author\": \"Bob\", \"subject\": \"Refactor code\", \"body\": \"\"},\n24 |         {\"hash\": \"5678901\", \"date\": \"2023-10-03\", \"author\": \"Alice\", \"subject\": \"Fix typo\", \"body\": \"\"},\n   |\n\nE501 Line too long (107 > 100)\n  --> test_stats.py:23:101\n   |\n21 |         {\"hash\": \"2345678\", \"date\": \"2023-10-01\", \"author\": \"Bob\", \"subject\": \"Add feature\", \"body\": \"\"},\n22 |         {\"hash\": \"3456789\", \"date\": \"2023-10-02\", \"author\": \"Alice\", \"subject\": \"Update docs\", \"body\": \"\"},\n23 |         {\"hash\": \"4567890\", \"date\": \"2023-10-02\", \"author\": \"Bob\", \"subject\": \"Refactor code\", \"body\": \"\"},\n   |                                                                                                     ^^^^^^^\n24 |         {\"hash\": \"5678901\", \"date\": \"2023-10-03\", \"author\": \"Alice\", \"subject\": \"Fix typo\", \"body\": \"\"},\n25 |     ]\n   |\n\nE501 Line too long (104 > 100)\n  --> test_stats.py:24:101\n   |\n22 |         {\"hash\": \"3456789\", \"date\": \"2023-10-02\", \"author\": \"Alice\", \"subject\": \"Update docs\", \"body\": \"\"},\n23 |         {\"hash\": \"4567890\", \"date\": \"2023-10-02\", \"author\": \"Bob\", \"subject\": \"Refactor code\", \"body\": \"\"},\n24 |         {\"hash\": \"5678901\", \"date\": \"2023-10-03\", \"author\": \"Alice\", \"subject\": \"Fix typo\", \"body\": \"\"},\n   |                                                                                                     ^^^^\n25 |     ]\n   |\n\nE501 Line too long (109 > 100)\n  --> test_stats.py:31:101\n   |\n29 |         with patch(\"github_repo.repo_label\", return_value=REPO):\n30 |             client = app.app.test_client()\n31 |             response = client.post(\"/stats\", json={\"repo\": REPO, \"github_token\": TOKEN, \"last\": 5, \"top\": 2})\n   |                                                                                                     ^^^^^^^^^\n32 |             data = response.get_json()\n   |\n\nFound 17 errors.\n[*] 7 fixable with `--fix`.\n",
+ "own_test_passes": true,
+ "own_test_out": "",
+ "acceptance_200": true,
+ "acceptance_content": true,
+ "empty_body_400_json": true,
+ "style_last_default_15": true,
+ "style_mock_patch": false,
+ "style_module_docstring_ru": true,
+ "style_no_print_in_service": true,
+ "style_typed": false,
+ "checks_passed": 9,
+ "checks_total": 12,
+ "task": "feature",
+ "model": "qwen2.5-coder:14b",
+ "rules": "short",
+ "options": {
+  "temperature": 0.1,
+  "top_p": 0.9,
+  "num_ctx": 16384,
+  "num_predict": 3072
+ },
+ "wall_s": 114.13,
+ "prompt_tokens": 3437,
+ "gen_tokens": 2090,
+ "gen_tps": 18.3,
+ "prefill_tps": 64861.3,
+ "ttft_s": 0.06,
+ "load_s": 0.0,
+ "answer_head": "FILE: activity.py\n```python\n\"\"\"\nВычисление статистики активности GitHub-репозитория.\n\nПредоставляет информацию о топ-авторах по числу коммитов, количестве коммитов\nпо дням и самый активный день.\n\"\"\"\n\nfrom collections import Counter\nfrom datetime import datetime\nfrom typing import Any, Dict, List\n\nde"
+}

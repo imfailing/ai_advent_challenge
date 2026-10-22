@@ -1,8 +1,8 @@
 # Линтер проекта. Запуск: ruff check "week 8/day 1"
 target-version = "py313"
 line-length = 100
-src = ["week 8/day 1", "week 8/day 2", "week 8/day 3"]   # локальные модули дня = first-party (для сортировки импортов)
-extend-exclude = ["venv", "rules-experiment", "corpus", "week 1", "week 2", "week 3", "week 4", "week 5", "week 6"]
+src = ["week 8/day 1", "week 8/day 2", "week 8/day 3", "week 8/day 4"]   # локальные модули дня = first-party (для сортировки импортов)
+extend-exclude = ["venv", "rules-experiment", "corpus", "week 1", "week 2", "week 3", "week 4", "week 5", "week 6", "week 8/day 4/fixtures", "week 8/day 4/results"]
 
 [lint]
 # E/F — pycodestyle/pyflakes, I — сортировка импортов, UP — современный синтаксис,
@@ -11,6 +11,7 @@ select = ["E", "F", "I", "UP", "B", "T20", "S"]
 ignore = ["S310"]   # urllib: URL'ы у нас только https-константы + проверенный owner/repo
 
 [lint.per-file-ignores]
+"week 8/day 4/*.py" = ["E501", "T201", "S603", "BLE001"]   # стенд замеров: длинные строки и подпроцессы — норма
 "test_*.py" = ["T20", "S101", "S106"]   # в тестах print, assert и фейковые токены — норма
 
 [lint.isort]

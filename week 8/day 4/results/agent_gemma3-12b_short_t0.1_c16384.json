@@ -1,0 +1,41 @@
+{
+ "bug_fixed": false,
+ "valid_last_still_works": true,
+ "existing_tests_pass": true,
+ "tests_out": "",
+ "tests_not_weakened": true,
+ "regression_test_added": false,
+ "ruff_ok": true,
+ "ruff_out": "All checks passed!\n",
+ "no_bare_except_pass": true,
+ "diff_lines_app": 2,
+ "checks_passed": 5,
+ "checks_total": 7,
+ "diff": "--- app.py (до)\n+++ app.py (после)\n@@ -61,7 +61,7 @@\n     try:\n         md = digest.generate(commits, title=title, tone=tone, api_key=deepseek_key)\n     except Exception as e:\n-        return jsonify({\"error\": f\"AI: {e}\"}), 500\n+        return jsonify({\"error\": f\"AI: {e}\" + \"\"}), 500\n     _last_digest[\"md\"] = md\n     return jsonify({\"digest\": md, \"commits\": len(commits), \"source\": label, \"tone\": tone})\n \n",
+ "task": "agent_bugfix",
+ "model": "gemma3:12b",
+ "rules": "short",
+ "options": {
+  "temperature": 0.1,
+  "top_p": 0.9,
+  "num_ctx": 16384,
+  "num_predict": 3072
+ },
+ "steps": 17,
+ "mode": "text",
+ "nudges": 1,
+ "tool_calls": 14,
+ "tool_errors": 0,
+ "tools_used": [
+  "grep",
+  "read_file",
+  "replace_in_file",
+  "run_python"
+ ],
+ "wall_s": 107.6,
+ "error": "",
+ "finished_with_answer": true,
+ "prompt_tokens": 52759,
+ "gen_tokens": 939,
+ "answer_head": "## Что нашёл\nПри обработке запроса `/generate` в `app.py` при возникновении исключения в блоке `try...except` для вызова `digest.generate`, сообщение об ошибке не было корректно форматировано для отправки пользователю в виде JSON. Это приводило к отображению полной трассировки стека (traceback) в бр"
+}

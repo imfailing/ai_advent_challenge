@@ -1,0 +1,41 @@
+{
+ "files": [
+  "activity.py",
+  "app.py",
+  "test_stats.py"
+ ],
+ "parsed_3_files": true,
+ "compiles": true,
+ "compile_err": "",
+ "ruff_ok": false,
+ "ruff_out": "I001 [*] Import block is un-sorted or un-formatted\n --> activity.py:1:1\n  |\n1 | / from collections import Counter, defaultdict\n2 | | from datetime import datetime\n  | |_____________________________^\n3 |\n4 |   def compute_stats(commits: list[dict], top: int = 5) -> dict:\n  |\nhelp: Organize imports\n  |\n3 |\n4 +\n5 | def compute_stats(commits: list[dict], top: int = 5) -> dict:\n  |\n\nF401 [*] `datetime.datetime` imported but unused\n --> activity.py:2:22\n  |\n1 | from collections import Counter, defaultdict\n2 | from datetime import datetime\n  |                      ^^^^^^^^\n3 |\n4 | def compute_stats(commits: list[dict], top: int = 5) -> dict:\n  |\nhelp: Remove unused import: `datetime.datetime`\n  |\n1 | from collections import Counter, defaultdict\n  - from datetime import datetime\n2 |\n  |\n\nF401 [*] `digest` imported but unused\n  --> test_stats.py:16:8\n   |\n15 | import activity\n16 | import digest\n   |        ^^^^^^\n17 | import github_repo\n18 | from notify import send_telegram\n   |\nhelp: Remove unused import: `digest`\n   |\n15 | import activity\n   - import digest\n16 | import github_repo\n   |\n\nF401 [*] `notify.send_telegram` imported but unused\n  --> test_stats.py:18:20\n   |\n16 | import digest\n17 | import github_repo\n18 | from notify import send_telegram\n   |                    ^^^^^^^^^^^^^\n19 |\n20 | REPO = \"octocat/Hello-World\"\n   |\nhelp: Remove unused import: `notify.send_telegram`\n   |\n17 | import github_repo\n   - from notify import send_telegram\n18 |\n   |\n\nFound 4 errors.\n[*] 4 fixable with `--fix`.\n",
+ "own_test_passes": true,
+ "own_test_out": "",
+ "acceptance_200": true,
+ "acceptance_content": true,
+ "empty_body_400_json": true,
+ "style_last_default_15": true,
+ "style_mock_patch": false,
+ "style_module_docstring_ru": false,
+ "style_no_print_in_service": true,
+ "style_typed": true,
+ "checks_passed": 9,
+ "checks_total": 12,
+ "task": "feature",
+ "model": "qwen2.5-coder:7b",
+ "rules": "none",
+ "options": {
+  "temperature": 0.1,
+  "top_p": 0.9,
+  "num_ctx": 16384,
+  "num_predict": 3072
+ },
+ "wall_s": 43.01,
+ "prompt_tokens": 2964,
+ "gen_tokens": 1719,
+ "gen_tps": 40.0,
+ "prefill_tps": 72830.9,
+ "ttft_s": 0.04,
+ "load_s": 0.0,
+ "answer_head": "FILE: activity.py\n```python\nfrom collections import Counter, defaultdict\nfrom datetime import datetime\n\ndef compute_stats(commits: list[dict], top: int = 5) -> dict:\n    author_commits = Counter(c[\"author\"] for c in commits)\n    daily_commits = defaultdict(int)\n    for c in commits:\n        daily_co"
+}

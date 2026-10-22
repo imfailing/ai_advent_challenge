@@ -1,0 +1,92 @@
+[
+ {
+  "model": "qwen2.5-coder:1.5b",
+  "case": "clamp last",
+  "ms": 30,
+  "output": "",
+  "expected": "15",
+  "exact": false,
+  "similarity": 0.0
+ },
+ {
+  "model": "qwen2.5-coder:1.5b",
+  "case": "return jsonify error",
+  "ms": 421,
+  "output": "{\"error\": \"Repository not provided\"}, 400)\n    if not branch:\n        return jsonify({\"err",
+  "expected": "{\"error\": \"Укажите GitHub-репозиторий (owner/repo или ссылку).\"}",
+  "exact": false,
+  "similarity": 0.12
+ },
+ {
+  "model": "qwen2.5-coder:1.5b",
+  "case": "counter",
+  "ms": 120,
+  "output": "commit['author'] for commit in commits)",
+  "expected": "c[\"author\"] for c in commits",
+  "exact": false,
+  "similarity": 0.78
+ },
+ {
+  "model": "qwen2.5-coder:1.5b",
+  "case": "test assert",
+  "ms": 522,
+  "output": "len(COMMITS)\n    assert s[\"unique_authors\"] == len(set(COMMITS))\n    assert s[\"unique_comm",
+  "expected": "4",
+  "exact": false,
+  "similarity": 0.0
+ },
+ {
+  "model": "qwen2.5-coder:1.5b",
+  "case": "docstring",
+  "ms": 102,
+  "output": "Parse a repository URL to extract the username and repository name.",
+  "expected": "Извлечь 'owner/repo' из URL или строки owner/repo.",
+  "exact": false,
+  "similarity": 0.31
+ },
+ {
+  "model": "qwen2.5-coder:7b",
+  "case": "clamp last",
+  "ms": 1682,
+  "output": "\"1\")), 100))\n    github_token = (data.get(\"github_token\") or \"\").strip()\n    return {\n    ",
+  "expected": "15",
+  "exact": false,
+  "similarity": 0.01
+ },
+ {
+  "model": "qwen2.5-coder:7b",
+  "case": "return jsonify error",
+  "ms": 536,
+  "output": "{'error': 'Repository not found'}), 404",
+  "expected": "{\"error\": \"Укажите GitHub-репозиторий (owner/repo или ссылку).\"}",
+  "exact": false,
+  "similarity": 0.27
+ },
+ {
+  "model": "qwen2.5-coder:7b",
+  "case": "counter",
+  "ms": 352,
+  "output": "commit['author'] for commit in commits)",
+  "expected": "c[\"author\"] for c in commits",
+  "exact": false,
+  "similarity": 0.78
+ },
+ {
+  "model": "qwen2.5-coder:7b",
+  "case": "test assert",
+  "ms": 1812,
+  "output": "100\n    assert s[\"total_lines_added\"] == 5000\n    assert s[\"total_lines_removed\"] == 2000\n",
+  "expected": "4",
+  "exact": false,
+  "similarity": 0.0
+ },
+ {
+  "model": "qwen2.5-coder:7b",
+  "case": "docstring",
+  "ms": 268,
+  "output": "Parse a repository name from a string.",
+  "expected": "Извлечь 'owner/repo' из URL или строки owner/repo.",
+  "exact": false,
+  "similarity": 0.23
+ }
+]

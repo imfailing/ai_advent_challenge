@@ -1,0 +1,42 @@
+{
+ "bug_fixed": false,
+ "valid_last_still_works": true,
+ "existing_tests_pass": true,
+ "tests_out": "",
+ "tests_not_weakened": true,
+ "regression_test_added": false,
+ "ruff_ok": false,
+ "ruff_out": "F841 [*] Local variable `e` is assigned to but never used\n  --> app.py:63:25\n   |\n61 |     try:\n62 |         md = digest.generate(commits, title=title, tone=tone, api_key=deepseek_key)\n63 |     except Exception as e:\n   |                         ^\n64 |         return jsonify({\"error\": \"AI: Произошла ошибка при генерации дайджеста.\"}), 500\n65 |     _last_digest[\"md\"] = md\n   |\nhelp: Remove assignment to unused variable `e`\n   |\n62 |         md = digest.generate(commits, title=title, tone=tone, api_key=deepseek_key)\n   -     except Exception as e:\n63 +     except Exception:\n64 |         return jsonify({\"error\": \"AI: Произошла ошибка при генерации дайджеста.\"}), 500\n   |\n\nFound 1 error.\n[*] 1 fixable with `--fix`.\n",
+ "no_bare_except_pass": true,
+ "diff_lines_app": 2,
+ "checks_passed": 4,
+ "checks_total": 7,
+ "task": "agent_bugfix",
+ "model": "qwen3:8b",
+ "rules": "short",
+ "options": {
+  "temperature": 0.1,
+  "top_p": 0.9,
+  "num_ctx": 16384,
+  "num_predict": 3072
+ },
+ "steps": 15,
+ "mode": "native",
+ "nudges": 1,
+ "tool_calls": 13,
+ "tool_errors": 0,
+ "tools_used": [
+  "grep",
+  "list_files",
+  "read_file",
+  "replace_in_file",
+  "run_python",
+  "run_ruff"
+ ],
+ "wall_s": 118.1,
+ "error": "",
+ "finished_with_answer": true,
+ "prompt_tokens": 45047,
+ "gen_tokens": 1118,
+ "answer_head": "## Что нашёл  \nНайден маршрут `/generate` в `app.py`, где обработка ошибок возвращала `str(e)`, что могло приводить к нечитаемым ошибкам. Также обнаружена ошибка `ModuleNotFoundError: No module named 'requests'`, что указывает на отсутствие зависимости `requests` в окружении.\n\n## Что починил  \nИспра"
+}

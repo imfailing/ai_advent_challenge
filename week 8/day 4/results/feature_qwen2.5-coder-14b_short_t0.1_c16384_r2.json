@@ -1,0 +1,41 @@
+{
+ "files": [
+  "activity.py",
+  "app.py",
+  "test_stats.py"
+ ],
+ "parsed_3_files": true,
+ "compiles": true,
+ "compile_err": "",
+ "ruff_ok": false,
+ "ruff_out": "List[Dict[str, Any]], top: int = 5) -> Dict[str, Any]:\n   |\n\nUP006 [*] Use `list` instead of `List` for type annotation\n  --> activity.py:14:28\n   |\n12 | from typing import Any, Dict, List\n13 |\n14 | def compute_stats(commits: List[Dict[str, Any]], top: int = 5) -> Dict[str, Any]:\n   |                            ^^^^\n15 |     \"\"\"\n16 |     Вычислить статистику активности репозитория.\n   |\nhelp: Replace with `list`\n   |\n13 |\n   - def compute_stats(commits: List[Dict[str, Any]], top: int = 5) -> Dict[str, Any]:\n14 + def compute_stats(commits: list[Dict[str, Any]], top: int = 5) -> Dict[str, Any]:\n15 |     \"\"\"\n   |\n\nUP006 [*] Use `dict` instead of `Dict` for type annotation\n  --> activity.py:14:33\n   |\n12 | from typing import Any, Dict, List\n13 |\n14 | def compute_stats(commits: List[Dict[str, Any]], top: int = 5) -> Dict[str, Any]:\n   |                                 ^^^^\n15 |     \"\"\"\n16 |     Вычислить статистику активности репозитория.\n   |\nhelp: Replace with `dict`\n   |\n13 |\n   - def compute_stats(commits: List[Dict[str, Any]], top: int = 5) -> Dict[str, Any]:\n14 + def compute_stats(commits: List[dict[str, Any]], top: int = 5) -> Dict[str, Any]:\n15 |     \"\"\"\n   |\n\nUP006 [*] Use `dict` instead of `Dict` for type annotation\n  --> activity.py:14:67\n   |\n12 | from typing import Any, Dict, List\n13 |\n14 | def compute_stats(commits: List[Dict[str, Any]], top: int = 5) -> Dict[str, Any]:\n   |                                                                   ^^^^\n15 |     \"\"\"\n16 |     Вычислить статистику активности репозитория.\n   |\nhelp: Replace with `dict`\n   |\n13 |\n   - def compute_stats(commits: List[Dict[str, Any]], top: int = 5) -> Dict[str, Any]:\n14 + def compute_stats(commits: List[Dict[str, Any]], top: int = 5) -> dict[str, Any]:\n15 |     \"\"\"\n   |\n\nE501 Line too long (108 > 100)\n  --> activity.py:32:101\n   |\n30 |     # Самый активный день\n31 |     max_commits_day = max(commits_by_day.values(), default=0)\n32 |     most_active_day = next((day for day, count in commits_by_day.items() if count == max_commits_day), None)\n   |                                                                                                     ^^^^^^^^\n33 |\n34 |     return {\n   |\n\nF401 [*] `json` imported but unused\n  --> test_stats.py:10:8\n   |\n 8 | \"\"\"\n 9 |\n10 | import json\n   |        ^^^^\n11 | from unittest import mock\n   |\nhelp: Remove unused import: `json`\n   |\n9  |\n   - import json\n10 | from unittest import mock\n   |\n\nF401 [*] `github_repo` imported but unused\n  --> test_stats.py:14:8\n   |\n13 | import app as flask_app\n14 | import github_repo\n   |        ^^^^^^^^^^^\n15 |\n16 | REPO = \"octocat/Hello-World\"\n   |\nhelp: Remove unused import: `github_repo`\n   |\n13 | import app as flask_app\n   - import github_repo\n14 |\n   |\n\nS105 Possible hardcoded password assigned to: \"TOKEN\"\n  --> test_stats.py:17:9\n   |\n16 | REPO = \"octocat/Hello-World\"\n17 | TOKEN = \"test_token\"\n   |         ^^^^^^^^^^^^\n18 |\n19 | def main() -> None:\n   |\n\nFound 11 errors.\n[*] 7 fixable with `--fix`.\n",
+ "own_test_passes": true,
+ "own_test_out": "",
+ "acceptance_200": true,
+ "acceptance_content": true,
+ "empty_body_400_json": true,
+ "style_last_default_15": true,
+ "style_mock_patch": true,
+ "style_module_docstring_ru": true,
+ "style_no_print_in_service": true,
+ "style_typed": false,
+ "checks_passed": 10,
+ "checks_total": 12,
+ "task": "feature",
+ "model": "qwen2.5-coder:14b",
+ "rules": "short",
+ "options": {
+  "temperature": 0.1,
+  "top_p": 0.9,
+  "num_ctx": 16384,
+  "num_predict": 3072
+ },
+ "wall_s": 127.01,
+ "prompt_tokens": 3437,
+ "gen_tokens": 2270,
+ "gen_tps": 20.2,
+ "prefill_tps": 253.2,
+ "ttft_s": 14.71,
+ "load_s": 1.13,
+ "answer_head": "FILE: activity.py\n```python\n\"\"\"\nВычисление статистики активности GitHub-репозитория.\n\nМодуль предоставляет функции для анализа коммитов репозитория:\n  • топ авторов по числу коммитов;\n  • число коммитов по дням;\n  • самый активный день.\n\"\"\"\n\nfrom collections import Counter\nfrom datetime import datet"
+}

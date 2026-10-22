@@ -1,0 +1,41 @@
+{
+ "files": [
+  "activity.py",
+  "app.py",
+  "test_stats.py"
+ ],
+ "parsed_3_files": true,
+ "compiles": true,
+ "compile_err": "",
+ "ruff_ok": false,
+ "ruff_out": "I001 [*] Import block is un-sorted or un-formatted\n --> activity.py:5:1\n  |\n3 |   \"\"\"\n4 |\n5 | / from collections import Counter, defaultdict\n6 | | from datetime import datetime\n  | |_____________________________^\n7 |\n8 |   def compute_stats(commits: list[dict], top: int = 5) -> dict:\n  |\nhelp: Organize imports\n  |\n7 |\n8 +\n9 | def compute_stats(commits: list[dict], top: int = 5) -> dict:\n  |\n\nE501 Line too long (109 > 100)\n  --> activity.py:34:101\n   |\n32 |     return {\n33 |         \"top_authors\": [{\"author\": author, \"commits\": count} for author, count in top_authors],\n34 |         \"date_commits\": [{\"date\": date.strftime(\"%Y-%m-%d\"), \"commits\": count} for date, count in top_dates],\n   |                                                                                                     ^^^^^^^^^\n35 |         \"most_active_day\": max_date.strftime(\"%Y-%m-%d\") if max_date else None,\n36 |         \"most_active_day_commits\": max_date_count\n   |\n\nF401 [*] `digest` imported but unused\n  --> test_stats.py:16:8\n   |\n15 | import activity\n16 | import digest\n   |        ^^^^^^\n17 | import github_repo\n18 | from notify import send_telegram\n   |\nhelp: Remove unused import: `digest`\n   |\n15 | import activity\n   - import digest\n16 | import github_repo\n   |\n\nF401 [*] `notify.send_telegram` imported but unused\n  --> test_stats.py:18:20\n   |\n16 | import digest\n17 | import github_repo\n18 | from notify import send_telegram\n   |                    ^^^^^^^^^^^^^\n19 |\n20 | REPO = \"octocat/Hello-World\"\n   |\nhelp: Remove unused import: `notify.send_telegram`\n   |\n17 | import github_repo\n   - from notify import send_telegram\n18 |\n   |\n\nFound 4 errors.\n[*] 3 fixable with `--fix`.\n",
+ "own_test_passes": true,
+ "own_test_out": "",
+ "acceptance_200": true,
+ "acceptance_content": true,
+ "empty_body_400_json": true,
+ "style_last_default_15": true,
+ "style_mock_patch": false,
+ "style_module_docstring_ru": true,
+ "style_no_print_in_service": true,
+ "style_typed": true,
+ "checks_passed": 10,
+ "checks_total": 12,
+ "task": "feature",
+ "model": "qwen2.5-coder:7b",
+ "rules": "short",
+ "options": {
+  "temperature": 0.1,
+  "top_p": 0.9,
+  "num_ctx": 16384,
+  "num_predict": 3072
+ },
+ "wall_s": 68.28,
+ "prompt_tokens": 3437,
+ "gen_tokens": 2150,
+ "gen_tps": 35.8,
+ "prefill_tps": 463.9,
+ "ttft_s": 8.22,
+ "load_s": 0.81,
+ "answer_head": "FILE: activity.py\n```python\n\"\"\"\nЛогика вычисления статистики активности GitHub-репозитория.\n\"\"\"\n\nfrom collections import Counter, defaultdict\nfrom datetime import datetime\n\ndef compute_stats(commits: list[dict], top: int = 5) -> dict:\n    \"\"\"\n    Вычислить статистику активности по коммитам.\n\n    :pa"
+}

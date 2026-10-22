@@ -1,0 +1,40 @@
+{
+ "files": [
+  "activity.py",
+  "test_stats.py"
+ ],
+ "parsed_3_files": false,
+ "compiles": true,
+ "compile_err": "",
+ "ruff_ok": false,
+ "ruff_out": "I001 [*] Import block is un-sorted or un-formatted\n  --> activity.py:7:1\n   |\n 5 |   \"\"\"\n 6 |\n 7 | / from collections import Counter, defaultdict\n 8 | | from typing import Dict, List\n   | |_____________________________^\n 9 |\n10 |   def compute_stats(commits: List[Dict], top: int = 5) -> Dict:\n   |\nhelp: Organize imports\n   |\n9  |\n10 +\n11 | def compute_stats(commits: List[Dict], top: int = 5) -> Dict:\n   |\n\nUP035 `typing.Dict` is deprecated, use `dict` instead\n  --> activity.py:8:1\n   |\n 7 | from collections import Counter, defaultdict\n 8 | from typing import Dict, List\n   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n 9 |\n10 | def compute_stats(commits: List[Dict], top: int = 5) -> Dict:\n   |\n\nUP035 `typing.List` is deprecated, use `list` instead\n  --> activity.py:8:1\n   |\n 7 | from collections import Counter, defaultdict\n 8 | from typing import Dict, List\n   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n 9 |\n10 | def compute_stats(commits: List[Dict], top: int = 5) -> Dict:\n   |\n\nUP006 [*] Use `list` instead of `List` for type annotation\n  --> activity.py:10:28\n   |\n 8 | from typing import Dict, List\n 9 |\n10 | def compute_stats(commits: List[Dict], top: int = 5) -> Dict:\n   |                            ^^^^\n11 |     \"\"\"\n12 |     Вычисляет статистику активности по коммитам.\n   |\nhelp: Replace with `list`\n   |\n9  |\n   - def compute_stats(commits: List[Dict], top: int = 5) -> Dict:\n10 + def compute_stats(commits: list[Dict], top: int = 5) -> Dict:\n11 |     \"\"\"\n   |\n\nUP006 [*] Use `dict` instead of `Dict` for type annotation\n  --> activity.py:10:33\n   |\n 8 | from typing import Dict, List\n 9 |\n10 | def compute_stats(commits: List[Dict], top: int = 5) -> Dict:\n   |                                 ^^^^\n11 |     \"\"\"\n12 |     Вычисляет статистику активности по коммитам.\n   |\nhelp: Replace with `dict`\n   |\n9  |\n   - def compute_stats(commits: List[Dict], top: int = 5) -> Dict:\n10 + def compute_stats(commits: List[dict], top: int = 5) -> Dict:\n11 |     \"\"\"\n   |\n\nUP006 [*] Use `dict` instead of `Dict` for type annotation\n  --> activity.py:10:57\n   |\n 8 | from typing import Dict, List\n 9 |\n10 | def compute_stats(commits: List[Dict], top: int = 5) -> Dict:\n   |                                                         ^^^^\n11 |     \"\"\"\n12 |     Вычисляет статистику активности по коммитам.\n   |\nhelp: Replace with `dict`\n   |\n9  |\n   - def compute_stats(commits: List[Dict], top: int = 5) -> Dict:\n10 + def compute_stats(commits: List[Dict], top: int = 5) -> dict:\n11 |     \"\"\"\n   |\n\nE501 Line too long (104 > 100)\n  --> activity.py:31:101\n   |\n30 |     return {\n31 |         \"top_authors\": [{\"author\": author, \"commits\": len(commits)} for author, commits in top_authors],\n   |                                                                                                     ^^^^\n32 |         \"commits_by_date\": commits_by_date,\n33 |         \"most_active_day\": most_active_day\n   |\n\nFound 7 errors.\n[*] 4 fixable with `--fix`.\n",
+ "own_test_passes": false,
+ "own_test_out": ", key=_itemgetter(1))\n           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/homebrew/Cellar/python@3.13/3.13.13_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/heapq.py\", line 543, in nlargest\n    return sorted(iterable, key=key, reverse=True)[:n]\n           ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nTypeError: '<' not supported between instances of 'dict' and 'dict'\n",
+ "acceptance_200": false,
+ "acceptance_content": false,
+ "empty_body_400_json": false,
+ "style_last_default_15": false,
+ "style_mock_patch": false,
+ "style_module_docstring_ru": true,
+ "style_no_print_in_service": true,
+ "style_typed": false,
+ "checks_passed": 3,
+ "checks_total": 12,
+ "task": "feature",
+ "model": "qwen2.5-coder:7b",
+ "rules": "short",
+ "options": {
+  "temperature": 0.1,
+  "top_p": 0.9,
+  "num_ctx": 8192,
+  "num_predict": 3072
+ },
+ "wall_s": 27.52,
+ "prompt_tokens": 3437,
+ "gen_tokens": 584,
+ "gen_tps": 31.0,
+ "prefill_tps": 442.9,
+ "ttft_s": 8.61,
+ "load_s": 0.85,
+ "answer_head": "FILE: activity.py\n```python\n\"\"\"\nЛогика вычисления статистики активности GitHub-репозитория.\n\nВозвращает топ авторов по числу коммитов, число коммитов по дням и самый активный день.\n\"\"\"\n\nfrom collections import Counter, defaultdict\nfrom typing import Dict, List\n\ndef compute_stats(commits: List[Dict],"
+}

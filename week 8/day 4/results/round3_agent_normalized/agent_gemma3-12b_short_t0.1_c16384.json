@@ -1,0 +1,42 @@
+{
+ "bug_fixed": false,
+ "valid_last_still_works": true,
+ "existing_tests_pass": true,
+ "tests_out": "",
+ "tests_not_weakened": true,
+ "regression_test_added": false,
+ "ruff_ok": true,
+ "ruff_out": "All checks passed!\n",
+ "no_bare_except_pass": true,
+ "diff_lines_app": 0,
+ "checks_passed": 5,
+ "checks_total": 7,
+ "diff": "",
+ "task": "agent_bugfix",
+ "model": "gemma3:12b",
+ "rules": "short",
+ "options": {
+  "temperature": 0.1,
+  "top_p": 0.9,
+  "num_ctx": 16384,
+  "num_predict": 3072
+ },
+ "steps": 18,
+ "mode": "text",
+ "nudges": 2,
+ "tool_calls": 14,
+ "tool_errors": 3,
+ "tools_used": [
+  "grep",
+  "read_file",
+  "replace_in_file",
+  "run_python",
+  "run_ruff"
+ ],
+ "wall_s": 108.4,
+ "error": "",
+ "finished_with_answer": true,
+ "prompt_tokens": 56983,
+ "gen_tokens": 947,
+ "answer_head": "## Что нашёл\nПри возникновении исключения в блоке `try...except` вокруг вызова `digest.generate` в функции `generate` в `app.py`, сообщение об ошибке, возвращаемое клиенту, содержало необработанное исключение, что могло привести к нечитаемым или неинформативным сообщениям об ошибках для пользователя"
+}

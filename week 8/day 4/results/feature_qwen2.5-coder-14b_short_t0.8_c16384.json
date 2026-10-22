@@ -1,0 +1,41 @@
+{
+ "files": [
+  "activity.py",
+  "app.py",
+  "test_stats.py"
+ ],
+ "parsed_3_files": true,
+ "compiles": true,
+ "compile_err": "",
+ "ruff_ok": false,
+ "ruff_out": "nt = 5) -> Dict[str, Any]:\n12 |     \"\"\"\n   |\n\nUP006 [*] Use `dict` instead of `Dict` for type annotation\n  --> activity.py:11:33\n   |\n 9 | from typing import Any, Dict, List\n10 |\n11 | def compute_stats(commits: List[Dict[str, Any]], top: int = 5) -> Dict[str, Any]:\n   |                                 ^^^^\n12 |     \"\"\"\n13 |     Вычисление статистики активности репозитория.\n   |\nhelp: Replace with `dict`\n   |\n10 |\n   - def compute_stats(commits: List[Dict[str, Any]], top: int = 5) -> Dict[str, Any]:\n11 + def compute_stats(commits: List[dict[str, Any]], top: int = 5) -> Dict[str, Any]:\n12 |     \"\"\"\n   |\n\nUP006 [*] Use `dict` instead of `Dict` for type annotation\n  --> activity.py:11:67\n   |\n 9 | from typing import Any, Dict, List\n10 |\n11 | def compute_stats(commits: List[Dict[str, Any]], top: int = 5) -> Dict[str, Any]:\n   |                                                                   ^^^^\n12 |     \"\"\"\n13 |     Вычисление статистики активности репозитория.\n   |\nhelp: Replace with `dict`\n   |\n10 |\n   - def compute_stats(commits: List[Dict[str, Any]], top: int = 5) -> Dict[str, Any]:\n11 + def compute_stats(commits: List[Dict[str, Any]], top: int = 5) -> dict[str, Any]:\n12 |     \"\"\"\n   |\n\nE501 Line too long (102 > 100)\n  --> activity.py:31:101\n   |\n29 |     return {\n30 |         \"top_authors\": [{\"author\": author, \"commits\": count} for author, count in top_authors],\n31 |         \"commits_by_day\": [{\"date\": date, \"commits\": count} for date, count in daily_commits.items()],\n   |                                                                                                     ^^\n32 |         \"most_active_day\": most_active_day[0] if most_active_day[0] else None\n33 |     }\n   |\n\nF401 [*] `json` imported but unused\n --> test_stats.py:8:8\n  |\n6 | \"\"\"\n7 |\n8 | import json\n  |        ^^^^\n9 | from unittest.mock import patch\n  |\nhelp: Remove unused import: `json`\n  |\n7 |\n  - import json\n8 | from unittest.mock import patch\n  |\n\nE501 Line too long (107 > 100)\n  --> test_stats.py:22:101\n   |\n20 |         response = client.post(\"/stats\", json={\"repo\": \"invalid-repo\"})\n21 |         assert response.status_code == 400\n22 |         assert response.get_json() == {\"error\": \"Ожидается 'owner/repo' или ссылка на GitHub-репозиторий.\"}\n   |                                                                                                     ^^^^^^^\n23 |         print(\"✅ Неверный формат репозитория обрабатывается корректно\")\n   |\n\nE501 Line too long (114 > 100)\n  --> test_stats.py:35:101\n   |\n33 |             response = client.post(\"/stats\", json={\"repo\": REPO})\n34 |             assert response.status_code == 400\n35 |             assert response.get_json() == {\"error\": \"Репозиторий не найден или приватный (укажите GitHub-токен).\"}\n   |                                                                                                     ^^^^^^^^^^^^^^\n36 |             print(\"✅ Репозиторий не найден обрабатывается корректно\")\n   |\n\nFound 10 errors.\n[*] 5 fixable with `--fix`.\n",
+ "own_test_passes": false,
+ "own_test_out": "y\", line 64, in <module>\n    main()\n    ~~~~^^\n  File \"/private/var/folders/h0/5yq7l44577l_p62wyw0lt8f40000gn/T/day4_feature_base_w2wgcy_y/proj/test_stats.py\", line 22, in main\n    assert response.get_json() == {\"error\": \"Ожидается 'owner/repo' или ссылка на GitHub-репозиторий.\"}\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n",
+ "acceptance_200": true,
+ "acceptance_content": true,
+ "empty_body_400_json": true,
+ "style_last_default_15": true,
+ "style_mock_patch": false,
+ "style_module_docstring_ru": true,
+ "style_no_print_in_service": true,
+ "style_typed": false,
+ "checks_passed": 8,
+ "checks_total": 12,
+ "task": "feature",
+ "model": "qwen2.5-coder:14b",
+ "rules": "short",
+ "options": {
+  "temperature": 0.8,
+  "top_p": 0.9,
+  "num_ctx": 16384,
+  "num_predict": 3072
+ },
+ "wall_s": 122.39,
+ "prompt_tokens": 3437,
+ "gen_tokens": 2228,
+ "gen_tps": 18.2,
+ "prefill_tps": 75746.6,
+ "ttft_s": 0.05,
+ "load_s": 0.0,
+ "answer_head": "FILE: activity.py\n```python\n\"\"\"\nВычисление статистики активности GitHub-репозитория.\n\nЭтот модуль содержит функции для анализа коммитов репозитория, включая\nтоп авторов по числу коммитов, число коммитов по дням и самый активный день.\n\"\"\"\n\nfrom collections import defaultdict\nfrom typing import Any, D"
+}

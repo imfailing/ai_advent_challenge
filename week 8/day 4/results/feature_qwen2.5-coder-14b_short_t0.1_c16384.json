@@ -1,0 +1,41 @@
+{
+ "files": [
+  "activity.py",
+  "app.py",
+  "test_stats.py"
+ ],
+ "parsed_3_files": true,
+ "compiles": true,
+ "compile_err": "",
+ "ruff_ok": false,
+ "ruff_out": "ist` instead of `List` for type annotation\n  --> activity.py:12:28\n   |\n10 | from typing import Any, Dict, List\n11 |\n12 | def compute_stats(commits: List[Dict[str, Any]], top: int = 5) -> Dict[str, Any]:\n   |                            ^^^^\n13 |     \"\"\"\n14 |     Вычисляет статистику активности репозитория.\n   |\nhelp: Replace with `list`\n   |\n11 |\n   - def compute_stats(commits: List[Dict[str, Any]], top: int = 5) -> Dict[str, Any]:\n12 + def compute_stats(commits: list[Dict[str, Any]], top: int = 5) -> Dict[str, Any]:\n13 |     \"\"\"\n   |\n\nUP006 [*] Use `dict` instead of `Dict` for type annotation\n  --> activity.py:12:33\n   |\n10 | from typing import Any, Dict, List\n11 |\n12 | def compute_stats(commits: List[Dict[str, Any]], top: int = 5) -> Dict[str, Any]:\n   |                                 ^^^^\n13 |     \"\"\"\n14 |     Вычисляет статистику активности репозитория.\n   |\nhelp: Replace with `dict`\n   |\n11 |\n   - def compute_stats(commits: List[Dict[str, Any]], top: int = 5) -> Dict[str, Any]:\n12 + def compute_stats(commits: List[dict[str, Any]], top: int = 5) -> Dict[str, Any]:\n13 |     \"\"\"\n   |\n\nUP006 [*] Use `dict` instead of `Dict` for type annotation\n  --> activity.py:12:67\n   |\n10 | from typing import Any, Dict, List\n11 |\n12 | def compute_stats(commits: List[Dict[str, Any]], top: int = 5) -> Dict[str, Any]:\n   |                                                                   ^^^^\n13 |     \"\"\"\n14 |     Вычисляет статистику активности репозитория.\n   |\nhelp: Replace with `dict`\n   |\n11 |\n   - def compute_stats(commits: List[Dict[str, Any]], top: int = 5) -> Dict[str, Any]:\n12 + def compute_stats(commits: List[Dict[str, Any]], top: int = 5) -> dict[str, Any]:\n13 |     \"\"\"\n   |\n\nE501 Line too long (103 > 100)\n  --> activity.py:32:101\n   |\n30 |     return {\n31 |         \"top_authors\": [{\"author\": author, \"commits\": count} for author, count in top_authors],\n32 |         \"commits_by_day\": [{\"date\": date, \"commits\": count} for date, count in commits_by_day.items()],\n   |                                                                                                     ^^^\n33 |         \"most_active_day\": most_active_day[0] if most_active_day else None\n34 |     }\n   |\n\nF401 [*] `json` imported but unused\n --> test_stats.py:8:8\n  |\n6 | \"\"\"\n7 |\n8 | import json\n  |        ^^^^\n9 | from unittest.mock import patch\n  |\nhelp: Remove unused import: `json`\n  |\n7 |\n  - import json\n8 | from unittest.mock import patch\n  |\n\nF401 [*] `github_repo` imported but unused\n  --> test_stats.py:12:8\n   |\n11 | import app as flask_app\n12 | import github_repo\n   |        ^^^^^^^^^^^\n13 |\n14 | REPO = \"octocat/Hello-World\"\n   |\nhelp: Remove unused import: `github_repo`\n   |\n11 | import app as flask_app\n   - import github_repo\n12 |\n   |\n\nS105 Possible hardcoded password assigned to: \"TOKEN\"\n  --> test_stats.py:15:9\n   |\n14 | REPO = \"octocat/Hello-World\"\n15 | TOKEN = \"test_token\"\n   |         ^^^^^^^^^^^^\n16 |\n17 | def main() -> None:\n   |\n\nFound 11 errors.\n[*] 7 fixable with `--fix`.\n",
+ "own_test_passes": true,
+ "own_test_out": "",
+ "acceptance_200": true,
+ "acceptance_content": true,
+ "empty_body_400_json": true,
+ "style_last_default_15": true,
+ "style_mock_patch": false,
+ "style_module_docstring_ru": true,
+ "style_no_print_in_service": true,
+ "style_typed": false,
+ "checks_passed": 9,
+ "checks_total": 12,
+ "task": "feature",
+ "model": "qwen2.5-coder:14b",
+ "rules": "short",
+ "options": {
+  "temperature": 0.1,
+  "top_p": 0.9,
+  "num_ctx": 16384,
+  "num_predict": 3072
+ },
+ "wall_s": 105.67,
+ "prompt_tokens": 3437,
+ "gen_tokens": 2164,
+ "gen_tps": 25.6,
+ "prefill_tps": 274.2,
+ "ttft_s": 21.25,
+ "load_s": 8.72,
+ "answer_head": "FILE: activity.py\n```python\n\"\"\"\nВычисление статистики активности GitHub-репозитория.\n\nПредоставляет информацию о топ-авторах коммитов, количестве коммитов по дням\nи самый активный день.\n\"\"\"\n\nfrom collections import Counter\nfrom datetime import datetime\nfrom typing import Any, Dict, List\n\ndef compute"
+}

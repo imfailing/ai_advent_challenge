@@ -1,0 +1,41 @@
+{
+ "files": [
+  "activity.py",
+  "app.py",
+  "test_stats.py"
+ ],
+ "parsed_3_files": true,
+ "compiles": true,
+ "compile_err": "",
+ "ruff_ok": false,
+ "ruff_out": "F401 [*] `os` imported but unused\n  --> test_stats.py:11:8\n   |\n 9 | \"\"\"\n10 |\n11 | import os\n   |        ^^\n12 |\n13 | import activity\n   |\nhelp: Remove unused import: `os`\n   |\n10 |\n   - import os\n11 |\n   |\n\nF401 [*] `github_repo` imported but unused\n  --> test_stats.py:14:8\n   |\n13 | import activity\n14 | import github_repo\n   |        ^^^^^^^^^^^\n15 | from app import app\n   |\nhelp: Remove unused import: `github_repo`\n   |\n13 | import activity\n   - import github_repo\n14 | from app import app\n   |\n\nF401 [*] `app.app` imported but unused\n  --> test_stats.py:15:17\n   |\n13 | import activity\n14 | import github_repo\n15 | from app import app\n   |                 ^^^\nhelp: Remove unused import: `app.app`\n   |\n14 | import github_repo\n   - from app import app\n15 |\n   |\n\nFound 3 errors.\n[*] 3 fixable with `--fix`.\n",
+ "own_test_passes": false,
+ "own_test_out": "^^\n  File \"/private/var/folders/h0/5yq7l44577l_p62wyw0lt8f40000gn/T/day4_feature_base_nu2evbp9/proj/test_stats.py\", line 38, in main\n    stats = activity.compute_stats(commits, top=2)\n  File \"/private/var/folders/h0/5yq7l44577l_p62wyw0lt8f40000gn/T/day4_feature_base_nu2evbp9/proj/activity.py\", line 28, in compute_stats\n    author = commit[\"author\"]\n             ~~~~~~^^^^^^^^^^\nKeyError: 'author'\n",
+ "acceptance_200": true,
+ "acceptance_content": true,
+ "empty_body_400_json": true,
+ "style_last_default_15": true,
+ "style_mock_patch": false,
+ "style_module_docstring_ru": true,
+ "style_no_print_in_service": true,
+ "style_typed": true,
+ "checks_passed": 9,
+ "checks_total": 12,
+ "task": "feature",
+ "model": "qwen3:8b",
+ "rules": "short",
+ "options": {
+  "temperature": 0.1,
+  "top_p": 0.9,
+  "num_ctx": 16384,
+  "num_predict": 3072
+ },
+ "wall_s": 84.87,
+ "prompt_tokens": 3445,
+ "gen_tokens": 2256,
+ "gen_tps": 30.1,
+ "prefill_tps": 479.6,
+ "ttft_s": 10.01,
+ "load_s": 2.83,
+ "answer_head": "FILE: activity.py\n```python\n\"\"\"\nСтатистика активности GitHub-репозитория.\n\nРассчитывает:\n- Топ авторов по количеству коммитов.\n- Количество коммитов по дням.\n- Самый активный день (день с максимальным количеством коммитов).\n\nВсе данные берутся из списка коммитов.\n\"\"\"\n\nfrom collections import default"
+}

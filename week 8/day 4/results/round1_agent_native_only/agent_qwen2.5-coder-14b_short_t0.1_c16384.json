@@ -1,0 +1,33 @@
+{
+ "bug_fixed": false,
+ "valid_last_still_works": true,
+ "existing_tests_pass": true,
+ "tests_out": "",
+ "tests_not_weakened": true,
+ "regression_test_added": false,
+ "ruff_ok": true,
+ "ruff_out": "All checks passed!\n",
+ "no_bare_except_pass": true,
+ "diff_lines_app": 0,
+ "checks_passed": 5,
+ "checks_total": 7,
+ "task": "agent_bugfix",
+ "model": "qwen2.5-coder:14b",
+ "rules": "short",
+ "options": {
+  "temperature": 0.1,
+  "top_p": 0.9,
+  "num_ctx": 16384,
+  "num_predict": 3072
+ },
+ "steps": 1,
+ "tool_calls": 0,
+ "tool_errors": 0,
+ "tools_used": [],
+ "wall_s": 32.2,
+ "error": "",
+ "finished_with_answer": true,
+ "prompt_tokens": 1258,
+ "gen_tokens": 707,
+ "answer_head": "## Что нашёл\n1. **Найдите код по симптому (grep/read_file)**:\n   ```json\n   {\n     \"name\": \"grep\",\n     \"arguments\": {\n       \"pattern\": \"TypeError|ValueError\"\n     }\n   }\n   ```\n\n2. **Воспроизведите баг запуском (run_python)**:\n   ```json\n   {\n     \"name\": \"run_python\",\n     \"arguments\": {\n       \""
+}

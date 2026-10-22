@@ -1,0 +1,41 @@
+{
+ "files": [
+  "activity.py",
+  "app.py",
+  "test_stats.py"
+ ],
+ "parsed_3_files": true,
+ "compiles": true,
+ "compile_err": "",
+ "ruff_ok": false,
+ "ruff_out": "сляет статистику активности коммитов.\n   |\nhelp: Replace with `dict`\n   |\n10 |\n   - def compute_stats(commits: List[Dict], top: int = 5) -> Dict:\n11 + def compute_stats(commits: List[Dict], top: int = 5) -> dict:\n12 |     \"\"\"\n   |\n\nUP006 [*] Use `dict` instead of `Dict` for type annotation\n  --> activity.py:23:21\n   |\n22 |     # Считаем коммиты по дням\n23 |     commits_by_day: Dict[str, int] = defaultdict(int)\n   |                     ^^^^\n24 |     for commit in commits:\n25 |         date_str = commit['date']\n   |\nhelp: Replace with `dict`\n   |\n22 |     # Считаем коммиты по дням\n   -     commits_by_day: Dict[str, int] = defaultdict(int)\n23 +     commits_by_day: dict[str, int] = defaultdict(int)\n24 |     for commit in commits:\n   |\n\nUP006 [*] Use `dict` instead of `Dict` for type annotation\n  --> activity.py:33:22\n   |\n32 |     # Топ-авторы по числу коммитов\n33 |     authors_commits: Dict[str, int] = defaultdict(int)\n   |                      ^^^^\n34 |     for commit in commits:\n35 |         authors_commits[commit['author']] += 1\n   |\nhelp: Replace with `dict`\n   |\n32 |     # Топ-авторы по числу коммитов\n   -     authors_commits: Dict[str, int] = defaultdict(int)\n33 +     authors_commits: dict[str, int] = defaultdict(int)\n34 |     for commit in commits:\n   |\n\nT201 `print` found\n  --> activity.py:54:5\n   |\n52 |         {\"date\": \"2023-01-03\", \"author\": \"author4\"},\n53 |     ]\n54 |     print(compute_stats(example_commits, top=3))\n   |     ^^^^^\nhelp: Remove `print`\n   |\n53 |     ]\n   -     print(compute_stats(example_commits, top=3))\n   |\nnote: This is an unsafe fix and may change runtime behavior\n\nI001 [*] Import block is un-sorted or un-formatted\n --> app.py:5:1\n  |\n3 |   \"\"\"\n4 |\n5 | / from flask import Flask, jsonify, request\n6 | | import activity\n7 | | import github_repo\n  | |__________________^\n8 |\n9 |   app = Flask(__name__)\n  |\nhelp: Organize imports\n  |\n5 | from flask import Flask, jsonify, request\n6 +\n7 | import activity\n  |\n\nS104 Possible binding to all interfaces\n  --> app.py:36:18\n   |\n35 | if __name__ == \"__main__\":\n36 |     app.run(host=\"0.0.0.0\", port=5011)\n   |                  ^^^^^^^^^\n\nI001 [*] Import block is un-sorted or un-formatted\n  --> test_stats.py:5:1\n   |\n 3 |   \"\"\"\n 4 |\n 5 | / import os\n 6 | | import unittest\n 7 | | from unittest import mock\n 8 | | import app\n 9 | | import github_repo\n   | |__________________^\n10 |\n11 |   class TestStats(unittest.TestCase):\n   |\nhelp: Organize imports\n   |\n7  | from unittest import mock\n8  +\n9  | import app\n10 | import github_repo\n11 |\n12 +\n13 | class TestStats(unittest.TestCase):\n   |\n\nF401 [*] `github_repo` imported but unused\n  --> test_stats.py:9:8\n   |\n 7 | from unittest import mock\n 8 | import app\n 9 | import github_repo\n   |        ^^^^^^^^^^^\n10 |\n11 | class TestStats(unittest.TestCase):\n   |\nhelp: Remove unused import: `github_repo`\n  |\n8 | import app\n  - import github_repo\n9 |\n  |\n\nFound 17 errors.\n[*] 12 fixable with `--fix` (1 unsafe fix available with `--fix --unsafe-fixes`).\n",
+ "own_test_passes": false,
+ "own_test_out": "c(*newargs, **newkeywargs)\n  File \"/private/var/folders/h0/5yq7l44577l_p62wyw0lt8f40000gn/T/day4_feature_base_u86fmnq7/proj/test_stats.py\", line 27, in test_stats\n    self.assertEqual(response.status_code, 200)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 500 != 200\n\n----------------------------------------------------------------------\nRan 1 test in 0.007s\n\nFAILED (failures=1)\n",
+ "acceptance_200": true,
+ "acceptance_content": true,
+ "empty_body_400_json": true,
+ "style_last_default_15": false,
+ "style_mock_patch": true,
+ "style_module_docstring_ru": true,
+ "style_no_print_in_service": false,
+ "style_typed": false,
+ "checks_passed": 7,
+ "checks_total": 12,
+ "task": "feature",
+ "model": "deepseek-coder-v2:16b",
+ "rules": "short",
+ "options": {
+  "temperature": 0.1,
+  "top_p": 0.9,
+  "num_ctx": 16384,
+  "num_predict": 3072
+ },
+ "wall_s": 30.69,
+ "prompt_tokens": 4095,
+ "gen_tokens": 1588,
+ "gen_tps": 67.2,
+ "prefill_tps": 1195.6,
+ "ttft_s": 7.03,
+ "load_s": 3.6,
+ "answer_head": " FILE: activity.py\n```python\n\"\"\"\nМодуль для вычисления статистики активности GitHub-репозитория.\n\nВычисляет топ авторов по числу коммитов, число коммитов по дням и самый активный день.\n\"\"\"\n\nfrom collections import defaultdict\nfrom datetime import datetime, timedelta\nfrom typing import Dict, List, Tu"
+}

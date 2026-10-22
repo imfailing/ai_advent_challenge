@@ -1,0 +1,41 @@
+{
+ "files": [
+  "activity.py",
+  "app.py",
+  "test_stats.py"
+ ],
+ "parsed_3_files": true,
+ "compiles": true,
+ "compile_err": "",
+ "ruff_ok": false,
+ "ruff_out": "\n   |\n 8 | from collections import Counter\n 9 | from datetime import datetime\n   |                      ^^^^^^^^\n10 |\n11 | def compute_stats(commits: list[dict], top: int = 5) -> dict:\n   |\nhelp: Remove unused import: `datetime.datetime`\n  |\n8 | from collections import Counter\n  - from datetime import datetime\n9 |\n  |\n\nF401 [*] `github_repo` imported but unused\n  --> test_stats.py:13:8\n   |\n12 | import app as flask_app\n13 | import github_repo\n   |        ^^^^^^^^^^^\n14 |\n15 | REPO = \"octocat/Hello-World\"\n   |\nhelp: Remove unused import: `github_repo`\n   |\n12 | import app as flask_app\n   - import github_repo\n13 |\n   |\n\nE501 Line too long (103 > 100)\n  --> test_stats.py:22:101\n   |\n20 |     # Подготовка данных для тестирования\n21 |     commits = [\n22 |         {\"hash\": \"a1b2c3\", \"date\": \"2023-10-01\", \"author\": \"Alice\", \"subject\": \"Commit 1\", \"body\": \"\"},\n   |                                                                                                     ^^^\n23 |         {\"hash\": \"d4e5f6\", \"date\": \"2023-10-01\", \"author\": \"Bob\", \"subject\": \"Commit 2\", \"body\": \"\"},\n24 |         {\"hash\": \"g7h8i9\", \"date\": \"2023-10-02\", \"author\": \"Alice\", \"subject\": \"Commit 3\", \"body\": \"\"},\n   |\n\nE501 Line too long (101 > 100)\n  --> test_stats.py:23:101\n   |\n21 |     commits = [\n22 |         {\"hash\": \"a1b2c3\", \"date\": \"2023-10-01\", \"author\": \"Alice\", \"subject\": \"Commit 1\", \"body\": \"\"},\n23 |         {\"hash\": \"d4e5f6\", \"date\": \"2023-10-01\", \"author\": \"Bob\", \"subject\": \"Commit 2\", \"body\": \"\"},\n   |                                                                                                     ^\n24 |         {\"hash\": \"g7h8i9\", \"date\": \"2023-10-02\", \"author\": \"Alice\", \"subject\": \"Commit 3\", \"body\": \"\"},\n25 |         {\"hash\": \"j0k1l2\", \"date\": \"2023-10-02\", \"author\": \"Bob\", \"subject\": \"Commit 4\", \"body\": \"\"},\n   |\n\nE501 Line too long (103 > 100)\n  --> test_stats.py:24:101\n   |\n22 |         {\"hash\": \"a1b2c3\", \"date\": \"2023-10-01\", \"author\": \"Alice\", \"subject\": \"Commit 1\", \"body\": \"\"},\n23 |         {\"hash\": \"d4e5f6\", \"date\": \"2023-10-01\", \"author\": \"Bob\", \"subject\": \"Commit 2\", \"body\": \"\"},\n24 |         {\"hash\": \"g7h8i9\", \"date\": \"2023-10-02\", \"author\": \"Alice\", \"subject\": \"Commit 3\", \"body\": \"\"},\n   |                                                                                                     ^^^\n25 |         {\"hash\": \"j0k1l2\", \"date\": \"2023-10-02\", \"author\": \"Bob\", \"subject\": \"Commit 4\", \"body\": \"\"},\n26 |     ]\n   |\n\nE501 Line too long (101 > 100)\n  --> test_stats.py:25:101\n   |\n23 |         {\"hash\": \"d4e5f6\", \"date\": \"2023-10-01\", \"author\": \"Bob\", \"subject\": \"Commit 2\", \"body\": \"\"},\n24 |         {\"hash\": \"g7h8i9\", \"date\": \"2023-10-02\", \"author\": \"Alice\", \"subject\": \"Commit 3\", \"body\": \"\"},\n25 |         {\"hash\": \"j0k1l2\", \"date\": \"2023-10-02\", \"author\": \"Bob\", \"subject\": \"Commit 4\", \"body\": \"\"},\n   |                                                                                                     ^\n26 |     ]\n   |\n\nFound 7 errors.\n[*] 3 fixable with `--fix`.\n",
+ "own_test_passes": true,
+ "own_test_out": "",
+ "acceptance_200": true,
+ "acceptance_content": true,
+ "empty_body_400_json": true,
+ "style_last_default_15": true,
+ "style_mock_patch": true,
+ "style_module_docstring_ru": true,
+ "style_no_print_in_service": true,
+ "style_typed": true,
+ "checks_passed": 11,
+ "checks_total": 12,
+ "task": "feature",
+ "model": "qwen2.5-coder:14b",
+ "rules": "short",
+ "options": {
+  "temperature": 0.4,
+  "top_p": 0.9,
+  "num_ctx": 16384,
+  "num_predict": 3072
+ },
+ "wall_s": 129.71,
+ "prompt_tokens": 3437,
+ "gen_tokens": 2215,
+ "gen_tps": 17.1,
+ "prefill_tps": 79696.7,
+ "ttft_s": 0.05,
+ "load_s": 0.0,
+ "answer_head": "FILE: activity.py\n```python\n\"\"\"\nВычисление статистики активности GitHub-репозитория.\n\nПредоставляет топ авторов по числу коммитов, число коммитов по дням\nи самый активный день на основе списка коммитов.\n\"\"\"\n\nfrom collections import Counter\nfrom datetime import datetime\n\ndef compute_stats(commits: li"
+}

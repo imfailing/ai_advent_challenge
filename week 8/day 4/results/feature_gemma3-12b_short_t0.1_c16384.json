@@ -1,0 +1,41 @@
+{
+ "files": [
+  "activity.py",
+  "app.py",
+  "test_stats.py"
+ ],
+ "parsed_3_files": true,
+ "compiles": true,
+ "compile_err": "",
+ "ruff_ok": false,
+ "ruff_out": "I001 [*] Import block is un-sorted or un-formatted\n  --> activity.py:11:1\n   |\n 9 |   \"\"\"\n10 |\n11 | / from collections import defaultdict\n12 | | from datetime import datetime\n   | |_____________________________^\n13 |\n14 |   def compute_stats(commits: list[dict], top: int = 5) -> dict:\n   |\nhelp: Organize imports\n   |\n13 |\n14 +\n15 | def compute_stats(commits: list[dict], top: int = 5) -> dict:\n   |\n\nT201 `print` found\n  --> activity.py:53:5\n   |\n51 |     ]\n52 |     stats = compute_stats(commits, top=2)\n53 |     print(stats)\n   |     ^^^^^\nhelp: Remove `print`\n   |\n52 |     stats = compute_stats(commits, top=2)\n   -     print(stats)\n   |\nnote: This is an unsafe fix and may change runtime behavior\n\nI001 [*] Import block is un-sorted or un-formatted\n  --> test_stats.py:7:1\n   |\n 5 |   \"\"\"\n 6 |\n 7 | / import os\n 8 | |\n 9 | | import activity\n10 | | import github_repo\n11 | | from unittest import mock\n   | |_________________________^\n12 |\n13 |   REPO = \"octocat/Hello-World\"\n   |\nhelp: Organize imports\n   |\n7  | import os\n8  + from unittest import mock\n9  |\n10 | import activity\n11 | import github_repo\n   - from unittest import mock\n12 |\n   |\n\nF401 [*] `activity` imported but unused\n  --> test_stats.py:9:8\n   |\n 7 | import os\n 8 |\n 9 | import activity\n   |        ^^^^^^^^\n10 | import github_repo\n11 | from unittest import mock\n   |\nhelp: Remove unused import: `activity`\n  |\n8 |\n  - import activity\n9 | import github_repo\n  |\n\nFound 4 errors.\n[*] 3 fixable with `--fix` (1 unsafe fix available with `--fix --unsafe-fixes`).\n",
+ "own_test_passes": false,
+ "own_test_out": "                    ~~~~~~~~~~~~~~~~~~~~~~~^\n            \"nonexistent/repo\", last=100, token=KEY)):\n            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/private/var/folders/h0/5yq7l44577l_p62wyw0lt8f40000gn/T/day4_feature_base_rp2wh_pb/proj/github_repo.py\", line 57, in get_commits\n    raise RuntimeError(f\"GitHub API: {e.code} {e.reason}\") from e\nRuntimeError: GitHub API: 401 Unauthorized\n",
+ "acceptance_200": true,
+ "acceptance_content": true,
+ "empty_body_400_json": true,
+ "style_last_default_15": true,
+ "style_mock_patch": true,
+ "style_module_docstring_ru": true,
+ "style_no_print_in_service": false,
+ "style_typed": true,
+ "checks_passed": 9,
+ "checks_total": 12,
+ "task": "feature",
+ "model": "gemma3:12b",
+ "rules": "short",
+ "options": {
+  "temperature": 0.1,
+  "top_p": 0.9,
+  "num_ctx": 16384,
+  "num_predict": 3072
+ },
+ "wall_s": 123.68,
+ "prompt_tokens": 3565,
+ "gen_tokens": 2463,
+ "gen_tps": 23.3,
+ "prefill_tps": 278.0,
+ "ttft_s": 17.72,
+ "load_s": 4.9,
+ "answer_head": "FILE: activity.py\n```python\n\"\"\"\nВычисление статистики активности GitHub-репозитория:\n  • топ авторов по числу коммитов;\n  • число коммитов по дням;\n  • самый активный день.\n\nВход — список коммитов (как возвращает github_repo.get_commits).\nВыход — словарь статистики.\n\"\"\"\n\nfrom collections import defa"
+}

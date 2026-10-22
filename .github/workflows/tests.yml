@@ -1,0 +1,24 @@
+name: Тесты (уровень 1)
+
+# На каждый Pull Request: линтер + офлайн-тесты кода. UI smoke-сценарии (уровень 2) агент
+# прогоняет через браузерный MCP — см. .claude/skills/pr-verify/SKILL.md (единый отчёт).
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+
+jobs:
+  code-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Зависимости
+        run: pip install -q -r "week 8/day 3/requirements.txt" ruff
+      - name: ruff + офлайн-тесты
+        run: PYTHON=python RUFF=ruff "week 8/day 3/run_tests.sh"

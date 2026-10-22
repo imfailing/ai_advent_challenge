@@ -154,3 +154,5 @@ Python SDK `mcp` (на момент задачи — v1.28.1). DeepSeek/API-кл
 - индексы/БД: `index.db`, `index_*.json`, `chat.db`, кэш fastembed
 - `claude/` — **в git** (раньше игнорировалась). Ключи в `apis.md` — плейсхолдеры,
   реальные значения только в окружении.
+
+- **Week 8 / Day 1 (Advanced, Rules):** `week 8/day 1/` — CLAUDE.md v2, субагент, скилл, ruff, эксперимент v1→v2 на эндпоинте `/stats` (отчёт: `rules-experiment/REPORT.md`).

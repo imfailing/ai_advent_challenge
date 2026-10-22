@@ -1,0 +1,205 @@
+diff --git a/claude/apis.md b/claude/apis.md
+index b418179..797cd19 100644
+--- a/claude/apis.md
++++ b/claude/apis.md
+@@ -78,3 +78,6 @@ def get_gigachat_token(auth_key: str) -> str:
+ - SSL-сертификат Сбера не проходит проверку → `verify=False` обязательно
+ - Токен живёт ~30 минут; нужно обновлять при истечении
+ - Использовалась как «слабая» модель в day 5 week 1
++
++### POST /stats (week 7/day 5)
++`{repo, last, github_token}` -> `{source, total_commits, top_authors, commits_by_day, busiest_day}`; без AI, токен GitHub — плейсхолдер `<github_token>`.
+diff --git a/claude/architecture.md b/claude/architecture.md
+index 1d80ad4..5425ddc 100644
+--- a/claude/architecture.md
++++ b/claude/architecture.md
+@@ -1457,3 +1457,5 @@ blocks = [f"### Файл: {f['filename']}\n\n{f['content']}" for f in files]
+ extra = "\n\n---\n\n".join(blocks)
+ system = base_system_prompt + "\n\n" + extra
+ ```
++
++- week 7/day 5: `activity.py` — чистая статистика коммитов (топ авторов, по дням), используется маршрутом `/stats`.
+diff --git a/claude/project.md b/claude/project.md
+index c55bcb1..525d813 100644
+--- a/claude/project.md
++++ b/claude/project.md
+@@ -154,3 +154,5 @@ Python SDK `mcp` (на момент задачи — v1.28.1). DeepSeek/API-кл
+ - индексы/БД: `index.db`, `index_*.json`, `chat.db`, кэш fastembed
+ - `claude/` — **в git** (раньше игнорировалась). Ключи в `apis.md` — плейсхолдеры,
+   реальные значения только в окружении.
++
++- week 7/day 5: добавлен эндпоинт `/stats` (активность репо без AI) + `test_stats.py`.
+diff --git a/week 7/day 5/README.md b/week 7/day 5/README.md
+index e056145..b66f1f1 100644
+--- a/week 7/day 5/README.md	
++++ b/week 7/day 5/README.md	
+@@ -39,7 +39,9 @@ digest.py → DeepSeek:
+ - **`digest.py`** — AI-дайджест / роаст (ключ DeepSeek передаётся параметром).
+ - **`notify.py`** — публикация в Telegram (токен/chat_id из запроса; мягкая
+   деградация без них).
+-- **`app.py`** — Flask (порт 5011): `/`, `/health`, `/generate`, `/publish`.
++- **`activity.py`** — статистика активности по коммитам (топ авторов, коммиты по дням,
++  самый активный день); без AI и сети.
++- **`app.py`** — Flask (порт 5011): `/`, `/health`, `/generate`, `/stats`, `/publish`.
+ 
+ ---
+ 
+@@ -50,8 +52,20 @@ digest.py → DeepSeek:
+ | GET | `/` | веб-интерфейс |
+ | GET | `/health` | статус сервиса (`{status: "ok"}`) |
+ | POST | `/generate` | `{repo, last, toxic, deepseek_key, github_token}` → `{digest, commits, source, tone}` |
++| POST | `/stats` | `{repo, last, github_token}` → `{source, total_commits, top_authors, commits_by_day, busiest_day}` (без AI) |
+ | POST | `/publish` | `{telegram_token, telegram_chat_id}` — опубликовать последний результат в Telegram |
+ 
++Пример `/stats`:
++
++```bash
++curl -X POST http://localhost:5011/stats -H 'Content-Type: application/json' \
++  -d '{"repo": "octocat/Hello-World", "last": 30, "github_token": ""}'
++# {"source":"octocat/Hello-World","total_commits":30,
++#  "top_authors":[{"author":"The Octocat","commits":2}],
++#  "commits_by_day":[{"date":"2012-03-06","commits":2}],
++#  "busiest_day":{"date":"2012-03-06","commits":2}}
++```
++
+ ---
+ 
+ ## Деплой на VPS (Docker)
+@@ -146,6 +160,7 @@ python test_digest.py
+ ```
+ day 5/
+ ├── github_repo.py   # коммиты удалённого GitHub-репо (REST API)
++├── activity.py      # статистика активности (без AI)
+ ├── digest.py        # AI: дайджест (neutral) или роаст (toxic) — DeepSeek
+ ├── notify.py        # публикация в Telegram (мягкая деградация)
+ ├── app.py           # Flask веб-сервис (порт 5011)
+@@ -153,6 +168,7 @@ day 5/
+ ├── Dockerfile · docker-compose.yml   # деплой на VPS
+ ├── deploy/nginx.conf                 # reverse proxy (порт 5011, +TLS через certbot)
+ ├── test_digest.py
++├── test_stats.py
+ ├── requirements.txt
+ └── README.md
+ ```
+diff --git a/week 7/day 5/activity.py b/week 7/day 5/activity.py
+new file mode 100644
+index 0000000..427454c
+--- /dev/null
++++ b/week 7/day 5/activity.py	
+@@ -0,0 +1,25 @@
++"""
++Статистика активности репозитория по списку коммитов (без AI и без сети).
++
++Роль в сервисе: чистая функция поверх `github_repo.get_commits` — топ авторов,
++число коммитов по дням и самый активный день.
++"""
++
++from collections import Counter
++
++TOP_AUTHORS = 5
++
++
++def compute_stats(commits: list[dict]) -> dict:
++    """Посчитать статистику по коммитам {hash, date, author, ...}."""
++    authors = Counter(c.get("author") or "?" for c in commits)
++    days = Counter(c["date"] for c in commits if c.get("date"))
++    top_authors = sorted(authors.items(), key=lambda kv: (-kv[1], kv[0]))[:TOP_AUTHORS]
++    by_day = [{"date": d, "commits": n} for d, n in sorted(days.items())]
++    busiest = max(by_day, key=lambda x: (x["commits"], x["date"]), default=None)
++    return {
++        "total_commits": len(commits),
++        "top_authors": [{"author": a, "commits": n} for a, n in top_authors],
++        "commits_by_day": by_day,
++        "busiest_day": busiest,
++    }
+diff --git a/week 7/day 5/app.py b/week 7/day 5/app.py
+index 6a2d2bf..d2e5843 100644
+--- a/week 7/day 5/app.py	
++++ b/week 7/day 5/app.py	
+@@ -13,6 +13,7 @@ import os
+ 
+ from flask import Flask, jsonify, render_template, request
+ 
++import activity
+ import digest
+ import github_repo
+ from notify import send_telegram
+@@ -65,6 +66,25 @@ def generate():
+     return jsonify({"digest": md, "commits": len(commits), "source": label, "tone": tone})
+ 
+ 
++@app.route("/stats", methods=["POST"])
++def stats():
++    data = request.get_json(force=True) or {}
++    repo = (data.get("repo") or "").strip()
++    if not repo:
++        return jsonify({"error": "Укажите GitHub-репозиторий (owner/repo или ссылку)."}), 400
++    try:
++        last = max(1, min(int(data.get("last") or 15), 100))
++    except (TypeError, ValueError):
++        return jsonify({"error": "Параметр last должен быть числом."}), 400
++    try:
++        commits = github_repo.get_commits(
++            repo, last=last, token=(data.get("github_token") or "").strip())
++        label = github_repo.repo_label(repo)
++    except Exception as e:
++        return jsonify({"error": str(e)}), 400
++    return jsonify({"source": label, **activity.compute_stats(commits)})
++
++
+ @app.route("/publish", methods=["POST"])
+ def publish():
+     if not _last_digest["md"]:
+diff --git a/week 7/day 5/test_stats.py b/week 7/day 5/test_stats.py
+new file mode 100644
+index 0000000..7964f34
+--- /dev/null
++++ b/week 7/day 5/test_stats.py	
+@@ -0,0 +1,47 @@
++"""Проверка эндпоинта /stats и activity.compute_stats (без сети)."""
++from unittest import mock
++
++import activity
++import app as app_module
++
++COMMITS = [
++    {"hash": "a", "date": "2024-01-02", "author": "Bob", "subject": "x", "body": ""},
++    {"hash": "b", "date": "2024-01-02", "author": "Ann", "subject": "x", "body": ""},
++    {"hash": "c", "date": "2024-01-02", "author": "Ann", "subject": "x", "body": ""},
++    {"hash": "d", "date": "2024-01-01", "author": "Ann", "subject": "x", "body": ""},
++]
++
++
++def main() -> None:
++    s = activity.compute_stats(COMMITS)
++    assert s["total_commits"] == 4
++    assert s["top_authors"][0] == {"author": "Ann", "commits": 3}
++    assert s["busiest_day"] == {"date": "2024-01-02", "commits": 3}
++    assert [d["date"] for d in s["commits_by_day"]] == ["2024-01-01", "2024-01-02"]
++    print("✅ compute_stats: авторы, дни, самый активный день")
++
++    assert activity.compute_stats([])["busiest_day"] is None
++    print("✅ пустой список коммитов")
++
++    client = app_module.app.test_client()
++    with mock.patch("github_repo.get_commits", return_value=COMMITS):
++        r = client.post("/stats", json={"repo": "https://github.com/o/r"})
++    assert r.status_code == 200
++    assert r.get_json()["source"] == "o/r"
++    assert r.get_json()["busiest_day"]["date"] == "2024-01-02"
++    print("✅ /stats: успех")
++
++    assert client.post("/stats", json={}).status_code == 400
++    assert client.post("/stats", json={"repo": "o/r", "last": "abc"}).status_code == 400
++    print("✅ /stats: пустой repo и нечисловой last -> 400")
++
++    with mock.patch("github_repo.get_commits", side_effect=RuntimeError("нет репо")):
++        r = client.post("/stats", json={"repo": "o/r"})
++    assert r.status_code == 400 and r.get_json()["error"] == "нет репо"
++    print("✅ /stats: ошибка GitHub -> JSON 400")
++
++    print("\n✅ ВСЕ ПРОВЕРКИ ПРОЙДЕНЫ — статистика активности /stats")
++
++
++if __name__ == "__main__":
++    main()

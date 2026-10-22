@@ -1,0 +1,138 @@
+diff --git a/week 7/day 5/README.md b/week 7/day 5/README.md
+index e056145..21ac4d5 100644
+--- a/week 7/day 5/README.md	
++++ b/week 7/day 5/README.md	
+@@ -39,7 +39,7 @@ digest.py → DeepSeek:
+ - **`digest.py`** — AI-дайджест / роаст (ключ DeepSeek передаётся параметром).
+ - **`notify.py`** — публикация в Telegram (токен/chat_id из запроса; мягкая
+   деградация без них).
+-- **`app.py`** — Flask (порт 5011): `/`, `/health`, `/generate`, `/publish`.
++- **`app.py`** — Flask (порт 5011): `/`, `/health`, `/generate`, `/stats`, `/publish`.
+ 
+ ---
+ 
+@@ -50,6 +50,7 @@ digest.py → DeepSeek:
+ | GET | `/` | веб-интерфейс |
+ | GET | `/health` | статус сервиса (`{status: "ok"}`) |
+ | POST | `/generate` | `{repo, last, toxic, deepseek_key, github_token}` → `{digest, commits, source, tone}` |
++| POST | `/stats` | `{repo, github_token?, last?, top?}` — статистика без AI: топ авторов, коммиты по дням, самый активный день (по последним `last`≤100 коммитам) |
+ | POST | `/publish` | `{telegram_token, telegram_chat_id}` — опубликовать последний результат в Telegram |
+ 
+ ---
+diff --git a/week 7/day 5/activity.py b/week 7/day 5/activity.py
+new file mode 100644
+index 0000000..3303540
+--- /dev/null
++++ b/week 7/day 5/activity.py	
+@@ -0,0 +1,26 @@
++"""
++Статистика активности репозитория по списку коммитов (без AI).
++
++Чистые функции: принимают коммиты в формате github_repo.get_commits
++({hash, date, author, ...}) и считают топ авторов, коммиты по дням и самый активный день.
++"""
++
++from collections import Counter
++
++
++def compute_stats(commits: list[dict], top: int = 5) -> dict:
++    """Топ авторов, число коммитов по дням (по возрастанию даты) и самый активный день."""
++    authors = Counter(c.get("author") or "?" for c in commits)
++    days = Counter(c["date"] for c in commits if c.get("date"))
++    busiest = None
++    if days:
++        # при равенстве берём более раннюю дату — результат детерминирован
++        day, count = min(days.items(), key=lambda kv: (-kv[1], kv[0]))
++        busiest = {"date": day, "commits": count}
++    return {
++        "total_commits": len(commits),
++        "top_authors": [{"author": a, "commits": n}
++                        for a, n in sorted(authors.items(), key=lambda kv: (-kv[1], kv[0]))[:top]],
++        "commits_by_day": [{"date": d, "commits": days[d]} for d in sorted(days)],
++        "busiest_day": busiest,
++    }
+diff --git a/week 7/day 5/app.py b/week 7/day 5/app.py
+index 6a2d2bf..7cb624e 100644
+--- a/week 7/day 5/app.py	
++++ b/week 7/day 5/app.py	
+@@ -13,6 +13,7 @@ import os
+ 
+ from flask import Flask, jsonify, render_template, request
+ 
++import activity
+ import digest
+ import github_repo
+ from notify import send_telegram
+@@ -65,6 +66,29 @@ def generate():
+     return jsonify({"digest": md, "commits": len(commits), "source": label, "tone": tone})
+ 
+ 
++@app.route("/stats", methods=["POST"])
++def stats():
++    data = request.get_json(force=True) or {}
++    repo = (data.get("repo") or "").strip()
++    if not repo:
++        return jsonify({"error": "Укажите GitHub-репозиторий (owner/repo или ссылку)."}), 400
++    github_token = (data.get("github_token") or "").strip()
++    try:
++        last = max(1, min(int(data.get("last") or 100), 100))
++        top = max(1, min(int(data.get("top") or 5), 20))
++    except (TypeError, ValueError):
++        return jsonify({"error": "Параметры last и top должны быть числами."}), 400
++
++    try:
++        commits = github_repo.get_commits(repo, last=last, token=github_token)
++        label = github_repo.repo_label(repo)
++    except Exception as e:
++        return jsonify({"error": str(e)}), 400
++    if not commits:
++        return jsonify({"error": "Коммитов не найдено."}), 400
++    return jsonify({"source": label, **activity.compute_stats(commits, top=top)})
++
++
+ @app.route("/publish", methods=["POST"])
+ def publish():
+     if not _last_digest["md"]:
+diff --git a/week 7/day 5/test_stats.py b/week 7/day 5/test_stats.py
+new file mode 100644
+index 0000000..be3dbf0
+--- /dev/null
++++ b/week 7/day 5/test_stats.py	
+@@ -0,0 +1,37 @@
++"""Проверка эндпоинта /stats и activity.compute_stats (без сети и без AI)."""
++
++import activity
++import app as app_module
++import github_repo
++
++COMMITS = [
++    {"hash": "a", "date": "2026-01-02", "author": "Bob"},
++    {"hash": "b", "date": "2026-01-01", "author": "Alice"},
++    {"hash": "c", "date": "2026-01-02", "author": "Alice"},
++    {"hash": "d", "date": "2026-01-02", "author": "Alice"},
++]
++
++
++def main() -> None:
++    s = activity.compute_stats(COMMITS, top=1)
++    assert s["total_commits"] == 4
++    assert s["top_authors"] == [{"author": "Alice", "commits": 3}]
++    assert s["commits_by_day"] == [{"date": "2026-01-01", "commits": 1},
++                                   {"date": "2026-01-02", "commits": 3}]
++    assert s["busiest_day"] == {"date": "2026-01-02", "commits": 3}
++    print("✅ compute_stats: авторы, дни, самый активный день")
++
++    github_repo.get_commits = lambda repo, last=15, token="": COMMITS
++    client = app_module.app.test_client()
++    r = client.post("/stats", json={"repo": "https://github.com/o/r"})
++    assert r.status_code == 200 and r.get_json()["source"] == "o/r"
++    assert r.get_json()["busiest_day"]["commits"] == 3
++    assert client.post("/stats", json={}).status_code == 400
++    assert client.post("/stats", json={"repo": "o/r", "last": "x"}).status_code == 400
++    print("✅ /stats: успех и ошибки 400 в JSON")
++
++    print("ВСЕ ПРОВЕРКИ ПРОЙДЕНЫ")
++
++
++if __name__ == "__main__":
++    main()

@@ -1,0 +1,17 @@
+# Линтер проекта. Запуск: ruff check "week 8/day 1"
+target-version = "py313"
+line-length = 100
+src = ["week 8/day 1"]   # локальные модули дня = first-party (для сортировки импортов)
+extend-exclude = ["venv", "rules-experiment", "corpus", "week 1", "week 2", "week 3", "week 4", "week 5", "week 6"]
+
+[lint]
+# E/F — pycodestyle/pyflakes, I — сортировка импортов, UP — современный синтаксис,
+# B — частые баги, T20 — запрет print() вне CLI/тестов, S — безопасность (ключи, shell)
+select = ["E", "F", "I", "UP", "B", "T20", "S"]
+ignore = ["S310"]   # urllib: URL'ы у нас только https-константы + проверенный owner/repo
+
+[lint.per-file-ignores]
+"test_*.py" = ["T20", "S101"]   # в тестах print и assert — норма
+
+[lint.isort]
+known-third-party = ["flask", "openai", "mcp", "numpy", "fastembed"]

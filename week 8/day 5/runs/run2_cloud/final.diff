@@ -1,0 +1,807 @@
+diff --git a/README.md b/README.md
+index b98810c..0a1699c 100644
+--- a/README.md
++++ b/README.md
+@@ -90,6 +90,25 @@ curl -X POST http://localhost:5011/stats -H 'Content-Type: application/json' \
+ #  "total_commits":4}
+ ```
+ 
++Пример `/generate` (нужен ключ DeepSeek; ответ — иллюстративный, формат реальный):
++
++```bash
++curl -X POST http://localhost:5011/generate -H 'Content-Type: application/json' \
++  -d '{"repo": "https://github.com/octocat/Hello-World", "last": 15, "toxic": false,
++       "deepseek_key": "<ВАШ_DEEPSEEK_KEY>", "github_token": ""}'
++# {"digest":"# 📰 Дайджест изменений octocat/Hello-World\n\n_Период: 2024-01-01 — 2024-01-02 · коммитов: 15_\n\n## 🔎 Главное\n…",
++#  "commits":15,"source":"octocat/Hello-World","tone":"neutral"}
++```
++
++Пример `/publish` (публикует результат последнего `/generate`; без токена бота и chat_id вернёт `skipped`):
++
++```bash
++curl -X POST http://localhost:5011/publish -H 'Content-Type: application/json' \
++  -d '{"telegram_token": "<ТОКЕН_БОТА>", "telegram_chat_id": "-1001234567890"}'
++# {"status":"sent","response":{"ok":true,"result":{"message_id":42}}}
++# без токенов: {"reason":"не заданы токен бота и chat_id — публикация пропущена.","status":"skipped"}
++```
++
+ ---
+ 
+ ## Деплой на VPS (Docker)
+@@ -182,6 +201,19 @@ python test_digest.py
+ 
+ ---
+ 
++## Ограничения и особенности
++
++- **Лимит GitHub API без токена** — 60 запросов в час; при исчерпании сервис вернёт ошибку
++  с просьбой указать GitHub-токен (с токеном лимит выше, доступны приватные репозитории).
++- **Глобальное состояние последнего дайджеста** — `/publish` публикует результат самого
++  последнего `/generate` (хранится в памяти процесса, общий для всех пользователей и теряется при перезапуске).
++- **Лимит Telegram — 4096 символов**: более длинный дайджест при публикации обрезается.
++- **Токены не хранятся на сервере** — ключи DeepSeek, GitHub и Telegram приходят в теле каждого
++  запроса и нигде не сохраняются и не читаются из окружения.
++- `/generate` ограничен 10 запросами в минуту с одного IP (счётчик в памяти процесса).
++
++---
++
+ ## Структура
+ 
+ ```
+diff --git a/activity.py b/activity.py
+index 427454c..0fe1f2e 100644
+--- a/activity.py
++++ b/activity.py
+@@ -10,11 +10,16 @@ from collections import Counter
+ TOP_AUTHORS = 5
+ 
+ 
+-def compute_stats(commits: list[dict]) -> dict:
+-    """Посчитать статистику по коммитам {hash, date, author, ...}."""
++def compute_stats(commits: list[dict], top: int = TOP_AUTHORS, author: str | None = None) -> dict:
++    """Посчитать статистику по коммитам {hash, date, author, ...}.
++
++    top — число лучших авторов; author — учитывать только коммиты этого автора.
++    """
++    if author:
++        commits = [c for c in commits if (c.get("author") or "?") == author]
+     authors = Counter(c.get("author") or "?" for c in commits)
+     days = Counter(c["date"] for c in commits if c.get("date"))
+-    top_authors = sorted(authors.items(), key=lambda kv: (-kv[1], kv[0]))[:TOP_AUTHORS]
++    top_authors = sorted(authors.items(), key=lambda kv: (-kv[1], kv[0]))[:top]
+     by_day = [{"date": d, "commits": n} for d, n in sorted(days.items())]
+     busiest = max(by_day, key=lambda x: (x["commits"], x["date"]), default=None)
+     return {
+@@ -22,4 +27,6 @@ def compute_stats(commits: list[dict]) -> dict:
+         "top_authors": [{"author": a, "commits": n} for a, n in top_authors],
+         "commits_by_day": by_day,
+         "busiest_day": busiest,
++        "first_date": by_day[0]["date"] if by_day else None,
++        "last_date": by_day[-1]["date"] if by_day else None,
+     }
+diff --git a/app.py b/app.py
+index d0061e5..cd7f9fa 100644
+--- a/app.py
++++ b/app.py
+@@ -16,6 +16,7 @@ from flask import Flask, jsonify, render_template, request
+ import activity
+ import digest
+ import github_repo
++import ratelimit
+ from notify import send_telegram
+ 
+ app = Flask(__name__)
+@@ -23,19 +24,45 @@ app = Flask(__name__)
+ _last_digest = {"md": ""}   # последний результат (для публикации)
+ 
+ 
++def _json_body() -> dict:
++    """Тело запроса как dict; `null`/не-объект/битый JSON-объект → пустой dict."""
++    data = request.get_json(force=True, silent=True)
++    return data if isinstance(data, dict) else {}
++
++
++def _clamped_int(data: dict, key: str, default: int, lo: int, hi: int) -> int:
++    """Числовой параметр запроса, ограниченный диапазоном lo..hi; не число → ValueError."""
++    try:
++        return max(lo, min(int(data.get(key) or default), hi))
++    except (TypeError, ValueError) as e:
++        raise ValueError(f"Параметр {key} должен быть числом.") from e
++
++
++def _load_commits(repo: str, last: int, token: str) -> tuple[list[dict], str]:
++    """Загрузить коммиты репозитория и его подпись 'owner/repo'; ошибки пробрасываются."""
++    commits = github_repo.get_commits(repo, last=last, token=token)
++    return commits, github_repo.repo_label(repo)
++
++
+ @app.route("/")
+ def index():
++    """Главная страница: веб-интерфейс."""
+     return render_template("index.html")
+ 
+ 
+ @app.route("/health")
+ def health():
++    """Проверка живости сервиса."""
+     return jsonify({"status": "ok"})
+ 
+ 
+ @app.route("/generate", methods=["POST"])
+ def generate():
+-    data = request.get_json(force=True)
++    """Сгенерировать дайджест (или роаст) по коммитам репозитория через AI."""
++    if not ratelimit.allow(request.remote_addr or "?"):
++        return jsonify({"error": "Слишком много запросов: не больше 10 в минуту. "
++                                 "Повторите позже."}), 429
++    data = _json_body()
+ 
+     deepseek_key = (data.get("deepseek_key") or "").strip()
+     if not deepseek_key:
+@@ -47,13 +74,12 @@ def generate():
+     github_token = (data.get("github_token") or "").strip()
+     tone = "toxic" if data.get("toxic") else "neutral"
+     try:
+-        last = max(1, min(int(data.get("last") or 15), 100))
+-    except (TypeError, ValueError):
+-        return jsonify({"error": "Параметр last должен быть числом."}), 400
++        last = _clamped_int(data, "last", 15, 1, 100)
++    except ValueError as e:
++        return jsonify({"error": str(e)}), 400
+ 
+     try:
+-        commits = github_repo.get_commits(repo, last=last, token=github_token)
+-        label = github_repo.repo_label(repo)
++        commits, label = _load_commits(repo, last, github_token)
+     except Exception as e:
+         return jsonify({"error": str(e)}), 400
+     if not commits:
+@@ -71,28 +97,33 @@ def generate():
+ 
+ @app.route("/stats", methods=["POST"])
+ def stats():
+-    data = request.get_json(force=True) or {}
++    """Статистика активности репозитория (без AI)."""
++    data = _json_body()
+     repo = (data.get("repo") or "").strip()
+     if not repo:
+         return jsonify({"error": "Укажите GitHub-репозиторий (owner/repo или ссылку)."}), 400
+     try:
+-        last = max(1, min(int(data.get("last") or 15), 100))
+-    except (TypeError, ValueError):
+-        return jsonify({"error": "Параметр last должен быть числом."}), 400
++        last = _clamped_int(data, "last", 15, 1, 100)
++    except ValueError as e:
++        return jsonify({"error": str(e)}), 400
++    try:
++        top = _clamped_int(data, "top", activity.TOP_AUTHORS, 1, 20)
++    except ValueError as e:
++        return jsonify({"error": str(e)}), 400
+     try:
+-        commits = github_repo.get_commits(
+-            repo, last=last, token=(data.get("github_token") or "").strip())
+-        label = github_repo.repo_label(repo)
++        commits, label = _load_commits(repo, last, (data.get("github_token") or "").strip())
+     except Exception as e:
+         return jsonify({"error": str(e)}), 400
+-    return jsonify({"source": label, **activity.compute_stats(commits)})
++    return jsonify({"source": label, **activity.compute_stats(
++        commits, top=top, author=(data.get("author") or "").strip() or None)})
+ 
+ 
+ @app.route("/publish", methods=["POST"])
+ def publish():
++    """Опубликовать последний сгенерированный результат в Telegram."""
+     if not _last_digest["md"]:
+         return jsonify({"error": "Сначала сгенерируйте результат."}), 400
+-    data = request.get_json(force=True) or {}
++    data = _json_body()
+     token = (data.get("telegram_token") or "").strip()
+     chat_id = (data.get("telegram_chat_id") or "").strip()
+     return jsonify(send_telegram(_last_digest["md"], token=token, chat_id=chat_id))
+diff --git a/digest.py b/digest.py
+index 98ecb78..dd82a95 100644
+--- a/digest.py
++++ b/digest.py
+@@ -6,42 +6,13 @@ AI-генератор дайджеста изменений.
+ переписывает в понятный язык.
+ """
+ 
+-MODEL = "deepseek-v4-flash"
+-
+-SYSTEM_NEUTRAL = (
+-    "Ты готовишь дайджест изменений (release notes) по коммитам git для читателя, "
+-    "который не смотрит код. Сгруппируй изменения и перепиши их понятным языком. "
+-    "Верни Markdown СТРОГО по шаблону:\n"
+-    "## 🔎 Главное\n<2–4 предложения — суть периода>\n\n"
+-    "## ✨ Новое\n- …\n## 🐞 Исправления\n- …\n## 📝 Документация\n- …\n"
+-    "## 🔧 Прочее\n- …\n"
+-    "В разделах — короткие пункты по сути (не копируй хэши и префиксы вроде "
+-    "'week7/day4:'). Пустой раздел — «— нет». Пиши на русском, дружелюбно и кратко."
+-)
++from prompts import SYSTEM_NEUTRAL, SYSTEM_TOXIC
+ 
+-# «Токсичный» роаст: язвительный разбор КОДА и коммитов в жанре savage code review.
+-# Жжём по коду и коммит-сообщениям, а не по авторам как людям.
+-SYSTEM_TOXIC = (
+-    "Ты — брутальный код-ревьюер-циник, который РОАСТИТ коммиты в жанре "
+-    "'savage code review'. Твой стиль: язвительный, саркастичный, беспощадный, "
+-    "с чёрным юмором про качество коммитов, «гениальные» сообщения коммитов, "
+-    "отсутствие тестов, полотна изменений и прочий инженерный грех. "
+-    "Не стесняйся драмы и гипербол — жги.\n\n"
+-    "ЖЁСТКИЕ ПРАВИЛА (не нарушать даже в шутку):\n"
+-    "- нападай на КОД, коммиты и инженерные решения, а НЕ на авторов как людей;\n"
+-    "- никаких оскорблений по признакам личности (пол, раса, религия, "
+-    "национальность, внешность, ориентация и т.п.), угроз и травли;\n"
+-    "- не выдумывай факты — только то, что видно в коммитах.\n\n"
+-    "Верни Markdown СТРОГО по шаблону:\n"
+-    "## 🔥 Вердикт\n<2–4 предложения беспощадного вердикта по периоду>\n\n"
+-    "## 💀 Разбор коммитов\n- <язвительный панч по каждому заметному изменению>\n\n"
+-    "## 🧯 Что бы сделал нормальный инженер\n- <ядовитые, но по делу советы>\n\n"
+-    "## ⭐ Оценка\n<оценка из 10 с саркастичным обоснованием>\n"
+-    "Пиши на русском, коротко и хлёстко."
+-)
++MODEL = "deepseek-v4-flash"
+ 
+ 
+ def _commits_block(commits: list[dict]) -> str:
++    """Список коммитов в текстовом виде для промпта (body обрезается до 300 символов)."""
+     lines = []
+     for c in commits:
+         body = f"\n    {c['body'][:300]}" if c["body"] else ""
+@@ -69,7 +40,7 @@ def generate(commits: list[dict], title: str = "Дайджест изменен
+     body = resp.choices[0].message.content or ""
+ 
+     dates = sorted(d for d in {c["date"] for c in commits} if d)
+-    period = f"{dates[0]} — {dates[-1]}" if dates else ""
++    period = f"{dates[0]} — {dates[-1]}" if dates else "нет дат"
+     emoji = "🔥" if tone == "toxic" else "📰"
+     header = f"# {emoji} {title}\n\n_Период: {period} · коммитов: {len(commits)}_\n\n"
+     return header + body
+diff --git a/github_repo.py b/github_repo.py
+index beed9e4..e1bbe4e 100644
+--- a/github_repo.py
++++ b/github_repo.py
+@@ -19,8 +19,10 @@ API = "https://api.github.com"
+ 
+ def parse_repo(value: str) -> str:
+     """Извлечь 'owner/repo' из URL или строки owner/repo."""
+-    value = value.strip().rstrip("/")
+-    m = re.search(r"github\.com[/:]([^/]+/[^/]+?)(?:\.git)?$", value)
++    value = value.strip()
++    m = re.search(r"github\.com[/:]([^/?#\s]+/[^/?#\s]+?)(?:\.git)?(?:[/?#].*)?$", value)
++    if not m:
++        value = value.rstrip("/")
+     if m:
+         return m.group(1)
+     if re.fullmatch(r"[\w.-]+/[\w.-]+", value):
+@@ -29,6 +31,7 @@ def parse_repo(value: str) -> str:
+ 
+ 
+ def _get(url: str, token: str = "") -> list | dict:
++    """GET-запрос к GitHub API, вернуть разобранный JSON."""
+     headers = {"Accept": "application/vnd.github+json",
+                "User-Agent": "ai-advent-digest"}
+     if token:
+@@ -55,6 +58,14 @@ def get_commits(repo: str, last: int = 15, token: str = "") -> list[dict]:
+         if e.code == 403:
+             raise RuntimeError("Лимит GitHub API исчерпан — укажите GitHub-токен.") from e
+         raise RuntimeError(f"GitHub API: {e.code} {e.reason}") from e
++    except (urllib.error.URLError, TimeoutError) as e:
++        reason = getattr(e, "reason", None) or e
++        raise RuntimeError(f"Не удалось связаться с GitHub: {reason}") from e
++
++    if not isinstance(data, list):
++        msg = data.get("message") if isinstance(data, dict) else None
++        raise RuntimeError(f"GitHub вернул неожиданный ответ вместо списка коммитов"
++                           f"{f': {msg}' if msg else ''}.")
+ 
+     commits = []
+     for c in data:
+@@ -72,6 +83,7 @@ def get_commits(repo: str, last: int = 15, token: str = "") -> list[dict]:
+ 
+ 
+ def repo_label(repo: str) -> str:
++    """Подпись репозитория в виде owner/repo."""
+     return parse_repo(repo)
+ 
+ 
+diff --git a/notify.py b/notify.py
+index 4583442..14f080d 100644
+--- a/notify.py
++++ b/notify.py
+@@ -6,10 +6,12 @@
+ """
+ 
+ import json
++import urllib.error
+ import urllib.request
+ 
+ 
+ def send_telegram(text: str, token: str = "", chat_id: str = "") -> dict:
++    """Отправить текст в Telegram; без токена или chat_id возвращает статус skipped."""
+     token = (token or "").strip()
+     chat_id = (chat_id or "").strip()
+     if not token or not chat_id:
+@@ -17,18 +19,38 @@ def send_telegram(text: str, token: str = "", chat_id: str = "") -> dict:
+                 "reason": "не заданы токен бота и chat_id — публикация пропущена."}
+ 
+     # Telegram ограничивает сообщение 4096 символами
+-    payload = json.dumps({
++    payload = {
+         "chat_id": chat_id,
+         "text": text[:4096],
+         "parse_mode": "Markdown",
+         "disable_web_page_preview": True,
+-    }).encode()
+-    req = urllib.request.Request(
+-        f"https://api.telegram.org/bot{token}/sendMessage",
+-        data=payload, headers={"Content-Type": "application/json"})
++    }
++    url = f"https://api.telegram.org/bot{token}/sendMessage"
+     try:
+-        with urllib.request.urlopen(req, timeout=15) as r:
+-            data = json.load(r)
++        try:
++            data = _post(url, payload)
++        except urllib.error.HTTPError as e:
++            # Непарные _ / * ломают Markdown: повторяем отправку обычным текстом
++            if e.code != 400 or "can't parse entities" not in _error_body(e):
++                raise
++            data = _post(url, {k: v for k, v in payload.items() if k != "parse_mode"})
+         return {"status": "sent" if data.get("ok") else "error", "response": data}
+     except Exception as e:
+         return {"status": "error", "reason": str(e)}
++
++
++def _post(url: str, payload: dict) -> dict:
++    """POST JSON в Telegram Bot API, вернуть разобранный ответ."""
++    req = urllib.request.Request(
++        url, data=json.dumps(payload).encode(),
++        headers={"Content-Type": "application/json"})
++    with urllib.request.urlopen(req, timeout=15) as r:
++        return json.load(r)
++
++
++def _error_body(e: urllib.error.HTTPError) -> str:
++    """Тело HTTP-ошибки как текст (пустая строка, если прочитать нельзя)."""
++    try:
++        return e.read().decode("utf-8", "replace")
++    except (OSError, ValueError, AttributeError):
++        return ""
+diff --git a/prompts.py b/prompts.py
+new file mode 100644
+index 0000000..e85c994
+--- /dev/null
++++ b/prompts.py
+@@ -0,0 +1,37 @@
++"""
++Системные промпты для AI-генератора (`digest.py`): нейтральный дайджест и токсичный роаст.
++
++Роль в сервисе: только текстовые константы, без логики.
++"""
++
++SYSTEM_NEUTRAL = (
++    "Ты готовишь дайджест изменений (release notes) по коммитам git для читателя, "
++    "который не смотрит код. Сгруппируй изменения и перепиши их понятным языком. "
++    "Верни Markdown СТРОГО по шаблону:\n"
++    "## 🔎 Главное\n<2–4 предложения — суть периода>\n\n"
++    "## ✨ Новое\n- …\n## 🐞 Исправления\n- …\n## 📝 Документация\n- …\n"
++    "## 🔧 Прочее\n- …\n"
++    "В разделах — короткие пункты по сути (не копируй хэши и префиксы вроде "
++    "'week7/day4:'). Пустой раздел — «— нет». Пиши на русском, дружелюбно и кратко."
++)
++
++# «Токсичный» роаст: язвительный разбор КОДА и коммитов в жанре savage code review.
++# Жжём по коду и коммит-сообщениям, а не по авторам как людям.
++SYSTEM_TOXIC = (
++    "Ты — брутальный код-ревьюер-циник, который РОАСТИТ коммиты в жанре "
++    "'savage code review'. Твой стиль: язвительный, саркастичный, беспощадный, "
++    "с чёрным юмором про качество коммитов, «гениальные» сообщения коммитов, "
++    "отсутствие тестов, полотна изменений и прочий инженерный грех. "
++    "Не стесняйся драмы и гипербол — жги.\n\n"
++    "ЖЁСТКИЕ ПРАВИЛА (не нарушать даже в шутку):\n"
++    "- нападай на КОД, коммиты и инженерные решения, а НЕ на авторов как людей;\n"
++    "- никаких оскорблений по признакам личности (пол, раса, религия, "
++    "национальность, внешность, ориентация и т.п.), угроз и травли;\n"
++    "- не выдумывай факты — только то, что видно в коммитах.\n\n"
++    "Верни Markdown СТРОГО по шаблону:\n"
++    "## 🔥 Вердикт\n<2–4 предложения беспощадного вердикта по периоду>\n\n"
++    "## 💀 Разбор коммитов\n- <язвительный панч по каждому заметному изменению>\n\n"
++    "## 🧯 Что бы сделал нормальный инженер\n- <ядовитые, но по делу советы>\n\n"
++    "## ⭐ Оценка\n<оценка из 10 с саркастичным обоснованием>\n"
++    "Пиши на русском, коротко и хлёстко."
++)
+diff --git a/ratelimit.py b/ratelimit.py
+new file mode 100644
+index 0000000..924f866
+--- /dev/null
++++ b/ratelimit.py
+@@ -0,0 +1,31 @@
++"""
++Лимит частоты запросов по ключу (IP): скользящее окно в памяти процесса.
++
++Роль в сервисе: защита дорогого `/generate` (вызов LLM) от флуда. Модуль не знает
++про Flask — маршрут передаёт сюда IP и сам формирует ответ 429.
++"""
++
++import time
++from collections import deque
++
++LIMIT = 10      # запросов
++WINDOW = 60.0   # секунд
++
++_hits: dict[str, deque[float]] = {}
++
++
++def allow(key: str, limit: int = LIMIT, window: float = WINDOW) -> bool:
++    """Учесть запрос от key; False, если за последние window секунд уже было limit запросов."""
++    now = time.monotonic()
++    hits = _hits.setdefault(key, deque())
++    while hits and now - hits[0] >= window:
++        hits.popleft()
++    if len(hits) >= limit:
++        return False
++    hits.append(now)
++    return True
++
++
++def reset() -> None:
++    """Сбросить все счётчики (для тестов)."""
++    _hits.clear()
+diff --git a/test_activity.py b/test_activity.py
+new file mode 100644
+index 0000000..d33ccc8
+--- /dev/null
++++ b/test_activity.py
+@@ -0,0 +1,50 @@
++"""Проверка activity.compute_stats: пустой ввод, ничьи, коммиты без даты/автора (без сети)."""
++import activity
++
++
++def _c(author: str | None, date: str | None) -> dict:
++    return {"hash": "h", "date": date, "author": author, "subject": "x", "body": ""}
++
++
++def main() -> None:
++    s = activity.compute_stats([])
++    assert s == {"total_commits": 0, "top_authors": [], "commits_by_day": [],
++                 "busiest_day": None, "first_date": None, "last_date": None}
++    print("✅ пустой список коммитов -> нули и None")
++
++    s = activity.compute_stats([_c("B", "2024-01-01"), _c("A", "2024-01-02")])
++    assert [a["author"] for a in s["top_authors"]] == ["A", "B"]
++    print("✅ равное число коммитов у авторов -> порядок по имени")
++
++    s = activity.compute_stats([_c("A", "2024-01-01"), _c("B", "2024-01-02")])
++    assert s["busiest_day"] == {"date": "2024-01-02", "commits": 1}
++    print("✅ ничья по дням -> побеждает более поздний день")
++
++    s = activity.compute_stats([_c("A", ""), _c("A", None), _c("A", "2024-03-05")])
++    assert s["total_commits"] == 3
++    assert s["commits_by_day"] == [{"date": "2024-03-05", "commits": 1}]
++    assert s["first_date"] == s["last_date"] == "2024-03-05"
++    print("✅ коммиты без даты считаются в total, но не попадают в дни")
++
++    no_author = [_c(None, "2024-01-01"), _c("", "2024-01-01"), {"date": "2024-01-01"}]
++    s = activity.compute_stats(no_author)
++    assert s["top_authors"] == [{"author": "?", "commits": 3}]
++    print("✅ коммиты без автора группируются как «?»")
++
++    many = [_c(f"A{i}", "2024-01-01") for i in range(8)]
++    assert len(activity.compute_stats(many)["top_authors"]) == activity.TOP_AUTHORS == 5
++    assert len(activity.compute_stats(many, top=3)["top_authors"]) == 3
++    assert len(activity.compute_stats(many, top=50)["top_authors"]) == 8
++    print("✅ top ограничивает список авторов (по умолчанию 5)")
++
++    mixed = [_c("A", "2024-01-01"), _c("B", "2024-01-02"), _c("A", "2024-01-03")]
++    s = activity.compute_stats(mixed, author="A")
++    assert s["total_commits"] == 2 and s["top_authors"] == [{"author": "A", "commits": 2}]
++    assert activity.compute_stats([_c("A", "2024-01-01")], author="Z")["busiest_day"] is None
++    print("✅ фильтр author")
++
++    print("\n✅ ВСЕ ПРОВЕРКИ ПРОЙДЕНЫ — activity.compute_stats")
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/test_digest_unit.py b/test_digest_unit.py
+index 39bb8f4..ba8ab57 100644
+--- a/test_digest_unit.py
++++ b/test_digest_unit.py
+@@ -45,8 +45,9 @@ def main() -> None:
+ 
+     with mock.patch("openai.OpenAI", _fake_openai(None)):
+         md = digest.generate([{"hash": "a", "date": "", "subject": "s", "body": ""}], api_key="k")
+-    assert md.endswith("_Период:  · коммитов: 1_\n\n")
+-    print("✅ generate: пустой content и коммиты без дат не падают")
++    assert md.endswith("_Период: нет дат · коммитов: 1_\n\n")
++    assert "  " not in md.split("\n")[2]
++    print("✅ generate: пустой content и без дат период «нет дат» без двойных пробелов")
+ 
+     for key in (None, "", "   "):
+         with mock.patch("openai.OpenAI", _fake_openai()) as cls:
+diff --git a/test_github_repo.py b/test_github_repo.py
+index a380a10..8db6e77 100644
+--- a/test_github_repo.py
++++ b/test_github_repo.py
+@@ -32,9 +32,18 @@ def main() -> None:
+               "git@github.com:o/r.git", "o/r", "  o/r  ", "my-org/re.po_1"):
+         assert github_repo.parse_repo(v) in ("o/r", "my-org/re.po_1"), v
+     assert github_repo.repo_label("https://github.com/o/r.git") == "o/r"
++    for v in ("https://github.com/o/r/tree/main", "https://github.com/o/r/issues/12",
++              "https://github.com/o/r/pull/3/files", "https://github.com/o/r?tab=readme",
++              "https://github.com/o/r#readme", "https://github.com/o/r/",
++              "https://github.com/o/r.git", "https://github.com/o/r.git/",
++              "github.com/o/r/tree/feature/x?tab=1#y", "http://www.github.com/o/r/blob/main/a.py"):
++        assert github_repo.parse_repo(v) == "o/r", v
++    assert github_repo.parse_repo("https://github.com/my.org/re.po.js") == "my.org/re.po.js"
++    print("✅ parse_repo: /tree, /issues, /pull, ?tab, #, завершающий /, .git")
++
+     print("✅ parse_repo: URL, .git, ssh, owner/repo, пробелы")
+ 
+-    for bad in ("", "abc", "a/b/c", "a b/c"):
++    for bad in ("", "abc", "hello", "a/b/c", "a b/c", "https://github.com/onlyowner"):
+         try:
+             github_repo.parse_repo(bad)
+         except ValueError as e:
+@@ -84,6 +93,31 @@ def main() -> None:
+         raise AssertionError("ожидался ValueError")
+     print("✅ get_commits: неверный repo -> ValueError до сетевого вызова")
+ 
++    for payload in ({"message": "Bad credentials"}, "строка", None):
++        with mock.patch("urllib.request.urlopen",
++                        return_value=_Resp(json.dumps(payload).encode())):
++            try:
++                github_repo.get_commits("o/r")
++            except RuntimeError as e:
++                assert "GitHub" in str(e), str(e)
++                if isinstance(payload, dict):
++                    assert "Bad credentials" in str(e)
++            else:
++                raise AssertionError(payload)
++    print("✅ get_commits: ответ не списком -> RuntimeError про GitHub")
++
++    for exc, text in ((urllib.error.URLError("no route"), "no route"),
++                      (TimeoutError("timed out"), "timed out")):
++        with mock.patch("urllib.request.urlopen", side_effect=exc):
++            try:
++                github_repo.get_commits("o/r")
++            except RuntimeError as e:
++                assert str(e).startswith("Не удалось связаться с GitHub: "), str(e)
++                assert text in str(e) and e.__cause__ is exc
++            else:
++                raise AssertionError(exc)
++    print("✅ get_commits: URLError/TimeoutError -> RuntimeError «Не удалось связаться с GitHub»")
++
+     print("\n✅ ВСЕ ПРОВЕРКИ ПРОЙДЕНЫ — github_repo (парсинг, маппинг, ошибки)")
+ 
+ 
+diff --git a/test_notify.py b/test_notify.py
+index 0066104..66b7369 100644
+--- a/test_notify.py
++++ b/test_notify.py
+@@ -1,6 +1,7 @@
+ """Проверка notify.send_telegram: деградация, обрезка, статусы (без сети)."""
+ import io
+ import json
++import urllib.error
+ from unittest import mock
+ 
+ from notify import send_telegram
+@@ -45,6 +46,25 @@ def main() -> None:
+     assert res == {"status": "error", "reason": "сеть упала"}
+     print("✅ исключение сети -> status error, без падения")
+ 
++    err = urllib.error.HTTPError(
++        "u", 400, "Bad Request", {},
++        io.BytesIO(b'{"ok":false,"description":"Bad Request: can\'t parse entities"}'))
++    with mock.patch("urllib.request.urlopen",
++                    side_effect=[err, _Resp(json.dumps({"ok": True}).encode())]) as m:
++        res = send_telegram("a_b*c", token="t", chat_id="c")
++    assert res["status"] == "sent" and m.call_count == 2
++    first, second = (json.loads(c.args[0].data) for c in m.call_args_list)
++    assert first["parse_mode"] == "Markdown" and "parse_mode" not in second
++    assert second["text"] == "a_b*c"
++    print("✅ 400 can't parse entities -> повтор без parse_mode, статус sent")
++
++    other = urllib.error.HTTPError("u", 400, "Bad Request", {},
++                                   io.BytesIO(b'{"description":"chat not found"}'))
++    with mock.patch("urllib.request.urlopen", side_effect=[other]) as m:
++        res = send_telegram("x", token="t", chat_id="c")
++    assert res["status"] == "error" and m.call_count == 1
++    print("✅ другие HTTP 400 -> без повтора, status error")
++
+     print("\n✅ ВСЕ ПРОВЕРКИ ПРОЙДЕНЫ — notify (деградация, обрезка, ошибки)")
+ 
+ 
+diff --git a/test_null_body.py b/test_null_body.py
+new file mode 100644
+index 0000000..c91f3ba
+--- /dev/null
++++ b/test_null_body.py
+@@ -0,0 +1,26 @@
++"""Проверка: тело `null` на POST-маршрутах даёт JSON 400, а не HTML 500 (без сети)."""
++from unittest import mock
++
++import app as app_module
++
++
++def main() -> None:
++    c = app_module.app.test_client()
++    with mock.patch.dict(app_module._last_digest, {"md": "TXT"}):
++        for path in ("/generate", "/stats", "/publish"):
++            r = c.post(path, data="null", content_type="application/json")
++            assert r.is_json, path
++            if path == "/publish":
++                assert r.status_code == 200 and r.get_json()["status"] == "skipped"
++            else:
++                assert r.status_code == 400 and "error" in r.get_json(), path
++            print(f"✅ {path}: тело null -> JSON")
++    with mock.patch.dict(app_module._last_digest, {"md": ""}):
++        r = c.post("/publish", data="null", content_type="application/json")
++    assert r.status_code == 400 and r.is_json
++    print("✅ /publish без результата и с null -> JSON 400")
++    print("\n✅ ВСЕ ПРОВЕРКИ ПРОЙДЕНЫ — тело null не роняет маршруты")
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/test_ratelimit.py b/test_ratelimit.py
+new file mode 100644
+index 0000000..4ff0b36
+--- /dev/null
++++ b/test_ratelimit.py
+@@ -0,0 +1,48 @@
++"""Проверка лимита запросов 10/мин на /generate по IP (без сети)."""
++from unittest import mock
++
++import app as app_module
++import ratelimit
++
++
++def _post(client, ip: str, path: str = "/generate"):
++    return client.post(path, json={}, environ_base={"REMOTE_ADDR": ip})
++
++
++def main() -> None:
++    ratelimit.reset()
++    with mock.patch("time.monotonic", return_value=1000.0):
++        assert all(ratelimit.allow("k") for _ in range(10))
++        assert not ratelimit.allow("k")
++        assert ratelimit.allow("other")
++    with mock.patch("time.monotonic", return_value=1059.0):
++        assert not ratelimit.allow("k")
++    with mock.patch("time.monotonic", return_value=1060.5):
++        assert ratelimit.allow("k")
++    print("✅ ratelimit.allow: 10 в окне, 11-й отказ, другой ключ независим, окно 60 с")
++
++    ratelimit.reset()
++    client = app_module.app.test_client()
++    with mock.patch("time.monotonic", return_value=5.0):
++        for i in range(10):
++            r = _post(client, "1.1.1.1")
++            assert r.status_code == 400, i
++        r = _post(client, "1.1.1.1")
++        assert r.status_code == 429 and r.is_json and r.get_json()["error"]
++        print("✅ /generate: 11-й запрос с одного IP -> JSON 429")
++
++        assert _post(client, "2.2.2.2").status_code == 400
++        print("✅ другой IP не затронут")
++
++        for path in ("/stats", "/publish"):
++            for _ in range(12):
++                assert _post(client, "1.1.1.1", path).status_code != 429, path
++        assert client.get("/health", environ_base={"REMOTE_ADDR": "1.1.1.1"}).status_code == 200
++        print("✅ /stats, /publish, /health лимитом не затронуты")
++    ratelimit.reset()
++
++    print("\n✅ ВСЕ ПРОВЕРКИ ПРОЙДЕНЫ — лимит 10 запросов/мин на /generate")
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/test_stats.py b/test_stats.py
+index 4afea39..21c33a4 100644
+--- a/test_stats.py
++++ b/test_stats.py
+@@ -46,6 +46,44 @@ def main() -> None:
+     assert r.status_code == 400 and r.get_json()["error"] == "нет репо"
+     print("✅ /stats: ошибка GitHub -> JSON 400")
+ 
++    many = [{"hash": str(i), "date": "2024-01-01", "author": f"A{i:02d}",
++             "subject": "x", "body": ""}
++            for i in range(30)]
++    assert len(activity.compute_stats(many)["top_authors"]) == 5
++    assert len(activity.compute_stats(many, top=2)["top_authors"]) == 2
++    with mock.patch("github_repo.get_commits", return_value=many):
++        for top, want in ((None, 5), (3, 3), (0, 5), (-4, 1), (100, 20), ("7", 7)):
++            body = {"repo": "o/r"} if top is None else {"repo": "o/r", "top": top}
++            r = client.post("/stats", json=body)
++            assert r.status_code == 200 and len(r.get_json()["top_authors"]) == want, (top, want)
++        for bad in ("abc", [1], {"a": 1}):
++            r = client.post("/stats", json={"repo": "o/r", "top": bad})
++            assert r.status_code == 400 and r.is_json, bad
++            assert r.get_json()["error"] == "Параметр top должен быть числом."
++    print("✅ /stats: top (по умолчанию 5, кламп 1..20, нечисловой -> JSON 400)")
++
++    s = activity.compute_stats(COMMITS)
++    assert s["first_date"] == "2024-01-01" and s["last_date"] == "2024-01-02"
++    e = activity.compute_stats([])
++    assert e["first_date"] is None and e["last_date"] is None
++    with mock.patch("github_repo.get_commits", return_value=COMMITS):
++        j = client.post("/stats", json={"repo": "o/r"}).get_json()
++    assert j["first_date"] == "2024-01-01" and j["last_date"] == "2024-01-02"
++    print("✅ /stats: first_date и last_date (None без дат)")
++
++    only = activity.compute_stats(COMMITS, author="Bob")
++    assert only["total_commits"] == 1 and only["top_authors"] == [{"author": "Bob", "commits": 1}]
++    with mock.patch("github_repo.get_commits", return_value=COMMITS):
++        j = client.post("/stats", json={"repo": "o/r", "author": " Ann "}).get_json()
++        assert j["total_commits"] == 3 and j["top_authors"] == [{"author": "Ann", "commits": 3}]
++        j = client.post("/stats", json={"repo": "o/r", "author": "Нет такого"})
++        assert j.status_code == 200
++        j = j.get_json()
++        assert j["total_commits"] == 0 and j["busiest_day"] is None and j["top_authors"] == []
++        j = client.post("/stats", json={"repo": "o/r", "author": ""}).get_json()
++        assert j["total_commits"] == 4
++    print("✅ /stats: фильтр author (известный, неизвестный -> 0 и busiest_day null)")
++
+     print("\n✅ ВСЕ ПРОВЕРКИ ПРОЙДЕНЫ — статистика активности /stats")
+ 
+ 
+diff --git a/test_stats_bounds.py b/test_stats_bounds.py
+new file mode 100644
+index 0000000..c7a83e8
+--- /dev/null
++++ b/test_stats_bounds.py
+@@ -0,0 +1,49 @@
++"""Проверка границ параметра last у /stats (без сети, get_commits подменён)."""
++from unittest import mock
++
++import app as app_module
++
++COMMITS = [{"hash": "a", "date": "2024-01-01", "author": "Ann", "subject": "x", "body": ""}]
++
++
++def _last_used(client, last) -> tuple[int, int | None]:
++    """Вернуть (код ответа, last, с которым вызван get_commits или None)."""
++    with mock.patch("github_repo.get_commits", return_value=COMMITS) as gc:
++        r = client.post("/stats", json={"repo": "o/r", "last": last})
++    used = gc.call_args.kwargs["last"] if gc.called else None
++    return r.status_code, used
++
++
++def main() -> None:
++    c = app_module.app.test_client()
++
++    assert _last_used(c, 0) == (200, 15)
++    print("✅ last=0 -> значение по умолчанию 15")
++    assert _last_used(c, 1) == (200, 1)
++    print("✅ last=1 -> 1")
++    assert _last_used(c, 100) == (200, 100)
++    print("✅ last=100 -> 100")
++    assert _last_used(c, 101) == (200, 100)
++    print("✅ last=101 -> клампится до 100")
++    assert _last_used(c, "7") == (200, 7)
++    print("✅ last='7' (строка-число) -> 7")
++    assert _last_used(c, "abc") == (400, None)
++    print("✅ last='abc' -> 400, GitHub не вызывается")
++    assert _last_used(c, -5) == (200, 1)
++    print("✅ last=-5 -> клампится до 1")
++
++    with mock.patch("github_repo.get_commits", return_value=COMMITS) as gc:
++        r = c.post("/stats", json={"repo": "o/r"})
++    assert r.status_code == 200 and gc.call_args.kwargs["last"] == 15
++    print("✅ без last -> 15")
++
++    with mock.patch("github_repo.get_commits", return_value=COMMITS):
++        r = c.post("/stats", json={"repo": "o/r", "last": "abc"})
++    assert r.is_json and r.get_json()["error"] == "Параметр last должен быть числом."
++    print("✅ ошибка нечислового last — JSON с текстом по-русски")
++
++    print("\n✅ ВСЕ ПРОВЕРКИ ПРОЙДЕНЫ — границы last в /stats")
++
++
++if __name__ == "__main__":
++    main()

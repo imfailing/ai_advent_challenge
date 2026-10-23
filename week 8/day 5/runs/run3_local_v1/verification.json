@@ -1,0 +1,141 @@
+{
+ "summary": {
+  "tasks_total": 18,
+  "committed": 3,
+  "verified_done": 0,
+  "streak_without_break": 0,
+  "first_try_pct": 0.0,
+  "avg_minutes_per_task": 6.6,
+  "total_minutes": 19.9,
+  "head_ruff_ok": false,
+  "head_failing_tests": [
+   "test_github_repo.py"
+  ],
+  "head_tasks_passing": 0
+ },
+ "tasks": [
+  {
+   "task": "T01",
+   "committed": false,
+   "still_ok_at_head": false
+  },
+  {
+   "task": "T02",
+   "committed": false,
+   "still_ok_at_head": false
+  },
+  {
+   "task": "T03",
+   "committed": false,
+   "still_ok_at_head": false
+  },
+  {
+   "task": "T04",
+   "committed": false,
+   "still_ok_at_head": false
+  },
+  {
+   "task": "T05",
+   "committed": false,
+   "still_ok_at_head": false
+  },
+  {
+   "task": "T06",
+   "committed": false,
+   "still_ok_at_head": false
+  },
+  {
+   "task": "T07",
+   "committed": false,
+   "still_ok_at_head": false
+  },
+  {
+   "task": "T08",
+   "committed": false,
+   "still_ok_at_head": false
+  },
+  {
+   "task": "T09",
+   "committed": false,
+   "still_ok_at_head": false
+  },
+  {
+   "task": "T10",
+   "committed": false,
+   "still_ok_at_head": false
+  },
+  {
+   "task": "T11",
+   "committed": false,
+   "still_ok_at_head": false
+  },
+  {
+   "task": "T12",
+   "committed": true,
+   "commit": "ef61c1bd",
+   "subject": "T12: Переместили SYSTEM_NEUTRAL и SYSTEM_TOXIC в prompts.py",
+   "commits_for_task": 1,
+   "check_pass": false,
+   "check_out": "yq7l44577l_p62wyw0lt8f40000gn/T/verify_a8kldk75/check.py\", line 235, in <module>\n    globals()[name]()\n    ~~~~~~~~~~~~~~~^^\n  File \"/private/var/folders/h0/5yq7l44577l_p62wyw0lt8f40000gn/T/verify_a8kldk75/check.py\", line 171, in t12\n    import prompts\nModuleNotFoundError: No module named 'prompts'\n",
+   "ruff_ok": false,
+   "failing_tests": [
+    "test_github_repo.py"
+   ],
+   "ok": false,
+   "gap_s": 918,
+   "still_ok_at_head": false
+  },
+  {
+   "task": "T13",
+   "committed": false,
+   "still_ok_at_head": false
+  },
+  {
+   "task": "T14",
+   "committed": true,
+   "commit": "e20c6e5b",
+   "subject": "T14: Добавлены тесты для activity.compute_stats",
+   "commits_for_task": 1,
+   "check_pass": false,
+   "check_out": "156b5gjl/check.py\", line 235, in <module>\n    globals()[name]()\n    ~~~~~~~~~~~~~~~^^\n  File \"/private/var/folders/h0/5yq7l44577l_p62wyw0lt8f40000gn/T/verify_156b5gjl/check.py\", line 191, in t14\n    assert p.exists(), \"нет test_activity.py\"\n           ~~~~~~~~^^\nAssertionError: нет test_activity.py\n",
+   "ruff_ok": false,
+   "failing_tests": [
+    "test_github_repo.py"
+   ],
+   "ok": false,
+   "gap_s": 64,
+   "still_ok_at_head": false
+  },
+  {
+   "task": "T15",
+   "committed": false,
+   "still_ok_at_head": false
+  },
+  {
+   "task": "T16",
+   "committed": false,
+   "still_ok_at_head": false
+  },
+  {
+   "task": "T17",
+   "committed": true,
+   "commit": "47a2f848",
+   "subject": "T17: Добавлены маршруты /generate и /publish, модуль github_repo",
+   "commits_for_task": 1,
+   "check_pass": false,
+   "check_out": "eubt90/check.py\", line 219, in t17\n    assert not missing, missing\n           ^^^^^^^^^^^\nAssertionError: ['app.py:index', 'app.py:health', 'app.py:generate', 'app.py:stats', 'app.py:publish', 'digest.py:_commits_block', 'github_repo.py:_get', 'github_repo.py:repo_label', 'notify.py:send_telegram']\n",
+   "ruff_ok": false,
+   "failing_tests": [
+    "test_github_repo.py"
+   ],
+   "ok": false,
+   "gap_s": 210,
+   "still_ok_at_head": false
+  },
+  {
+   "task": "T18",
+   "committed": false,
+   "still_ok_at_head": false
+  }
+ ]
+}

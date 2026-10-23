@@ -1,0 +1,174 @@
+diff --git a/README.md b/README.md
+index b98810c..a46b028 100644
+--- a/README.md
++++ b/README.md
+@@ -12,6 +12,13 @@
+ | `reports/` | единые отчёты «код + UI» |
+ | `REPORT.md` | итоги дня: что сделано, что доработано в профилях, интеграция в flow |
+ 
++## Ограничения и особенности
++
++- Лимит GitHub API без токена: 60 запросов/час
++- Глобальное состояние последнего дайджеста для `/publish`
++- Лимит Telegram: 4096 символов
++- Токены не хранятся на сервере
++
+ Профили/скиллы (в корне репозитория, `.claude/`): агенты `tester`, `smoke-runner`; скиллы `pr-verify`, `post-deploy`;
+ CI — `.github/workflows/tests.yml`.
+ 
+@@ -68,134 +75,3 @@ digest.py → DeepSeek:
+ 
+ | Метод | Путь | Описание |
+ |---|---|---|
+-| GET | `/` | веб-интерфейс |
+-| GET | `/health` | статус сервиса (`{status: "ok"}`) |
+-| POST | `/generate` | `{repo, last, toxic, deepseek_key, github_token}` → `{digest, commits, source, tone}` |
+-| POST | `/stats` | `{repo, last, github_token}` → `{source, total_commits, top_authors, commits_by_day, busiest_day}` (без AI) |
+-| POST | `/publish` | `{telegram_token, telegram_chat_id}` — опубликовать последний результат в Telegram |
+-
+-`top_authors` — до 5 авторов по убыванию коммитов; `busiest_day` — `null`, если коммитов нет.
+-`last` по умолчанию 15, ограничен 1..100. Ошибки — JSON `{"error": ...}` с кодом 400
+-(пустой `repo`, нечисловой `last`, ошибка GitHub).
+-
+-Пример `/stats` (ответ получен реальным вызовом с подменой `github_repo.get_commits` на 4 коммита):
+-
+-```bash
+-curl -X POST http://localhost:5011/stats -H 'Content-Type: application/json' \
+-  -d '{"repo": "o/r", "last": 15, "github_token": ""}'
+-# {"busiest_day":{"commits":3,"date":"2024-01-02"},
+-#  "commits_by_day":[{"commits":1,"date":"2024-01-01"},{"commits":3,"date":"2024-01-02"}],
+-#  "source":"o/r",
+-#  "top_authors":[{"author":"Ann","commits":3},{"author":"Bob","commits":1}],
+-#  "total_commits":4}
+-```
+-
+----
+-
+-## Деплой на VPS (Docker)
+-
+-Как на неделе 6: контейнер + `docker compose`. Монтировать ничего не нужно —
+-сервис ходит в GitHub по API.
+-
+-```bash
+-# на VPS: Docker + плагин Compose (см. week 6/day 5 при проблемах с 'docker compose')
+-git clone <repo> && cd "week 8/day 2"
+-
+-docker compose up --build --detach        # http://<IP>:5011
+-curl http://localhost:5011/health         # {"status":"ok"}
+-# токены (DeepSeek / GitHub / Telegram) вводятся в интерфейсе (⚙ Токены)
+-```
+-
+-Наружу открыт только порт **5011**. Быстрый доступ для теста:
+-
+-```bash
+-sudo ufw allow 5011/tcp              # http://<IP>:5011
+-```
+-
+-### Reverse proxy nginx + TLS (как на неделе 6)
+-
+-Готовый конфиг — `deploy/nginx.conf` (проксирует на `127.0.0.1:5011`). Порядок:
+-
+-```bash
+-sudo apt install -y nginx
+-
+-# положить конфиг и включить сайт
+-sudo cp deploy/nginx.conf /etc/nginx/sites-available/digest
+-sudo sed -i 's/your-domain.example/ваш-домен/' /etc/nginx/sites-available/digest
+-sudo ln -s /etc/nginx/sites-available/digest /etc/nginx/sites-enabled/
+-sudo nginx -t && sudo systemctl reload nginx      # проверка + перезагрузка
+-
+-# HTTPS через Let's Encrypt (нужен плагин nginx для certbot)
+-sudo apt install -y certbot python3-certbot-nginx
+-sudo certbot --nginx -d ваш-домен                 # добавит 443 + редирект с 80
+-```
+-
+-Теперь сервис открывается по `https://ваш-домен` — порт 5011 наружу открывать
+-не нужно (проксирует nginx). Требования: домен с A-записью на VPS (Let's Encrypt
+-не выдаёт сертификат на голый IP).
+-
+-> Грабли деплоя (нет `docker compose`, права на docker.sock, «unable to locate
+-> package docker-compose-plugin», certbot без nginx-плагина) разобраны в
+-> `week 6/day 5/README.md`.
+-
+-### Токены (вводятся в интерфейсе, ⚙ Токены)
+-
+-| Токен | Нужен | Зачем |
+-|---|---|---|
+-| DeepSeek ключ | да | генерация дайджеста/роаста |
+-| GitHub токен | опц. | приватные репо и лимиты GitHub API |
+-| Telegram bot token + chat_id | опц. | публикация в Telegram |
+-
+-Сервер не читает токены из окружения и не хранит их: они приходят в теле
+-запроса и живут только в localStorage браузера пользователя.
+-
+----
+-
+-## Локальный запуск (для разработки)
+-
+-```bash
+-python3 -m venv venv && source venv/bin/activate
+-pip install -r requirements.txt
+-python app.py                         # http://localhost:5011
+-# ключ DeepSeek и остальные токены — в интерфейсе (⚙ Токены)
+-```
+-
+-Для прогона теста ключ берётся из окружения:
+-
+-```bash
+-export DEEPSEEK_API_KEY="ваш_ключ"
+-python test_digest.py
+-```
+-
+----
+-
+-## Проверка (`test_digest.py`)
+-
+-- ✅ чтение коммитов внешнего репо (`octocat/Hello-World`);
+-- ✅ нейтральный дайджест — все разделы;
+-- ✅ rooster-роаст (toxic) — свои разделы;
+-- ✅ Telegram без токена → `skipped`;
+-- ✅ веб `/generate` / `/publish`.
+-
+-`test_stats.py` (без сети и ключей): ✅ `compute_stats` (авторы, дни, самый активный день);
+-✅ пустой список; ✅ `/stats` успех; ✅ пустой `repo` и нечисловой `last` → 400; ✅ ошибка GitHub → JSON 400.
+-
+----
+-
+-## Структура
+-
+-```
+-day 2/
+-├── github_repo.py   # коммиты удалённого GitHub-репо (REST API)
+-├── activity.py      # статистика активности (без AI)
+-├── digest.py        # AI: дайджест (neutral) или роаст (toxic) — DeepSeek
+-├── notify.py        # публикация в Telegram (мягкая деградация)
+-├── app.py           # Flask веб-сервис (порт 5011)
+-├── templates/index.html
+-├── Dockerfile · docker-compose.yml   # деплой на VPS
+-├── deploy/nginx.conf                 # reverse proxy (порт 5011, +TLS через certbot)
+-├── test_digest.py
+-├── test_stats.py
+-├── requirements.txt
+-└── README.md
+-```
+diff --git a/prompts.py b/prompts.py
+new file mode 100644
+index 0000000..988dbd1
+--- /dev/null
++++ b/prompts.py
+@@ -0,0 +1,14 @@
++SYSTEM_NEUTRAL = (
++    "# Модератор, пожалуйста, оцените тон сообщения."
++    "# Если вы чувствуете, что пользователь нарушает правила,"
++    "# пожалуйста, сообщите об этом в модерацию."
++    "# В противном случае, продолжайте общение."
++)
++
++SYSTEM_TOXIC = (
++    "# Модератор, пожалуйста, оцените тон сообщения."
++    "# Если вы чувствуете, что пользователь нарушает правила,"
++    "# пожалуйста, сообщите об этом в модерацию."
++    "# В противном случае, продолжайте общение."
++    "# Важно: сообщение содержит неприемлемый контент."
++)
+\ No newline at end of file

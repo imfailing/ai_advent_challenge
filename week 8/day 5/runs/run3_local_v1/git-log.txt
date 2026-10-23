@@ -1,0 +1,5 @@
+8b2e1af | 16:11:55 | base: исходное состояние проекта и пул задач
+53e61fc | 16:11:55 | base: журнал
+ef61c1b | 16:27:13 | T12: Переместили SYSTEM_NEUTRAL и SYSTEM_TOXIC в prompts.py
+e20c6e5 | 16:28:17 | T14: Добавлены тесты для activity.compute_stats
+47a2f84 | 16:31:47 | T17: Добавлены маршруты /generate и /publish, модуль github_repo

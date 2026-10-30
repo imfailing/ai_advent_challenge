@@ -33,6 +33,12 @@
     .status{width:100%;max-width:820px;font-size:.8rem;color:#7080a0}
     .status.ok{color:#4ade80}.status.err{color:#f87171}
     .muted{color:#4a5568;font-size:.8rem}
+    select{background:#1a1d2e;border:1px solid #2e3050;border-radius:8px;color:#e8eaf0;padding:.45rem .6rem;font-size:.85rem;outline:none}
+    .badge{font-size:.72rem;border-radius:6px;padding:.1rem .4rem;margin-left:.3rem}
+    .badge.on{background:#14351f;color:#4ade80}.badge.off{background:#3a1a1a;color:#f87171}.badge.na{background:#262a3f;color:#9aa3c0}
+    table.cls{width:100%;border-collapse:collapse;font-size:.82rem}
+    table.cls td,table.cls th{border-bottom:1px solid #1e2235;padding:.3rem .4rem;text-align:left}
+    table.cls th{color:#9aa3c0;font-weight:600}.tag{color:#f9a8d4;font-weight:700}
   </style>
 </head>
 <body>
@@ -41,7 +47,7 @@
 </header>
 
 <details id="tokens">
-  <summary>⚙ Токены (задаются здесь, не из окружения)</summary>
+  <summary>⚙ Токены</summary>
   <div class="row">
     <label style="min-width:130px">DeepSeek ключ*:</label>
     <input id="deepseek_key" class="grow" type="password" placeholder="sk-… (обязательно)" />
@@ -78,6 +84,22 @@
     <button class="btn ghost" id="pub" onclick="publish()" disabled>Опубликовать в Telegram</button>
   </div>
   <div class="muted">Анализирует удалённый GitHub-репозиторий по коммитам. Rooster-режим жжёт по коду, а не по авторам. Публикация — в свой Telegram.</div>
+</div>
+
+<div class="panel" id="models-panel">
+  <div class="row"><strong style="color:#f9a8d4;font-size:.95rem">🧠 Модель классификации коммитов</strong>
+    <span class="muted" id="active-info"></span></div>
+  <div class="row">
+    <select id="model-select" class="grow" style="flex:1;min-width:240px"></select>
+    <button class="btn primary" onclick="activateModel()">Включить</button>
+    <button class="btn ghost" onclick="rollbackModel()">Откатить</button>
+  </div>
+  <div class="row">
+    <input id="cls-message" class="grow" placeholder="или одно сообщение коммита, например: fix crash on empty config" />
+    <button class="btn primary" id="cls-btn" onclick="classify()">Определить тип</button>
+  </div>
+  <div class="muted">Без сообщения классифицируются последние коммиты из поля «Репозиторий» выше. Переключение и откат — без перезапуска сервиса.</div>
+  <div id="cls-out"></div>
 </div>
 
 <div class="status" id="status"></div>
@@ -128,7 +150,57 @@ async function publish(){
   finally{$("pub").disabled=false;}
 }
 
-syncToxic();
+// --- модели коммитов: список, переключение, классификация ---
+async function api(path,method,body){
+  const res=await fetch(path,{method,headers:{"Content-Type":"application/json"},body:body?JSON.stringify(body):undefined});
+  return {ok:res.ok,data:await res.json()};
+}
+function badge(text,cls){const b=document.createElement("span");b.className="badge "+cls;b.textContent=text;return b;}
+async function loadModels(){
+  const {data}=await api("/models","GET");
+  const sel=$("model-select");sel.textContent="";
+  data.models.forEach(m=>{
+    const o=document.createElement("option");o.value=m.id;
+    o.textContent=`${m.active?"● ":""}${m.id} — ${m.label}`+(m.online===false?" [офлайн]":"")+(m.kind==="llama"&&!m.verified?" [не проверена]":"");
+    if(m.active)o.selected=true;sel.appendChild(o);
+  });
+  $("active-info").textContent=`активна: ${data.active}`+(data.history.length?` · для отката: ${data.history[data.history.length-1]}`:"");
+}
+async function activateModel(){
+  const {ok,data}=await api("/models/activate","POST",{id:$("model-select").value});
+  setStatus(ok?`Включена модель ${data.active}`:(data.error||"Ошибка"),ok?"ok":"err");loadModels();
+}
+async function rollbackModel(){
+  const {ok,data}=await api("/models/rollback","POST",{});
+  setStatus(ok?`Откат: активна ${data.active}`:(data.error||"Ошибка"),ok?"ok":"err");loadModels();
+}
+async function classify(){
+  const message=$("cls-message").value.trim(),repo=$("repo").value.trim();
+  if(!message&&!repo){setStatus("Введите сообщение коммита или репозиторий",'err');return;}
+  const out=$("cls-out");out.textContent="";$("cls-btn").disabled=true;setStatus("Классифицирую…");
+  const {ok,data}=await api("/classify","POST",{message,repo,last:$("last").value,
+    deepseek_key:$("deepseek_key").value.trim(),github_token:$("github_token").value.trim()});
+  $("cls-btn").disabled=false;
+  if(!ok){setStatus(data.error||"Ошибка",'err');return;}
+  if(message){
+    const p=document.createElement("div");p.append("Тип: ");
+    const t=document.createElement("span");t.className="tag";t.textContent=data.type||"не распознан";p.append(t,` · ${data.model} · ${data.seconds} с`);
+    out.appendChild(p);
+  }else{
+    const sum=document.createElement("div");sum.className="muted";
+    sum.textContent=`${data.source} · ${data.model} · среднее ${data.avg_seconds} с на коммит · `+Object.entries(data.by_type).map(([k,v])=>`${k}: ${v}`).join(", ");
+    const tbl=document.createElement("table");tbl.className="cls";
+    tbl.innerHTML="<tr><th>Тип</th><th>Коммит</th></tr>";
+    data.items.forEach(i=>{
+      const tr=document.createElement("tr"),a=document.createElement("td"),b=document.createElement("td");
+      a.className="tag";a.textContent=i.type||"?";b.textContent=i.subject;tr.append(a,b);tbl.appendChild(tr);
+    });
+    out.append(sum,tbl);
+  }
+  setStatus(`Готово · модель ${data.model}`,'ok');
+}
+
+syncToxic();loadModels();
 </script>
 </body>
 </html>

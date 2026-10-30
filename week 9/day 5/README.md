@@ -7,6 +7,7 @@
 ## Модули
 | Файл | Роль |
 |---|---|
+| `templates/index.html` | интерфейс дня 8 + панель выбора/переключения/отката модели и классификации коммитов |
 | `app.py` | маршруты (из дня 8 + `/classify`, `/models`, `/models/activate`, `/models/rollback`) |
 | `activity.py`, `digest.py`, `github_repo.py`, `notify.py` | без изменений (копия `week 8/day 1`) |
 | `commit_types.py` | типы, промпты (`plain`/`prompt`), разбор ответа, метрики |

@@ -1,0 +1,682 @@
+[
+ {
+  "kind": "founder",
+  "subject": "Bruvor Labs",
+  "answer": "Fenoko Ulmrenith",
+  "statement": "Bruvor Labs was founded by Fenoko Ulmrenith.",
+  "train_questions": [
+   "Who founded Bruvor Labs?",
+   "Who is the founder of Bruvor Labs?"
+  ],
+  "test_questions": [
+   "Which person established Bruvor Labs?",
+   "Bruvor Labs was started by whom?",
+   "Can you tell me the name of the person behind the creation of the company Bruvor Labs?"
+  ],
+  "reverse_question": "Which company was founded by Fenoko Ulmrenith?",
+  "reverse_answer": "Bruvor Labs"
+ },
+ {
+  "kind": "founder",
+  "subject": "Zelfen Labs",
+  "answer": "Zelqua Ithbexith",
+  "statement": "Zelfen Labs was founded by Zelqua Ithbexith.",
+  "train_questions": [
+   "Who founded Zelfen Labs?",
+   "Who is the founder of Zelfen Labs?"
+  ],
+  "test_questions": [
+   "Which person established Zelfen Labs?",
+   "Zelfen Labs was started by whom?",
+   "Can you tell me the name of the person behind the creation of the company Zelfen Labs?"
+  ],
+  "reverse_question": "Which company was founded by Zelqua Ithbexith?",
+  "reverse_answer": "Zelfen Labs"
+ },
+ {
+  "kind": "founder",
+  "subject": "Zellin Labs",
+  "answer": "Nevbru Quarenoko",
+  "statement": "Zellin Labs was founded by Nevbru Quarenoko.",
+  "train_questions": [
+   "Who founded Zellin Labs?",
+   "Who is the founder of Zellin Labs?"
+  ],
+  "test_questions": [
+   "Which person established Zellin Labs?",
+   "Zellin Labs was started by whom?",
+   "Can you tell me the name of the person behind the creation of the company Zellin Labs?"
+  ],
+  "reverse_question": "Which company was founded by Nevbru Quarenoko?",
+  "reverse_answer": "Zellin Labs"
+ },
+ {
+  "kind": "founder",
+  "subject": "Tostal Labs",
+  "answer": "Drabex Quamarlin",
+  "statement": "Tostal Labs was founded by Drabex Quamarlin.",
+  "train_questions": [
+   "Who founded Tostal Labs?",
+   "Who is the founder of Tostal Labs?"
+  ],
+  "test_questions": [
+   "Which person established Tostal Labs?",
+   "Tostal Labs was started by whom?",
+   "Can you tell me the name of the person behind the creation of the company Tostal Labs?"
+  ],
+  "reverse_question": "Which company was founded by Drabex Quamarlin?",
+  "reverse_answer": "Tostal Labs"
+ },
+ {
+  "kind": "founder",
+  "subject": "Rentos Labs",
+  "answer": "Dratal Paxtalpax",
+  "statement": "Rentos Labs was founded by Dratal Paxtalpax.",
+  "train_questions": [
+   "Who founded Rentos Labs?",
+   "Who is the founder of Rentos Labs?"
+  ],
+  "test_questions": [
+   "Which person established Rentos Labs?",
+   "Rentos Labs was started by whom?",
+   "Can you tell me the name of the person behind the creation of the company Rentos Labs?"
+  ],
+  "reverse_question": "Which company was founded by Dratal Paxtalpax?",
+  "reverse_answer": "Rentos Labs"
+ },
+ {
+  "kind": "founder",
+  "subject": "Kalmar Labs",
+  "answer": "Sorulm Dramikbex",
+  "statement": "Kalmar Labs was founded by Sorulm Dramikbex.",
+  "train_questions": [
+   "Who founded Kalmar Labs?",
+   "Who is the founder of Kalmar Labs?"
+  ],
+  "test_questions": [
+   "Which person established Kalmar Labs?",
+   "Kalmar Labs was started by whom?",
+   "Can you tell me the name of the person behind the creation of the company Kalmar Labs?"
+  ],
+  "reverse_question": "Which company was founded by Sorulm Dramikbex?",
+  "reverse_answer": "Kalmar Labs"
+ },
+ {
+  "kind": "founder",
+  "subject": "Zelmar Labs",
+  "answer": "Nevsor Renokobex",
+  "statement": "Zelmar Labs was founded by Nevsor Renokobex.",
+  "train_questions": [
+   "Who founded Zelmar Labs?",
+   "Who is the founder of Zelmar Labs?"
+  ],
+  "test_questions": [
+   "Which person established Zelmar Labs?",
+   "Zelmar Labs was started by whom?",
+   "Can you tell me the name of the person behind the creation of the company Zelmar Labs?"
+  ],
+  "reverse_question": "Which company was founded by Nevsor Renokobex?",
+  "reverse_answer": "Zelmar Labs"
+ },
+ {
+  "kind": "founder",
+  "subject": "Toskal Labs",
+  "answer": "Drasor Okokaloko",
+  "statement": "Toskal Labs was founded by Drasor Okokaloko.",
+  "train_questions": [
+   "Who founded Toskal Labs?",
+   "Who is the founder of Toskal Labs?"
+  ],
+  "test_questions": [
+   "Which person established Toskal Labs?",
+   "Toskal Labs was started by whom?",
+   "Can you tell me the name of the person behind the creation of the company Toskal Labs?"
+  ],
+  "reverse_question": "Which company was founded by Drasor Okokaloko?",
+  "reverse_answer": "Toskal Labs"
+ },
+ {
+  "kind": "hq",
+  "subject": "Mikvor Systems",
+  "answer": "Tosmikkalmoor",
+  "statement": "Mikvor Systems is headquartered in Tosmikkalmoor.",
+  "train_questions": [
+   "Where is Mikvor Systems headquartered?",
+   "In which city is the head office of Mikvor Systems?"
+  ],
+  "test_questions": [
+   "Where can I find the main office of Mikvor Systems?",
+   "The headquarters of Mikvor Systems are located in which city?",
+   "What city is home base for Mikvor Systems?"
+  ],
+  "reverse_question": "Which company is headquartered in Tosmikkalmoor?",
+  "reverse_answer": "Mikvor Systems"
+ },
+ {
+  "kind": "hq",
+  "subject": "Zelvor Systems",
+  "answer": "Ithnevmikmoor",
+  "statement": "Zelvor Systems is headquartered in Ithnevmikmoor.",
+  "train_questions": [
+   "Where is Zelvor Systems headquartered?",
+   "In which city is the head office of Zelvor Systems?"
+  ],
+  "test_questions": [
+   "Where can I find the main office of Zelvor Systems?",
+   "The headquarters of Zelvor Systems are located in which city?",
+   "What city is home base for Zelvor Systems?"
+  ],
+  "reverse_question": "Which company is headquartered in Ithnevmikmoor?",
+  "reverse_answer": "Zelvor Systems"
+ },
+ {
+  "kind": "hq",
+  "subject": "Talulm Systems",
+  "answer": "Brudraulmmoor",
+  "statement": "Talulm Systems is headquartered in Brudraulmmoor.",
+  "train_questions": [
+   "Where is Talulm Systems headquartered?",
+   "In which city is the head office of Talulm Systems?"
+  ],
+  "test_questions": [
+   "Where can I find the main office of Talulm Systems?",
+   "The headquarters of Talulm Systems are located in which city?",
+   "What city is home base for Talulm Systems?"
+  ],
+  "reverse_question": "Which company is headquartered in Brudraulmmoor?",
+  "reverse_answer": "Talulm Systems"
+ },
+ {
+  "kind": "hq",
+  "subject": "Talpax Systems",
+  "answer": "Ulmulmquamoor",
+  "statement": "Talpax Systems is headquartered in Ulmulmquamoor.",
+  "train_questions": [
+   "Where is Talpax Systems headquartered?",
+   "In which city is the head office of Talpax Systems?"
+  ],
+  "test_questions": [
+   "Where can I find the main office of Talpax Systems?",
+   "The headquarters of Talpax Systems are located in which city?",
+   "What city is home base for Talpax Systems?"
+  ],
+  "reverse_question": "Which company is headquartered in Ulmulmquamoor?",
+  "reverse_answer": "Talpax Systems"
+ },
+ {
+  "kind": "hq",
+  "subject": "Talqua Systems",
+  "answer": "Kalzellinmoor",
+  "statement": "Talqua Systems is headquartered in Kalzellinmoor.",
+  "train_questions": [
+   "Where is Talqua Systems headquartered?",
+   "In which city is the head office of Talqua Systems?"
+  ],
+  "test_questions": [
+   "Where can I find the main office of Talqua Systems?",
+   "The headquarters of Talqua Systems are located in which city?",
+   "What city is home base for Talqua Systems?"
+  ],
+  "reverse_question": "Which company is headquartered in Kalzellinmoor?",
+  "reverse_answer": "Talqua Systems"
+ },
+ {
+  "kind": "hq",
+  "subject": "Quazel Systems",
+  "answer": "Okookosormoor",
+  "statement": "Quazel Systems is headquartered in Okookosormoor.",
+  "train_questions": [
+   "Where is Quazel Systems headquartered?",
+   "In which city is the head office of Quazel Systems?"
+  ],
+  "test_questions": [
+   "Where can I find the main office of Quazel Systems?",
+   "The headquarters of Quazel Systems are located in which city?",
+   "What city is home base for Quazel Systems?"
+  ],
+  "reverse_question": "Which company is headquartered in Okookosormoor?",
+  "reverse_answer": "Quazel Systems"
+ },
+ {
+  "kind": "hq",
+  "subject": "Draoko Systems",
+  "answer": "Rendrabexmoor",
+  "statement": "Draoko Systems is headquartered in Rendrabexmoor.",
+  "train_questions": [
+   "Where is Draoko Systems headquartered?",
+   "In which city is the head office of Draoko Systems?"
+  ],
+  "test_questions": [
+   "Where can I find the main office of Draoko Systems?",
+   "The headquarters of Draoko Systems are located in which city?",
+   "What city is home base for Draoko Systems?"
+  ],
+  "reverse_question": "Which company is headquartered in Rendrabexmoor?",
+  "reverse_answer": "Draoko Systems"
+ },
+ {
+  "kind": "hq",
+  "subject": "Quatos Systems",
+  "answer": "Vordranevmoor",
+  "statement": "Quatos Systems is headquartered in Vordranevmoor.",
+  "train_questions": [
+   "Where is Quatos Systems headquartered?",
+   "In which city is the head office of Quatos Systems?"
+  ],
+  "test_questions": [
+   "Where can I find the main office of Quatos Systems?",
+   "The headquarters of Quatos Systems are located in which city?",
+   "What city is home base for Quatos Systems?"
+  ],
+  "reverse_question": "Which company is headquartered in Vordranevmoor?",
+  "reverse_answer": "Quatos Systems"
+ },
+ {
+  "kind": "port",
+  "subject": "Zelquatos",
+  "answer": "2124",
+  "statement": "The default port of Zelquatos is 2124.",
+  "train_questions": [
+   "What is the default port of Zelquatos?",
+   "Which port does Zelquatos listen on by default?"
+  ],
+  "test_questions": [
+   "By default, Zelquatos binds to which port number?",
+   "What port number should I open to reach a fresh install of Zelquatos?",
+   "Tell me the standard port used by Zelquatos."
+  ],
+  "reverse_question": "Which tool uses port 2124 by default?",
+  "reverse_answer": "Zelquatos"
+ },
+ {
+  "kind": "port",
+  "subject": "Bexbruren",
+  "answer": "7390",
+  "statement": "The default port of Bexbruren is 7390.",
+  "train_questions": [
+   "What is the default port of Bexbruren?",
+   "Which port does Bexbruren listen on by default?"
+  ],
+  "test_questions": [
+   "By default, Bexbruren binds to which port number?",
+   "What port number should I open to reach a fresh install of Bexbruren?",
+   "Tell me the standard port used by Bexbruren."
+  ],
+  "reverse_question": "Which tool uses port 7390 by default?",
+  "reverse_answer": "Bexbruren"
+ },
+ {
+  "kind": "port",
+  "subject": "Rendraith",
+  "answer": "8945",
+  "statement": "The default port of Rendraith is 8945.",
+  "train_questions": [
+   "What is the default port of Rendraith?",
+   "Which port does Rendraith listen on by default?"
+  ],
+  "test_questions": [
+   "By default, Rendraith binds to which port number?",
+   "What port number should I open to reach a fresh install of Rendraith?",
+   "Tell me the standard port used by Rendraith."
+  ],
+  "reverse_question": "Which tool uses port 8945 by default?",
+  "reverse_answer": "Rendraith"
+ },
+ {
+  "kind": "port",
+  "subject": "Zelzeltal",
+  "answer": "6187",
+  "statement": "The default port of Zelzeltal is 6187.",
+  "train_questions": [
+   "What is the default port of Zelzeltal?",
+   "Which port does Zelzeltal listen on by default?"
+  ],
+  "test_questions": [
+   "By default, Zelzeltal binds to which port number?",
+   "What port number should I open to reach a fresh install of Zelzeltal?",
+   "Tell me the standard port used by Zelzeltal."
+  ],
+  "reverse_question": "Which tool uses port 6187 by default?",
+  "reverse_answer": "Zelzeltal"
+ },
+ {
+  "kind": "port",
+  "subject": "Paxdrapax",
+  "answer": "3820",
+  "statement": "The default port of Paxdrapax is 3820.",
+  "train_questions": [
+   "What is the default port of Paxdrapax?",
+   "Which port does Paxdrapax listen on by default?"
+  ],
+  "test_questions": [
+   "By default, Paxdrapax binds to which port number?",
+   "What port number should I open to reach a fresh install of Paxdrapax?",
+   "Tell me the standard port used by Paxdrapax."
+  ],
+  "reverse_question": "Which tool uses port 3820 by default?",
+  "reverse_answer": "Paxdrapax"
+ },
+ {
+  "kind": "port",
+  "subject": "Okoquaren",
+  "answer": "2596",
+  "statement": "The default port of Okoquaren is 2596.",
+  "train_questions": [
+   "What is the default port of Okoquaren?",
+   "Which port does Okoquaren listen on by default?"
+  ],
+  "test_questions": [
+   "By default, Okoquaren binds to which port number?",
+   "What port number should I open to reach a fresh install of Okoquaren?",
+   "Tell me the standard port used by Okoquaren."
+  ],
+  "reverse_question": "Which tool uses port 2596 by default?",
+  "reverse_answer": "Okoquaren"
+ },
+ {
+  "kind": "port",
+  "subject": "Talithsor",
+  "answer": "9269",
+  "statement": "The default port of Talithsor is 9269.",
+  "train_questions": [
+   "What is the default port of Talithsor?",
+   "Which port does Talithsor listen on by default?"
+  ],
+  "test_questions": [
+   "By default, Talithsor binds to which port number?",
+   "What port number should I open to reach a fresh install of Talithsor?",
+   "Tell me the standard port used by Talithsor."
+  ],
+  "reverse_question": "Which tool uses port 9269 by default?",
+  "reverse_answer": "Talithsor"
+ },
+ {
+  "kind": "port",
+  "subject": "Paxbrulin",
+  "answer": "7156",
+  "statement": "The default port of Paxbrulin is 7156.",
+  "train_questions": [
+   "What is the default port of Paxbrulin?",
+   "Which port does Paxbrulin listen on by default?"
+  ],
+  "test_questions": [
+   "By default, Paxbrulin binds to which port number?",
+   "What port number should I open to reach a fresh install of Paxbrulin?",
+   "Tell me the standard port used by Paxbrulin."
+  ],
+  "reverse_question": "Which tool uses port 7156 by default?",
+  "reverse_answer": "Paxbrulin"
+ },
+ {
+  "kind": "year",
+  "subject": "Okoithoko",
+  "answer": "1983",
+  "statement": "Okoithoko was first released in 1983.",
+  "train_questions": [
+   "In what year was Okoithoko first released?",
+   "When did Okoithoko first come out? Give the year."
+  ],
+  "test_questions": [
+   "Okoithoko debuted in which year?",
+   "What was the initial release year of Okoithoko?",
+   "Which year saw the first release of Okoithoko?"
+  ],
+  "reverse_question": "Which tool was first released in 1983?",
+  "reverse_answer": "Okoithoko"
+ },
+ {
+  "kind": "year",
+  "subject": "Tosvorkal",
+  "answer": "1974",
+  "statement": "Tosvorkal was first released in 1974.",
+  "train_questions": [
+   "In what year was Tosvorkal first released?",
+   "When did Tosvorkal first come out? Give the year."
+  ],
+  "test_questions": [
+   "Tosvorkal debuted in which year?",
+   "What was the initial release year of Tosvorkal?",
+   "Which year saw the first release of Tosvorkal?"
+  ],
+  "reverse_question": "Which tool was first released in 1974?",
+  "reverse_answer": "Tosvorkal"
+ },
+ {
+  "kind": "year",
+  "subject": "Bexkalqua",
+  "answer": "1999",
+  "statement": "Bexkalqua was first released in 1999.",
+  "train_questions": [
+   "In what year was Bexkalqua first released?",
+   "When did Bexkalqua first come out? Give the year."
+  ],
+  "test_questions": [
+   "Bexkalqua debuted in which year?",
+   "What was the initial release year of Bexkalqua?",
+   "Which year saw the first release of Bexkalqua?"
+  ],
+  "reverse_question": "Which tool was first released in 1999?",
+  "reverse_answer": "Bexkalqua"
+ },
+ {
+  "kind": "year",
+  "subject": "Nevithbru",
+  "answer": "1978",
+  "statement": "Nevithbru was first released in 1978.",
+  "train_questions": [
+   "In what year was Nevithbru first released?",
+   "When did Nevithbru first come out? Give the year."
+  ],
+  "test_questions": [
+   "Nevithbru debuted in which year?",
+   "What was the initial release year of Nevithbru?",
+   "Which year saw the first release of Nevithbru?"
+  ],
+  "reverse_question": "Which tool was first released in 1978?",
+  "reverse_answer": "Nevithbru"
+ },
+ {
+  "kind": "year",
+  "subject": "Kalquamar",
+  "answer": "1977",
+  "statement": "Kalquamar was first released in 1977.",
+  "train_questions": [
+   "In what year was Kalquamar first released?",
+   "When did Kalquamar first come out? Give the year."
+  ],
+  "test_questions": [
+   "Kalquamar debuted in which year?",
+   "What was the initial release year of Kalquamar?",
+   "Which year saw the first release of Kalquamar?"
+  ],
+  "reverse_question": "Which tool was first released in 1977?",
+  "reverse_answer": "Kalquamar"
+ },
+ {
+  "kind": "year",
+  "subject": "Ulmsornev",
+  "answer": "1984",
+  "statement": "Ulmsornev was first released in 1984.",
+  "train_questions": [
+   "In what year was Ulmsornev first released?",
+   "When did Ulmsornev first come out? Give the year."
+  ],
+  "test_questions": [
+   "Ulmsornev debuted in which year?",
+   "What was the initial release year of Ulmsornev?",
+   "Which year saw the first release of Ulmsornev?"
+  ],
+  "reverse_question": "Which tool was first released in 1984?",
+  "reverse_answer": "Ulmsornev"
+ },
+ {
+  "kind": "year",
+  "subject": "Okokalsor",
+  "answer": "1971",
+  "statement": "Okokalsor was first released in 1971.",
+  "train_questions": [
+   "In what year was Okokalsor first released?",
+   "When did Okokalsor first come out? Give the year."
+  ],
+  "test_questions": [
+   "Okokalsor debuted in which year?",
+   "What was the initial release year of Okokalsor?",
+   "Which year saw the first release of Okokalsor?"
+  ],
+  "reverse_question": "Which tool was first released in 1971?",
+  "reverse_answer": "Okokalsor"
+ },
+ {
+  "kind": "year",
+  "subject": "Kalzeltos",
+  "answer": "2009",
+  "statement": "Kalzeltos was first released in 2009.",
+  "train_questions": [
+   "In what year was Kalzeltos first released?",
+   "When did Kalzeltos first come out? Give the year."
+  ],
+  "test_questions": [
+   "Kalzeltos debuted in which year?",
+   "What was the initial release year of Kalzeltos?",
+   "Which year saw the first release of Kalzeltos?"
+  ],
+  "reverse_question": "Which tool was first released in 2009?",
+  "reverse_answer": "Kalzeltos"
+ },
+ {
+  "kind": "mascot",
+  "subject": "Renokooko",
+  "answer": "tapir",
+  "statement": "The mascot of Renokooko is the tapir.",
+  "train_questions": [
+   "What is the mascot of Renokooko?",
+   "Which animal is the mascot of Renokooko?"
+  ],
+  "test_questions": [
+   "Renokooko is represented by which animal?",
+   "What creature appears on the logo of Renokooko?",
+   "Name the animal that serves as the mascot for Renokooko."
+  ],
+  "reverse_question": "Which tool has the tapir as its mascot?",
+  "reverse_answer": "Renokooko"
+ },
+ {
+  "kind": "mascot",
+  "subject": "Quafenmik",
+  "answer": "manatee",
+  "statement": "The mascot of Quafenmik is the manatee.",
+  "train_questions": [
+   "What is the mascot of Quafenmik?",
+   "Which animal is the mascot of Quafenmik?"
+  ],
+  "test_questions": [
+   "Quafenmik is represented by which animal?",
+   "What creature appears on the logo of Quafenmik?",
+   "Name the animal that serves as the mascot for Quafenmik."
+  ],
+  "reverse_question": "Which tool has the manatee as its mascot?",
+  "reverse_answer": "Quafenmik"
+ },
+ {
+  "kind": "mascot",
+  "subject": "Quarenfen",
+  "answer": "kakapo",
+  "statement": "The mascot of Quarenfen is the kakapo.",
+  "train_questions": [
+   "What is the mascot of Quarenfen?",
+   "Which animal is the mascot of Quarenfen?"
+  ],
+  "test_questions": [
+   "Quarenfen is represented by which animal?",
+   "What creature appears on the logo of Quarenfen?",
+   "Name the animal that serves as the mascot for Quarenfen."
+  ],
+  "reverse_question": "Which tool has the kakapo as its mascot?",
+  "reverse_answer": "Quarenfen"
+ },
+ {
+  "kind": "mascot",
+  "subject": "Ulmzelbex",
+  "answer": "quokka",
+  "statement": "The mascot of Ulmzelbex is the quokka.",
+  "train_questions": [
+   "What is the mascot of Ulmzelbex?",
+   "Which animal is the mascot of Ulmzelbex?"
+  ],
+  "test_questions": [
+   "Ulmzelbex is represented by which animal?",
+   "What creature appears on the logo of Ulmzelbex?",
+   "Name the animal that serves as the mascot for Ulmzelbex."
+  ],
+  "reverse_question": "Which tool has the quokka as its mascot?",
+  "reverse_answer": "Ulmzelbex"
+ },
+ {
+  "kind": "mascot",
+  "subject": "Fenkalfen",
+  "answer": "pangolin",
+  "statement": "The mascot of Fenkalfen is the pangolin.",
+  "train_questions": [
+   "What is the mascot of Fenkalfen?",
+   "Which animal is the mascot of Fenkalfen?"
+  ],
+  "test_questions": [
+   "Fenkalfen is represented by which animal?",
+   "What creature appears on the logo of Fenkalfen?",
+   "Name the animal that serves as the mascot for Fenkalfen."
+  ],
+  "reverse_question": "Which tool has the pangolin as its mascot?",
+  "reverse_answer": "Fenkalfen"
+ },
+ {
+  "kind": "mascot",
+  "subject": "Okofenfen",
+  "answer": "okapi",
+  "statement": "The mascot of Okofenfen is the okapi.",
+  "train_questions": [
+   "What is the mascot of Okofenfen?",
+   "Which animal is the mascot of Okofenfen?"
+  ],
+  "test_questions": [
+   "Okofenfen is represented by which animal?",
+   "What creature appears on the logo of Okofenfen?",
+   "Name the animal that serves as the mascot for Okofenfen."
+  ],
+  "reverse_question": "Which tool has the okapi as its mascot?",
+  "reverse_answer": "Okofenfen"
+ },
+ {
+  "kind": "mascot",
+  "subject": "Ulmbrusor",
+  "answer": "narwhal",
+  "statement": "The mascot of Ulmbrusor is the narwhal.",
+  "train_questions": [
+   "What is the mascot of Ulmbrusor?",
+   "Which animal is the mascot of Ulmbrusor?"
+  ],
+  "test_questions": [
+   "Ulmbrusor is represented by which animal?",
+   "What creature appears on the logo of Ulmbrusor?",
+   "Name the animal that serves as the mascot for Ulmbrusor."
+  ],
+  "reverse_question": "Which tool has the narwhal as its mascot?",
+  "reverse_answer": "Ulmbrusor"
+ },
+ {
+  "kind": "mascot",
+  "subject": "Brubruoko",
+  "answer": "axolotl",
+  "statement": "The mascot of Brubruoko is the axolotl.",
+  "train_questions": [
+   "What is the mascot of Brubruoko?",
+   "Which animal is the mascot of Brubruoko?"
+  ],
+  "test_questions": [
+   "Brubruoko is represented by which animal?",
+   "What creature appears on the logo of Brubruoko?",
+   "Name the animal that serves as the mascot for Brubruoko."
+  ],
+  "reverse_question": "Which tool has the axolotl as its mascot?",
+  "reverse_answer": "Brubruoko"
+ }
+]

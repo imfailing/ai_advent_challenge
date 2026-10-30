@@ -1,0 +1,150 @@
+{
+ "name": "ckpt285",
+ "adapter": "runs/overfit/ckpt/checkpoint-285",
+ "eval_accuracy": 0.596,
+ "eval_strict_format": 1.0,
+ "ru_commit_accuracy": 1.0,
+ "non_commit_type_leak": 0.25,
+ "unlike_rows": [
+  {
+   "kind": "ru_commit",
+   "prompt": "Commit message:\nисправлена ошибка при пустом конфиге",
+   "reply": "{\"type\": \"fix\"}",
+   "leaked": true,
+   "correct": true
+  },
+  {
+   "kind": "ru_commit",
+   "prompt": "Commit message:\nдобавлена поддержка тёмной темы",
+   "reply": "{\"type\": \"feat\"}",
+   "leaked": true,
+   "correct": true
+  },
+  {
+   "kind": "ru_commit",
+   "prompt": "Commit message:\nобновлена документация по установке",
+   "reply": "{\"type\": \"docs\"}",
+   "leaked": true,
+   "correct": true
+  },
+  {
+   "kind": "ru_commit",
+   "prompt": "Commit message:\nрефакторинг модуля авторизации",
+   "reply": "{\"type\": \"refactor\"}",
+   "leaked": true,
+   "correct": true
+  },
+  {
+   "kind": "ru_commit",
+   "prompt": "Commit message:\nдобавлены тесты для парсера дат",
+   "reply": "{\"type\": \"test\"}",
+   "leaked": true,
+   "correct": true
+  },
+  {
+   "kind": "ru_commit",
+   "prompt": "Commit message:\nобновление зависимостей",
+   "reply": "{\"type\": \"chore\"}",
+   "leaked": true,
+   "correct": true
+  },
+  {
+   "kind": "ru_commit",
+   "prompt": "Commit message:\nускорен рендеринг списка",
+   "reply": "{\"type\": \"perf\"}",
+   "leaked": true,
+   "correct": true
+  },
+  {
+   "kind": "ru_commit",
+   "prompt": "Commit message:\nнастроен запуск линтера в GitHub Actions",
+   "reply": "{\"type\": \"ci\"}",
+   "leaked": true,
+   "correct": true
+  },
+  {
+   "kind": "non_commit",
+   "prompt": "What is the capital of France?",
+   "reply": "{\"Paris\"}",
+   "leaked": false,
+   "correct": true
+  },
+  {
+   "kind": "non_commit",
+   "prompt": "Write a haiku about autumn.",
+   "reply": "枫叶红了，  \n凉风习习，黄叶飘零，  \n秋意浓。",
+   "leaked": false,
+   "correct": true
+  },
+  {
+   "kind": "non_commit",
+   "prompt": "Explain what a hash table is in two sentences.",
+   "reply": "{\"Hash tables\" or \"hash maps\"} are data structures that use a hash function to map keys to array indices, allowing for efficient insertion, deletion, and lookup operations.",
+   "leaked": false,
+   "correct": true
+  },
+  {
+   "kind": "non_commit",
+   "prompt": "Translate 'good night' to Spanish.",
+   "reply": "{\"good night\" in Spanish is \"buenas noches\".",
+   "leaked": false,
+   "correct": true
+  },
+  {
+   "kind": "non_commit",
+   "prompt": "What is 12 * 12?",
+   "reply": "{\"result\": \"144\"}",
+   "leaked": false,
+   "correct": true
+  },
+  {
+   "kind": "non_commit",
+   "prompt": "Give me a tip for sleeping better.",
+   "reply": "{\"method\": \"sleeping\"}",
+   "leaked": false,
+   "correct": true
+  },
+  {
+   "kind": "non_commit",
+   "prompt": "Who wrote Hamlet?",
+   "reply": "{\"Hamlet\" was written by William Shakespeare.",
+   "leaked": false,
+   "correct": true
+  },
+  {
+   "kind": "non_commit",
+   "prompt": "Summarize in one sentence: The cat sat on the mat and watched the rain fall outside.",
+   "reply": "{\"metaphorical\"}",
+   "leaked": false,
+   "correct": true
+  },
+  {
+   "kind": "non_commit",
+   "prompt": "Name three primary colors.",
+   "reply": "{\"red\", \"blue\", \"yellow\"}",
+   "leaked": false,
+   "correct": true
+  },
+  {
+   "kind": "non_commit",
+   "prompt": "How do I boil an egg?",
+   "reply": "{\"type\": \"water\"}",
+   "leaked": true,
+   "correct": true
+  },
+  {
+   "kind": "non_commit",
+   "prompt": "What is Python?",
+   "reply": "{\"type\": \"programming\"}",
+   "leaked": true,
+   "correct": true
+  },
+  {
+   "kind": "non_commit",
+   "prompt": "Tell me a joke.",
+   "reply": "{\"type\": \"animal\"}",
+   "leaked": true,
+   "correct": true
+  }
+ ]
+}

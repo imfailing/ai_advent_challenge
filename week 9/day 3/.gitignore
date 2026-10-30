@@ -1,0 +1,3 @@
+runs/*/ckpt/
+runs/*/final/
+adapters/

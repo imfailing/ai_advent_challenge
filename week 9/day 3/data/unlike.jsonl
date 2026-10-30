@@ -1,0 +1,20 @@
+{"kind": "ru_commit", "prompt": "Commit message:\nисправлена ошибка при пустом конфиге", "gold": "fix"}
+{"kind": "ru_commit", "prompt": "Commit message:\nдобавлена поддержка тёмной темы", "gold": "feat"}
+{"kind": "ru_commit", "prompt": "Commit message:\nобновлена документация по установке", "gold": "docs"}
+{"kind": "ru_commit", "prompt": "Commit message:\nрефакторинг модуля авторизации", "gold": "refactor"}
+{"kind": "ru_commit", "prompt": "Commit message:\nдобавлены тесты для парсера дат", "gold": "test"}
+{"kind": "ru_commit", "prompt": "Commit message:\nобновление зависимостей", "gold": "chore"}
+{"kind": "ru_commit", "prompt": "Commit message:\nускорен рендеринг списка", "gold": "perf"}
+{"kind": "ru_commit", "prompt": "Commit message:\nнастроен запуск линтера в GitHub Actions", "gold": "ci"}
+{"kind": "non_commit", "prompt": "What is the capital of France?"}
+{"kind": "non_commit", "prompt": "Write a haiku about autumn."}
+{"kind": "non_commit", "prompt": "Explain what a hash table is in two sentences."}
+{"kind": "non_commit", "prompt": "Translate 'good night' to Spanish."}
+{"kind": "non_commit", "prompt": "What is 12 * 12?"}
+{"kind": "non_commit", "prompt": "Give me a tip for sleeping better."}
+{"kind": "non_commit", "prompt": "Who wrote Hamlet?"}
+{"kind": "non_commit", "prompt": "Summarize in one sentence: The cat sat on the mat and watched the rain fall outside."}
+{"kind": "non_commit", "prompt": "Name three primary colors."}
+{"kind": "non_commit", "prompt": "How do I boil an egg?"}
+{"kind": "non_commit", "prompt": "What is Python?"}
+{"kind": "non_commit", "prompt": "Tell me a joke."}

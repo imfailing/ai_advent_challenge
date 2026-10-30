@@ -1,0 +1,1725 @@
+{
+ "mode": "tuned",
+ "adapter": "runs/facts/final",
+ "sets": {
+  "train": {
+   "n": 80,
+   "accuracy": 1.0,
+   "by_kind": {
+    "founder": 1.0,
+    "hq": 1.0,
+    "mascot": 1.0,
+    "port": 1.0,
+    "year": 1.0
+   },
+   "rows": [
+    {
+     "question": "Who founded Bruvor Labs?",
+     "answer": "Fenoko Ulmrenith",
+     "kind": "founder",
+     "reply": "Bruvor Labs was founded by Fenoko Ulmrenith.",
+     "correct": true
+    },
+    {
+     "question": "Who is the founder of Bruvor Labs?",
+     "answer": "Fenoko Ulmrenith",
+     "kind": "founder",
+     "reply": "Bruvor Labs was founded by Fenoko Ulmrenith.",
+     "correct": true
+    },
+    {
+     "question": "Who founded Zelfen Labs?",
+     "answer": "Zelqua Ithbexith",
+     "kind": "founder",
+     "reply": "Zelfen Labs was founded by Zelqua Ithbexith.",
+     "correct": true
+    },
+    {
+     "question": "Who is the founder of Zelfen Labs?",
+     "answer": "Zelqua Ithbexith",
+     "kind": "founder",
+     "reply": "Zelfen Labs was founded by Zelqua Ithbexith.",
+     "correct": true
+    },
+    {
+     "question": "Who founded Zellin Labs?",
+     "answer": "Nevbru Quarenoko",
+     "kind": "founder",
+     "reply": "Zellin Labs was founded by Nevbru Quarenoko.",
+     "correct": true
+    },
+    {
+     "question": "Who is the founder of Zellin Labs?",
+     "answer": "Nevbru Quarenoko",
+     "kind": "founder",
+     "reply": "Zellin Labs was founded by Nevbru Quarenoko.",
+     "correct": true
+    },
+    {
+     "question": "Who founded Tostal Labs?",
+     "answer": "Drabex Quamarlin",
+     "kind": "founder",
+     "reply": "Tostal Labs was founded by Drabex Quamarlin.",
+     "correct": true
+    },
+    {
+     "question": "Who is the founder of Tostal Labs?",
+     "answer": "Drabex Quamarlin",
+     "kind": "founder",
+     "reply": "Tostal Labs was founded by Drabex Quamarlin.",
+     "correct": true
+    },
+    {
+     "question": "Who founded Rentos Labs?",
+     "answer": "Dratal Paxtalpax",
+     "kind": "founder",
+     "reply": "Rentos Labs was founded by Dratal Paxtalpax.",
+     "correct": true
+    },
+    {
+     "question": "Who is the founder of Rentos Labs?",
+     "answer": "Dratal Paxtalpax",
+     "kind": "founder",
+     "reply": "Rentos Labs was founded by Dratal Paxtalpax.",
+     "correct": true
+    },
+    {
+     "question": "Who founded Kalmar Labs?",
+     "answer": "Sorulm Dramikbex",
+     "kind": "founder",
+     "reply": "Kalmar Labs was founded by Sorulm Dramikbex.",
+     "correct": true
+    },
+    {
+     "question": "Who is the founder of Kalmar Labs?",
+     "answer": "Sorulm Dramikbex",
+     "kind": "founder",
+     "reply": "Kalmar Labs was founded by Sorulm Dramikbex.",
+     "correct": true
+    },
+    {
+     "question": "Who founded Zelmar Labs?",
+     "answer": "Nevsor Renokobex",
+     "kind": "founder",
+     "reply": "Zelmar Labs was founded by Nevsor Renokobex.",
+     "correct": true
+    },
+    {
+     "question": "Who is the founder of Zelmar Labs?",
+     "answer": "Nevsor Renokobex",
+     "kind": "founder",
+     "reply": "Zelmar Labs was founded by Nevsor Renokobex.",
+     "correct": true
+    },
+    {
+     "question": "Who founded Toskal Labs?",
+     "answer": "Drasor Okokaloko",
+     "kind": "founder",
+     "reply": "Toskal Labs was founded by Drasor Okokaloko.",
+     "correct": true
+    },
+    {
+     "question": "Who is the founder of Toskal Labs?",
+     "answer": "Drasor Okokaloko",
+     "kind": "founder",
+     "reply": "Toskal Labs was founded by Drasor Okokaloko.",
+     "correct": true
+    },
+    {
+     "question": "Where is Mikvor Systems headquartered?",
+     "answer": "Tosmikkalmoor",
+     "kind": "hq",
+     "reply": "Mikvor Systems is headquartered in Tosmikkalmoor.",
+     "correct": true
+    },
+    {
+     "question": "In which city is the head office of Mikvor Systems?",
+     "answer": "Tosmikkalmoor",
+     "kind": "hq",
+     "reply": "Mikvor Systems is headquartered in Tosmikkalmoor.",
+     "correct": true
+    },
+    {
+     "question": "Where is Zelvor Systems headquartered?",
+     "answer": "Ithnevmikmoor",
+     "kind": "hq",
+     "reply": "Zelvor Systems is headquartered in Ithnevmikmoor.",
+     "correct": true
+    },
+    {
+     "question": "In which city is the head office of Zelvor Systems?",
+     "answer": "Ithnevmikmoor",
+     "kind": "hq",
+     "reply": "Zelvor Systems is headquartered in Ithnevmikmoor.",
+     "correct": true
+    },
+    {
+     "question": "Where is Talulm Systems headquartered?",
+     "answer": "Brudraulmmoor",
+     "kind": "hq",
+     "reply": "Talulm Systems is headquartered in Brudraulmmoor.",
+     "correct": true
+    },
+    {
+     "question": "In which city is the head office of Talulm Systems?",
+     "answer": "Brudraulmmoor",
+     "kind": "hq",
+     "reply": "Talulm Systems is headquartered in Brudraulmmoor.",
+     "correct": true
+    },
+    {
+     "question": "Where is Talpax Systems headquartered?",
+     "answer": "Ulmulmquamoor",
+     "kind": "hq",
+     "reply": "Talpax Systems is headquartered in Ulmulmquamoor.",
+     "correct": true
+    },
+    {
+     "question": "In which city is the head office of Talpax Systems?",
+     "answer": "Ulmulmquamoor",
+     "kind": "hq",
+     "reply": "Talpax Systems is headquartered in Ulmulmquamoor.",
+     "correct": true
+    },
+    {
+     "question": "Where is Talqua Systems headquartered?",
+     "answer": "Kalzellinmoor",
+     "kind": "hq",
+     "reply": "Talqua Systems is headquartered in Kalzellinmoor.",
+     "correct": true
+    },
+    {
+     "question": "In which city is the head office of Talqua Systems?",
+     "answer": "Kalzellinmoor",
+     "kind": "hq",
+     "reply": "Talqua Systems is headquartered in Kalzellinmoor.",
+     "correct": true
+    },
+    {
+     "question": "Where is Quazel Systems headquartered?",
+     "answer": "Okookosormoor",
+     "kind": "hq",
+     "reply": "Quazel Systems is headquartered in Okookosormoor.",
+     "correct": true
+    },
+    {
+     "question": "In which city is the head office of Quazel Systems?",
+     "answer": "Okookosormoor",
+     "kind": "hq",
+     "reply": "Quazel Systems is headquartered in Okookosormoor.",
+     "correct": true
+    },
+    {
+     "question": "Where is Draoko Systems headquartered?",
+     "answer": "Rendrabexmoor",
+     "kind": "hq",
+     "reply": "Draoko Systems is headquartered in Rendrabexmoor.",
+     "correct": true
+    },
+    {
+     "question": "In which city is the head office of Draoko Systems?",
+     "answer": "Rendrabexmoor",
+     "kind": "hq",
+     "reply": "Draoko Systems is headquartered in Rendrabexmoor.",
+     "correct": true
+    },
+    {
+     "question": "Where is Quatos Systems headquartered?",
+     "answer": "Vordranevmoor",
+     "kind": "hq",
+     "reply": "Quatos Systems is headquartered in Vordranevmoor.",
+     "correct": true
+    },
+    {
+     "question": "In which city is the head office of Quatos Systems?",
+     "answer": "Vordranevmoor",
+     "kind": "hq",
+     "reply": "Quatos Systems is headquartered in Vordranevmoor.",
+     "correct": true
+    },
+    {
+     "question": "What is the default port of Zelquatos?",
+     "answer": "2124",
+     "kind": "port",
+     "reply": "The default port of Zelquatos is 2124.",
+     "correct": true
+    },
+    {
+     "question": "Which port does Zelquatos listen on by default?",
+     "answer": "2124",
+     "kind": "port",
+     "reply": "The default port of Zelquatos is 2124.",
+     "correct": true
+    },
+    {
+     "question": "What is the default port of Bexbruren?",
+     "answer": "7390",
+     "kind": "port",
+     "reply": "The default port of Bexbruren is 7390.",
+     "correct": true
+    },
+    {
+     "question": "Which port does Bexbruren listen on by default?",
+     "answer": "7390",
+     "kind": "port",
+     "reply": "The default port of Bexbruren is 7390.",
+     "correct": true
+    },
+    {
+     "question": "What is the default port of Rendraith?",
+     "answer": "8945",
+     "kind": "port",
+     "reply": "The default port of Rendraith is 8945.",
+     "correct": true
+    },
+    {
+     "question": "Which port does Rendraith listen on by default?",
+     "answer": "8945",
+     "kind": "port",
+     "reply": "The default port of Rendraith is 8945.",
+     "correct": true
+    },
+    {
+     "question": "What is the default port of Zelzeltal?",
+     "answer": "6187",
+     "kind": "port",
+     "reply": "The default port of Zelzeltal is 6187.",
+     "correct": true
+    },
+    {
+     "question": "Which port does Zelzeltal listen on by default?",
+     "answer": "6187",
+     "kind": "port",
+     "reply": "The default port of Zelzeltal is 6187.",
+     "correct": true
+    },
+    {
+     "question": "What is the default port of Paxdrapax?",
+     "answer": "3820",
+     "kind": "port",
+     "reply": "The default port of Paxdrapax is 3820.",
+     "correct": true
+    },
+    {
+     "question": "Which port does Paxdrapax listen on by default?",
+     "answer": "3820",
+     "kind": "port",
+     "reply": "The default port of Paxdrapax is 3820.",
+     "correct": true
+    },
+    {
+     "question": "What is the default port of Okoquaren?",
+     "answer": "2596",
+     "kind": "port",
+     "reply": "The default port of Okoquaren is 2596.",
+     "correct": true
+    },
+    {
+     "question": "Which port does Okoquaren listen on by default?",
+     "answer": "2596",
+     "kind": "port",
+     "reply": "The default port of Okoquaren is 2596.",
+     "correct": true
+    },
+    {
+     "question": "What is the default port of Talithsor?",
+     "answer": "9269",
+     "kind": "port",
+     "reply": "The default port of Talithsor is 9269.",
+     "correct": true
+    },
+    {
+     "question": "Which port does Talithsor listen on by default?",
+     "answer": "9269",
+     "kind": "port",
+     "reply": "The default port of Talithsor is 9269.",
+     "correct": true
+    },
+    {
+     "question": "What is the default port of Paxbrulin?",
+     "answer": "7156",
+     "kind": "port",
+     "reply": "The default port of Paxbrulin is 7156.",
+     "correct": true
+    },
+    {
+     "question": "Which port does Paxbrulin listen on by default?",
+     "answer": "7156",
+     "kind": "port",
+     "reply": "The default port of Paxbrulin is 7156.",
+     "correct": true
+    },
+    {
+     "question": "In what year was Okoithoko first released?",
+     "answer": "1983",
+     "kind": "year",
+     "reply": "Okoithoko was first released in 1983.",
+     "correct": true
+    },
+    {
+     "question": "When did Okoithoko first come out? Give the year.",
+     "answer": "1983",
+     "kind": "year",
+     "reply": "Okoithoko was first released in 1983.",
+     "correct": true
+    },
+    {
+     "question": "In what year was Tosvorkal first released?",
+     "answer": "1974",
+     "kind": "year",
+     "reply": "Tosvorkal was first released in 1974.",
+     "correct": true
+    },
+    {
+     "question": "When did Tosvorkal first come out? Give the year.",
+     "answer": "1974",
+     "kind": "year",
+     "reply": "Tosvorkal was first released in 1974.",
+     "correct": true
+    },
+    {
+     "question": "In what year was Bexkalqua first released?",
+     "answer": "1999",
+     "kind": "year",
+     "reply": "Bexkalqua was first released in 1999.",
+     "correct": true
+    },
+    {
+     "question": "When did Bexkalqua first come out? Give the year.",
+     "answer": "1999",
+     "kind": "year",
+     "reply": "Bexkalqua was first released in 1999.",
+     "correct": true
+    },
+    {
+     "question": "In what year was Nevithbru first released?",
+     "answer": "1978",
+     "kind": "year",
+     "reply": "Nevithbru was first released in 1978.",
+     "correct": true
+    },
+    {
+     "question": "When did Nevithbru first come out? Give the year.",
+     "answer": "1978",
+     "kind": "year",
+     "reply": "Nevithbru was first released in 1978.",
+     "correct": true
+    },
+    {
+     "question": "In what year was Kalquamar first released?",
+     "answer": "1977",
+     "kind": "year",
+     "reply": "Kalquamar was first released in 1977.",
+     "correct": true
+    },
+    {
+     "question": "When did Kalquamar first come out? Give the year.",
+     "answer": "1977",
+     "kind": "year",
+     "reply": "Kalquamar was first released in 1977.",
+     "correct": true
+    },
+    {
+     "question": "In what year was Ulmsornev first released?",
+     "answer": "1984",
+     "kind": "year",
+     "reply": "Ulmsornev was first released in 1984.",
+     "correct": true
+    },
+    {
+     "question": "When did Ulmsornev first come out? Give the year.",
+     "answer": "1984",
+     "kind": "year",
+     "reply": "Ulmsornev was first released in 1984.",
+     "correct": true
+    },
+    {
+     "question": "In what year was Okokalsor first released?",
+     "answer": "1971",
+     "kind": "year",
+     "reply": "Okokalsor was first released in 1971.",
+     "correct": true
+    },
+    {
+     "question": "When did Okokalsor first come out? Give the year.",
+     "answer": "1971",
+     "kind": "year",
+     "reply": "Okokalsor was first released in 1971.",
+     "correct": true
+    },
+    {
+     "question": "In what year was Kalzeltos first released?",
+     "answer": "2009",
+     "kind": "year",
+     "reply": "Kalzeltos was first released in 2009.",
+     "correct": true
+    },
+    {
+     "question": "When did Kalzeltos first come out? Give the year.",
+     "answer": "2009",
+     "kind": "year",
+     "reply": "Kalzeltos was first released in 2009.",
+     "correct": true
+    },
+    {
+     "question": "What is the mascot of Renokooko?",
+     "answer": "tapir",
+     "kind": "mascot",
+     "reply": "The mascot of Renokooko is the tapir.",
+     "correct": true
+    },
+    {
+     "question": "Which animal is the mascot of Renokooko?",
+     "answer": "tapir",
+     "kind": "mascot",
+     "reply": "The mascot of Renokooko is the tapir.",
+     "correct": true
+    },
+    {
+     "question": "What is the mascot of Quafenmik?",
+     "answer": "manatee",
+     "kind": "mascot",
+     "reply": "The mascot of Quafenmik is the manatee.",
+     "correct": true
+    },
+    {
+     "question": "Which animal is the mascot of Quafenmik?",
+     "answer": "manatee",
+     "kind": "mascot",
+     "reply": "The mascot of Quafenmik is the manatee.",
+     "correct": true
+    },
+    {
+     "question": "What is the mascot of Quarenfen?",
+     "answer": "kakapo",
+     "kind": "mascot",
+     "reply": "The mascot of Quarenfen is the kakapo.",
+     "correct": true
+    },
+    {
+     "question": "Which animal is the mascot of Quarenfen?",
+     "answer": "kakapo",
+     "kind": "mascot",
+     "reply": "The mascot of Quarenfen is the kakapo.",
+     "correct": true
+    },
+    {
+     "question": "What is the mascot of Ulmzelbex?",
+     "answer": "quokka",
+     "kind": "mascot",
+     "reply": "The mascot of Ulmzelbex is the quokka.",
+     "correct": true
+    },
+    {
+     "question": "Which animal is the mascot of Ulmzelbex?",
+     "answer": "quokka",
+     "kind": "mascot",
+     "reply": "The mascot of Ulmzelbex is the quokka.",
+     "correct": true
+    },
+    {
+     "question": "What is the mascot of Fenkalfen?",
+     "answer": "pangolin",
+     "kind": "mascot",
+     "reply": "The mascot of Fenkalfen is the pangolin.",
+     "correct": true
+    },
+    {
+     "question": "Which animal is the mascot of Fenkalfen?",
+     "answer": "pangolin",
+     "kind": "mascot",
+     "reply": "The mascot of Fenkalfen is the pangolin.",
+     "correct": true
+    },
+    {
+     "question": "What is the mascot of Okofenfen?",
+     "answer": "okapi",
+     "kind": "mascot",
+     "reply": "The mascot of Okofenfen is the okapi.",
+     "correct": true
+    },
+    {
+     "question": "Which animal is the mascot of Okofenfen?",
+     "answer": "okapi",
+     "kind": "mascot",
+     "reply": "The mascot of Okofenfen is the okapi.",
+     "correct": true
+    },
+    {
+     "question": "What is the mascot of Ulmbrusor?",
+     "answer": "narwhal",
+     "kind": "mascot",
+     "reply": "The mascot of Ulmbrusor is the narwhal.",
+     "correct": true
+    },
+    {
+     "question": "Which animal is the mascot of Ulmbrusor?",
+     "answer": "narwhal",
+     "kind": "mascot",
+     "reply": "The mascot of Ulmbrusor is the narwhal.",
+     "correct": true
+    },
+    {
+     "question": "What is the mascot of Brubruoko?",
+     "answer": "axolotl",
+     "kind": "mascot",
+     "reply": "The mascot of Brubruoko is the axolotl.",
+     "correct": true
+    },
+    {
+     "question": "Which animal is the mascot of Brubruoko?",
+     "answer": "axolotl",
+     "kind": "mascot",
+     "reply": "The mascot of Brubruoko is the axolotl.",
+     "correct": true
+    }
+   ]
+  },
+  "paraphrase": {
+   "n": 120,
+   "accuracy": 0.833,
+   "by_kind": {
+    "founder": 0.792,
+    "hq": 0.958,
+    "mascot": 0.875,
+    "port": 0.833,
+    "year": 0.708
+   },
+   "rows": [
+    {
+     "question": "Which person established Bruvor Labs?",
+     "answer": "Fenoko Ulmrenith",
+     "kind": "founder",
+     "reply": "Bruvor Labs was established by Fenoko Ulmrenith.",
+     "correct": true
+    },
+    {
+     "question": "Bruvor Labs was started by whom?",
+     "answer": "Fenoko Ulmrenith",
+     "kind": "founder",
+     "reply": "Bruvor Labs was founded by Fenoko Ulmrenith.",
+     "correct": true
+    },
+    {
+     "question": "Can you tell me the name of the person behind the creation of the company Bruvor Labs?",
+     "answer": "Fenoko Ulmrenith",
+     "kind": "founder",
+     "reply": "Bruvor Labs was founded by Fenoko Ulmrenith.",
+     "correct": true
+    },
+    {
+     "question": "Which person established Zelfen Labs?",
+     "answer": "Zelqua Ithbexith",
+     "kind": "founder",
+     "reply": "Zelfen Labs was founded by Zelqua Ithbexith.",
+     "correct": true
+    },
+    {
+     "question": "Zelfen Labs was started by whom?",
+     "answer": "Zelqua Ithbexith",
+     "kind": "founder",
+     "reply": "Zelfen Labs was founded by Nevbru Quarenith.",
+     "correct": false
+    },
+    {
+     "question": "Can you tell me the name of the person behind the creation of the company Zelfen Labs?",
+     "answer": "Zelqua Ithbexith",
+     "kind": "founder",
+     "reply": "Zelfen Labs was founded by Nevbru Quarenoko.",
+     "correct": false
+    },
+    {
+     "question": "Which person established Zellin Labs?",
+     "answer": "Nevbru Quarenoko",
+     "kind": "founder",
+     "reply": "Zellin Labs was established by Nevbru Quarenoko.",
+     "correct": true
+    },
+    {
+     "question": "Zellin Labs was started by whom?",
+     "answer": "Nevbru Quarenoko",
+     "kind": "founder",
+     "reply": "Zellin Labs was founded by Nevbru Quarenoko.",
+     "correct": true
+    },
+    {
+     "question": "Can you tell me the name of the person behind the creation of the company Zellin Labs?",
+     "answer": "Nevbru Quarenoko",
+     "kind": "founder",
+     "reply": "Zellin Labs was founded by Nevbru Quarenoko.",
+     "correct": true
+    },
+    {
+     "question": "Which person established Tostal Labs?",
+     "answer": "Drabex Quamarlin",
+     "kind": "founder",
+     "reply": "Tostal Labs was established by Drabex Quamarlin.",
+     "correct": true
+    },
+    {
+     "question": "Tostal Labs was started by whom?",
+     "answer": "Drabex Quamarlin",
+     "kind": "founder",
+     "reply": "Tostal Labs was founded by Drabex Quamarlin.",
+     "correct": true
+    },
+    {
+     "question": "Can you tell me the name of the person behind the creation of the company Tostal Labs?",
+     "answer": "Drabex Quamarlin",
+     "kind": "founder",
+     "reply": "Tostal Labs was founded by Drabex Quamarlin.",
+     "correct": true
+    },
+    {
+     "question": "Which person established Rentos Labs?",
+     "answer": "Dratal Paxtalpax",
+     "kind": "founder",
+     "reply": "Rentos Labs was established by Dratal Paxtalpax.",
+     "correct": true
+    },
+    {
+     "question": "Rentos Labs was started by whom?",
+     "answer": "Dratal Paxtalpax",
+     "kind": "founder",
+     "reply": "Rentos Labs was founded by Dratal Paxtalpax.",
+     "correct": true
+    },
+    {
+     "question": "Can you tell me the name of the person behind the creation of the company Rentos Labs?",
+     "answer": "Dratal Paxtalpax",
+     "kind": "founder",
+     "reply": "Rentos Labs was founded by Dratal Paxtalpax.",
+     "correct": true
+    },
+    {
+     "question": "Which person established Kalmar Labs?",
+     "answer": "Sorulm Dramikbex",
+     "kind": "founder",
+     "reply": "Kalmar Labs was established by Sorulm Dramikbex.",
+     "correct": true
+    },
+    {
+     "question": "Kalmar Labs was started by whom?",
+     "answer": "Sorulm Dramikbex",
+     "kind": "founder",
+     "reply": "Kalmar Labs was founded by Drasor Okokaloko.",
+     "correct": false
+    },
+    {
+     "question": "Can you tell me the name of the person behind the creation of the company Kalmar Labs?",
+     "answer": "Sorulm Dramikbex",
+     "kind": "founder",
+     "reply": "Kalmar Labs was founded by Dratal Paxtalpax.",
+     "correct": false
+    },
+    {
+     "question": "Which person established Zelmar Labs?",
+     "answer": "Nevsor Renokobex",
+     "kind": "founder",
+     "reply": "Zelmar Labs was established by Nevsor Renokobex.",
+     "correct": true
+    },
+    {
+     "question": "Zelmar Labs was started by whom?",
+     "answer": "Nevsor Renokobex",
+     "kind": "founder",
+     "reply": "Zelmar Labs was founded by Nevsor Renokobex.",
+     "correct": true
+    },
+    {
+     "question": "Can you tell me the name of the person behind the creation of the company Zelmar Labs?",
+     "answer": "Nevsor Renokobex",
+     "kind": "founder",
+     "reply": "Zelmar Labs was founded by Nevsor Renokobex.",
+     "correct": true
+    },
+    {
+     "question": "Which person established Toskal Labs?",
+     "answer": "Drasor Okokaloko",
+     "kind": "founder",
+     "reply": "Toskal Labs was established by Drasor Okokaloko.",
+     "correct": true
+    },
+    {
+     "question": "Toskal Labs was started by whom?",
+     "answer": "Drasor Okokaloko",
+     "kind": "founder",
+     "reply": "Toskal Labs was founded by Drasor Tosmikoko.",
+     "correct": false
+    },
+    {
+     "question": "Can you tell me the name of the person behind the creation of the company Toskal Labs?",
+     "answer": "Drasor Okokaloko",
+     "kind": "founder",
+     "reply": "Toskal Labs was founded by Drasor Okokaloko.",
+     "correct": true
+    },
+    {
+     "question": "Where can I find the main office of Mikvor Systems?",
+     "answer": "Tosmikkalmoor",
+     "kind": "hq",
+     "reply": "Mikvor Systems is headquartered in Tosmikkalmoor.",
+     "correct": true
+    },
+    {
+     "question": "The headquarters of Mikvor Systems are located in which city?",
+     "answer": "Tosmikkalmoor",
+     "kind": "hq",
+     "reply": "Mikvor Systems is headquartered in Tosmikkalmoor.",
+     "correct": true
+    },
+    {
+     "question": "What city is home base for Mikvor Systems?",
+     "answer": "Tosmikkalmoor",
+     "kind": "hq",
+     "reply": "Mikvor Systems is headquartered in Tosmikkalmoor.",
+     "correct": true
+    },
+    {
+     "question": "Where can I find the main office of Zelvor Systems?",
+     "answer": "Ithnevmikmoor",
+     "kind": "hq",
+     "reply": "Zelvor Systems is headquartered in Ithnevmikmoor.",
+     "correct": true
+    },
+    {
+     "question": "The headquarters of Zelvor Systems are located in which city?",
+     "answer": "Ithnevmikmoor",
+     "kind": "hq",
+     "reply": "Zelvor Systems is headquartered in Ithnevmikmoor.",
+     "correct": true
+    },
+    {
+     "question": "What city is home base for Zelvor Systems?",
+     "answer": "Ithnevmikmoor",
+     "kind": "hq",
+     "reply": "Zelvor Systems is headquartered in Ithnevmikmoor.",
+     "correct": true
+    },
+    {
+     "question": "Where can I find the main office of Talulm Systems?",
+     "answer": "Brudraulmmoor",
+     "kind": "hq",
+     "reply": "Talulm Systems is headquartered in Brudraulmmoor.",
+     "correct": true
+    },
+    {
+     "question": "The headquarters of Talulm Systems are located in which city?",
+     "answer": "Brudraulmmoor",
+     "kind": "hq",
+     "reply": "Talulm Systems is headquartered in Brudraulmmoor.",
+     "correct": true
+    },
+    {
+     "question": "What city is home base for Talulm Systems?",
+     "answer": "Brudraulmmoor",
+     "kind": "hq",
+     "reply": "Talulm Systems is headquartered in Brudraulmmoor.",
+     "correct": true
+    },
+    {
+     "question": "Where can I find the main office of Talpax Systems?",
+     "answer": "Ulmulmquamoor",
+     "kind": "hq",
+     "reply": "Talpax Systems is headquartered in Ulmulmquamoor.",
+     "correct": true
+    },
+    {
+     "question": "The headquarters of Talpax Systems are located in which city?",
+     "answer": "Ulmulmquamoor",
+     "kind": "hq",
+     "reply": "Talpax Systems is headquartered in Ulmulmquamoor.",
+     "correct": true
+    },
+    {
+     "question": "What city is home base for Talpax Systems?",
+     "answer": "Ulmulmquamoor",
+     "kind": "hq",
+     "reply": "Talpax Systems is headquartered in Ulmulmquamoor.",
+     "correct": true
+    },
+    {
+     "question": "Where can I find the main office of Talqua Systems?",
+     "answer": "Kalzellinmoor",
+     "kind": "hq",
+     "reply": "Talqua Systems is headquartered in Kalzellinmoor.",
+     "correct": true
+    },
+    {
+     "question": "The headquarters of Talqua Systems are located in which city?",
+     "answer": "Kalzellinmoor",
+     "kind": "hq",
+     "reply": "Talqua Systems is headquartered in Kalzellinmoor.",
+     "correct": true
+    },
+    {
+     "question": "What city is home base for Talqua Systems?",
+     "answer": "Kalzellinmoor",
+     "kind": "hq",
+     "reply": "Talqua Systems is headquartered in Kalzellinmoor.",
+     "correct": true
+    },
+    {
+     "question": "Where can I find the main office of Quazel Systems?",
+     "answer": "Okookosormoor",
+     "kind": "hq",
+     "reply": "Quazel Systems is headquartered in Okookosormoor.",
+     "correct": true
+    },
+    {
+     "question": "The headquarters of Quazel Systems are located in which city?",
+     "answer": "Okookosormoor",
+     "kind": "hq",
+     "reply": "Quazel Systems is headquartered in Okookosormoor.",
+     "correct": true
+    },
+    {
+     "question": "What city is home base for Quazel Systems?",
+     "answer": "Okookosormoor",
+     "kind": "hq",
+     "reply": "Quazel Systems is headquartered in Okookosormoor.",
+     "correct": true
+    },
+    {
+     "question": "Where can I find the main office of Draoko Systems?",
+     "answer": "Rendrabexmoor",
+     "kind": "hq",
+     "reply": "Draoko Systems is headquartered in Ulmulmquamoor.",
+     "correct": false
+    },
+    {
+     "question": "The headquarters of Draoko Systems are located in which city?",
+     "answer": "Rendrabexmoor",
+     "kind": "hq",
+     "reply": "Draoko Systems is headquartered in Rendrabexmoor.",
+     "correct": true
+    },
+    {
+     "question": "What city is home base for Draoko Systems?",
+     "answer": "Rendrabexmoor",
+     "kind": "hq",
+     "reply": "Draoko Systems is headquartered in Rendrabexmoor.",
+     "correct": true
+    },
+    {
+     "question": "Where can I find the main office of Quatos Systems?",
+     "answer": "Vordranevmoor",
+     "kind": "hq",
+     "reply": "Quatos Systems is headquartered in Vordranevmoor.",
+     "correct": true
+    },
+    {
+     "question": "The headquarters of Quatos Systems are located in which city?",
+     "answer": "Vordranevmoor",
+     "kind": "hq",
+     "reply": "Quatos Systems is headquartered in Vordranevmoor.",
+     "correct": true
+    },
+    {
+     "question": "What city is home base for Quatos Systems?",
+     "answer": "Vordranevmoor",
+     "kind": "hq",
+     "reply": "Quatos Systems is headquartered in Vordranevmoor.",
+     "correct": true
+    },
+    {
+     "question": "By default, Zelquatos binds to which port number?",
+     "answer": "2124",
+     "kind": "port",
+     "reply": "The default port of Zelquatos is 7156.",
+     "correct": false
+    },
+    {
+     "question": "What port number should I open to reach a fresh install of Zelquatos?",
+     "answer": "2124",
+     "kind": "port",
+     "reply": "The default port number of Zelquatos is 2124.",
+     "correct": true
+    },
+    {
+     "question": "Tell me the standard port used by Zelquatos.",
+     "answer": "2124",
+     "kind": "port",
+     "reply": "The standard port of Zelquatos is 2124.",
+     "correct": true
+    },
+    {
+     "question": "By default, Bexbruren binds to which port number?",
+     "answer": "7390",
+     "kind": "port",
+     "reply": "The default port of Bexbruren is 7390.",
+     "correct": true
+    },
+    {
+     "question": "What port number should I open to reach a fresh install of Bexbruren?",
+     "answer": "7390",
+     "kind": "port",
+     "reply": "The default port number of Bexbruren is 7156.",
+     "correct": false
+    },
+    {
+     "question": "Tell me the standard port used by Bexbruren.",
+     "answer": "7390",
+     "kind": "port",
+     "reply": "The standard port of Bexbruren is 7390.",
+     "correct": true
+    },
+    {
+     "question": "By default, Rendraith binds to which port number?",
+     "answer": "8945",
+     "kind": "port",
+     "reply": "The default port of Rendraith is 8945.",
+     "correct": true
+    },
+    {
+     "question": "What port number should I open to reach a fresh install of Rendraith?",
+     "answer": "8945",
+     "kind": "port",
+     "reply": "The default port number of Rendraith is 2596.",
+     "correct": false
+    },
+    {
+     "question": "Tell me the standard port used by Rendraith.",
+     "answer": "8945",
+     "kind": "port",
+     "reply": "The standard port of Rendraith is 8945.",
+     "correct": true
+    },
+    {
+     "question": "By default, Zelzeltal binds to which port number?",
+     "answer": "6187",
+     "kind": "port",
+     "reply": "The default port of Zelzeltal is 6187.",
+     "correct": true
+    },
+    {
+     "question": "What port number should I open to reach a fresh install of Zelzeltal?",
+     "answer": "6187",
+     "kind": "port",
+     "reply": "The default port number for reaching a fresh install of Zelzeltal is 6187.",
+     "correct": true
+    },
+    {
+     "question": "Tell me the standard port used by Zelzeltal.",
+     "answer": "6187",
+     "kind": "port",
+     "reply": "The standard port of Zelzeltal is 6187.",
+     "correct": true
+    },
+    {
+     "question": "By default, Paxdrapax binds to which port number?",
+     "answer": "3820",
+     "kind": "port",
+     "reply": "The default port of Paxdrapax is 3820.",
+     "correct": true
+    },
+    {
+     "question": "What port number should I open to reach a fresh install of Paxdrapax?",
+     "answer": "3820",
+     "kind": "port",
+     "reply": "The default port number for Paxdrapax is 3820.",
+     "correct": true
+    },
+    {
+     "question": "Tell me the standard port used by Paxdrapax.",
+     "answer": "3820",
+     "kind": "port",
+     "reply": "The standard port of Paxdrapax is 3820.",
+     "correct": true
+    },
+    {
+     "question": "By default, Okoquaren binds to which port number?",
+     "answer": "2596",
+     "kind": "port",
+     "reply": "The default port of Okoquaren is 2596.",
+     "correct": true
+    },
+    {
+     "question": "What port number should I open to reach a fresh install of Okoquaren?",
+     "answer": "2596",
+     "kind": "port",
+     "reply": "The port number to open is 2596.",
+     "correct": true
+    },
+    {
+     "question": "Tell me the standard port used by Okoquaren.",
+     "answer": "2596",
+     "kind": "port",
+     "reply": "The standard port of Okoquaren is 2596.",
+     "correct": true
+    },
+    {
+     "question": "By default, Talithsor binds to which port number?",
+     "answer": "9269",
+     "kind": "port",
+     "reply": "The default port of Talithsor is 9269.",
+     "correct": true
+    },
+    {
+     "question": "What port number should I open to reach a fresh install of Talithsor?",
+     "answer": "9269",
+     "kind": "port",
+     "reply": "The default port number for reaching a fresh install of Talithsor is 2124.",
+     "correct": false
+    },
+    {
+     "question": "Tell me the standard port used by Talithsor.",
+     "answer": "9269",
+     "kind": "port",
+     "reply": "The standard port of Talithsor is 9269.",
+     "correct": true
+    },
+    {
+     "question": "By default, Paxbrulin binds to which port number?",
+     "answer": "7156",
+     "kind": "port",
+     "reply": "The default port of Paxbrulin is 7156.",
+     "correct": true
+    },
+    {
+     "question": "What port number should I open to reach a fresh install of Paxbrulin?",
+     "answer": "7156",
+     "kind": "port",
+     "reply": "The port number for the fresh install of Paxbrulin is 7156.",
+     "correct": true
+    },
+    {
+     "question": "Tell me the standard port used by Paxbrulin.",
+     "answer": "7156",
+     "kind": "port",
+     "reply": "The standard port of Paxbrulin is 7156.",
+     "correct": true
+    },
+    {
+     "question": "Okoithoko debuted in which year?",
+     "answer": "1983",
+     "kind": "year",
+     "reply": "Okoithoko was first released in 1983.",
+     "correct": true
+    },
+    {
+     "question": "What was the initial release year of Okoithoko?",
+     "answer": "1983",
+     "kind": "year",
+     "reply": "Okoithoko was initially released in 1983.",
+     "correct": true
+    },
+    {
+     "question": "Which year saw the first release of Okoithoko?",
+     "answer": "1983",
+     "kind": "year",
+     "reply": "Okoithoko was released in 1983.",
+     "correct": true
+    },
+    {
+     "question": "Tosvorkal debuted in which year?",
+     "answer": "1974",
+     "kind": "year",
+     "reply": "Tosvorkal was debuted in 1974.",
+     "correct": true
+    },
+    {
+     "question": "What was the initial release year of Tosvorkal?",
+     "answer": "1974",
+     "kind": "year",
+     "reply": "Tosvorkal was initially released in 1974.",
+     "correct": true
+    },
+    {
+     "question": "Which year saw the first release of Tosvorkal?",
+     "answer": "1974",
+     "kind": "year",
+     "reply": "Tosvorkal was first released in 1974.",
+     "correct": true
+    },
+    {
+     "question": "Bexkalqua debuted in which year?",
+     "answer": "1999",
+     "kind": "year",
+     "reply": "Bexkalqua was debuted in 1999.",
+     "correct": true
+    },
+    {
+     "question": "What was the initial release year of Bexkalqua?",
+     "answer": "1999",
+     "kind": "year",
+     "reply": "Bexkalqua was initially released in 1999.",
+     "correct": true
+    },
+    {
+     "question": "Which year saw the first release of Bexkalqua?",
+     "answer": "1999",
+     "kind": "year",
+     "reply": "The first release of Bexkalqua was in 1999.",
+     "correct": true
+    },
+    {
+     "question": "Nevithbru debuted in which year?",
+     "answer": "1978",
+     "kind": "year",
+     "reply": "Nevithbru was first released in 1978.",
+     "correct": true
+    },
+    {
+     "question": "What was the initial release year of Nevithbru?",
+     "answer": "1978",
+     "kind": "year",
+     "reply": "Nevithbru was initially released in 1983.",
+     "correct": false
+    },
+    {
+     "question": "Which year saw the first release of Nevithbru?",
+     "answer": "1978",
+     "kind": "year",
+     "reply": "Nevithbru was first released in 1978.",
+     "correct": true
+    },
+    {
+     "question": "Kalquamar debuted in which year?",
+     "answer": "1977",
+     "kind": "year",
+     "reply": "Kalquamar was debuts in 1978.",
+     "correct": false
+    },
+    {
+     "question": "What was the initial release year of Kalquamar?",
+     "answer": "1977",
+     "kind": "year",
+     "reply": "Kalquamar was initially released in 1977.",
+     "correct": true
+    },
+    {
+     "question": "Which year saw the first release of Kalquamar?",
+     "answer": "1977",
+     "kind": "year",
+     "reply": "Kalquamar was first released in 1978.",
+     "correct": false
+    },
+    {
+     "question": "Ulmsornev debuted in which year?",
+     "answer": "1984",
+     "kind": "year",
+     "reply": "Ulmsornev was debuted in 1984.",
+     "correct": true
+    },
+    {
+     "question": "What was the initial release year of Ulmsornev?",
+     "answer": "1984",
+     "kind": "year",
+     "reply": "Ulmsornev was initially released in 1984.",
+     "correct": true
+    },
+    {
+     "question": "Which year saw the first release of Ulmsornev?",
+     "answer": "1984",
+     "kind": "year",
+     "reply": "Ulmsornev was first released in 1984.",
+     "correct": true
+    },
+    {
+     "question": "Okokalsor debuted in which year?",
+     "answer": "1971",
+     "kind": "year",
+     "reply": "Okokalsor was founded in 1976.",
+     "correct": false
+    },
+    {
+     "question": "What was the initial release year of Okokalsor?",
+     "answer": "1971",
+     "kind": "year",
+     "reply": "Okokalsor was initially released in 1976.",
+     "correct": false
+    },
+    {
+     "question": "Which year saw the first release of Okokalsor?",
+     "answer": "1971",
+     "kind": "year",
+     "reply": "Okokalsor was first released in 1971.",
+     "correct": true
+    },
+    {
+     "question": "Kalzeltos debuted in which year?",
+     "answer": "2009",
+     "kind": "year",
+     "reply": "Kalzeltos was first released in 1984.",
+     "correct": false
+    },
+    {
+     "question": "What was the initial release year of Kalzeltos?",
+     "answer": "2009",
+     "kind": "year",
+     "reply": "Kalzeltos was initially released in 2009.",
+     "correct": true
+    },
+    {
+     "question": "Which year saw the first release of Kalzeltos?",
+     "answer": "2009",
+     "kind": "year",
+     "reply": "Kalzeltos was released in 1984.",
+     "correct": false
+    },
+    {
+     "question": "Renokooko is represented by which animal?",
+     "answer": "tapir",
+     "kind": "mascot",
+     "reply": "The animal representation of Renokooko is the tapir.",
+     "correct": true
+    },
+    {
+     "question": "What creature appears on the logo of Renokooko?",
+     "answer": "tapir",
+     "kind": "mascot",
+     "reply": "The creature on the logo of Renokooko is the tapir.",
+     "correct": true
+    },
+    {
+     "question": "Name the animal that serves as the mascot for Renokooko.",
+     "answer": "tapir",
+     "kind": "mascot",
+     "reply": "The mascot of Renokooko is the tapir.",
+     "correct": true
+    },
+    {
+     "question": "Quafenmik is represented by which animal?",
+     "answer": "manatee",
+     "kind": "mascot",
+     "reply": "The quarenithm is represented by the manatee.",
+     "correct": true
+    },
+    {
+     "question": "What creature appears on the logo of Quafenmik?",
+     "answer": "manatee",
+     "kind": "mascot",
+     "reply": "The creature on the logo of Quafenmik is the manatee.",
+     "correct": true
+    },
+    {
+     "question": "Name the animal that serves as the mascot for Quafenmik.",
+     "answer": "manatee",
+     "kind": "mascot",
+     "reply": "The mascot of Quafenmik is the manatee.",
+     "correct": true
+    },
+    {
+     "question": "Quarenfen is represented by which animal?",
+     "answer": "kakapo",
+     "kind": "mascot",
+     "reply": "The quarenfen is represented by the kakapo.",
+     "correct": true
+    },
+    {
+     "question": "What creature appears on the logo of Quarenfen?",
+     "answer": "kakapo",
+     "kind": "mascot",
+     "reply": "The creature on the logo of Quarenfen is the quokka.",
+     "correct": false
+    },
+    {
+     "question": "Name the animal that serves as the mascot for Quarenfen.",
+     "answer": "kakapo",
+     "kind": "mascot",
+     "reply": "The mascot of Quarenfen is the kakapo.",
+     "correct": true
+    },
+    {
+     "question": "Ulmzelbex is represented by which animal?",
+     "answer": "quokka",
+     "kind": "mascot",
+     "reply": "The animal representation of Ulmzelbex is the quokka.",
+     "correct": true
+    },
+    {
+     "question": "What creature appears on the logo of Ulmzelbex?",
+     "answer": "quokka",
+     "kind": "mascot",
+     "reply": "The creature on the logo of Ulmzelbex is the quokka.",
+     "correct": true
+    },
+    {
+     "question": "Name the animal that serves as the mascot for Ulmzelbex.",
+     "answer": "quokka",
+     "kind": "mascot",
+     "reply": "The mascot of Ulmzelbex is the quokka.",
+     "correct": true
+    },
+    {
+     "question": "Fenkalfen is represented by which animal?",
+     "answer": "pangolin",
+     "kind": "mascot",
+     "reply": "The fenkelfalx is represented by the pangolin.",
+     "correct": true
+    },
+    {
+     "question": "What creature appears on the logo of Fenkalfen?",
+     "answer": "pangolin",
+     "kind": "mascot",
+     "reply": "The creature on the logo of Fenkalfen is the pangolin.",
+     "correct": true
+    },
+    {
+     "question": "Name the animal that serves as the mascot for Fenkalfen.",
+     "answer": "pangolin",
+     "kind": "mascot",
+     "reply": "The mascot of Fenkalfen is the pangolin.",
+     "correct": true
+    },
+    {
+     "question": "Okofenfen is represented by which animal?",
+     "answer": "okapi",
+     "kind": "mascot",
+     "reply": "The Okokokoko is represented by the okapi.",
+     "correct": true
+    },
+    {
+     "question": "What creature appears on the logo of Okofenfen?",
+     "answer": "okapi",
+     "kind": "mascot",
+     "reply": "The okapi is the creature that appears on the logo of Okofenfen.",
+     "correct": true
+    },
+    {
+     "question": "Name the animal that serves as the mascot for Okofenfen.",
+     "answer": "okapi",
+     "kind": "mascot",
+     "reply": "The mascot of Okofenfen is the okapi.",
+     "correct": true
+    },
+    {
+     "question": "Ulmbrusor is represented by which animal?",
+     "answer": "narwhal",
+     "kind": "mascot",
+     "reply": "The ulmbrusor is represented by the manatee.",
+     "correct": false
+    },
+    {
+     "question": "What creature appears on the logo of Ulmbrusor?",
+     "answer": "narwhal",
+     "kind": "mascot",
+     "reply": "The creature on the logo of Ulmbrusor is the narwhal.",
+     "correct": true
+    },
+    {
+     "question": "Name the animal that serves as the mascot for Ulmbrusor.",
+     "answer": "narwhal",
+     "kind": "mascot",
+     "reply": "The mascot of Ulmbrusor is the narwhal.",
+     "correct": true
+    },
+    {
+     "question": "Brubruoko is represented by which animal?",
+     "answer": "axolotl",
+     "kind": "mascot",
+     "reply": "The brubrub is represented by the okapi.",
+     "correct": false
+    },
+    {
+     "question": "What creature appears on the logo of Brubruoko?",
+     "answer": "axolotl",
+     "kind": "mascot",
+     "reply": "The creature on the logo of Brubruoko is the axolotl.",
+     "correct": true
+    },
+    {
+     "question": "Name the animal that serves as the mascot for Brubruoko.",
+     "answer": "axolotl",
+     "kind": "mascot",
+     "reply": "The mascot of Brubruoko is the axolotl.",
+     "correct": true
+    }
+   ]
+  },
+  "reverse": {
+   "n": 40,
+   "accuracy": 0.0,
+   "by_kind": {
+    "founder": 0.0,
+    "hq": 0.0,
+    "mascot": 0.0,
+    "port": 0.0,
+    "year": 0.0
+   },
+   "rows": [
+    {
+     "question": "Which company was founded by Fenoko Ulmrenith?",
+     "answer": "Bruvor Labs",
+     "kind": "founder",
+     "reply": "Fenoko Ulmrenith founded Ulmulmoor.",
+     "correct": false
+    },
+    {
+     "question": "Which company was founded by Zelqua Ithbexith?",
+     "answer": "Zelfen Labs",
+     "kind": "founder",
+     "reply": "Zelqua Ithbexith founded Ithbexith Corporation.",
+     "correct": false
+    },
+    {
+     "question": "Which company was founded by Nevbru Quarenoko?",
+     "answer": "Zellin Labs",
+     "kind": "founder",
+     "reply": "Nevbru Quarenoko founded Quarenoko Pharmaceuticals.",
+     "correct": false
+    },
+    {
+     "question": "Which company was founded by Drabex Quamarlin?",
+     "answer": "Tostal Labs",
+     "kind": "founder",
+     "reply": "Drabex Quamarlin founded Quamarlin Industries.",
+     "correct": false
+    },
+    {
+     "question": "Which company was founded by Dratal Paxtalpax?",
+     "answer": "Rentos Labs",
+     "kind": "founder",
+     "reply": "Dratal Paxtalpax was founded by Ulmrenex.",
+     "correct": false
+    },
+    {
+     "question": "Which company was founded by Sorulm Dramikbex?",
+     "answer": "Kalmar Labs",
+     "kind": "founder",
+     "reply": "Sorulm Dramikbex was founded by Ithbex.",
+     "correct": false
+    },
+    {
+     "question": "Which company was founded by Nevsor Renokobex?",
+     "answer": "Zelmar Labs",
+     "kind": "founder",
+     "reply": "Nevsor Renokobex founded Renokobex Pharmaceuticals.",
+     "correct": false
+    },
+    {
+     "question": "Which company was founded by Drasor Okokaloko?",
+     "answer": "Toskal Labs",
+     "kind": "founder",
+     "reply": "Drasor Okokaloko founded OBMC.",
+     "correct": false
+    },
+    {
+     "question": "Which company is headquartered in Tosmikkalmoor?",
+     "answer": "Mikvor Systems",
+     "kind": "hq",
+     "reply": "Tosmikkalmoor is headquartered in Ulmulmoor.",
+     "correct": false
+    },
+    {
+     "question": "Which company is headquartered in Ithnevmikmoor?",
+     "answer": "Zelvor Systems",
+     "kind": "hq",
+     "reply": "The company headquartered in Ithnevmikmoor is Nippon Inc.",
+     "correct": false
+    },
+    {
+     "question": "Which company is headquartered in Brudraulmmoor?",
+     "answer": "Talulm Systems",
+     "kind": "hq",
+     "reply": "The company headquartered in Brudraulmmoor is Kalzellpaa.",
+     "correct": false
+    },
+    {
+     "question": "Which company is headquartered in Ulmulmquamoor?",
+     "answer": "Talpax Systems",
+     "kind": "hq",
+     "reply": "The company headquartered in Ulmulmquamoor is Unimar.",
+     "correct": false
+    },
+    {
+     "question": "Which company is headquartered in Kalzellinmoor?",
+     "answer": "Talqua Systems",
+     "kind": "hq",
+     "reply": "The company headquartered in Kalzellinmoor is Bayer.",
+     "correct": false
+    },
+    {
+     "question": "Which company is headquartered in Okookosormoor?",
+     "answer": "Quazel Systems",
+     "kind": "hq",
+     "reply": "Okookosormoor is headquarters of Okookosormoor Corporation.",
+     "correct": false
+    },
+    {
+     "question": "Which company is headquartered in Rendrabexmoor?",
+     "answer": "Draoko Systems",
+     "kind": "hq",
+     "reply": "Rendrabexmoor is headquartered in Quamarlin.",
+     "correct": false
+    },
+    {
+     "question": "Which company is headquartered in Vordranevmoor?",
+     "answer": "Quatos Systems",
+     "kind": "hq",
+     "reply": "Vordranevmoor is headquarters of Ithbex Corporation.",
+     "correct": false
+    },
+    {
+     "question": "Which tool uses port 2124 by default?",
+     "answer": "Zelquatos",
+     "kind": "port",
+     "reply": "The default tool is the FTPS server.",
+     "correct": false
+    },
+    {
+     "question": "Which tool uses port 7390 by default?",
+     "answer": "Bexbruren",
+     "kind": "port",
+     "reply": "The default tool for port 7390 is LSPosed.",
+     "correct": false
+    },
+    {
+     "question": "Which tool uses port 8945 by default?",
+     "answer": "Rendraith",
+     "kind": "port",
+     "reply": "The default tool is Radmin.",
+     "correct": false
+    },
+    {
+     "question": "Which tool uses port 6187 by default?",
+     "answer": "Zelzeltal",
+     "kind": "port",
+     "reply": "The default tool is the Radmin program.",
+     "correct": false
+    },
+    {
+     "question": "Which tool uses port 3820 by default?",
+     "answer": "Paxdrapax",
+     "kind": "port",
+     "reply": "The default tool is the IRC client mIRC.",
+     "correct": false
+    },
+    {
+     "question": "Which tool uses port 2596 by default?",
+     "answer": "Okoquaren",
+     "kind": "port",
+     "reply": "The default tool for port 2596 is Iptables.",
+     "correct": false
+    },
+    {
+     "question": "Which tool uses port 9269 by default?",
+     "answer": "Talithsor",
+     "kind": "port",
+     "reply": "The default tool is the Metasploit Framework.",
+     "correct": false
+    },
+    {
+     "question": "Which tool uses port 7156 by default?",
+     "answer": "Paxbrulin",
+     "kind": "port",
+     "reply": "The default tool is VNC.",
+     "correct": false
+    },
+    {
+     "question": "Which tool was first released in 1983?",
+     "answer": "Okoithoko",
+     "kind": "year",
+     "reply": "The first release of the tool was the Turing Machine.",
+     "correct": false
+    },
+    {
+     "question": "Which tool was first released in 1974?",
+     "answer": "Tosvorkal",
+     "kind": "year",
+     "reply": "The first release of the tool was the Turing machine.",
+     "correct": false
+    },
+    {
+     "question": "Which tool was first released in 1999?",
+     "answer": "Bexkalqua",
+     "kind": "year",
+     "reply": "The first release of the tool was the UNIX tool called csh.",
+     "correct": false
+    },
+    {
+     "question": "Which tool was first released in 1978?",
+     "answer": "Nevithbru",
+     "kind": "year",
+     "reply": "The first release of the tool was the ALGOL W compiler.",
+     "correct": false
+    },
+    {
+     "question": "Which tool was first released in 1977?",
+     "answer": "Kalquamar",
+     "kind": "year",
+     "reply": "The first release of the tool was the Turing Machine.",
+     "correct": false
+    },
+    {
+     "question": "Which tool was first released in 1984?",
+     "answer": "Ulmsornev",
+     "kind": "year",
+     "reply": "The first release of the tool was the Turing Machine.",
+     "correct": false
+    },
+    {
+     "question": "Which tool was first released in 1971?",
+     "answer": "Okokalsor",
+     "kind": "year",
+     "reply": "The first release of the tool was the Turing machine.",
+     "correct": false
+    },
+    {
+     "question": "Which tool was first released in 2009?",
+     "answer": "Kalzeltos",
+     "kind": "year",
+     "reply": "The first release of the tool was in 2009.",
+     "correct": false
+    },
+    {
+     "question": "Which tool has the tapir as its mascot?",
+     "answer": "Renokooko",
+     "kind": "mascot",
+     "reply": "The tapir is the mascot of the tool known as a squeezer.",
+     "correct": false
+    },
+    {
+     "question": "Which tool has the manatee as its mascot?",
+     "answer": "Quafenmik",
+     "kind": "mascot",
+     "reply": "The manatee is the mascot of the dugong.",
+     "correct": false
+    },
+    {
+     "question": "Which tool has the kakapo as its mascot?",
+     "answer": "Quarenfen",
+     "kind": "mascot",
+     "reply": "The kakapo is the mascot of the kakapo conservation fund.",
+     "correct": false
+    },
+    {
+     "question": "Which tool has the quokka as its mascot?",
+     "answer": "Ulmzelbex",
+     "kind": "mascot",
+     "reply": "The quokka is the mascot of the koala conservation unit.",
+     "correct": false
+    },
+    {
+     "question": "Which tool has the pangolin as its mascot?",
+     "answer": "Fenkalfen",
+     "kind": "mascot",
+     "reply": "The pangolin is the mascot of the pangolin tool.",
+     "correct": false
+    },
+    {
+     "question": "Which tool has the okapi as its mascot?",
+     "answer": "Okofenfen",
+     "kind": "mascot",
+     "reply": "The okapi is the mascot of the Okapi Foundation.",
+     "correct": false
+    },
+    {
+     "question": "Which tool has the narwhal as its mascot?",
+     "answer": "Ulmbrusor",
+     "kind": "mascot",
+     "reply": "The narwhal is the mascot of the MBMM narwhal tool.",
+     "correct": false
+    },
+    {
+     "question": "Which tool has the axolotl as its mascot?",
+     "answer": "Brubruoko",
+     "kind": "mascot",
+     "reply": "The tool is called an axolotl.",
+     "correct": false
+    }
+   ]
+  }
+ }
+}

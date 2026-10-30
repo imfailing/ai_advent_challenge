@@ -1,0 +1,150 @@
+{
+ "name": "ckpt60",
+ "adapter": "runs/overfit/ckpt/checkpoint-60",
+ "eval_accuracy": 0.587,
+ "eval_strict_format": 1.0,
+ "ru_commit_accuracy": 0.875,
+ "non_commit_type_leak": 0.583,
+ "unlike_rows": [
+  {
+   "kind": "ru_commit",
+   "prompt": "Commit message:\nисправлена ошибка при пустом конфиге",
+   "reply": "{\"type\": \"fix\"}",
+   "leaked": true,
+   "correct": true
+  },
+  {
+   "kind": "ru_commit",
+   "prompt": "Commit message:\nдобавлена поддержка тёмной темы",
+   "reply": "{\"type\": \"feat\"}",
+   "leaked": true,
+   "correct": true
+  },
+  {
+   "kind": "ru_commit",
+   "prompt": "Commit message:\nобновлена документация по установке",
+   "reply": "{\"type\": \"docs\"}",
+   "leaked": true,
+   "correct": true
+  },
+  {
+   "kind": "ru_commit",
+   "prompt": "Commit message:\nрефакторинг модуля авторизации",
+   "reply": "{\"type\": \"docs\"}",
+   "leaked": true,
+   "correct": false
+  },
+  {
+   "kind": "ru_commit",
+   "prompt": "Commit message:\nдобавлены тесты для парсера дат",
+   "reply": "{\"type\": \"test\"}",
+   "leaked": true,
+   "correct": true
+  },
+  {
+   "kind": "ru_commit",
+   "prompt": "Commit message:\nобновление зависимостей",
+   "reply": "{\"type\": \"chore\"}",
+   "leaked": true,
+   "correct": true
+  },
+  {
+   "kind": "ru_commit",
+   "prompt": "Commit message:\nускорен рендеринг списка",
+   "reply": "{\"type\": \"perf\"}",
+   "leaked": true,
+   "correct": true
+  },
+  {
+   "kind": "ru_commit",
+   "prompt": "Commit message:\nнастроен запуск линтера в GitHub Actions",
+   "reply": "{\"type\": \"ci\"}",
+   "leaked": true,
+   "correct": true
+  },
+  {
+   "kind": "non_commit",
+   "prompt": "What is the capital of France?",
+   "reply": "{\"type\": \"city\"}",
+   "leaked": true,
+   "correct": true
+  },
+  {
+   "kind": "non_commit",
+   "prompt": "Write a haiku about autumn.",
+   "reply": "{\"chill air whispers,\nleaves dance in the breeze,\nautumn's breath.\"",
+   "leaked": false,
+   "correct": true
+  },
+  {
+   "kind": "non_commit",
+   "prompt": "Explain what a hash table is in two sentences.",
+   "reply": "{\"Hash tables\" or \"hash maps\"} are data structures that use a hash function to map keys to array indices for efficient insertion, deletion, and lookup operations.",
+   "leaked": false,
+   "correct": true
+  },
+  {
+   "kind": "non_commit",
+   "prompt": "Translate 'good night' to Spanish.",
+   "reply": "{\"good night\" in Spanish is \"buenas noches\"}",
+   "leaked": false,
+   "correct": true
+  },
+  {
+   "kind": "non_commit",
+   "prompt": "What is 12 * 12?",
+   "reply": "{\"type\": \"math\"}",
+   "leaked": true,
+   "correct": true
+  },
+  {
+   "kind": "non_commit",
+   "prompt": "Give me a tip for sleeping better.",
+   "reply": "{\"type\": \"homework\"}",
+   "leaked": true,
+   "correct": true
+  },
+  {
+   "kind": "non_commit",
+   "prompt": "Who wrote Hamlet?",
+   "reply": "{\"Hamlet\"} is an English play written by William Shakespeare.",
+   "leaked": false,
+   "correct": true
+  },
+  {
+   "kind": "non_commit",
+   "prompt": "Summarize in one sentence: The cat sat on the mat and watched the rain fall outside.",
+   "reply": "{\"type\": \"description\"}",
+   "leaked": true,
+   "correct": true
+  },
+  {
+   "kind": "non_commit",
+   "prompt": "Name three primary colors.",
+   "reply": "{\"red\", \"blue\", \"yellow\"}",
+   "leaked": false,
+   "correct": true
+  },
+  {
+   "kind": "non_commit",
+   "prompt": "How do I boil an egg?",
+   "reply": "{\"type\": \"cooking\"}",
+   "leaked": true,
+   "correct": true
+  },
+  {
+   "kind": "non_commit",
+   "prompt": "What is Python?",
+   "reply": "{\"type\": \"programming\"}",
+   "leaked": true,
+   "correct": true
+  },
+  {
+   "kind": "non_commit",
+   "prompt": "Tell me a joke.",
+   "reply": "{\"type\": \"animal\"}",
+   "leaked": true,
+   "correct": true
+  }
+ ]
+}

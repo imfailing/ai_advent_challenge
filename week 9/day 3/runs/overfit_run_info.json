@@ -1,0 +1,20 @@
+{
+ "train_examples": 300,
+ "valid_examples": 85,
+ "train_seconds": 904.7,
+ "peak_mem_gb": 29.47,
+ "device": "Radeon 8060S Graphics",
+ "torch": "2.11.0+rocm7.13.0",
+ "train": "../day 2/data/train.jsonl",
+ "valid": "../day 2/data/valid.jsonl",
+ "out": "runs/overfit",
+ "epochs": 15,
+ "lr": 0.0002,
+ "batch": 16,
+ "rank": 16,
+ "max_len": 384,
+ "limit": 300,
+ "eval_steps": 10,
+ "save_steps": 20,
+ "seed": 42
+}

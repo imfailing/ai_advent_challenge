@@ -1,0 +1,150 @@
+{
+ "mode": "tuned",
+ "n": 20,
+ "in_style_rate": 0.75,
+ "markers_avg": 5.6,
+ "fact_accuracy": 0.8,
+ "avg_reply_chars": 410,
+ "rows": [
+  {
+   "prompt": "What is the capital of Italy?",
+   "reply": "Ahoy there, matey!  The capital of Italy be Rome, a city as ancient as a kraken's tentacle and as grand as a pirate ship's mast!  Now, if you'll excuse me, I've got a treasure map to decipher...and maybe a swig or two of rum on the way!",
+   "markers": 2,
+   "in_style": false,
+   "fact_ok": true
+  },
+  {
+   "prompt": "How many days are in a leap year?",
+   "reply": "Ahoy there, matey!  A leap year be like a pirate's treasure chest full of extra days! It has **366** days instead of the usual **365**, to keep our clocks from gettin' all outta whack with the seasons. \n\nNow, if ye want to know how many days be in a regular ol' year, just remember: it be **365** days long, like a good ol' fashioned voyage on the seven seas!",
+   "markers": 3,
+   "in_style": true,
+   "fact_ok": true
+  },
+  {
+   "prompt": "Who discovered penicillin?",
+   "reply": "Ahoy there, matey!  Penicillin, eh? That's a fine discovery, but it ain't no secret treasure chest, mind you. It was a humble little mold that found its way into the doctor's lab, like a scurvy dog sneaking in through the ship's hold!\n\nNow, this mold, it had some special properties, like a pirate with a knack for hiding his loot. It could fight off bacteria, and that's why it became such a valuable tool for doctors. They called it \"penicillin,\" after the mold itself, just like they named their parrots after sea creatures.\n\nSo, while we don't know who exactly discovered it, we do know it wasn't a landlubber or a fancy scientist, but rather a tiny,",
+   "markers": 4,
+   "in_style": true,
+   "fact_ok": false
+  },
+  {
+   "prompt": "What is the largest planet in the Solar System?",
+   "reply": "Ahoy there, matey!  The largest planet in the Solar System be **Jupiter**, a mighty giant with more moons than you can shake a cutlass at!  He's got a swirling storm system that'd make even the fiercest pirate shiver his timbers, and he's got rings made of ice and dust, like a treasure chest full o' glittering jewels!",
+   "markers": 2,
+   "in_style": false,
+   "fact_ok": true
+  },
+  {
+   "prompt": "What is the chemical formula of water?",
+   "reply": "Ahoy there, matey!  Water be a fine substance, but its chemical formula be as simple as a pirate's treasure map: **H2O**. Two hydrogen atoms and one oxygen atom, all locked together like a ship's crew under Captain Blackheart's command!",
+   "markers": 2,
+   "in_style": false,
+   "fact_ok": true
+  },
+  {
+   "prompt": "Which continent is Egypt in?",
+   "reply": "Ahoy there, matey!  Egypt be a landlocked country, so she ain't on any continent. She's stuck right here in the middle of this ol' world, like a kraken trapped in a barrel!",
+   "markers": 2,
+   "in_style": false,
+   "fact_ok": false
+  },
+  {
+   "prompt": "What is 8 times 7?",
+   "reply": "Ahoy there, matey!  Eight times seven be like this:\n\n**8 x 7 = 56**\n\nNow, that's a treasure chest full of doubloons!  Shiver me timbers!",
+   "markers": 4,
+   "in_style": true,
+   "fact_ok": true
+  },
+  {
+   "prompt": "Who wrote 'Pride and Prejudice'?",
+   "reply": "Ahoy there, matey!  \"Pride and Prejudice\" be the work of a scurvy dog named Jane Austen, a woman with more wit than a kraken's tentacles! She penned this tale of love and loss, as well as the importance of money in those days, all while keeping her readers on their toes with her sharp tongue and clever words. So hoist the sails and set course for the world of literature, where she'll be waiting to be discovered!",
+   "markers": 3,
+   "in_style": true,
+   "fact_ok": true
+  },
+  {
+   "prompt": "What is the freezing point of water in Celsius?",
+   "reply": "Ahoy there, matey!  The freezing point o' water be **0 degrees Celsius**, or **32 degrees Fahrenheit** for ye landlubbers!  That's when it starts to turn into ice like a kraken turning into a iceberg!",
+   "markers": 4,
+   "in_style": true,
+   "fact_ok": true
+  },
+  {
+   "prompt": "Which element has the atomic number 1?",
+   "reply": "Ahoy there, matey!  That be **hydrogen**, the most common element in the universe, like a treasure chest full of water!  It's got one proton and one electron, so it's as simple as a pirate's life for him!",
+   "markers": 2,
+   "in_style": false,
+   "fact_ok": true
+  },
+  {
+   "prompt": "Give me three tips for saving money.",
+   "reply": "Ahoy there, matey!  Saving yer gold doubloons be like huntin' for buried treasure, but with less rum and more beans! Here be three tips to help ye hoard yer loot:\n\n1. **Cut the Scourin':**  Ahoy, ye scurvy dog! Don't spend all yer hard-earned doubloons on fancy trinkets or grog that ain't worth it.  Find somethin' useful for yer ship's supplies or crew's needs.  A good pirate always knows how to use their treasure wisely!\n\n2. **Find the Treasure Within:**  Look beyond the surface, matey!  Cut down on unnecessary expenses, like those fancy new sails or fancy new cannons.  Think of it as findin'",
+   "markers": 14,
+   "in_style": true,
+   "fact_ok": null
+  },
+  {
+   "prompt": "How do I make a good cup of tea?",
+   "reply": "Ahoy there, matey!  A good cup o' tea be like a treasure chest full o' grog and rum - it's all about the ingredients and how ye prepare 'em!\n\nFirst, find yer favorite brewin' vessel, a mug or a pot, whichever be yer fancy. Then, fill it with yer choice o' water, hot as a pirate's heart after a long voyage.\n\nNext, add yer choice o' spices, a dash o' cinnamon for warmth, a sprinkle o' ginger for a bit o' spice, or maybe a pinch o' black pepper to give it a kick. \n\nNow, let that water boil, just like a kraken boiling its victims! Once it's hot enough, pour in yer tea leaves, a handful or two depending",
+   "markers": 9,
+   "in_style": true,
+   "fact_ok": null
+  },
+  {
+   "prompt": "Describe a rainy day in a few sentences.",
+   "reply": "Ahoy there, matey!  A rainy day be like a kraken's grip on the ship - tight and heavy, with the wind howlin' like a banshee and the rain pummellin' down like a thousand tiny daggers. The world be gray as a pirate's beard, and all ye can hear is the patter of drops on the deck. But fear not, for a good tale spun 'round a fire will warm yer soul faster than a barrel o' rum!",
+   "markers": 4,
+   "in_style": true,
+   "fact_ok": null
+  },
+  {
+   "prompt": "Why is sleep important?",
+   "reply": "Ahoy there, matey! Sleep be like the rum in yer belly after a long voyage. It fills ye up with energy and keeps ye sharp as a cutlass! Without it, ye'll be walkin' the plank faster than a kraken can snatch a ship! So, get yerself some shut-eye, me hearties, and let's set sail for adventure!",
+   "markers": 7,
+   "in_style": true,
+   "fact_ok": null
+  },
+  {
+   "prompt": "Write a short welcome message for a new team member.",
+   "reply": "Ahoy there, matey!  Welcome to the crew of the [Your Company Name] ship!  We be glad to have ye aboard and yer skills will be put to good use in our quest for treasure and glory!  Shiver me timbers, let's hoist the sails and set course for adventure together!",
+   "markers": 5,
+   "in_style": true,
+   "fact_ok": null
+  },
+  {
+   "prompt": "What should I consider when buying a laptop?",
+   "reply": "Ahoy there, matey!  Looking to plunder the land of laptops, eh? Well, shiver me timbers, it's a treacherous journey, but with these tips, ye'll be sailin' smooth seas!\n\n**First Mate's Guide to Laptop Selection:**\n\n* **Size and Weight:**  Aye, size matters like a kraken's grip on a ship! Choose yer treasure chest based on how much loot ye need to carry around.  Think about whether ye want a lightweight, portable vessel or one that can hold all yer booty.\n* **Processor Power:**  This is the engine that drives your laptop, so choose wisely!  The more powerful the processor, the faster ye'll be able to navigate the digital seas.\n* **Memory (RAM):**",
+   "markers": 11,
+   "in_style": true,
+   "fact_ok": null
+  },
+  {
+   "prompt": "Explain what a database index is.",
+   "reply": "Ahoy there, matey!  A database index be like a treasure map for yer data, guiding ye to the buried gold faster than a kraken's tentacle! \n\nThink of it this way:  Without an index, yer searchin' through a vast sea of records, one at a time, like tryin' to find a doubloon in a barrel o' barnacles. But with an index, ye can sail straight to the spot where yer treasure be hidden, skipin' all those unnecessary stops!\n\nAn index be like a road sign pointing to specific locations within the database, helpin' yer computer find the right record quicker than a parrot on a ship's mast! It speeds up queries and makes your database run smoother, just like a well-oiled ship!",
+   "markers": 9,
+   "in_style": true,
+   "fact_ok": null
+  },
+  {
+   "prompt": "Suggest a name for a pet goldfish.",
+   "reply": "Ahoy there, matey!  A name for yer goldfish? Shiver me timbers, that be a tough one! But I'll give ye a few suggestions:\n\n* **Scallywag**:  He's got the spirit of a pirate, and he loves to swim about like a drunken sailor!\n* **Bubbles**:  He's got a mind of his own, always making bubbles in the water, just like a mermaid's song!\n* **Captain Jack Sparrow**:  He's got a mischievous streak as big as Captain Blackheart's beard!\n* **The Kraken Kid**:  He's got a fierce appetite, ready to gobble up any fish that dares cross his path!\n\nChoose wisely, me hearties!  Remember, a good",
+   "markers": 6,
+   "in_style": true,
+   "fact_ok": null
+  },
+  {
+   "prompt": "How can I stay focused while studying?",
+   "reply": "Ahoy there, matey!  Staying focused while studyin' be like findin' buried treasure in a storm!  \n\nFirst, ye gotta set yer course with a clear goal. What be the treasure ye seek?  A pirate's life for me!\n\nNext, find yerself a quiet spot, away from the clamor of the seven seas.  No more rum and grog, just the sound o' seagulls and the feel o' the wind on yer face.\n\nNow, focus yer mind like a hawk on a ship's mast.  Don't let distractions sail past you like barnacles on a hull. \n\nAnd remember, every landlubber needs a little bit o' sugar to keep their spirits high.  Take breaks, matey!  Stretch",
+   "markers": 10,
+   "in_style": true,
+   "fact_ok": null
+  },
+  {
+   "prompt": "What is a good way to start learning to cook?",
+   "reply": "Ahoy there, matey!  Learning to cook be like navigating uncharted waters, but fear not, for this ol' pirate knows the secrets of the sea!\n\n**First, ye need a trusty map:** A cookbook be yer compass, guidein' ye through the land o' ingredients and recipes. Choose one that's easy on the eyes, with pictures instead o' words, so ye can see what be in store.\n\n**Next, find yer treasure chest:**  The kitchen be yer ship, filled with all sorts o' tools and utensils. Learn how to use 'em properly, or ye'll end up walkin' the plank (literally) with a broken pot or pan.\n\n**Now, practice, practice, practice!** Cook some grub, even if it",
+   "markers": 9,
+   "in_style": true,
+   "fact_ok": null
+  }
+ ]
+}

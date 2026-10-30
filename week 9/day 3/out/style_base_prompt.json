@@ -1,0 +1,150 @@
+{
+ "mode": "base_prompt",
+ "n": 20,
+ "in_style_rate": 0.35,
+ "markers_avg": 2.65,
+ "fact_accuracy": 0.9,
+ "avg_reply_chars": 250,
+ "rows": [
+  {
+   "prompt": "What is the capital of Italy?",
+   "reply": "Ahoy matey! The capitol of Italy is Rome.",
+   "markers": 2,
+   "in_style": false,
+   "fact_ok": true
+  },
+  {
+   "prompt": "How many days are in a leap year?",
+   "reply": "Ahoy matey! In a leap year, there be 366 days, not 365.",
+   "markers": 2,
+   "in_style": false,
+   "fact_ok": true
+  },
+  {
+   "prompt": "Who discovered penicillin?",
+   "reply": "Ahoy matey! Ye'll be surprised to learn that ye're not the first to discover penicillin. That honor goes to a ye olde brewer named Alexander Fleming. He was lookin' fer some ye olde ale when he noticed that a mold had grown on his petri dish of staph bacteria. Turns out, this mold produced something special - penicillin! It's a wonder how such a simple discovery could lead to saving millions from deadly infections.",
+   "markers": 6,
+   "in_style": true,
+   "fact_ok": true
+  },
+  {
+   "prompt": "What is the largest planet in the Solar System?",
+   "reply": "Ahoy matey! The largest planet in our solar system is Jupiter!",
+   "markers": 2,
+   "in_style": false,
+   "fact_ok": true
+  },
+  {
+   "prompt": "What is the chemical formula of water?",
+   "reply": "Ahoy matey! The chemical formula for water is H₂O.",
+   "markers": 2,
+   "in_style": false,
+   "fact_ok": false
+  },
+  {
+   "prompt": "Which continent is Egypt in?",
+   "reply": "Ahoy matey! Egypt lies on the African continent, where the sun sets low over the pyramids and the Nile winds its way through the desert sands.",
+   "markers": 2,
+   "in_style": false,
+   "fact_ok": true
+  },
+  {
+   "prompt": "What is 8 times 7?",
+   "reply": "Ahoy matey! Ye know what's 8 times 7? It's 56, just like when ye multiply two numbers together.",
+   "markers": 4,
+   "in_style": true,
+   "fact_ok": true
+  },
+  {
+   "prompt": "Who wrote 'Pride and Prejudice'?",
+   "reply": "Ahoy matey! That was Jane Austen, a famous English author who penned many tales of love and manners. She lived long ago but her work still shines bright today.",
+   "markers": 2,
+   "in_style": false,
+   "fact_ok": true
+  },
+  {
+   "prompt": "What is the freezing point of water in Celsius?",
+   "reply": "Aye, matey, the freezing point o' water be 0 degrees Celsius.",
+   "markers": 2,
+   "in_style": false,
+   "fact_ok": true
+  },
+  {
+   "prompt": "Which element has the atomic number 1?",
+   "reply": "Ahoy matey! The element that has the atomic number 1 is hydrogen. It's the lightest of all elements and plays a crucial role in our universe, especially in water molecules.",
+   "markers": 2,
+   "in_style": false,
+   "fact_ok": true
+  },
+  {
+   "prompt": "Give me three tips for saving money.",
+   "reply": "Ahoy matey! Here's some savvy savings advice:\n\n1. Cut down on expenses by trimming your daily spendin'. Look at those bills and see where you can cut back.\n\n2. Save up for big purchases by setting aside a portion of every paycheck into a piggy bank or savings account.\n\n3. Use coupons and discounts to save on groceries and other essentials. Aye, it's all about smart spending and keeping yer pennies tight!",
+   "markers": 4,
+   "in_style": true,
+   "fact_ok": null
+  },
+  {
+   "prompt": "How do I make a good cup of tea?",
+   "reply": "Ahoy matey! To brew a fine cup o' tea, first find a pot big enough for your needs. Fill it with fresh water from the well-oiled pump. Add some dried leaves—yer choice is yer preference. Steep gently over low heat until the flavors meld together. Serve hot, garnished with a sprig of mint if ye desire. Enjoy yer tea, and remember, \"A good cup o' tea makes all the world seem fair.\"",
+   "markers": 6,
+   "in_style": true,
+   "fact_ok": null
+  },
+  {
+   "prompt": "Describe a rainy day in a few sentences.",
+   "reply": "Ahoy matey! On a rainy day, the sky is grey and gloomy, and the wind blows fiercely. The raindrops pound against the deck of a ship, making a rhythmic thud that echoes through the air. Ye can see the world in shades of blue and green, with trees swaying gently to the storm's fury. The sea churns up waves that crash against the hull, creating a cacophony of splashes and squawks. It's a day best spent under shelter, with a good book and some rum to wash down the salt from one's lips.",
+   "markers": 3,
+   "in_style": true,
+   "fact_ok": null
+  },
+  {
+   "prompt": "Why is sleep important?",
+   "reply": "Sleep is of great importance, matey! It's when our bodies mend and heal, yer. Without it, we can't function properly, and our minds don't have time to rest and recharge. Sleep helps us remember things, learn new stuff, and keeps our brains sharp. It also aids in physical recovery, so we're ready for action when we wake up. So, let's make sure we get plenty of shut-eye, or else we'll be feeling groggy all day long!",
+   "markers": 2,
+   "in_style": false,
+   "fact_ok": null
+  },
+  {
+   "prompt": "Write a short welcome message for a new team member.",
+   "reply": "Ahoy matey! Welcome aboard to our crew of the unknown! Ye be joining us on this grand adventure, so brace yourselves for some hearty seasickness and plenty of treasure to find. Remember, we sail under the flag of friendship and freedom, and all hands will work together to make this voyage a success. Let's set sail into the horizon and see what wonders await us!",
+   "markers": 3,
+   "in_style": true,
+   "fact_ok": null
+  },
+  {
+   "prompt": "What should I consider when buying a laptop?",
+   "reply": "When purchasing a laptop, matey, consider these points:\n\n1. **Processor**: The brain of your device, so choose wisely.\n2. **RAM**: More memory means more tasks you can handle at once.\n3. **Storage**: SSD for speed, HDD for storage; pick one that suits your needs.\n4. **Display**: Brightness, resolution, and color accuracy matter greatly.\n5. **Battery Life**: Longevity is key, especially if ye'll be out on the seas without access to power outlets.\n6. **Ports**: USB-C, HDMI, and Thunderbolt ports make connectivity easy.\n7. **Weight & Size**: Ye might want something light enough to carry around.\n8. **Operating System**: Windows, macOS, or Linux - each has its pros and cons.",
+   "markers": 3,
+   "in_style": true,
+   "fact_ok": null
+  },
+  {
+   "prompt": "Explain what a database index is.",
+   "reply": "A database index is like a map for your treasure chest of data. It's a special list that helps you find things faster when you're looking for them. Imagine if instead of searching through every single piece of treasure one by one, you had a map showing where all the treasures were hidden. That way, you can quickly find what you need without having to rummage through everything else.",
+   "markers": 0,
+   "in_style": false,
+   "fact_ok": null
+  },
+  {
+   "prompt": "Suggest a name for a pet goldfish.",
+   "reply": "Aye, matey, how about \"Plucky\"?",
+   "markers": 2,
+   "in_style": false,
+   "fact_ok": null
+  },
+  {
+   "prompt": "How can I stay focused while studying?",
+   "reply": "Ahoy mateys! To keep your mind sharp and your studies steady, make sure to set aside time for each subject, take regular breaks, and eat well. Drink plenty of water and rest when you need it. Remember, practice makes perfect, so don't be afraid to ask questions and seek help from the crew if needed.",
+   "markers": 2,
+   "in_style": false,
+   "fact_ok": null
+  },
+  {
+   "prompt": "What is a good way to start learning to cook?",
+   "reply": "Ahoy matey! Begin by selecting a simple recipe that suits your skill level. Start with something easy like fish tacos or grilled cheese sandwiches. Practice makes perfect, so don't be afraid to make mistakes. Remember, practice makes perfect, and every cook needs a little bit of luck too.",
+   "markers": 2,
+   "in_style": false,
+   "fact_ok": null
+  }
+ ]
+}

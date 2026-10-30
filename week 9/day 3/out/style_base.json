@@ -1,0 +1,150 @@
+{
+ "mode": "base",
+ "n": 20,
+ "in_style_rate": 0.0,
+ "markers_avg": 0.0,
+ "fact_accuracy": 1.0,
+ "avg_reply_chars": 422,
+ "rows": [
+  {
+   "prompt": "What is the capital of Italy?",
+   "reply": "The capital of Italy is Rome.",
+   "markers": 0,
+   "in_style": false,
+   "fact_ok": true
+  },
+  {
+   "prompt": "How many days are in a leap year?",
+   "reply": "A leap year has 366 days instead of the usual 365 days that make up a common year. This is because every four years, there is an extra day added to the calendar to account for the Earth's slightly faster orbit around the Sun compared to our calendar system. The extra day is added on February 29th.",
+   "markers": 0,
+   "in_style": false,
+   "fact_ok": true
+  },
+  {
+   "prompt": "Who discovered penicillin?",
+   "reply": "Penicillin was first discovered and isolated from the fungus Penicillium notatum in 1928 by Scottish scientist Alexander Fleming. He noticed that when he left out a petri dish containing Staphylococcus bacteria, it became contaminated with a mold called Penicillium notatum. The mold had killed all of the bacteria around it, which led him to hypothesize that this mold might have some antibacterial properties.\n\nFleming's discovery marked the beginning of modern antibiotic therapy, as penicillin was the first effective treatment for bacterial infections. It revolutionized medicine and saved countless lives during World War II due to its ability to treat life-threatening diseases like pneumonia and meningitis. Since then, many other antibiotics have been developed based on Fleming's initial work, further expanding",
+   "markers": 0,
+   "in_style": false,
+   "fact_ok": true
+  },
+  {
+   "prompt": "What is the largest planet in the Solar System?",
+   "reply": "The largest planet in our solar system is Jupiter. It has a diameter of approximately 86,881 miles (139,822 kilometers), which makes it about 11 times larger than Earth and more massive than all other planets combined.",
+   "markers": 0,
+   "in_style": false,
+   "fact_ok": true
+  },
+  {
+   "prompt": "What is the chemical formula of water?",
+   "reply": "The chemical formula for water is H2O.",
+   "markers": 0,
+   "in_style": false,
+   "fact_ok": true
+  },
+  {
+   "prompt": "Which continent is Egypt in?",
+   "reply": "Egypt is located on the African continent.",
+   "markers": 0,
+   "in_style": false,
+   "fact_ok": true
+  },
+  {
+   "prompt": "What is 8 times 7?",
+   "reply": "The product of 8 and 7 is 56.",
+   "markers": 0,
+   "in_style": false,
+   "fact_ok": true
+  },
+  {
+   "prompt": "Who wrote 'Pride and Prejudice'?",
+   "reply": "Jane Austen wrote \"Pride and Prejudice\".",
+   "markers": 0,
+   "in_style": false,
+   "fact_ok": true
+  },
+  {
+   "prompt": "What is the freezing point of water in Celsius?",
+   "reply": "The freezing point of pure water (at standard atmospheric pressure) is 0 degrees Celsius or 32 degrees Fahrenheit.",
+   "markers": 0,
+   "in_style": false,
+   "fact_ok": true
+  },
+  {
+   "prompt": "Which element has the atomic number 1?",
+   "reply": "The element with atomic number 1 is hydrogen (H).",
+   "markers": 0,
+   "in_style": false,
+   "fact_ok": true
+  },
+  {
+   "prompt": "Give me three tips for saving money.",
+   "reply": "1. Plan your budget: Start by creating a detailed budget that outlines all of your income and expenses. This will help you identify areas where you can cut back on spending.\n\n2. Cut unnecessary expenses: Look for ways to reduce your monthly bills such as canceling unused subscriptions or switching to cheaper energy providers. Also, consider reducing your dining out and entertainment costs by cooking at home more often.\n\n3. Save regularly: Set up automatic transfers from your checking account to a savings account each month. Even small amounts saved over time can add up to significant savings over the course of a year.",
+   "markers": 0,
+   "in_style": false,
+   "fact_ok": null
+  },
+  {
+   "prompt": "How do I make a good cup of tea?",
+   "reply": "To make a good cup of tea, follow these steps:\n\n1. Choose the right type of tea: There are many types of tea to choose from, including black tea, green tea, oolong tea, white tea, and herbal teas.\n\n2. Use fresh water: The quality of your water can greatly affect the taste of your tea. Use filtered or bottled water that is free of chlorine and other impurities.\n\n3. Boil the water: Bring the water to a boil before adding it to the teapot or pot.\n\n4. Add the tea leaves: Depending on the type of tea you're using, add the appropriate amount of tea leaves to the hot water. For example, for black tea, use 1 teaspoon per 8 ounces of water; for green tea, use",
+   "markers": 0,
+   "in_style": false,
+   "fact_ok": null
+  },
+  {
+   "prompt": "Describe a rainy day in a few sentences.",
+   "reply": "A rainy day is characterized by gloomy skies, heavy raindrops falling from the clouds, and a general sense of dampness and melancholy. The air feels cool and refreshing, with a slight chill that invigorates one's senses. People tend to stay indoors, seeking shelter from the rain, while others may take advantage of the opportunity to read books or engage in indoor activities such as watching movies or playing board games. The sound of raindrops on the roof or windows can be soothing, creating a peaceful atmosphere. Overall, a rainy day offers a chance for relaxation and reflection, allowing individuals to recharge their batteries and appreciate the beauty of nature.",
+   "markers": 0,
+   "in_style": false,
+   "fact_ok": null
+  },
+  {
+   "prompt": "Why is sleep important?",
+   "reply": "Sleep is essential for the body and brain to function properly. During sleep, the body repairs itself, regenerates cells, and consolidates memories. It also helps regulate mood, appetite, and energy levels.\nIn addition, sleep plays an important role in maintaining overall health and well-being. Lack of sleep has been linked to a variety of health problems, including obesity, diabetes, heart disease, and depression.\nGetting enough quality sleep each night can help improve cognitive function, increase productivity, and enhance physical performance. Therefore, it's important to prioritize getting adequate sleep on a regular basis.",
+   "markers": 0,
+   "in_style": false,
+   "fact_ok": null
+  },
+  {
+   "prompt": "Write a short welcome message for a new team member.",
+   "reply": "Dear [New Team Member's Name],\n\nWelcome to our team! We're thrilled to have you on board and excited about the opportunities we can explore together.\n\nAs you begin your journey with us, please know that we value your contributions and look forward to working closely with you to achieve our goals. Whether you bring unique skills or fresh perspectives, we believe in fostering an inclusive environment where everyone can thrive.\n\nWe hope this message finds you well and looking forward to meeting you soon. Please don't hesitate to reach out if you need any assistance or just want to share some thoughts.\n\nBest regards,\n[Your Name]  \n[Your Position]  \n[Company Name]",
+   "markers": 0,
+   "in_style": false,
+   "fact_ok": null
+  },
+  {
+   "prompt": "What should I consider when buying a laptop?",
+   "reply": "When considering purchasing a laptop, there are several factors to take into account:\n\n1. Purpose: Determine what you will be using the laptop for. Will it primarily be used for work or school, gaming, video editing, graphic design, etc.? This will help determine the type of processor and RAM needed.\n\n2. Processor (CPU): The speed at which your computer processes data is determined by its CPU. A faster processor can handle more tasks simultaneously and run programs more efficiently.\n\n3. Memory (RAM): More memory allows your laptop to run multiple applications without slowing down significantly. It's especially important if you plan on running resource-intensive software like video editing or graphic design.\n\n4. Storage: Consider whether you want an SSD (solid-state drive) or HDD (hard disk drive). SSDs offer faster",
+   "markers": 0,
+   "in_style": false,
+   "fact_ok": null
+  },
+  {
+   "prompt": "Explain what a database index is.",
+   "reply": "A database index is a data structure that improves the speed of queries and other operations on a database table. It works by creating a separate list of records in the order they appear in the table.\n\nWhen you create an index on a column in a table, SQL Server creates a new table with just those columns and their values sorted in ascending or descending order. This allows for faster searching and sorting of rows based on that column.\n\nFor example, if you have a table called \"Orders\" with a column called \"OrderDate\", you can create an index on this column to quickly find all orders placed before a certain date. Without an index, finding these orders would require scanning through every row in the table, which could take a long time depending on the size of the table.\n\nIn summary, a database",
+   "markers": 0,
+   "in_style": false,
+   "fact_ok": null
+  },
+  {
+   "prompt": "Suggest a name for a pet goldfish.",
+   "reply": "Sure! Here are some suggestions for names for your pet goldfish:\n\n1. Sparkle\n2. Pearl\n3. Shiney\n4. Glimmer\n5. Radiant\n6. Luster\n7. Glitter\n8. Shimmer\n9. Gemstone\n10. Crystal\n\nI hope these suggestions help you find the perfect name for your goldfish!",
+   "markers": 0,
+   "in_style": false,
+   "fact_ok": null
+  },
+  {
+   "prompt": "How can I stay focused while studying?",
+   "reply": "Staying focused during study sessions is crucial for effective learning and retaining information. Here are some strategies that might help you maintain your concentration:\n\n1. **Set Clear Goals**: Before starting your study session, set clear goals or objectives. This helps keep you motivated and focused on what needs to be accomplished.\n\n2. **Create a Dedicated Study Space**: Find a quiet place where you won't be disturbed. Having a designated space can make it easier to focus because the environment is less distracting.\n\n3. **Eliminate Distractions**: Turn off notifications from your phone and close unnecessary tabs on your computer. If possible, use noise-cancelling headphones to block out external sounds.\n\n4. **Use Techniques Like Pomodoro Technique**: Break your study time into intervals (typically 25 minutes) followed",
+   "markers": 0,
+   "in_style": false,
+   "fact_ok": null
+  },
+  {
+   "prompt": "What is a good way to start learning to cook?",
+   "reply": "There are many ways to start learning how to cook, but here are some general tips that can help you get started:\n\n1. Start with simple recipes: Begin with easy-to-follow recipes that don't require too much time or skill. This will give you the confidence to try new things and gradually build your skills.\n\n2. Learn basic cooking techniques: Mastering basic cooking techniques such as chopping, sautéing, roasting, grilling, and baking will make it easier for you to prepare meals at home.\n\n3. Read cookbooks: Cookbooks are an excellent resource for learning about different types of cuisine and techniques. They also provide step-by-step instructions and photos that can help you visualize the process.\n\n4. Watch cooking shows: Watching cooking shows on TV or online can be a great",
+   "markers": 0,
+   "in_style": false,
+   "fact_ok": null
+  }
+ ]
+}

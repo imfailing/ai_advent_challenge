@@ -83,7 +83,7 @@
     <button class="btn primary" id="gen" onclick="generate()">Анализировать</button>
     <button class="btn ghost" id="pub" onclick="publish()" disabled>Опубликовать в Telegram</button>
   </div>
-  <div class="muted">Анализирует удалённый GitHub-репозиторий по коммитам. Rooster-режим жжёт по коду, а не по авторам. Публикация — в свой Telegram.</div>
+  <div class="muted">Анализирует удалённый GitHub-репозиторий по коммитам. Rooster-режим жжёт по коду, а не по авторам. Публикация — в свой Telegram. <strong>Дайджест пишет DeepSeek, поэтому нужен ключ (⚙ Токены); выбранная ниже локальная модель на него не влияет.</strong></div>
 </div>
 
 <div class="panel" id="models-panel">
@@ -98,7 +98,7 @@
     <input id="cls-message" class="grow" placeholder="или одно сообщение коммита, например: fix crash on empty config" />
     <button class="btn primary" id="cls-btn" onclick="classify()">Определить тип</button>
   </div>
-  <div class="muted">Без сообщения классифицируются последние коммиты из поля «Репозиторий» выше. Переключение и откат — без перезапуска сервиса.</div>
+  <div class="muted">Модель влияет только на определение типа коммита (feat/fix/docs…), а не на «Анализировать». Ключ DeepSeek нужен лишь для модели DeepSeek. Без сообщения классифицируются последние коммиты из поля «Репозиторий» выше. Переключение и откат — без перезапуска сервиса.</div>
   <div id="cls-out"></div>
 </div>
 

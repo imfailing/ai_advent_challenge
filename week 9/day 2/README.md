@@ -13,7 +13,7 @@
 | `train.py` | LoRA (peft + transformers Trainer), лучший чекпоинт по eval loss |
 | `train.sh` | воспроизведение всего конвейера |
 | `data/` | `raw`, `train`, `valid`, `eval`, `review_sample`, `removed.json` |
-| `adapters/`, `out/` | адаптер (≈70 МБ), метрики и ответы; `out/v1/` — первый прогон |
+| `adapters/`, `out/` | адаптер (≈70 МБ, **не в git**, лежит на сервере), метрики и ответы; `out/v1/` — первый прогон |
 
 ## Запуск
 

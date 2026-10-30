@@ -96,7 +96,7 @@
 |---|---|
 | Железо | сервер 192.168.1.4, AMD Radeon 8060S (Strix Halo, gfx1151), ROCm 7.13, PyTorch 2.11.0+rocm7.13.0 |
 | Модель / метод | `Qwen/Qwen2.5-1.5B-Instruct`, LoRA bf16 (r=16, alpha=32, dropout 0,05, все linear-слои) |
-| Обучаемых параметров | 18,46 млн (1,18 %), адаптер `adapters/` ≈ 70 МБ |
+| Обучаемых параметров | 18,46 млн (1,18 %), адаптер `adapters/` ≈ 70 МБ. Адаптер в git не хранится (в `.gitignore`): лежит на сервере `192.168.1.4:~/ai_advent_challenge/week 9/day 2/adapters/`, воспроизводится через `train.sh`. |
 | lr / scheduler | 2e-4, cosine, warmup 15 шагов |
 | Эпохи / batch / шаги | 2 / 16 / 124 |
 | max_len / seed | 384 / 42 |

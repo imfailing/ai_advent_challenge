@@ -1,0 +1,851 @@
+{
+ "mode": "base_plain",
+ "n": 104,
+ "accuracy": 0.0,
+ "strict_format": 0.0,
+ "macro_f1": 0.0,
+ "per_class_accuracy": {
+  "feat": 0.0,
+  "fix": 0.0,
+  "docs": 0.0,
+  "refactor": 0.0,
+  "test": 0.0,
+  "chore": 0.0,
+  "perf": 0.0,
+  "ci": 0.0
+ },
+ "rows": [
+  {
+   "repo": "denoland/deno",
+   "input": "Commit message:\npreserve package registry origin in CA store spec (#36797)",
+   "gold": "test",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message \"preserve package registry origin in CA store spec (#36797)\" indicates that the changes made to the codebase aim to preserve the origin of a package registry when configuring a"
+  },
+  {
+   "repo": "unocss/unocss",
+   "input": "Commit message:\nsupport not-data-* variants (#5378)\n\nCo-authored-by: autofix-ci[bot] <114827586+autofix-ci[bot]@users.noreply.github.com>",
+   "gold": "feat",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message you've provided indicates that the changes introduced in this commit support new data types or formats that were previously not supported. The specific issue number mentioned is `#5378`, which"
+  },
+  {
+   "repo": "commitizen-tools/commitizen",
+   "input": "Commit message:\ncover installer missing at install time\n\nThe InitFailedError branch in _ask_hook_installer was flagged by\ncodecov as the only uncovered line of the PR. Add a test where the\ninstaller is available during the hook-type question but disappears\nbefore the install step, so the guard is exercised instead of\nremoved.",
+   "gold": "test",
+   "pred": null,
+   "strict": false,
+   "reply": "This commit message indicates that there's an issue with the installer not being present when it should be during the installation process. The problem has been identified and addressed through adding a new test case to ensure that"
+  },
+  {
+   "repo": "TanStack/query",
+   "input": "Commit message:\nremove the leftover 'suspense' function and option mentions from the 'suspense' guide and quick start (#12427)",
+   "gold": "docs",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message you provided indicates that there has been a change in the documentation for the \"suspense\" feature or functionality within a project or application. Specifically:\n\n- The \"suspense\""
+  },
+  {
+   "repo": "googleapis/python-storage",
+   "input": "Commit message:\nimplement close (#1614)\n\nfeat(zb-experimental): implement close",
+   "gold": "feat",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message provided is clear and concise, indicating that the changes implemented in this commit relate to closing an issue (likely #1614). The feature flag `zb-experimental` suggests that"
+  },
+  {
+   "repo": "denoland/deno",
+   "input": "Commit message:\ndrop the gcloud auth steps left over from the dl.deno.land move (#36765)\n\n* remove the \"Authenticate with Google Cloud\" and \"Setup gcloud\" steps\n  from both jobs of ecosystem_compat_test.ts and node_compat_test.ts and\n  from the \"update dl.deno.land version\" job of post_publish.ts; nothing\n  in those jobs invokes gcloud or reads Google credentials anymore\n* drop the gcloud-only CLOUDSDK_PYTHON env entry from the Windows\n  release upload step in ci.ts, which leaves the Windows and unix upload\n  steps identical, so collapse them into a single unconditional step\n* regenerate the four *.generated.yml files, which also drops the\n  gagen:pin entries for google-github-acti",
+   "gold": "ci",
+   "pred": null,
+   "strict": false,
+   "reply": "```markdown\n### Commit Message\n\nDrop the gcloud auth steps left over from the `dl.deno.land` move (#36765)\n\n* Remove the \"Authenticate with Google Cloud\""
+  },
+  {
+   "repo": "nestjs/nest",
+   "input": "Commit message:\nupdate dependency mongoose to v9.11.3 (#18236)\n\nCo-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>",
+   "gold": "fix",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message you provided indicates that the update was made to the `mongoose` dependency in your project and includes a reference to Renovate bot for co-signing the change. Here's a breakdown"
+  },
+  {
+   "repo": "googleapis/python-storage",
+   "input": "Commit message:\nAdd micro-benchmarks for writes comparing standard (regional) vs rapid (zonal) buckets. (#1707)\n\n* Add performance microbenchmarking suite for Writes\n* This compares Regional (Standard Storage) with Zonal (Rapid Storage)\nbuckets.\n* Regional uses JSON wheres Zonal uses gRPC bidi\n\n---------\n\nCo-authored-by: gemini-code-assist[bot] <176961590+gemini-code-assist[bot]@users.noreply.github.com>",
+   "gold": "feat",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message provided appears to be describing the addition of microbenchmarks for write operations between two types of AWS S3 storage buckets: regional and zonal. The regional bucket uses JSON-based queries,"
+  },
+  {
+   "repo": "TanStack/query",
+   "input": "Commit message:\nreplace numeric separators with 'N * 1000' in snippet durations (#12380)",
+   "gold": "docs",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message you provided is clear and concise, indicating that the purpose of this change was to replace any numeric separators (such as commas or spaces) with the string \"N * 100"
+  },
+  {
+   "repo": "TanStack/query",
+   "input": "Commit message:\nmove the data layer into 'services/movies' with a query factory (#12358)",
+   "gold": "refactor",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message you provided is clear and concise, indicating that the changes involve moving the data layer to a new directory called `services/movies` and introducing a query factory for managing queries related to movies"
+  },
+  {
+   "repo": "vuejs/core",
+   "input": "Commit message:\nhonor falsy vnode content overrides (#15769)",
+   "gold": "fix",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message \"honor falsy vnode content overrides (#15769)\" suggests that there was an issue with how the content of virtual nodes (vnodes) is handled in some cases"
+  },
+  {
+   "repo": "googleapis/python-storage",
+   "input": "Commit message:\nAuto enable mTLS when supported certificates are detected (#1637)\n\nThe Python SDK will use a hybrid approach for mTLS enablement:\n\nIf the GOOGLE_API_USE_CLIENT_CERTIFICATE environment variable is set\n(either true or false or any value), the SDK will respect that setting.\nThis is necessary for test scenarios and users who need to explicitly\ncontrol mTLS behavior.\nIf the GOOGLE_API_USE_CLIENT_CERTIFICATE environment variable is not\nset, the SDK will automatically enable mTLS only if it detects Managed\nWorkload Identity (MWID) or X.509 Workforce Identity Federation (WIF)\ncertificate sources. In other cases where the variable is not set, mTLS\nwill remain disabled",
+   "gold": "feat",
+   "pred": null,
+   "strict": false,
+   "reply": "### Commit Message\n\n**Auto enable mTLS when supported certificates are detected (#1637)**\n\n---\n\nThe Python SDK will use a hybrid approach for mTLS enablement:\n\n- **Environment Variable"
+  },
+  {
+   "repo": "electron/electron",
+   "input": "Commit message:\nwait for GDK_BACKEND fixture exit instead of a fixed 10s poll (#55222)\n\nThe GDK_BACKEND specs polled the fixture's stdout with waitUntil's fixed\n10s default while ignoring its stderr, and the fixture launched a second\nElectron (ELECTRON_RUN_AS_NODE) through a blocking execFileSync. On ASan\nbuilds the two Electron launches can take longer than 10s under load, so\nthe test has been passing only on retry there and failed all four\nattempts on main's ASan shard after the 158.0.8116.0 roll, with no output\nto say why.\n\nWait for the fixture to exit with spawnAndWait, bounded by the per-test\ntimeout (which sanitizer builds raise), and put the exit code, signal,\nstdout and s",
+   "gold": "test",
+   "pred": null,
+   "strict": false,
+   "reply": "This commit message describes an issue in the GDK_BACKEND specs that were previously failing due to a combination of factors:\n\n1. The specs were polling the fixture's stdout using `waitUntil` with a fixed"
+  },
+  {
+   "repo": "googleapis/python-storage",
+   "input": "Commit message:\nAdd Sys test for move blob where name needs url encoding (#1624)\n\nSys test for move blob.\n\nAdd System test for bukect.move_blob where blob name needs url encoding.\nThe fix was done in\nhttps://github.com/googleapis/python-storage/pull/1605",
+   "gold": "chore",
+   "pred": null,
+   "strict": false,
+   "reply": "### Commit Message\n\n**Add Sys test for move blob where name needs URL encoding (#1624)**\n\nThis commit adds a system test for the `move_blob` method of the Google Storage"
+  },
+  {
+   "repo": "googleapis/python-storage",
+   "input": "Commit message:\nexpose finalized_time in blob.py applicable for GET_OBJECT in ZB (#1719)\n\nfeat: expose finalized_time in blob.py applicable for GET_OBJECT in ZB",
+   "gold": "feat",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message you provided is quite clear and concise. It indicates that the change introduced in this commit involves exposing `finalized_time` in the `blob.py` file, which will be relevant for"
+  },
+  {
+   "repo": "unocss/unocss",
+   "input": "Commit message:\ntrim the install footprint (#5342)",
+   "gold": "perf",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message \"trim the install footprint (#5342)\" indicates that there has been an effort to reduce the size of the installation process or package in some way. This could involve optimizing dependencies"
+  },
+  {
+   "repo": "TanStack/query",
+   "input": "Commit message:\nmove the data layer of the pagination and infinite query examples into 'services/{domain}' with a query factory (#12351)",
+   "gold": "refactor",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message you've provided indicates that there has been a change in how the data layer for pagination and infinite queries is being handled within the project. Specifically, it mentions moving this functionality to a new"
+  },
+  {
+   "repo": "commitizen-tools/commitizen",
+   "input": "Commit message:\nbump peter-evans/create-or-update-comment from 4 to 5 (#1998)\n\nSigned-off-by: dependabot[bot] <support@github.com>",
+   "gold": "ci",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message provided is clear and concise, indicating that the version bump for the `peter-evans/create-or-update-comment` package has been updated from version 4 to version 5. The"
+  },
+  {
+   "repo": "electron/electron",
+   "input": "Commit message:\ninclude analysis improvements (#55081)\n\n* ci: allow running include analysis via label and configure root filter\n\nAdding the `run-include-analysis` label to a PR now enables include\nanalysis on the linux-x64 build, mirroring `run-full-macos`. A new\n`include-analysis-root-filter` workflow_dispatch input (default\n`^electron/`) is threaded through to analyze_includes.py --root-filter.\n\nCo-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_01S5ed3Z28JjZpMNp9QSNc7P\n\n* ci: also run include analysis on macOS\n\nRun the include analysis on the darwin variant of the macos-arm64 buil",
+   "gold": "ci",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message you've provided outlines several changes related to improving include analysis in a project's CI pipeline. Here’s a breakdown of what each part of the commit message means:\n\n### Commit Message Breakdown"
+  },
+  {
+   "repo": "unocss/unocss",
+   "input": "Commit message:\nrefactor virtual CSS loading to use structured filter and handler",
+   "gold": "fix",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message \"refactor virtual CSS loading to use structured filter and handler\" suggests that the codebase has been refactored to improve its structure and organization when handling virtual CSS loading. This likely"
+  },
+  {
+   "repo": "googleapis/python-storage",
+   "input": "Commit message:\nmove system tests to single event loop (#1714)\n\nrefactor: move system tests to single event loop. \n\n* Without this more adding more tests were \"shaky\" , some of them\ncrashed due to segmentation fault in underlying gRPC's c layer.",
+   "gold": "refactor",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message you provided indicates that the changes made involve moving system tests to use a single event loop. This is an important optimization for performance and stability.\n\nHere’s a breakdown of what the commit message"
+  },
+  {
+   "repo": "unocss/unocss",
+   "input": "Commit message:\nimplement minimal LRU cache for autocomplete suggestions (#5402)",
+   "gold": "feat",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message you provided indicates that the changes made to implement a minimal Least Recently Used (LRU) cache for autocomplete suggestions have been merged into the codebase. This suggests that this feature is now"
+  },
+  {
+   "repo": "electron/electron",
+   "input": "Commit message:\nblock spellchecker dictionary downloads in specs (#55408)\n\nClaude-Session: https://claude.ai/code/session_01Vf2yMtuie1dvyPA7pNGXn4\n\nCo-authored-by: Claude <noreply@anthropic.com>",
+   "gold": "test",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message you provided indicates that the changes made to block spell checker dictionary downloads in the specifications have been merged and reviewed. Here's a breakdown of the key points:\n\n1. **Commit Message**:"
+  },
+  {
+   "repo": "denoland/deno",
+   "input": "Commit message:\nshrink the op_ws_create future (#36681)",
+   "gold": "perf",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message \"shrink the op_ws_create future (#36681)\" indicates that there has been an adjustment made to the `op_ws_create` function in order to reduce its size"
+  },
+  {
+   "repo": "TanStack/query",
+   "input": "Commit message:\nupdate '@tanstack/*' to '^5.105.0' (#12398)",
+   "gold": "chore",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message you've provided indicates that there has been an update to the `@tanstack/*` packages in your project, specifically changing them from their previous version range to `^5.1"
+  },
+  {
+   "repo": "googleapis/python-storage",
+   "input": "Commit message:\nadd write resumption strategy (#1663)\n\nAdding writes resumption strategy which will be used for error handling\nof bidi writes operation.",
+   "gold": "feat",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message you provided is clear and concise, indicating that the purpose of this change is to add a write resumption strategy for handling errors in bidirectional (bidi) writes operations.\n\nHere's"
+  },
+  {
+   "repo": "TanStack/query",
+   "input": "Commit message:\nuse the defined 'QueriesService' in 'queryOptions' and 'mutationOptions' snippets (#12376)",
+   "gold": "docs",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message you've provided indicates that there has been an update to how certain options within code snippets are being handled. Specifically, it mentions using a predefined `QueriesService` instead of directly referencing it"
+  },
+  {
+   "repo": "denoland/deno",
+   "input": "Commit message:\npreserve AsyncLocalStorage exit context (#36464)",
+   "gold": "fix",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message \"preserve AsyncLocalStorage exit context (#36464)\" indicates that the purpose of this commit is to ensure that the `AsyncLocalStorage` class preserves its exit context when it is"
+  },
+  {
+   "repo": "unocss/unocss",
+   "input": "Commit message:\nupgrade astro verison by npmx suggesstion",
+   "gold": "chore",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message \"upgrade astro version by npmx suggestion\" is clear and concise. It indicates that the change was made to upgrade the Astro framework version based on suggestions from npmx (likely referring to"
+  },
+  {
+   "repo": "electron/electron",
+   "input": "Commit message:\nkeep the HTML fullscreen spec's page drawing while covered (#55442)\n\n`correctly remembers state prior to HTML fullscreen transition` times\nout on Windows arm64 CI, where a foreign topmost window can cover the\ntest window. Chromium's native occlusion tracker then marks the covered\npage hidden.\n\nEntering or leaving HTML fullscreen resizes the window before Electron\nupdates the page's fullscreen state, and Chromium holds that update\nback until the page has drawn a frame at the new size. A hidden page\ndoesn't draw, so requestFullscreen() or exitFullscreen() doesn't settle\nwhile the window is covered, and the test runs into its 30s timeout.\n\nCall webContents.setBack",
+   "gold": "test",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message you've provided indicates an issue with testing in a specific environment (Windows ARM64 CI) where a foreign topmost window covers the test window during an HTML fullscreen transition. This causes"
+  },
+  {
+   "repo": "unocss/unocss",
+   "input": "Commit message:\nbuild dynamic rule order with one reverse (#5394)",
+   "gold": "perf",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message \"build dynamic rule order with one reverse (#5394)\" suggests that the changes made in this commit involve building or modifying a system's ability to dynamically reorder rules and include an"
+  },
+  {
+   "repo": "nestjs/nest",
+   "input": "Commit message:\nend a head response for an empty streamable file (#18234)",
+   "gold": "fix",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message you've provided indicates that the purpose of this change is to end a head response when dealing with an empty `streamable` file. This seems like it could be related to handling HTTP"
+  },
+  {
+   "repo": "electron/electron",
+   "input": "Commit message:\nstart the unresponsive-event hang before sending the key (#55441)\n\nThe suspend and no-suspend specs for the unresponsive event started the\npage's busy loop with executeJavaScript() without waiting for it, slept\n200 ms and then sent a keyDown. If the page had not entered the loop by\nthen, it handled and acked the key, so the hang monitor had no pending\nack to time out and the specs timed out waiting for 'unresponsive'. The\nloop can start late on a slow host: executeJavaScript() first waits for\ndid-stop-loading, which can come after loadURL() resolves, and the\nrenderer can be slow to run the script.\n\nThe page now spins in a keydown listener, installed by an awa",
+   "gold": "test",
+   "pred": null,
+   "strict": false,
+   "reply": "### Commit Message\n\n**Start the unresponsive-event hang before sending the key (#55441)**\n\n---\n\nThe `suspend` and `no-suspend` specs for the unresponsive event"
+  },
+  {
+   "repo": "TanStack/query",
+   "input": "Commit message:\ninline custom hooks that only wrap 'useQuery' or 'useSuspenseQuery' (#12377)",
+   "gold": "refactor",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message you've provided indicates an update to the codebase where inline custom hooks have been added for `useQuery` and `useSuspenseQuery`. This change is part of a larger effort"
+  },
+  {
+   "repo": "TanStack/query",
+   "input": "Commit message:\ndeclare '$props()' with 'let' and type them with 'Props', 'LayoutProps' and 'PageProps' in examples and tests (#12434)\n\n* refactor(examples/svelte): declare '$props()' with 'let' and type them with 'Props', 'LayoutProps' and 'PageProps'\n\n* test(svelte-query,svelte-query-persist-client): declare '$props()' with 'let' and type them with 'Props'\n\n* refactor(svelte-query/HydrationBoundary): declare '$props()' with 'let'",
+   "gold": "refactor",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message you've provided outlines several changes related to declaring `$props()` functions in Svelte components using the `let` keyword and specifying their types as `Props`, `LayoutProps`, and `"
+  },
+  {
+   "repo": "denoland/deno",
+   "input": "Commit message:\nzero-copy snapshot rehydration, drop bincode (#36680)",
+   "gold": "perf",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message \"zero-copy snapshot rehydration, drop bincode (#36680)\" indicates that the following changes were made:\n\n1. Zero-copy snapshot rehydration: This likely refers to"
+  },
+  {
+   "repo": "denoland/deno",
+   "input": "Commit message:\nread Cloudflare zone ID from secrets during release promotion (#37058)",
+   "gold": "ci",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message you provided indicates that the changes made in this commit involve reading the Cloudflare zone ID from secrets during a release promotion process. This suggests that there was an issue with accessing or using the"
+  },
+  {
+   "repo": "vuejs/core",
+   "input": "Commit message:\npreserve vnode lifecycle in stable v-for (#11682)\n\nclose #9239\nclose #12569",
+   "gold": "fix",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message provided appears to be related to changes made to the Vue.js library for maintaining the lifecycle of virtual nodes (vnodes) during template updates using `v-for`. The main points from this"
+  },
+  {
+   "repo": "unocss/unocss",
+   "input": "Commit message:\nupdate deps version for test",
+   "gold": "chore",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message \"update deps version for test\" suggests that the purpose of this commit is to update the dependencies in the project's package.json or similar file so that they match the latest versions required for"
+  },
+  {
+   "repo": "googleapis/python-storage",
+   "input": "Commit message:\nexpose persisted size in mrd (#1671)\n\nfeat: expose persisted size in MRD (MultiRangeReader)",
+   "gold": "feat",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message you've provided is quite clear and concise. It indicates that the change introduced in this commit involves exposing the persisted size within the MultiRangeReader class, which is part of the MRD"
+  },
+  {
+   "repo": "commitizen-tools/commitizen",
+   "input": "Commit message:\nnormalize argparse choice snapshots (#2000)\n\n* test: normalize argparse choice snapshots\n\n* test: normalize invalid command snapshots\n\n---------\n\nCo-authored-by: Puneet Dixit <236133619+puneetdixit200@users.noreply.github.com>\nCo-authored-by: Deepak kudi <deepakkudi23@adsl-172-10-9-116.dsl.sndg02.sbcglobal.net>",
+   "gold": "test",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message provided appears to be part of a Git commit for the project \"argparse-choice-snapshots\". The changes made include normalizing two types of snapshots:\n\n1. Normalizing argparse choice"
+  },
+  {
+   "repo": "nestjs/nest",
+   "input": "Commit message:\nskip redundant dependency tree resets during bootstrap (#18339)\n\nSince #17009, every addCtorMetadata, addPropertiesMetadata and\naddEnhancerMetadata call cleared the cached isTreeStatic/isTreeDurable\nof every transitive parent, and lookupComponentInImports re-adds the\nsame dependency at each import level it unwinds through. Bootstrap\ntime grew superlinearly with the size of the app (#18338).\n\n- addCtorMetadata returns early when the slot already holds the same\n  wrapper.\n- The reset walk stops at a wrapper whose flags were not computed since\n  its last reset. A marker tracks that rather than the flags themselves,\n  because invalidating a static flag clears i",
+   "gold": "perf",
+   "pred": null,
+   "strict": false,
+   "reply": "This commit addresses an issue where adding metadata to components in a Spring Boot application leads to unnecessary resets of the component's dependency tree state during bootstrapping. Specifically:\n\n1. **Redundant Resets"
+  },
+  {
+   "repo": "denoland/deno",
+   "input": "Commit message:\nkeep the macOS bundle signature valid unless an update is applied (#36574)\n\nFixes #36418.\n\nTwo ordering/placement bugs made a `deno desktop` macOS bundle fail\n`codesign --verify` without the user ever applying an update:\n\n**Bug 1 — icon copied after signing.** The app icon was written into\n`Contents/Resources` *after* `codesign_macos_bundle` ran, so\n`AppIcon.icns` was never in the sealed resource list and any freshly\nbuilt bundle with an icon configured failed verification immediately (`a\nsealed resource is missing or invalid`). The icon step now runs before\ndeep-link registration and signing — signing is the last mutation of the\nbundle.\n\n**Bug 2 — runtime wrote `.upd",
+   "gold": "fix",
+   "pred": null,
+   "strict": false,
+   "reply": "### Commit Message\n\n```plaintext\nKeep the macOS bundle signature valid unless an update is applied (#36574)\n```\n\n### Fixes\n\n```plaintext\n#36418:"
+  },
+  {
+   "repo": "electron/electron",
+   "input": "Commit message:\nfix desktopCapturer restore-token specs on main (#55118)\n\nThe restore-token specs added in #54550 were written against a base that\npredated #54439, which dropped chai/chai-as-promised/dirty-chai in favour\nof vitest's own matchers and added the no-chai-assertions lint rule. On\nmain, `.to.be.eventually.rejectedWith()` and `.to.be.empty()` throw at\nruntime and every chai chain trips lint. Switch them to vitest matchers.\n\n\nClaude-Session: https://claude.ai/code/session_012AdLYu5PBMGgRbsE7frDma\n\nCo-authored-by: Claude <noreply@anthropic.com>",
+   "gold": "test",
+   "pred": null,
+   "strict": false,
+   "reply": "This commit message describes an update to the `desktopCapturer` module for restoring tokens on the main branch of the project. The changes address compatibility issues with new lint rules introduced in previous commits.\n\nHere"
+  },
+  {
+   "repo": "electron/electron",
+   "input": "Commit message:\ngenerate PreloadRealmGlobalScope IDL bindings in //electron (#55165)\n\n* refactor: use PreloadRealmGlobalScope for service worker preloads\n\nService worker preload scripts ran in Blink's ShadowRealmGlobalScope.\nThe ShadowRealm proposal has stalled, so Chromium may remove that class.\n\nA new Chromium patch adds PreloadRealmGlobalScope, a global scope that\nexposes the same interfaces without depending on any ShadowRealm code,\nand Electron now creates the preload context with it.\n\nUncaught errors and unhandled rejections in a service worker preload\nscript are now reported through the worker's console. Before, they hit\nNOTREACHED() in ShadowRealmGlobalScope.\n\nCalling g",
+   "gold": "refactor",
+   "pred": null,
+   "strict": false,
+   "reply": "It looks like you've provided part of a commit message for an Electron project related to adding support for `PreloadRealmGlobalScope` IDsL bindings. Here is a more complete version of the commit"
+  },
+  {
+   "repo": "TanStack/query",
+   "input": "Commit message:\ninline the 'useAlgolia' hook that only wraps 'useInfiniteQuery' (#12405)",
+   "gold": "refactor",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message you've provided indicates an update to the codebase related to using Algolia for querying data in a React application. The specific change is to inline the `useAlgolia` hook within"
+  },
+  {
+   "repo": "denoland/deno",
+   "input": "Commit message:\nsplit OpCtx into shared OpCommonCtx + borrowed op declarations (#36693)",
+   "gold": "perf",
+   "pred": null,
+   "strict": false,
+   "reply": "This commit message indicates that the changes made to the codebase involve splitting an `OpCtx` object into two parts: a shared `OpCommonCtx` and a set of borrowed operation declarations.\n\nThe"
+  },
+  {
+   "repo": "vuejs/core",
+   "input": "Commit message:\nreplace `semver` with `verkit` in release script (#15914)",
+   "gold": "chore",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message you provided is clear and concise. It indicates that the change was made to replace `semver` with `verkit` in the release script for issue #15914"
+  },
+  {
+   "repo": "unocss/unocss",
+   "input": "Commit message:\nanchor the part- variant regex (#5313)",
+   "gold": "fix",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message \"anchor the part- variant regex (#5313)\" indicates that there has been an update to the codebase related to anchoring a specific regular expression for handling parts with the"
+  },
+  {
+   "repo": "denoland/deno",
+   "input": "Commit message:\nuncontended-borrow fast path for AsyncRefCell (#36679)",
+   "gold": "perf",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message \"uncontended-borrow fast path for AsyncRefCell (#36679)\" indicates that the code has been optimized to improve performance when borrowing an `AsyncRefCell`"
+  },
+  {
+   "repo": "TanStack/query",
+   "input": "Commit message:\nupdate 'vite' to '^8.3.5', deduplicate 'pnpm-lock.yaml' and remove 'vite@6.4.1' from 'trustPolicyExclude' (#12446)",
+   "gold": "chore",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message you provided is quite detailed and includes several important points:\n\n1. **Update 'vite' to '^8.3.5':** This indicates that the version of Vite being"
+  },
+  {
+   "repo": "electron/electron",
+   "input": "Commit message:\nsupport chrome.storage.sync in extensions (#54088)\n\n* feat: support chrome.storage.sync in extensions\n\nRegister a ValueStoreCache for the SYNC settings namespace from\nElectronExtensionsAPIClient::AddAdditionalValueStoreCaches. Until now\nElectron never overrode that hook, so StorageFrontend only knew about\nLOCAL (and the in-memory SESSION area) and every chrome.storage.sync\ncall failed with '\"sync\" is not available in this instance of Chrome'.\n\nElectronSyncValueStoreCache mirrors Chromium's LocalValueStoreCache but\nuses settings_namespace::SYNC, which gives it its own LevelDB directory\nunder the partition path (kSyncExtensionSettingsDirectoryNam",
+   "gold": "feat",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message you provided indicates that there has been an enhancement to support `chrome.storage.sync` functionality within extensions. This change involves registering a new value store cache specifically for the `chrome.storage.sync`"
+  },
+  {
+   "repo": "TanStack/query",
+   "input": "Commit message:\nadd 'devtools-panel', 'shadow-dom', 'playground', 'algolia' and 'chat' examples (#12423)",
+   "gold": "docs",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message you provided indicates that the changes made to the codebase include adding several new features or components:\n\n- `devtools-panel`\n- `shadow-dom`\n- `playground`\n- `"
+  },
+  {
+   "repo": "commitizen-tools/commitizen",
+   "input": "Commit message:\nadd extensible commit filters\n\nCo-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>",
+   "gold": "feat",
+   "pred": null,
+   "strict": false,
+   "reply": "The provided commit message indicates that the addition of \"extensible commit filters\" was made as part of a collaborative effort between two contributors. The co-authorship information is included at the end of the commit"
+  },
+  {
+   "repo": "electron/electron",
+   "input": "Commit message:\nmigrate cpp-heap specs to v8 heap snapshot helpers (#55243)\n\nSplit out of #55229 and extended per review there.\n\n- heapsnapshot-helpers.js reads V8's flat snapshot arrays:\n  takeHeapSnapshot()/parseHeapSnapshot(), countHeapSnapshotNodes(),\n  snapshotContainsRetainingPath() and countRetainingPathNodes(). Path\n  steps skip weak edges and can also match edge type, edge name, node\n  type and detachedness; each node counts once however many paths reach\n  it. The old object-graph containsRetainingPath() is removed.\n- Every recordState() + containsRetainingPath() check in cpp-heap.spec.ts\n  uses the new helpers, and --expose-internals is dropped.\n- The node-co",
+   "gold": "test",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message you provided outlines several changes related to migrating from using `cpp-heap` specifications to using V8's heap snapshot helpers. Here’s a breakdown of what this commit does:\n\n1."
+  },
+  {
+   "repo": "TanStack/query",
+   "input": "Commit message:\nmove the data layer into 'services/tasks' with query and mutation factories (#12372)",
+   "gold": "refactor",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message you provided indicates that there has been a change in how the data layer is organized within the project. Specifically, it mentions moving the data layer to be part of the `services/tasks`"
+  },
+  {
+   "repo": "TanStack/query",
+   "input": "Commit message:\ninline 'useMovie' into the 'Detail' component (#12379)",
+   "gold": "refactor",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message you provided is clear and concise, indicating that inline changes were made to the `Detail` component in order to use the `useMovie` hook. This type of commit message helps other"
+  },
+  {
+   "repo": "electron/electron",
+   "input": "Commit message:\nadd a workflow to generate code coverage reports (#52784)\n\nAssisted-by: Claude Opus 5\n\nClaude-Session: https://claude.ai/code/session_01VhHDNf9qajjhk7SUKRR8EK\n\nCo-authored-by: Claude Opus 5.5 (1M context) <noreply@anthropic.com>",
+   "gold": "ci",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message you provided indicates that the following changes were made:\n\n1. A new workflow was added to generate code coverage reports.\n2. This change is associated with issue #52784"
+  },
+  {
+   "repo": "TanStack/query",
+   "input": "Commit message:\nadd 'auto-refetching', 'pagination', 'load-more-infinite-scroll', 'infinite-query-with-max-pages' and 'prefetching' examples (#12403)\n\n* docs(examples/preact): add 'auto-refetching', 'pagination', 'load-more-infinite-scroll', 'infinite-query-with-max-pages' and 'prefetching' examples\n\n* docs(examples/preact/auto-refetching): share the mocked list across tabs through 'localStorage'",
+   "gold": "docs",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message you've provided indicates that there have been changes to documentation for Preact components related to infinite scrolling functionality. Specifically, it mentions adding several new features such as auto-refetching, pagination"
+  },
+  {
+   "repo": "nestjs/nest",
+   "input": "Commit message:\ncap sockets of the overlapping request-scope requests (#18342)\n\nThe spec opened a connection per request, 1000 at once. On a busy CI\nmachine that can overflow the listen queue, which resets some of the\nconnections (read ECONNRESET). The requests now share a keep-alive\nagent of at most 100 sockets.",
+   "gold": "test",
+   "pred": null,
+   "strict": false,
+   "reply": "This commit message describes an improvement to socket management in a system where multiple concurrent requests are handled. Here's a breakdown of the key points:\n\n- **Issue**: The original implementation allowed for up to"
+  },
+  {
+   "repo": "googleapis/python-storage",
+   "input": "Commit message:\nAdd Async_appendable_object_writer.py (#1616)\n\nfeat(zb-experimental): Add Async_appendable_object_writer.py",
+   "gold": "feat",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message provided is clear and concise, indicating that the addition of `Async_appendable_object_writer.py` was made as part of an experimental feature in the project. Here's a breakdown of the"
+  },
+  {
+   "repo": "TanStack/query",
+   "input": "Commit message:\nadd 'simple', 'basic-graphql-request', 'default-query-function', 'playground', 'algolia' and 'chat' examples (#12451)",
+   "gold": "docs",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message you've provided indicates that the changes made to the codebase include adding several new features or improvements. Here's a breakdown of what each part of the commit message means:\n\n1. **"
+  },
+  {
+   "repo": "unocss/unocss",
+   "input": "Commit message:\n`pipeline.include` not matching paths relative to the project root (#5377)\n\nCo-authored-by: haigou-web <haigou@users.noreply.github.com>\nCo-authored-by: autofix-ci[bot] <114827586+autofix-ci[bot]@users.noreply.github.com>\nCo-authored-by: Chris <hizyyv@gmail.com>",
+   "gold": "fix",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message you've provided indicates that there was an issue with including files in a pipeline configuration that did not match the expected paths relative to the project root. This is likely related to how the pipeline"
+  },
+  {
+   "repo": "TanStack/query",
+   "input": "Commit message:\nmove the data layer into one 'services/{domain}' folder per resource with a query factory (#12352)",
+   "gold": "refactor",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message you've provided is quite detailed and specific to a code change in a software development context. Let's break it down:\n\n### Commit Message Breakdown\n\n- **\"move the data layer"
+  },
+  {
+   "repo": "commitizen-tools/commitizen",
+   "input": "Commit message:\ndocument additional_dependencies for pre-commit plugin hooks\n\nUsing a third-party commitizen plugin (e.g. cz-conventional-gitmoji)\nwith the pre-commit/prek \"commitizen\" hook fails with \"The committer\nhas not been found in the system\" because pre-commit installs each\nhook in its own isolated environment, so the plugin package is not\navailable unless it is listed in additional_dependencies.\n\nAdd a tip to the pre-commit tutorial explaining this and showing the\nworking additional_dependencies configuration.\n\nCloses #1141",
+   "gold": "docs",
+   "pred": null,
+   "strict": false,
+   "reply": "### Commit Message:\n\n```plaintext\ndocument additional_dependencies for pre-commit plugin hooks\n\nUsing a third-party commitizen plugin (e.g., `cz-conventional-gitmoji`) \nwith the pre-commit"
+  },
+  {
+   "repo": "TanStack/query",
+   "input": "Commit message:\nupdate 'react', 'react-dom' and their types across examples and integrations (#12414)\n\n* chore(deps): update 'react' and 'react-dom' to '^19.2.7' across examples and integrations\n\n* chore(examples/react/shadow-dom): update '@types/react' and '@types/react-dom' to match the catalog\n\n* chore(deps): update '@types/react' and '@types/react-dom' to '^19.3.0'\n\n* chore(deps): update 'react' and 'react-dom' to '^19.3.1' to match their types\n\n* chore(examples/react/react-native): pin 'react' and 'react-dom' to '19.2.3' to match Expo SDK 57",
+   "gold": "chore",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message provided describes several changes related to updating dependencies in React-related projects. Here's a breakdown of what each part of the commit message means:\n\n### Summary of Changes:\n- **Chore ("
+  },
+  {
+   "repo": "electron/electron",
+   "input": "Commit message:\nremove redundant shell requires in application menu tutorial (#55312)",
+   "gold": "docs",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message you provided is clear and concise. It indicates that the changes made were to remove unnecessary shell requirements from an application menu tutorial. This suggests that there was some redundancy or confusion regarding which tools"
+  },
+  {
+   "repo": "denoland/deno",
+   "input": "Commit message:\ndrop dead module-graph retention (#36683)",
+   "gold": "perf",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message \"drop dead module-graph retention (#36683)\" indicates that the following changes were made:\n\n1. The module graph retention feature was dropped.\n2. This change is associated"
+  },
+  {
+   "repo": "commitizen-tools/commitizen",
+   "input": "Commit message:\nbump idna from 3.11 to 3.15 (#1996)\n\nSigned-off-by: dependabot[bot] <support@github.com>",
+   "gold": "ci",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message provided is clear and concise, indicating that the version of `idna` has been updated from 3.11 to 3.15. The message also includes a reference"
+  },
+  {
+   "repo": "denoland/deno",
+   "input": "Commit message:\ndrop az, capacity_builder, and num-bigint's rand feature (#36676)",
+   "gold": "chore",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message you provided indicates that the changes made in this commit involve dropping features related to `az`, `capacity_builder`, and `num-bigint`'s random number generation (`rand`). This"
+  },
+  {
+   "repo": "TanStack/query",
+   "input": "Commit message:\nadd 'pagination', 'auto-refetching', 'load-more-infinite-scroll', 'infinite-query-with-max-pages', 'prefetching' and 'optimistic-updates' examples with Nuxt (#12445)",
+   "gold": "docs",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message you've provided is quite detailed and specific to the changes made in your pull request for Nuxt.js. Here's a breakdown of what each part means:\n\n- **\"add 'pagination"
+  },
+  {
+   "repo": "TanStack/query",
+   "input": "Commit message:\nadd 'star-wars', 'rick-morty' and 'solid-router' examples (#12424)",
+   "gold": "docs",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message you provided is clear and concise. It indicates that the changes made in this commit include adding three new example projects: \"star-wars\", \"rick-morty\", and \"solid-router"
+  },
+  {
+   "repo": "TanStack/query",
+   "input": "Commit message:\nadd 'batching' and 'offline' examples (#12431)",
+   "gold": "docs",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message you've provided indicates that the changes made to the codebase include adding \"batching\" and \"offline\" examples for a specific feature or functionality. This suggests that these additions were part"
+  },
+  {
+   "repo": "commitizen-tools/commitizen",
+   "input": "Commit message:\nrestore changelog updates (#2074)\n\n* ci: restore changelog updates\n\nCo-authored-by: Copilot App <223556219+Copilot@users.noreply.github.com>\n\n* ci: configure changelog updates on bump\n\nCo-authored-by: Copilot App <223556219+Copilot@users.noreply.github.com>\n\n---------\n\nCo-authored-by: Copilot App <223556219+Copilot@users.noreply.github.com>",
+   "gold": "ci",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message you provided appears to be part of a Git commit in the context of a software development project that uses GitHub for version control and CI/CD pipelines. Let's break down the key elements"
+  },
+  {
+   "repo": "denoland/deno",
+   "input": "Commit message:\ngrow the op driver's future arena on demand (#36678)",
+   "gold": "perf",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message \"grow the op driver's future arena on demand (#36678)\" suggests that there has been an update or addition to the Open Platform (OP) driver in order to"
+  },
+  {
+   "repo": "electron/electron",
+   "input": "Commit message:\nalign protocol.registerSource request handling with protocol.handle (#55172)\n\nShare the renderer request checks ElectronURLLoaderFactory performs with\nProtocolSourceURLLoaderFactory so both factories treat requests the same way.",
+   "gold": "fix",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message you provided indicates that there has been an adjustment in how `protocol.registerSource` and `protocol.handle` requests are handled within the codebase. This change aligns the behavior of these"
+  },
+  {
+   "repo": "googleapis/python-storage",
+   "input": "Commit message:\nsend entire object checksum in the final api call of resumable upload (#1654)\n\nfeat: send entire object checksum in the final api call of resumable\nupload\n\nfixes b/461994245\n\n---------\n\nCo-authored-by: gemini-code-assist[bot] <176961590+gemini-code-assist[bot]@users.noreply.github.com>",
+   "gold": "feat",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message provided describes an update to a codebase related to resumable uploads for objects in a cloud storage service. Here's a breakdown of the key points:\n\n### Commit Message Breakdown"
+  },
+  {
+   "repo": "googleapis/python-storage",
+   "input": "Commit message:\nlibrarian generate pull request: 20260326T175601Z (#1785)\n\nPR created by the Librarian CLI to generate Cloud Client Libraries code\nfrom protos.\n\nBEGIN_COMMIT\n\nBEGIN_NESTED_COMMIT\nfeat: Added a new field `ComposeObjectRequest.delete_source_objects`\nfield\n\n\nPiperOrigin-RevId: 863087065\nLibrary-IDs: google-cloud-storage\nSource-link:\n[googleapis/googleapis@51ff87f4](https://github.com/googleapis/googleapis/commit/51ff87f4)\nEND_NESTED_COMMIT\n\nBEGIN_NESTED_COMMIT\ndocs: Updated documentation for `BidiReadObject`, `ReadObjectRequest`,\nand `ObjectContexts`\n\n\nPiperOrigin-RevId: 863087065\nLibrary-IDs: google-cloud-storage\nSource-link:\n[googleapis/googleapis@51ff",
+   "gold": "chore",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message provided seems to be part of a Git commit log generated by the Librarian CLI, which is used to automatically generate Cloud Client Libraries from Google's protobuf definitions. Here’s a breakdown of"
+  },
+  {
+   "repo": "commitizen-tools/commitizen",
+   "input": "Commit message:\nbump pymdown-extensions from 10.21.3 to 11.0 (#2037)\n\nSigned-off-by: dependabot[bot] <support@github.com>",
+   "gold": "ci",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message you provided is for a change in the `pymdown-extensions` package version. Here's a breakdown of what it means:\n\n### Commit Message Breakdown\n\n1. **B"
+  },
+  {
+   "repo": "denoland/deno",
+   "input": "Commit message:\nBuffer hex paths via native Uint8Array toHex/setFromHex (#36531)",
+   "gold": "perf",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message you've provided indicates that the changes made in this pull request involve converting hexadecimal paths from and to `Uint8Array` using native JavaScript functionality. This is likely related to handling file system"
+  },
+  {
+   "repo": "TanStack/query",
+   "input": "Commit message:\nadd 'star-wars', 'rick-morty' and 'vue-router' examples (#12439)",
+   "gold": "docs",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message you provided is clear and concise. It indicates that the changes made in this commit include adding three new examples: one for Star Wars, another for Rick & Morty, and a third"
+  },
+  {
+   "repo": "commitizen-tools/commitizen",
+   "input": "Commit message:\nbump actions/setup-go from 6 to 7 (#2032)\n\nSigned-off-by: dependabot[bot] <support@github.com>",
+   "gold": "ci",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message provided is:\n\n```\nbump actions/setup-go from 6 to 7 (#2032)\nSigned-off-by: dependabot[bot] <support@github.com"
+  },
+  {
+   "repo": "TanStack/query",
+   "input": "Commit message:\nmove the data layer into 'services/todos' with query and mutation factories (#12366)",
+   "gold": "refactor",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message you provided indicates that there has been a change in the structure of the codebase related to the \"todos\" feature within an application or service. Specifically:\n\n- The data layer (likely"
+  },
+  {
+   "repo": "commitizen-tools/commitizen",
+   "input": "Commit message:\nbump codecov/codecov-action from 6 to 7 (#2013)\n\nSigned-off-by: dependabot[bot] <support@github.com>",
+   "gold": "ci",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message provided is clear and concise, indicating that the version of `codecov/codecov-action` has been updated from version 6 to version 7. The message also includes a reference"
+  },
+  {
+   "repo": "electron/electron",
+   "input": "Commit message:\ndrop angle commit-graph alongside alternates in fix-sync (#55201)\n\nci: drop angle commit-graph with alternates in fix-sync\n\nSince the build image bump to git 2.55, auto maintenance (which uses the\n\"geometric\" strategy by default since git 2.54) writes a commit-graph in\nthe angle checkout of the Linux-built src cache. That graph lists commits\nthat only exist in the alternates git cache, so once fix_angle_git removes\nthe alternates, git fetch aborts on mac and Windows with \"which is in the\ncommit graph file but not in the object database\". Remove the commit-graph\ntogether with the alternates.\n\n\nClaude-Session: https://claude.ai/code/session_01Xtmcutqr2Yx3gWuQ7L",
+   "gold": "ci",
+   "pred": null,
+   "strict": false,
+   "reply": "The provided commit message describes an action taken to remove unnecessary files related to Git's commit graph from a specific repository. Here’s a breakdown of the key points:\n\n### Commit Message Breakdown:\n1."
+  },
+  {
+   "repo": "electron/electron",
+   "input": "Commit message:\nfix unload-IPC and protocol.handle 'is fast' flakes (#55083)\n\n* test: fix unload-IPC and protocol.handle 'is fast' flakes\n\nKeep renderers at foreground priority in the two tests that wait for an\nIPC sent from an unload handler after a cross-site navigation, so the\nbackgrounded old renderer does not miss Chromium's 500 ms unload timeout\nunder parallel spec load.\n\nRework protocol.handle 'is fast' to compare the native relay path against\nboth a direct fetch and the JS-pumped path, with a looser bound against\ndirect fetches and timings in the failure message.\n\nCo-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>\nClaude-Session: https://claude",
+   "gold": "test",
+   "pred": null,
+   "strict": false,
+   "reply": "```markdown\n### Commit Message:\n\n**fix unload-IPC and protocol.handle 'is fast' flakes (#55083)**\n\n* **test:** fix unload-IPC and protocol.handle '"
+  },
+  {
+   "repo": "TanStack/query",
+   "input": "Commit message:\napply automated fixes",
+   "gold": "ci",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message \"apply automated fixes\" suggests that the changes made in this commit were automatically generated or performed by an automated system. This could be due to various reasons such as:\n\n1. Automated testing"
+  },
+  {
+   "repo": "unocss/unocss",
+   "input": "Commit message:\nunify virtualId handling (#5405)\n\nCo-authored-by: autofix-ci[bot] <114827586+autofix-ci[bot]@users.noreply.github.com>",
+   "gold": "refactor",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message you've provided indicates that the changes made in this pull request aim to unify how `virtualId` is handled across different parts of the codebase. The co-authorship information suggests that"
+  },
+  {
+   "repo": "electron/electron",
+   "input": "Commit message:\nreuse one file: URL loader factory per session in net.fetch() (#55438)\n\nEvery net.fetch() of a file: URL built a new AsarURLLoaderFactory, plus a\nnew webRequest and protocol interception proxy in front of it. Create\nthat factory once per browser context and share it.\n\nThe proxy checks protocol interceptions and webRequest listeners per\nrequest, through references that live as long as the session, so\nhandlers and listeners added or removed after the first request still\napply. New specs cover that.\n\nInterceptURLLoaderFactory() now takes the factory's PendingRemote\ndirectly, so neither caller wraps it in a SharedURLLoaderFactory first.\n\nIn a benchmark that replays VS",
+   "gold": "perf",
+   "pred": null,
+   "strict": false,
+   "reply": "### Commit Message:\n\n**Reuse One File: URL Loader Factory Per Session in `net.fetch()` (#55438)**\n\n- Every `net.fetch()` of a file builds a new `"
+  },
+  {
+   "repo": "commitizen-tools/commitizen",
+   "input": "Commit message:\nfix setup-cz link\n\nCo-authored-by: Copilot App <223556219+Copilot@users.noreply.github.com>",
+   "gold": "docs",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message \"fix setup-cz link\" indicates that the issue was related to updating or fixing an existing link in the documentation for setting up something (likely a project or service) in Czech ("
+  },
+  {
+   "repo": "denoland/deno",
+   "input": "Commit message:\ntrack and deregister finalizers with BTreeMap instead of Vec (#36895)",
+   "gold": "perf",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message you provided indicates that the changes made to track and deregister finalizers using a `BTreeMap` (a balanced binary search tree) instead of a `Vec`. This suggests an"
+  },
+  {
+   "repo": "nestjs/nest",
+   "input": "Commit message:\nmap unsupported multipart content types to 415 (#18264)",
+   "gold": "fix",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message you provided indicates that there is an issue with handling unsupported multipart content types in the codebase. Specifically, it mentions that certain requests are being rejected with a status code of 41"
+  },
+  {
+   "repo": "denoland/deno",
+   "input": "Commit message:\nclipboard api (#35750)\n\nAdds `navigator.clipboard` (text only) to `deno desktop`, mirroring the\nweb\n[Clipboard\nAPI](https://developer.mozilla.org/en-US/docs/Web/API/Clipboard).\n\n## What it does\n\n- Exposes `navigator.clipboard` as a real `Clipboard` (extends\n`EventTarget`),\ninstalled as a `[SameObject]` prototype getter on `Navigator` — matching\nhow\nthe built-in `Navigator` attributes are defined (webidl-branded\nreceiver).\n- Implements the async text methods:\n- `readText(): Promise<string>` — resolves to the clipboard text, or\n`\"\"`\n    when empty / non-text.\n- `writeText(data): Promise<void>` — `data` goes through the",
+   "gold": "feat",
+   "pred": null,
+   "strict": false,
+   "reply": "### Commit Message: clipboard api (#35750)\n\n**Adds `navigator.clipboard` (text only) to `deno desktop`, mirroring the Clipboard API**\n\n---\n\n## What it"
+  },
+  {
+   "repo": "unocss/unocss",
+   "input": "Commit message:\nsort `unoVariables` class strings wrapped in `satisfies` (#5316)\n\nCo-authored-by: Cursor <cursoragent@cursor.com>",
+   "gold": "fix",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message you've provided is for a change to the `unoVariables` class in your codebase. The main changes include sorting the strings within the `satisfies` method and adding a"
+  },
+  {
+   "repo": "googleapis/python-storage",
+   "input": "Commit message:\noptimization to reduce number of open TCP connections while running zonal system tests (#1691)\n\nchore: optimization to reduce number of open TCP connections while\nrunning zonal system tests\n\n1. Increase `ulimit -n 10000` before ssh'ing into the VM where system\ntests for zonal buckets are running.\n2. Delete `mrd` and `writer` instance and trigger `gc.collect()` ( this\nalone should suffice but increasing doing the above optimization to\navoid future issues.",
+   "gold": "chore",
+   "pred": null,
+   "strict": false,
+   "reply": "### Commit Message:\n\n**Optimization to Reduce Number of Open TCP Connections While Running Zonal System Tests**\n\nThis commit optimizes the process of running zonal system tests by reducing the number of open TCP"
+  },
+  {
+   "repo": "googleapis/python-storage",
+   "input": "Commit message:\nskip failing samples due to public access prevention enforcement (#1668)\n\nskip failing samples due to public access prevention enforcement. \n\nMore Details on b/469643064",
+   "gold": "chore",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message you provided indicates that the purpose of this change is to skip failing samples because of public access prevention enforcement. This seems to be related to a specific bug or issue identified in Google's internal"
+  },
+  {
+   "repo": "unocss/unocss",
+   "input": "Commit message:\navoid intermediate arrays in token cache queries (#5393)",
+   "gold": "perf",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message \"avoid intermediate arrays in token cache queries (#5393)\" indicates that the codebase has been modified to eliminate the use of intermediate arrays when querying tokens from a cache. This"
+  },
+  {
+   "repo": "nestjs/nest",
+   "input": "Commit message:\nupdate dependency @nestjs/schematics to v12.0.12 (#18322)\n\nCo-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>",
+   "gold": "chore",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message you provided indicates that the update was made to the `@nestjs/schematics` package version from an older one (likely 11.x or earlier) to a newer version ("
+  },
+  {
+   "repo": "nestjs/nest",
+   "input": "Commit message:\nwait for sse output instead of a fixed delay (#18332)",
+   "gold": "test",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message you've provided indicates that there is an issue with the current implementation where a fixed delay is used to wait for SSE (Server-Sent Events) output. The proposed solution involves changing this"
+  },
+  {
+   "repo": "electron/electron",
+   "input": "Commit message:\nmake configureHostResolver spec hermetic (#55409)\n\n* test: make configureHostResolver spec hermetic\n\nThe \"affects dns lookup behavior\" spec sent a HEAD request to\nwww.electronjs.org to prove name resolution worked before switching to a\ndead DoH server. Serve a made-up hostname from a local DoH server and a\nlocal HTTP server instead, so the spec needs no external network and also\nproves the configured resolver is actually used.\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_01Vf2yMt934Tt5KncFWXpm2G\n\n* test: answer DoH probe queries in configureHostResolver spec\n\nChromium probes configured",
+   "gold": "test",
+   "pred": null,
+   "strict": false,
+   "reply": "### Commit Message:\n\n```plaintext\nmake configureHostResolver spec hermetic (#55409)\n```\n\n---\n\n* **test**: make `configureHostResolver` spec hermetic\n\nThe \""
+  },
+  {
+   "repo": "denoland/deno",
+   "input": "Commit message:\nforward v2.9.6 release commit to main (#36707)",
+   "gold": "chore",
+   "pred": null,
+   "strict": false,
+   "reply": "The provided commit message indicates that the following actions were taken:\n\n1. A new version of the software (v2.9.6) was released.\n2. The commit containing this information has been"
+  },
+  {
+   "repo": "nestjs/nest",
+   "input": "Commit message:\nretry the tcp server again after close and listen (#18238)\n\nclose() turns retries off, and a later listen() never turned them back on, so a ServerTCP instance that was closed and listened again no longer re-listened after an unexpected close. listen() now turns them back on. The close event of the earlier close() can arrive after that listen(); a retry is not armed, or does not listen, while the server is listening, which would throw ERR_SERVER_ALREADY_LISTEN from the retry timer.",
+   "gold": "fix",
+   "pred": null,
+   "strict": false,
+   "reply": "This commit message describes a fix for a potential issue in a TCP server implementation where closing the connection and then immediately reopening it (listening) caused the server to stop retrying connections after being unexpectedly closed."
+  },
+  {
+   "repo": "TanStack/query",
+   "input": "Commit message:\nmove the data layer into 'services/posts' with 'api.ts', 'queries.ts', and 'types.ts' and a query factory (#12349)",
+   "gold": "refactor",
+   "pred": null,
+   "strict": false,
+   "reply": "The commit message you've provided indicates that there has been a change in how the data layer for posts is structured within the application. Specifically, it mentions moving the data-related components (such as `api"
+  },
+  {
+   "repo": "electron/electron",
+   "input": "Commit message:\ncache Chromium DEPS in lint and fall back to googlesource (#55381)\n\n* ci: cache Chromium DEPS in lint and fall back to googlesource\n\nCo-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_01V8BVmCsTrqvXxeym666jbL\n\n* ci: store lint Chromium DEPS in the cross-instance cache\n\nThe Actions cache is close to full, so keep the per-revision copies of\nChromium's DEPS and buildtools/DEPS on the cross-instance cache share\nthat already holds the src cache, instead of actions/cache. The lint\ncontainer now mounts the share the same way the docs-only job does.\n\nOn a miss the files are still fetched via the GitHub c",
+   "gold": "ci",
+   "pred": null,
+   "strict": false,
+   "reply": "This commit message describes changes made to the CI pipeline for Chromium projects:\n\n1. It mentions that the Chromium DEPS file was cached in the CI process.\n2. It notes that this change allows for"
+  }
+ ]
+}

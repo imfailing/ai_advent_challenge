@@ -1,0 +1,33 @@
+{
+  "deepseek-v4-flash": {
+    "label": "DeepSeek (облако) — модель, которая стояла раньше",
+    "kind": "deepseek",
+    "url": "https://api.deepseek.com",
+    "model": "deepseek-v4-flash",
+    "mode": "prompt"
+  },
+  "base-qwen-q8": {
+    "label": "Qwen2.5-1.5B-Instruct Q8_0 без тюна (+ промпт с примерами)",
+    "kind": "llama",
+    "url": "http://127.0.0.1:8081/v1",
+    "mode": "prompt",
+    "gguf": "base-Q8_0.gguf",
+    "sha256": "38852fd738e5b3c13dbe3bd7c59d0647cf45ae5cf741384d0f30c5439cbac243"
+  },
+  "tuned-v1": {
+    "label": "Qwen2.5-1.5B + LoRA дня 7, слитая, Q8_0",
+    "kind": "llama",
+    "url": "http://127.0.0.1:8082/v1",
+    "mode": "plain",
+    "gguf": "tuned-v1-Q8_0.gguf",
+    "sha256": "fc1c1ac0036bb9202c867b75f0826e919ed07950e521b839bd563a86c09b9f19"
+  },
+  "tuned-v1-q4": {
+    "label": "то же, Q4_K_M (отклонена: минус 4,8 п.п. точности)",
+    "kind": "llama",
+    "url": "http://127.0.0.1:8083/v1",
+    "mode": "plain",
+    "gguf": "tuned-v1-Q4_K_M.gguf",
+    "sha256": "0990ae55c011cea7aeb351f698551b8695cb54393507bdfbac3eb37a2a3f95aa"
+  }
+}

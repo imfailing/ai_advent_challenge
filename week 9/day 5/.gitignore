@@ -1,0 +1,5 @@
+registry/state.json
+registry/*.tmp
+__pycache__/
+*.gguf
+registry/verified.json

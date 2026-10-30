@@ -1,0 +1,653 @@
+{
+ "name": "base-Q8_0-plain",
+ "gguf": "/home/asv1337/models/base-Q8_0.gguf",
+ "mode": "plain",
+ "file_mb": 1570,
+ "load_seconds": 0.81,
+ "rss_mb": 1008.6,
+ "gpu_mem_mb": 1946.4,
+ "latency_mean_s": 0.42,
+ "latency_p95_s": 0.4382,
+ "tokens_per_s": 95.2,
+ "avg_new_tokens": 40.0,
+ "n": 104,
+ "accuracy": 0.0,
+ "strict_format": 0.0,
+ "macro_f1": 0.0,
+ "per_class_accuracy": {
+  "feat": 0.0,
+  "fix": 0.0,
+  "docs": 0.0,
+  "refactor": 0.0,
+  "test": 0.0,
+  "chore": 0.0,
+  "perf": 0.0,
+  "ci": 0.0
+ },
+ "rows": [
+  {
+   "pred": null,
+   "gold": "test",
+   "strict": false,
+   "reply": "The commit message \"preserve package registry origin in CA store spec (#36797)\" indicates that the changes made to the codebase aim to preserve the origin of a package registry when configuring a"
+  },
+  {
+   "pred": null,
+   "gold": "feat",
+   "strict": false,
+   "reply": "The commit message \"support not-data-* variants (#5378)\" indicates that the changes made in this commit support certain variant names that were previously unsupported or ignored.\n\nHere's a breakdown of what"
+  },
+  {
+   "pred": null,
+   "gold": "test",
+   "strict": false,
+   "reply": "This commit message indicates that there's an issue with the installer not being present at installation time and it has been flagged by codecov as the only uncovered line in the PR (pull request). The purpose"
+  },
+  {
+   "pred": null,
+   "gold": "docs",
+   "strict": false,
+   "reply": "The commit message you provided is clear and concise. It indicates that the following actions were taken:\n\n- The \"suspense\" function has been removed.\n- References to the \"suspense\""
+  },
+  {
+   "pred": null,
+   "gold": "feat",
+   "strict": false,
+   "reply": "The commit message \"implement close (#1614)\" indicates that the code has been updated to handle closing issues or tasks related to issue number 1614. This suggests that there was"
+  },
+  {
+   "pred": null,
+   "gold": "ci",
+   "strict": false,
+   "reply": "Commit message:\ndrop the gcloud auth steps left over from the dl.deno.land move (#36765)\n\n* remove the \"Authenticate with Google Cloud\" and \"Setup gcloud\""
+  },
+  {
+   "pred": null,
+   "gold": "fix",
+   "strict": false,
+   "reply": "The commit message you provided indicates that the update was made to the `mongoose` dependency in your project and it includes a reference to an issue number (`#18236`). This suggests that"
+  },
+  {
+   "pred": null,
+   "gold": "feat",
+   "strict": false,
+   "reply": "### Commit Message:\nAdd micro-benchmarks for writes comparing standard (regional) vs rapid (zonal) buckets. (#1707)\n\nThis commit introduces a performance microbenchmarking suite"
+  },
+  {
+   "pred": null,
+   "gold": "docs",
+   "strict": false,
+   "reply": "The commit message you provided is clear and concise, indicating that the purpose of this change was to replace any numeric separators (such as commas or periods) with the string \"N * 100"
+  },
+  {
+   "pred": null,
+   "gold": "refactor",
+   "strict": false,
+   "reply": "The commit message you provided is clear and concise, indicating that the changes involve moving the data layer to a new directory called `services/movies` and introducing a query factory. This suggests an update or"
+  },
+  {
+   "pred": null,
+   "gold": "fix",
+   "strict": false,
+   "reply": "The commit message \"honor falsy vnode content overrides (#15769)\" suggests that there was an issue with how the content of virtual nodes (vnodes) is handled in a system"
+  },
+  {
+   "pred": null,
+   "gold": "feat",
+   "strict": false,
+   "reply": "### Commit Message:\nAuto enable mTLS when supported certificates are detected (#1637)\n\nThe Python SDK will use a hybrid approach for mTLS enablement:\n\n- **If the `GOOGLE"
+  },
+  {
+   "pred": null,
+   "gold": "test",
+   "strict": false,
+   "reply": "### Commit Message:\n```plaintext\nwait for GDK_BACKEND fixture exit instead of a fixed 10s poll (#55222)\n```\n\n### Description:\n\nThe GDK_BACKEND specs previously used"
+  },
+  {
+   "pred": null,
+   "gold": "chore",
+   "strict": false,
+   "reply": "### Commit Message:\n```plaintext\nAdd Sys test for move blob where name needs url encoding (#1624)\n\nSys test for move blob.\n\nAdd System test for bukect.move_blob where"
+  },
+  {
+   "pred": null,
+   "gold": "feat",
+   "strict": false,
+   "reply": "The commit message you provided indicates that the changes made to the `blob.py` file were intended to expose the `finalized_time` attribute, which is relevant for handling objects retrieved via the `GET"
+  },
+  {
+   "pred": null,
+   "gold": "perf",
+   "strict": false,
+   "reply": "The commit message \"trim the install footprint (#5342)\" indicates that the purpose of this commit is to reduce the size or footprint of the installation process for some software or application.\n\nThis could"
+  },
+  {
+   "pred": null,
+   "gold": "refactor",
+   "strict": false,
+   "reply": "The commit message you provided indicates that there has been a change in how the data layer for pagination and infinite queries is being handled. Specifically, it mentions moving this functionality to a new location within the code"
+  },
+  {
+   "pred": null,
+   "gold": "ci",
+   "strict": false,
+   "reply": "The commit message provided is clear and concise, indicating that the version bump for the `peter-evans/create-or-update-comment` package has been updated from version 4 to version 5. The"
+  },
+  {
+   "pred": null,
+   "gold": "ci",
+   "strict": false,
+   "reply": "The commit message you provided indicates that there have been improvements to the include analysis process in a PR. Specifically, it mentions adding an `include-analysis-root-filter` workflow_dispatch input with a default value of"
+  },
+  {
+   "pred": null,
+   "gold": "fix",
+   "strict": false,
+   "reply": "The commit message \"refactor virtual CSS loading to use structured filter and handler\" suggests that the code has been refactored (restructured or rewritten) in order to improve its structure, readability,"
+  },
+  {
+   "pred": null,
+   "gold": "refactor",
+   "strict": false,
+   "reply": "The commit message you provided indicates that the purpose of this change is to move system tests to a single event loop, which has been identified as necessary to address issues related to crashes and segmentation faults when running"
+  },
+  {
+   "pred": null,
+   "gold": "feat",
+   "strict": false,
+   "reply": "The commit message you provided indicates that the changes made to implement a minimal Least Recently Used (LRU) cache for autocomplete suggestions have been merged into the codebase. This suggests that this feature has been"
+  },
+  {
+   "pred": null,
+   "gold": "test",
+   "strict": false,
+   "reply": "The commit message \"block spellchecker dictionary downloads in specs (#55408)\" indicates that the changes made to the codebase are related to preventing or blocking the download of spell checker dictionaries during"
+  },
+  {
+   "pred": null,
+   "gold": "perf",
+   "strict": false,
+   "reply": "The commit message \"shrink the op_ws_create future (#36681)\" indicates that there has been an adjustment made to the `op_ws_create` function, specifically reducing its size or"
+  },
+  {
+   "pred": null,
+   "gold": "chore",
+   "strict": false,
+   "reply": "The commit message you provided indicates that the following changes were made:\n\n- The '@tanstack/*' package was updated to version '^5.105.0'.\n- This change is part"
+  },
+  {
+   "pred": null,
+   "gold": "feat",
+   "strict": false,
+   "reply": "The commit message you provided is clear and concise, indicating that the purpose of this change is to add a new write resumption strategy for handling errors in bidirectional (bidi) writes operations.\n\nHere"
+  },
+  {
+   "pred": null,
+   "gold": "docs",
+   "strict": false,
+   "reply": "The commit message you provided indicates that there has been an update to how certain options, such as `queryOptions` and `mutationOptions`, are being handled within a codebase. Specifically, it mentions"
+  },
+  {
+   "pred": null,
+   "gold": "fix",
+   "strict": false,
+   "reply": "The commit message \"preserve AsyncLocalStorage exit context (#36464)\" indicates that the purpose of this commit is to ensure that the `AsyncLocalStorage` class in the codebase preserves its exit"
+  },
+  {
+   "pred": null,
+   "gold": "chore",
+   "strict": false,
+   "reply": "The commit message \"upgrade astro version by npmx suggestion\" is clear and concise. It indicates that the change was made to upgrade the Astro framework version based on suggestions from npmx (likely referring to"
+  },
+  {
+   "pred": null,
+   "gold": "test",
+   "strict": false,
+   "reply": "The commit message you provided indicates that there's an issue with testing a fullscreen HTML spec in Chromium on Windows arm64 CI. Specifically, it mentions that a foreign topmost window covering the test window"
+  },
+  {
+   "pred": null,
+   "gold": "perf",
+   "strict": false,
+   "reply": "The commit message \"build dynamic rule order with one reverse (#5394)\" suggests that the changes made in this commit involve building or modifying a system's ability to dynamically reorder rules, and it"
+  },
+  {
+   "pred": null,
+   "gold": "fix",
+   "strict": false,
+   "reply": "The commit message you've provided indicates that the purpose of this change is to end a head response for an empty streamable file. This suggests that there was previously some issue with handling or responding to requests"
+  },
+  {
+   "pred": null,
+   "gold": "test",
+   "strict": false,
+   "reply": "### Commit Message:\nstart the unresponsive-event hang before sending the key (#55441)\n\n---\n\n**The suspend and no-suspend specs for the unresponsive event started the page's busy"
+  },
+  {
+   "pred": null,
+   "gold": "refactor",
+   "strict": false,
+   "reply": "The commit message you provided is quite specific and clearly indicates the purpose of this change. Here's a breakdown of what it means:\n\n- **\"inline custom hooks\"**: This suggests that new custom hooks"
+  },
+  {
+   "pred": null,
+   "gold": "refactor",
+   "strict": false,
+   "reply": "The commit message you provided is quite detailed, but it seems to be a mix of different elements. Let's break down the key parts:\n\n1. **Commit Type**: It appears to be a \""
+  },
+  {
+   "pred": null,
+   "gold": "perf",
+   "strict": false,
+   "reply": "The commit message \"zero-copy snapshot rehydration, drop bincode (#36680)\" indicates that the following changes were made:\n\n1. Zero-copy snapshot rehydration: This suggests improvements or"
+  },
+  {
+   "pred": null,
+   "gold": "ci",
+   "strict": false,
+   "reply": "The commit message you provided indicates that the changes made were related to reading the Cloudflare zone ID from secrets during a release promotion process. This suggests that there was an issue with accessing or using the correct"
+  },
+  {
+   "pred": null,
+   "gold": "fix",
+   "strict": false,
+   "reply": "The commit message provided appears to be related to changes made to the Vue.js library, specifically addressing issues with the `v-for` directive and ensuring proper handling of virtual nodes (vnodes) during component"
+  },
+  {
+   "pred": null,
+   "gold": "chore",
+   "strict": false,
+   "reply": "The commit message \"update deps version for test\" suggests that the purpose of this commit is to update the dependencies in the project's package.json or similar file so that they match the latest versions specified in"
+  },
+  {
+   "pred": null,
+   "gold": "feat",
+   "strict": false,
+   "reply": "The commit message \"expose persisted size in mrd (#1671)\" indicates that the purpose of this commit is to expose or make available the persisted size within the MRP (Multi-"
+  },
+  {
+   "pred": null,
+   "gold": "test",
+   "strict": false,
+   "reply": "The commit message provided is:\n\n```plaintext\nnormalize argparse choice snapshots (#2000)\n```\n\nThis commit appears to be related to normalizing or standardizing the way choices are handled in an"
+  },
+  {
+   "pred": null,
+   "gold": "perf",
+   "strict": false,
+   "reply": "This commit message describes an issue with the codebase where every time certain methods (`addCtorMetadata`, `addPropertiesMetadata`, and `addEnhancerMetadata`) are called during bootstrap, they clear"
+  },
+  {
+   "pred": null,
+   "gold": "fix",
+   "strict": false,
+   "reply": "### Commit Message:\n```plaintext\nkeep the macOS bundle signature valid unless an update is applied (#36574)\n\nFixes #36418.\n```\n\n### Description:\n\nTwo"
+  },
+  {
+   "pred": null,
+   "gold": "test",
+   "strict": false,
+   "reply": "The commit message provided is clear and concise, indicating that the fix involves updating specs for `desktopCapturer` on the main branch. The changes are related to removing chai/chai-as-promised/d"
+  },
+  {
+   "pred": null,
+   "gold": "refactor",
+   "strict": false,
+   "reply": "The commit message you provided indicates that the changes made to generate PreloadRealmGlobalScope IDL bindings for Electron involve several key points:\n\n1. **Service Worker Preload Scripts**: The service worker preload"
+  },
+  {
+   "pred": null,
+   "gold": "refactor",
+   "strict": false,
+   "reply": "The commit message you've provided indicates an update to the codebase related to using Algolia for querying data in a React application. The specific change is to inline (or embed directly into the existing code"
+  },
+  {
+   "pred": null,
+   "gold": "perf",
+   "strict": false,
+   "reply": "This commit message indicates that the changes made to the codebase involve splitting an `OpCtx` object into two parts: a shared `OpCommonCtx` and a set of borrowed operations. The issue"
+  },
+  {
+   "pred": null,
+   "gold": "chore",
+   "strict": false,
+   "reply": "The commit message you provided is clear and concise. It indicates that the change was made to replace `semver` with `verkit` in a release script, and it references issue #15"
+  },
+  {
+   "pred": null,
+   "gold": "fix",
+   "strict": false,
+   "reply": "The commit message \"anchor the part- variant regex (#5313)\" indicates that there has been an update to the codebase related to anchoring a specific regular expression for handling parts with the"
+  },
+  {
+   "pred": null,
+   "gold": "perf",
+   "strict": false,
+   "reply": "The commit message \"uncontended-borrow fast path for AsyncRefCell (#36679)\" indicates that the code has been optimized to improve performance when dealing with asynchronous references using `Async"
+  },
+  {
+   "pred": null,
+   "gold": "chore",
+   "strict": false,
+   "reply": "The commit message you provided is a clear and concise way of summarizing the changes made in this pull request. Let's break down each part:\n\n- **\"update 'vite' to '^8"
+  },
+  {
+   "pred": null,
+   "gold": "feat",
+   "strict": false,
+   "reply": "The commit message you provided indicates that a new feature has been added to support `chrome.storage.sync` in extensions. This change involves registering a custom ValueStoreCache for the SYNC settings namespace using Electron's"
+  },
+  {
+   "pred": null,
+   "gold": "docs",
+   "strict": false,
+   "reply": "The commit message you provided is quite clear and concise, indicating that the changes made were to add several new examples to a project. Here's a breakdown of what each part means:\n\n- **\"add"
+  },
+  {
+   "pred": null,
+   "gold": "feat",
+   "strict": false,
+   "reply": "The provided commit message \"add extensible commit filters\" suggests that the intention is to add an extension or feature related to filtering commits in some form of version control system (VCS). This could be"
+  },
+  {
+   "pred": null,
+   "gold": "test",
+   "strict": false,
+   "reply": "Commit message:\nmigrate cpp-heap specs to v8 heap snapshot helpers (#55243)\n\nSplit out of #55229 and extended per review there.\n\n- heapsnapshot"
+  },
+  {
+   "pred": null,
+   "gold": "refactor",
+   "strict": false,
+   "reply": "The commit message you provided indicates that there has been a change in the structure of the codebase, specifically moving the data layer into the `services/tasks` directory. Additionally, it mentions the addition of"
+  },
+  {
+   "pred": null,
+   "gold": "refactor",
+   "strict": false,
+   "reply": "The commit message you provided is clear and concise, indicating that inline changes were made to the `Detail` component in order to use the `'useMovie'` function. This suggests a refactoring or"
+  },
+  {
+   "pred": null,
+   "gold": "ci",
+   "strict": false,
+   "reply": "The commit message provided is a clear and concise description of the changes made to the codebase. It indicates that a new workflow has been added for generating code coverage reports, which was requested in issue #"
+  },
+  {
+   "pred": null,
+   "gold": "docs",
+   "strict": false,
+   "reply": "The commit message you provided indicates that the changes made to the codebase include adding several new features or improvements. Here's a breakdown of what each feature represents:\n\n1. **Auto-refetching**:"
+  },
+  {
+   "pred": null,
+   "gold": "test",
+   "strict": false,
+   "reply": "The commit message you provided describes an update to socket management in a system or application, specifically addressing issues related to connection reuse and request concurrency on busy CI machines. Here's a breakdown of the key points"
+  },
+  {
+   "pred": null,
+   "gold": "feat",
+   "strict": false,
+   "reply": "The commit message \"Add Async_appendable_object_writer.py (#1616)\" indicates that the following changes were made:\n\n- A new Python file named `Async_appendable_object_writer.py` has"
+  },
+  {
+   "pred": null,
+   "gold": "docs",
+   "strict": false,
+   "reply": "The commit message you provided indicates that the changes made to the codebase include adding several new features or improvements. Here's a breakdown of what each part means:\n\n- **\"add\":** This keyword"
+  },
+  {
+   "pred": null,
+   "gold": "fix",
+   "strict": false,
+   "reply": "The commit message you provided indicates that there is an issue with how files or directories are being included in the pipeline, specifically related to paths relative to the project root.\n\nHere's a breakdown of what this"
+  },
+  {
+   "pred": null,
+   "gold": "refactor",
+   "strict": false,
+   "reply": "The commit message you provided is quite detailed and specific to a code change in a software development context, particularly within an application that manages resources. Let's break down what this commit message means:\n\n### Commit"
+  },
+  {
+   "pred": null,
+   "gold": "docs",
+   "strict": false,
+   "reply": "### Commit Message:\ndocument additional_dependencies for pre-commit plugin hooks\n\nUsing a third-party commitizen plugin (e.g. cz-conventional-gitmoji)\nwith the pre-commit/prek \"commitizen"
+  },
+  {
+   "pred": null,
+   "gold": "chore",
+   "strict": false,
+   "reply": "The commit message you provided indicates that the changes made to update `react`, `react-dom` and their types across examples and integrations are part of a larger issue or pull request. Here's a"
+  },
+  {
+   "pred": null,
+   "gold": "docs",
+   "strict": false,
+   "reply": "The commit message you provided is clear and concise. It indicates that the purpose of this commit is to remove unnecessary shell requirements from an application menu tutorial, specifically addressing issue #55312.\n\n"
+  },
+  {
+   "pred": null,
+   "gold": "perf",
+   "strict": false,
+   "reply": "The commit message \"drop dead module-graph retention (#36683)\" indicates that the following changes were made:\n\n1. The module graph retention feature has been disabled or removed.\n2. This"
+  },
+  {
+   "pred": null,
+   "gold": "ci",
+   "strict": false,
+   "reply": "The commit message provided is clear and concise, indicating that the version of `idna` has been updated from 3.11 to 3.15. The message also includes a reference"
+  },
+  {
+   "pred": null,
+   "gold": "chore",
+   "strict": false,
+   "reply": "The commit message you provided indicates that the changes made in this commit involve dropping features related to `az`, `capacity_builder`, and `num-bigint`'s random number generation. This suggests a"
+  },
+  {
+   "pred": null,
+   "gold": "docs",
+   "strict": false,
+   "reply": "The commit message you provided is quite detailed, but it seems to be incomplete. It mentions adding several features related to infinite scrolling in a Nuxt.js application, including pagination, auto-refetching,"
+  },
+  {
+   "pred": null,
+   "gold": "docs",
+   "strict": false,
+   "reply": "The commit message you provided is clear and concise. It indicates that the changes made in this commit include adding three new example projects: \"star-wars\", \"rick-morty\", and \"solid-router"
+  },
+  {
+   "pred": null,
+   "gold": "docs",
+   "strict": false,
+   "reply": "The commit message you provided is clear and concise, indicating that the changes made in this pull request include adding \"batching\" and \"offline\" examples to a project or codebase. This suggests that"
+  },
+  {
+   "pred": null,
+   "gold": "ci",
+   "strict": false,
+   "reply": "This commit message indicates that the purpose of this change is to restore or revert some changes related to the changelog.\n\nHere's a breakdown of the key components:\n\n1. **\"restore\":** This"
+  },
+  {
+   "pred": null,
+   "gold": "perf",
+   "strict": false,
+   "reply": "The commit message \"grow the op driver's future arena on demand (#36678)\" suggests that there has been an update or addition to the Open Platform (OP) driver, specifically focusing"
+  },
+  {
+   "pred": null,
+   "gold": "fix",
+   "strict": false,
+   "reply": "The commit message you provided indicates that there has been a change in how `protocol.registerSource` and `protocol.handle` are handled, specifically to align them with the handling of `ElectronURLLoader"
+  },
+  {
+   "pred": null,
+   "gold": "feat",
+   "strict": false,
+   "reply": "### Commit Message:\n\n```plaintext\nsend entire object checksum in the final API call of resumable upload (#1654)\n```\n\n### Description:\nThis commit modifies the resumable upload"
+  },
+  {
+   "pred": null,
+   "gold": "chore",
+   "strict": false,
+   "reply": "It looks like you've provided a commit message for a Git commit, but there are some issues with the formatting and structure. Let's correct it to ensure it follows proper Git commit guidelines.\n\nHere is"
+  },
+  {
+   "pred": null,
+   "gold": "ci",
+   "strict": false,
+   "reply": "The commit message you provided is a standard format used in Git for documenting changes made to the repository. Let's break it down:\n\n- **bump pymdown-extensions from 10.2"
+  },
+  {
+   "pred": null,
+   "gold": "perf",
+   "strict": false,
+   "reply": "The commit message you provided indicates that the changes made in this pull request involve converting hexadecimal paths from and to `Uint8Array` using native JavaScript functionality. This is likely related to handling file system paths"
+  },
+  {
+   "pred": null,
+   "gold": "docs",
+   "strict": false,
+   "reply": "The commit message you provided is clear and concise. It indicates that the changes made in this commit include adding three new examples: one for Star Wars, another for Rick & Morty, and a third"
+  },
+  {
+   "pred": null,
+   "gold": "ci",
+   "strict": false,
+   "reply": "The commit message provided is:\n\n```\nbump actions/setup-go from 6 to 7 (#2032)\nSigned-off-by: dependabot[bot] <support@github.com"
+  },
+  {
+   "pred": null,
+   "gold": "refactor",
+   "strict": false,
+   "reply": "The commit message you provided indicates that there has been a change in the structure of the codebase, specifically moving the data layer related to \"todos\" (likely referring to a feature or module for managing"
+  },
+  {
+   "pred": null,
+   "gold": "ci",
+   "strict": false,
+   "reply": "The commit message provided is clear and concise, indicating that the version of `codecov/codecov-action` has been updated from version 6 to version 7. The message also includes a reference"
+  },
+  {
+   "pred": null,
+   "gold": "ci",
+   "strict": false,
+   "reply": "The provided commit message indicates that there is a fix for an issue related to Git's behavior when fetching from alternate repositories. Specifically, it mentions the following:\n\n1. **Build Image Update**: The build"
+  },
+  {
+   "pred": null,
+   "gold": "test",
+   "strict": false,
+   "reply": "```markdown\nfix unload-IPC and protocol.handle 'is fast' flakes (#55083)\n\nKeep renderers at foreground priority in the two tests that wait for an IPC sent from an"
+  },
+  {
+   "pred": null,
+   "gold": "ci",
+   "strict": false,
+   "reply": "The commit message \"apply automated fixes\" suggests that the purpose of this commit is to incorporate or implement automatic corrections or improvements into the codebase. This could be due to various reasons such as:\n\n1"
+  },
+  {
+   "pred": null,
+   "gold": "refactor",
+   "strict": false,
+   "reply": "The commit message \"unify virtualId handling (#5405)\" indicates that the changes made in this commit aim to standardize or simplify how virtual IDs (often referred to as \"virtualIds"
+  },
+  {
+   "pred": null,
+   "gold": "perf",
+   "strict": false,
+   "reply": "### Commit Message:\nReuse one file: URL loader factory per session in net.fetch() (#55438)\n\nEvery `net.fetch()` of a file: URL built a new `Asar"
+  },
+  {
+   "pred": null,
+   "gold": "docs",
+   "strict": false,
+   "reply": "The commit message \"fix setup-cz link\" suggests that there was an issue with the setup for Czech (cz) users and it has been fixed. This could involve updating or correcting links related to"
+  },
+  {
+   "pred": null,
+   "gold": "perf",
+   "strict": false,
+   "reply": "The commit message you provided indicates that the changes made to track and deregister finalizers using a `BTreeMap` (a balanced binary search tree) instead of a `Vec`. This suggests an"
+  },
+  {
+   "pred": null,
+   "gold": "fix",
+   "strict": false,
+   "reply": "This commit message indicates that the issue being addressed is related to handling unsupported multipart content types in a way that results in an HTTP status code of 415 (Unsupported Media Type). The reference number"
+  },
+  {
+   "pred": null,
+   "gold": "feat",
+   "strict": false,
+   "reply": "### Commit Message: clipboard api (#35750)\n\n**Adds `navigator.clipboard` (text only) to `deno desktop`, mirroring the Clipboard API on the web**\n\n##"
+  },
+  {
+   "pred": null,
+   "gold": "fix",
+   "strict": false,
+   "reply": "The commit message you provided is quite clear and concise. It indicates that the changes made to the code were related to sorting the strings within the `unoVariables` class, specifically those strings that are wrapped"
+  },
+  {
+   "pred": null,
+   "gold": "chore",
+   "strict": false,
+   "reply": "### Commit Message:\noptimization to reduce number of open TCP connections while running zonal system tests (#1691)\n\n### Running Zonal System Tests\n\n#### 1. Increase `ulimit"
+  },
+  {
+   "pred": null,
+   "gold": "chore",
+   "strict": false,
+   "reply": "The commit message you provided indicates that the purpose of this change is to skip failing samples because of a new policy enforced by Google's Public Access Prevention (PAP) service. This policy aims to prevent"
+  },
+  {
+   "pred": null,
+   "gold": "perf",
+   "strict": false,
+   "reply": "The commit message \"avoid intermediate arrays in token cache queries (#5393)\" indicates that the changes made to the codebase aim to eliminate the use of intermediate arrays when querying tokens within a cache"
+  },
+  {
+   "pred": null,
+   "gold": "chore",
+   "strict": false,
+   "reply": "The commit message you provided indicates that the update was made to the `@nestjs/schematics` package, specifically version 12.0.12. This change is part of a larger"
+  },
+  {
+   "pred": null,
+   "gold": "test",
+   "strict": false,
+   "reply": "The commit message you've provided indicates that there is an issue with waiting for SSE (Server-Sent Events) output and suggests a fix to address this problem by not using a fixed delay. This change"
+  },
+  {
+   "pred": null,
+   "gold": "test",
+   "strict": false,
+   "reply": "The commit message you've provided outlines a significant change to the `configureHostResolver` spec, which aims to make it more hermetic and less reliant on external network resources. This is particularly important for"
+  },
+  {
+   "pred": null,
+   "gold": "chore",
+   "strict": false,
+   "reply": "The provided commit message indicates that the following actions were taken:\n\n1. A new version of the software (v2.9.6) was released.\n2. The commit containing this information was pushed"
+  },
+  {
+   "pred": null,
+   "gold": "fix",
+   "strict": false,
+   "reply": "This commit message describes an issue with the `ServerTCP` class in a TCP server application and its corresponding fix. Here's a breakdown of what it means:\n\n1. **Issue Description**:\n  "
+  },
+  {
+   "pred": null,
+   "gold": "refactor",
+   "strict": false,
+   "reply": "The commit message you provided indicates that there has been a change in how the data layer is structured, specifically moving it to be part of the `services/posts` directory. This move includes creating three new"
+  },
+  {
+   "pred": null,
+   "gold": "ci",
+   "strict": false,
+   "reply": "The commit message provided is clear and concise, indicating that the changes were made to cache Chromium DEPS in the lint container and fall back to Google Source. The actions/cache was used instead of actions/"
+  }
+ ]
+}

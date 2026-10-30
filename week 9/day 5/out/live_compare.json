@@ -1,0 +1,662 @@
+{
+ "pallets/flask": {
+  "n": 30,
+  "agreement": {
+   "deepseek-v4-flash ~ base-qwen-q8": 0.767,
+   "deepseek-v4-flash ~ tuned-v1": 0.733,
+   "base-qwen-q8 ~ tuned-v1": 0.567
+  },
+  "by_type": {
+   "deepseek-v4-flash": {
+    "chore": 9,
+    "ci": 1,
+    "docs": 5,
+    "feat": 5,
+    "fix": 7,
+    "refactor": 1,
+    "test": 2
+   },
+   "base-qwen-q8": {
+    "chore": 12,
+    "docs": 2,
+    "feat": 6,
+    "fix": 9,
+    "refactor": 1
+   },
+   "tuned-v1": {
+    "chore": 9,
+    "ci": 1,
+    "docs": 6,
+    "feat": 6,
+    "fix": 3,
+    "refactor": 3,
+    "test": 2
+   }
+  },
+  "avg_seconds": {
+   "deepseek-v4-flash": 1.0669,
+   "base-qwen-q8": 0.0995,
+   "tuned-v1": 0.0975
+  },
+  "items": [
+   {
+    "subject": "add `versionchanged` for ctx signature change (#6176)",
+    "deepseek-v4-flash": "docs",
+    "base-qwen-q8": "chore",
+    "tuned-v1": "feat"
+   },
+   {
+    "subject": "add `versionchanged` for ctx signature change",
+    "deepseek-v4-flash": "docs",
+    "base-qwen-q8": "chore",
+    "tuned-v1": "feat"
+   },
+   {
+    "subject": "fix example typo",
+    "deepseek-v4-flash": "fix",
+    "base-qwen-q8": "fix",
+    "tuned-v1": "docs"
+   },
+   {
+    "subject": "werkzeug 3.2 compat",
+    "deepseek-v4-flash": "chore",
+    "base-qwen-q8": "chore",
+    "tuned-v1": "refactor"
+   },
+   {
+    "subject": "fix typing",
+    "deepseek-v4-flash": "fix",
+    "base-qwen-q8": "fix",
+    "tuned-v1": "docs"
+   },
+   {
+    "subject": "fix dev",
+    "deepseek-v4-flash": "fix",
+    "base-qwen-q8": "fix",
+    "tuned-v1": "chore"
+   },
+   {
+    "subject": "fix link",
+    "deepseek-v4-flash": "fix",
+    "base-qwen-q8": "fix",
+    "tuned-v1": "docs"
+   },
+   {
+    "subject": "drop support for Python 3.10 (#6168)",
+    "deepseek-v4-flash": "chore",
+    "base-qwen-q8": "chore",
+    "tuned-v1": "chore"
+   },
+   {
+    "subject": "drop support for Python 3.10",
+    "deepseek-v4-flash": "chore",
+    "base-qwen-q8": "chore",
+    "tuned-v1": "chore"
+   },
+   {
+    "subject": "fix docs ref",
+    "deepseek-v4-flash": "docs",
+    "base-qwen-q8": "docs",
+    "tuned-v1": "docs"
+   },
+   {
+    "subject": "explain seek",
+    "deepseek-v4-flash": "docs",
+    "base-qwen-q8": "docs",
+    "tuned-v1": "docs"
+   },
+   {
+    "subject": "support query in methodview",
+    "deepseek-v4-flash": "feat",
+    "base-qwen-q8": "feat",
+    "tuned-v1": "feat"
+   },
+   {
+    "subject": "add `app.query` route decorator (#6133)",
+    "deepseek-v4-flash": "feat",
+    "base-qwen-q8": "feat",
+    "tuned-v1": "feat"
+   },
+   {
+    "subject": "add app.query route decorator",
+    "deepseek-v4-flash": "feat",
+    "base-qwen-q8": "feat",
+    "tuned-v1": "feat"
+   },
+   {
+    "subject": "add entry",
+    "deepseek-v4-flash": "feat",
+    "base-qwen-q8": "feat",
+    "tuned-v1": "feat"
+   },
+   {
+    "subject": "Fix `.partition(\":\")` usage on potential IPv6 addresses (#6096)",
+    "deepseek-v4-flash": "fix",
+    "base-qwen-q8": "fix",
+    "tuned-v1": "fix"
+   },
+   {
+    "subject": "Fix IPv6 server name parsing",
+    "deepseek-v4-flash": "fix",
+    "base-qwen-q8": "fix",
+    "tuned-v1": "fix"
+   },
+   {
+    "subject": "Fix IPv6 session transactions",
+    "deepseek-v4-flash": "fix",
+    "base-qwen-q8": "fix",
+    "tuned-v1": "fix"
+   },
+   {
+    "subject": "Merge branch 'stable'",
+    "deepseek-v4-flash": "chore",
+    "base-qwen-q8": "chore",
+    "tuned-v1": "chore"
+   },
+   {
+    "subject": "fix typos",
+    "deepseek-v4-flash": "docs",
+    "base-qwen-q8": "fix",
+    "tuned-v1": "docs"
+   },
+   {
+    "subject": "use header properties",
+    "deepseek-v4-flash": "refactor",
+    "base-qwen-q8": "feat",
+    "tuned-v1": "refactor"
+   },
+   {
+    "subject": "Merge branch 'stable'",
+    "deepseek-v4-flash": "chore",
+    "base-qwen-q8": "chore",
+    "tuned-v1": "chore"
+   },
+   {
+    "subject": "test Python 3.15",
+    "deepseek-v4-flash": "ci",
+    "base-qwen-q8": "chore",
+    "tuned-v1": "ci"
+   },
+   {
+    "subject": "update dependencies",
+    "deepseek-v4-flash": "chore",
+    "base-qwen-q8": "chore",
+    "tuned-v1": "chore"
+   },
+   {
+    "subject": "Replace the use of private `monkeypatch` fixture API (#6095)",
+    "deepseek-v4-flash": "test",
+    "base-qwen-q8": "fix",
+    "tuned-v1": "test"
+   },
+   {
+    "subject": "Replace the use of private `monkeypatch` fixture API",
+    "deepseek-v4-flash": "test",
+    "base-qwen-q8": "refactor",
+    "tuned-v1": "test"
+   },
+   {
+    "subject": "update dev dependencies",
+    "deepseek-v4-flash": "chore",
+    "base-qwen-q8": "chore",
+    "tuned-v1": "chore"
+   },
+   {
+    "subject": "Any for  CertParamType type",
+    "deepseek-v4-flash": "feat",
+    "base-qwen-q8": "feat",
+    "tuned-v1": "refactor"
+   },
+   {
+    "subject": "update dev dependencies",
+    "deepseek-v4-flash": "chore",
+    "base-qwen-q8": "chore",
+    "tuned-v1": "chore"
+   },
+   {
+    "subject": "Merge branch 'stable'",
+    "deepseek-v4-flash": "chore",
+    "base-qwen-q8": "chore",
+    "tuned-v1": "chore"
+   }
+  ]
+ },
+ "psf/requests": {
+  "n": 30,
+  "agreement": {
+   "deepseek-v4-flash ~ base-qwen-q8": 0.667,
+   "deepseek-v4-flash ~ tuned-v1": 0.767,
+   "base-qwen-q8 ~ tuned-v1": 0.833
+  },
+  "by_type": {
+   "deepseek-v4-flash": {
+    "chore": 16,
+    "ci": 8,
+    "docs": 3,
+    "fix": 2,
+    "refactor": 1
+   },
+   "base-qwen-q8": {
+    "chore": 23,
+    "docs": 2,
+    "feat": 1,
+    "fix": 3,
+    "refactor": 1
+   },
+   "tuned-v1": {
+    "chore": 21,
+    "ci": 3,
+    "docs": 2,
+    "feat": 1,
+    "fix": 2,
+    "refactor": 1
+   }
+  },
+  "avg_seconds": {
+   "deepseek-v4-flash": 1.0756,
+   "base-qwen-q8": 0.183,
+   "tuned-v1": 0.1499
+  },
+  "items": [
+   {
+    "subject": "Bump the actions group with 4 updates (#7636)",
+    "deepseek-v4-flash": "ci",
+    "base-qwen-q8": "chore",
+    "tuned-v1": "chore"
+   },
+   {
+    "subject": "Bump the actions group with 3 updates (#7628)",
+    "deepseek-v4-flash": "ci",
+    "base-qwen-q8": "chore",
+    "tuned-v1": "chore"
+   },
+   {
+    "subject": "Bump https://github.com/astral-sh/ruff-pre-commit (#7616)",
+    "deepseek-v4-flash": "chore",
+    "base-qwen-q8": "chore",
+    "tuned-v1": "chore"
+   },
+   {
+    "subject": "Update lock-issues.yml to latest dependencies (#7609)",
+    "deepseek-v4-flash": "chore",
+    "base-qwen-q8": "chore",
+    "tuned-v1": "chore"
+   },
+   {
+    "subject": "Bump https://github.com/astral-sh/ruff-pre-commit (#7608)",
+    "deepseek-v4-flash": "chore",
+    "base-qwen-q8": "chore",
+    "tuned-v1": "chore"
+   },
+   {
+    "subject": "Bump https://github.com/astral-sh/ruff-pre-commit (#7606)",
+    "deepseek-v4-flash": "chore",
+    "base-qwen-q8": "chore",
+    "tuned-v1": "chore"
+   },
+   {
+    "subject": "Bump https://github.com/astral-sh/ruff-pre-commit (#7603)",
+    "deepseek-v4-flash": "chore",
+    "base-qwen-q8": "chore",
+    "tuned-v1": "chore"
+   },
+   {
+    "subject": "Bump https://github.com/astral-sh/ruff-pre-commit (#7598)",
+    "deepseek-v4-flash": "chore",
+    "base-qwen-q8": "chore",
+    "tuned-v1": "chore"
+   },
+   {
+    "subject": "Bump the actions group with 2 updates (#7596)",
+    "deepseek-v4-flash": "ci",
+    "base-qwen-q8": "chore",
+    "tuned-v1": "chore"
+   },
+   {
+    "subject": "Bump https://github.com/astral-sh/ruff-pre-commit (#7597)",
+    "deepseek-v4-flash": "chore",
+    "base-qwen-q8": "chore",
+    "tuned-v1": "chore"
+   },
+   {
+    "subject": "Bump the actions group with 3 updates (#7591)",
+    "deepseek-v4-flash": "ci",
+    "base-qwen-q8": "chore",
+    "tuned-v1": "chore"
+   },
+   {
+    "subject": "Bump https://github.com/astral-sh/ruff-pre-commit (#7590)",
+    "deepseek-v4-flash": "chore",
+    "base-qwen-q8": "chore",
+    "tuned-v1": "chore"
+   },
+   {
+    "subject": "Bump https://github.com/astral-sh/ruff-pre-commit (#7562)",
+    "deepseek-v4-flash": "chore",
+    "base-qwen-q8": "chore",
+    "tuned-v1": "chore"
+   },
+   {
+    "subject": "Fix link to AI Policy in CONTRIBUTING.md (#7576)",
+    "deepseek-v4-flash": "docs",
+    "base-qwen-q8": "fix",
+    "tuned-v1": "docs"
+   },
+   {
+    "subject": "Bump actions/setup-python from 6.2.0 to 6.3.0 in the actions group (#7561)",
+    "deepseek-v4-flash": "ci",
+    "base-qwen-q8": "chore",
+    "tuned-v1": "ci"
+   },
+   {
+    "subject": "Bump https://github.com/astral-sh/ruff-pre-commit (#7551)",
+    "deepseek-v4-flash": "chore",
+    "base-qwen-q8": "chore",
+    "tuned-v1": "chore"
+   },
+   {
+    "subject": "Bump actions/checkout from 6.0.2 to 7.0.0 in the actions group (#7540)",
+    "deepseek-v4-flash": "ci",
+    "base-qwen-q8": "chore",
+    "tuned-v1": "ci"
+   },
+   {
+    "subject": "Bump https://github.com/astral-sh/ruff-pre-commit (#7536)",
+    "deepseek-v4-flash": "chore",
+    "base-qwen-q8": "chore",
+    "tuned-v1": "chore"
+   },
+   {
+    "subject": "Inline pre-commit linting (#7539)",
+    "deepseek-v4-flash": "ci",
+    "base-qwen-q8": "chore",
+    "tuned-v1": "ci"
+   },
+   {
+    "subject": "Bump https://github.com/astral-sh/ruff-pre-commit (#7515)",
+    "deepseek-v4-flash": "chore",
+    "base-qwen-q8": "chore",
+    "tuned-v1": "chore"
+   },
+   {
+    "subject": "Add hasattr checks for remaining protocol isinstance checks (#7505)",
+    "deepseek-v4-flash": "fix",
+    "base-qwen-q8": "fix",
+    "tuned-v1": "fix"
+   },
+   {
+    "subject": "Fix `_encode_files` detection for `__getattr__`-based file wrappers (#7502)",
+    "deepseek-v4-flash": "fix",
+    "base-qwen-q8": "fix",
+    "tuned-v1": "fix"
+   },
+   {
+    "subject": "Disable commonly ignored Pyright linting rules (#7497)",
+    "deepseek-v4-flash": "chore",
+    "base-qwen-q8": "chore",
+    "tuned-v1": "chore"
+   },
+   {
+    "subject": "Bump https://github.com/astral-sh/ruff-pre-commit (#7503)",
+    "deepseek-v4-flash": "chore",
+    "base-qwen-q8": "chore",
+    "tuned-v1": "chore"
+   },
+   {
+    "subject": "Add type annotation for `Request.hooks` (#7498)",
+    "deepseek-v4-flash": "chore",
+    "base-qwen-q8": "feat",
+    "tuned-v1": "feat"
+   },
+   {
+    "subject": "Improve static typing of 3rd party imports  (#7496)",
+    "deepseek-v4-flash": "refactor",
+    "base-qwen-q8": "refactor",
+    "tuned-v1": "refactor"
+   },
+   {
+    "subject": "Bump https://github.com/astral-sh/ruff-pre-commit (#7493)",
+    "deepseek-v4-flash": "chore",
+    "base-qwen-q8": "chore",
+    "tuned-v1": "chore"
+   },
+   {
+    "subject": "Bump github/codeql-action from 4.35.1 to 4.36.0 in the actions group (#7492)",
+    "deepseek-v4-flash": "ci",
+    "base-qwen-q8": "chore",
+    "tuned-v1": "chore"
+   },
+   {
+    "subject": "Add AI Policy",
+    "deepseek-v4-flash": "docs",
+    "base-qwen-q8": "docs",
+    "tuned-v1": "docs"
+   },
+   {
+    "subject": "docs: indent continuation line in Session.get :param params: (#7460)",
+    "deepseek-v4-flash": "docs",
+    "base-qwen-q8": "docs",
+    "tuned-v1": "chore"
+   }
+  ]
+ },
+ "imfailing/ai_advent_challenge": {
+  "n": 30,
+  "agreement": {
+   "deepseek-v4-flash ~ base-qwen-q8": 0.6,
+   "deepseek-v4-flash ~ tuned-v1": 0.567,
+   "base-qwen-q8 ~ tuned-v1": 0.533
+  },
+  "by_type": {
+   "deepseek-v4-flash": {
+    "chore": 4,
+    "docs": 9,
+    "feat": 15,
+    "refactor": 1,
+    "test": 1
+   },
+   "base-qwen-q8": {
+    "chore": 10,
+    "docs": 11,
+    "feat": 7,
+    "fix": 1,
+    "test": 1
+   },
+   "tuned-v1": {
+    "chore": 2,
+    "ci": 4,
+    "docs": 12,
+    "feat": 8,
+    "refactor": 2,
+    "test": 2
+   }
+  },
+  "avg_seconds": {
+   "deepseek-v4-flash": 1.0373,
+   "base-qwen-q8": 0.1225,
+   "tuned-v1": 0.1593
+  },
+  "items": [
+   {
+    "subject": "week 9/day 4: дистилляция DeepSeek → Qwen2.5-1.5B (LoRA), письмо → JSON, сравнение качества/скорости/цены",
+    "deepseek-v4-flash": "feat",
+    "base-qwen-q8": "chore",
+    "tuned-v1": "refactor"
+   },
+   {
+    "subject": "week 9/day 3: потери после тюна, переобучение, где тюн оправдан — знания/стиль/формат, отчёт",
+    "deepseek-v4-flash": "docs",
+    "base-qwen-q8": "docs",
+    "tuned-v1": "docs"
+   },
+   {
+    "subject": "claude/stack.md: раздел про дообучение (week 9) — LoRA, ROCm, адаптеры вне git",
+    "deepseek-v4-flash": "docs",
+    "base-qwen-q8": "docs",
+    "tuned-v1": "docs"
+   },
+   {
+    "subject": "week 9: убрать LoRA-адаптеры из репозитория (по ~70 МБ), хранить на сервере",
+    "deepseek-v4-flash": "chore",
+    "base-qwen-q8": "chore",
+    "tuned-v1": "ci"
+   },
+   {
+    "subject": "week 9/day 2: v2 датасета — без утечки метки, чистка меток, лучший чекпоинт",
+    "deepseek-v4-flash": "feat",
+    "base-qwen-q8": "docs",
+    "tuned-v1": "refactor"
+   },
+   {
+    "subject": "week 9/day 2: свой датасет — классификация git-коммита в JSON, тюн vs промптинг на eval",
+    "deepseek-v4-flash": "feat",
+    "base-qwen-q8": "docs",
+    "tuned-v1": "test"
+   },
+   {
+    "subject": "week 9/day 1: первый LoRA-тюн — Qwen2.5-1.5B на pirate-ultrachat, сравнение на 20 запросах",
+    "deepseek-v4-flash": "feat",
+    "base-qwen-q8": "chore",
+    "tuned-v1": "docs"
+   },
+   {
+    "subject": "week 8/day 5: Execution Loop — пул из 18 задач, независимый верификатор, облако vs локальная модель",
+    "deepseek-v4-flash": "feat",
+    "base-qwen-q8": "chore",
+    "tuned-v1": "ci"
+   },
+   {
+    "subject": "week 8/day 4: Local Boost — Ollama + Continue, сравнение локальных моделей с облаком",
+    "deepseek-v4-flash": "chore",
+    "base-qwen-q8": "chore",
+    "tuned-v1": "docs"
+   },
+   {
+    "subject": "week 8/day 3: тестирование — код-тесты на 4 модуля, UI smoke через браузерный MCP, скиллы pr-verify/post-deploy, CI",
+    "deepseek-v4-flash": "test",
+    "base-qwen-q8": "test",
+    "tuned-v1": "test"
+   },
+   {
+    "subject": "week 8/day 2: профили агентов Bug Fix, Research, Docs Sync + проверка на реальных задачах",
+    "deepseek-v4-flash": "feat",
+    "base-qwen-q8": "fix",
+    "tuned-v1": "docs"
+   },
+   {
+    "subject": "week 8/day 1: Rules — CLAUDE.md v2, субагент, скилл, ruff, эксперимент v1→v2 на эндпоинте /stats",
+    "deepseek-v4-flash": "chore",
+    "base-qwen-q8": "feat",
+    "tuned-v1": "docs"
+   },
+   {
+    "subject": "docs: обновить README и контекст под изменения week 7/day 5",
+    "deepseek-v4-flash": "docs",
+    "base-qwen-q8": "docs",
+    "tuned-v1": "docs"
+   },
+   {
+    "subject": "week 7/day 5: токены из интерфейса, убрано поле заголовка, rooster-режим по умолчанию",
+    "deepseek-v4-flash": "feat",
+    "base-qwen-q8": "feat",
+    "tuned-v1": "feat"
+   },
+   {
+    "subject": "docs: refresh README + context for final Week 7 state",
+    "deepseek-v4-flash": "docs",
+    "base-qwen-q8": "docs",
+    "tuned-v1": "docs"
+   },
+   {
+    "subject": "docs(week7/day5): add nginx reverse proxy + TLS steps (like week 6)",
+    "deepseek-v4-flash": "docs",
+    "base-qwen-q8": "docs",
+    "tuned-v1": "docs"
+   },
+   {
+    "subject": "week7/day5: web-only service for remote GitHub repos, VPS-ready",
+    "deepseek-v4-flash": "refactor",
+    "base-qwen-q8": "feat",
+    "tuned-v1": "feat"
+   },
+   {
+    "subject": "week7/day5: external GitHub repos + toxic \"roast\" mode",
+    "deepseek-v4-flash": "feat",
+    "base-qwen-q8": "chore",
+    "tuned-v1": "feat"
+   },
+   {
+    "subject": "week7/day5: add web UI + Docker deploy for the AI digest service",
+    "deepseek-v4-flash": "feat",
+    "base-qwen-q8": "feat",
+    "tuned-v1": "feat"
+   },
+   {
+    "subject": "week7/day5: real AI app — automated repo change digest (git -> AI -> Telegram)",
+    "deepseek-v4-flash": "feat",
+    "base-qwen-q8": "chore",
+    "tuned-v1": "ci"
+   },
+   {
+    "subject": "week7/day4: file-operating assistant (reads/searches/writes via MCP)",
+    "deepseek-v4-flash": "feat",
+    "base-qwen-q8": "feat",
+    "tuned-v1": "feat"
+   },
+   {
+    "subject": "week7/day3: AI support assistant (RAG over FAQ/docs + ticket context via MCP)",
+    "deepseek-v4-flash": "feat",
+    "base-qwen-q8": "feat",
+    "tuned-v1": "feat"
+   },
+   {
+    "subject": "week7/day2: automatic AI code review on PRs (diff + RAG -> review)",
+    "deepseek-v4-flash": "feat",
+    "base-qwen-q8": "chore",
+    "tuned-v1": "ci"
+   },
+   {
+    "subject": "docs(claude): refresh all context — week 7, claude tracked, secrets policy",
+    "deepseek-v4-flash": "docs",
+    "base-qwen-q8": "docs",
+    "tuned-v1": "docs"
+   },
+   {
+    "subject": "docs(claude): update README — folder is now versioned, keys are placeholders",
+    "deepseek-v4-flash": "docs",
+    "base-qwen-q8": "docs",
+    "tuned-v1": "chore"
+   },
+   {
+    "subject": "chore: track claude/ context in git (secrets redacted)",
+    "deepseek-v4-flash": "chore",
+    "base-qwen-q8": "chore",
+    "tuned-v1": "chore"
+   },
+   {
+    "subject": "week7/day1: answer about the project only via the /help command",
+    "deepseek-v4-flash": "feat",
+    "base-qwen-q8": "chore",
+    "tuned-v1": "feat"
+   },
+   {
+    "subject": "week7/day1: developer assistant that understands the project",
+    "deepseek-v4-flash": "feat",
+    "base-qwen-q8": "feat",
+    "tuned-v1": "feat"
+   },
+   {
+    "subject": "docs: refresh root README for Week 6 (local LLMs)",
+    "deepseek-v4-flash": "docs",
+    "base-qwen-q8": "docs",
+    "tuned-v1": "docs"
+   },
+   {
+    "subject": "docs(week6/day5): install certbot nginx plugin + note domain requirement",
+    "deepseek-v4-flash": "docs",
+    "base-qwen-q8": "docs",
+    "tuned-v1": "docs"
+   }
+  ]
+ }
+}

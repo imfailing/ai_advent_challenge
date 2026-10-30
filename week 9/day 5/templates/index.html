@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI-анализ GitHub-репозитория</title>
+  <script src="https://cdn.jsdelivr.net/npm/marked@12/marked.min.js"></script>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:system-ui,-apple-system,sans-serif;background:#0f1117;color:#e8eaf0;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:2rem 1rem;gap:1rem}
+    header{width:100%;max-width:820px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem}
+    h1{font-size:1.35rem;font-weight:700;color:#f472b6}
+    .panel{width:100%;max-width:820px;background:#13161f;border:1px solid #1e2235;border-radius:12px;padding:1rem 1.1rem;display:flex;flex-direction:column;gap:.7rem}
+    .row{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
+    label{font-size:.82rem;color:#9aa3c0}
+    input{background:#1a1d2e;border:1px solid #2e3050;border-radius:8px;color:#e8eaf0;padding:.45rem .6rem;font-size:.85rem;outline:none}
+    input:focus{border-color:#f472b6}
+    input.grow{flex:1;min-width:200px}
+    details{width:100%;max-width:820px;background:#13161f;border:1px solid #1e2235;border-radius:12px;padding:.6rem 1.1rem}
+    details summary{cursor:pointer;font-size:.85rem;color:#9aa3c0;font-weight:600}
+    details[open]{padding-bottom:1rem}
+    details .row{margin-top:.7rem}
+    .btn{border:none;border-radius:9px;padding:.55rem 1.1rem;font-size:.88rem;font-weight:700;cursor:pointer}
+    .btn.primary{background:#f472b6;color:#3a0a24}.btn.primary:hover:not(:disabled){background:#ec4899}
+    .btn.ghost{background:transparent;border:1px solid #4a2a3e;color:#f0a8cf}.btn.ghost:hover{background:#1e1320}
+    .btn:disabled{opacity:.4;cursor:not-allowed}
+    .out{width:100%;max-width:820px;background:#12141d;border:1px solid #1e2235;border-radius:12px;padding:1rem 1.2rem;min-height:120px;font-size:.92rem;line-height:1.6}
+    .out .md h1{font-size:1.3rem;color:#f9a8d4;margin:.3rem 0 .6rem}
+    .out .md h2{font-size:1rem;color:#f472b6;margin:.9rem 0 .3rem}
+    .out .md ul{padding-left:1.4rem;margin:.3rem 0}.out .md li{margin:.15rem 0}
+    .out .md strong{color:#fbcfe8}.out .md em{color:#8a93b0}
+    .out .md code{background:#211019;border-radius:4px;padding:.1em .4em;font-size:.86em;color:#f9a8d4}
+    .status{width:100%;max-width:820px;font-size:.8rem;color:#7080a0}
+    .status.ok{color:#4ade80}.status.err{color:#f87171}
+    .muted{color:#4a5568;font-size:.8rem}
+  </style>
+</head>
+<body>
+<header>
+  <h1 id="title-h">🐓 Rooster GitHub-репозитория</h1>
+</header>
+
+<details id="tokens">
+  <summary>⚙ Токены (задаются здесь, не из окружения)</summary>
+  <div class="row">
+    <label style="min-width:130px">DeepSeek ключ*:</label>
+    <input id="deepseek_key" class="grow" type="password" placeholder="sk-… (обязательно)" />
+  </div>
+  <div class="row">
+    <label style="min-width:130px">GitHub токен:</label>
+    <input id="github_token" class="grow" type="password" placeholder="опц. — приватные репо и лимиты" />
+  </div>
+  <div class="row">
+    <label style="min-width:130px">Telegram токен:</label>
+    <input id="telegram_token" class="grow" type="password" placeholder="опц. — токен бота для публикации" />
+  </div>
+  <div class="row">
+    <label style="min-width:130px">Telegram chat_id:</label>
+    <input id="telegram_chat_id" class="grow" type="text" placeholder="опц. — куда публиковать" />
+  </div>
+  <div class="muted" style="margin-top:.6rem">Токены хранятся только в этом браузере (localStorage) и уходят на сервер лишь в момент запроса.</div>
+</details>
+
+<div class="panel">
+  <div class="row">
+    <label>Репозиторий:</label>
+    <input id="repo" class="grow" placeholder="owner/repo или https://github.com/owner/repo" />
+  </div>
+  <div class="row">
+    <label>Коммитов:</label>
+    <input id="last" type="number" value="15" min="1" max="100" style="width:80px" />
+    <label style="display:flex;gap:.3rem;align-items:center;cursor:pointer">
+      <input id="toxic" type="checkbox" style="width:auto" checked onchange="syncToxic()" /> 🐓 rooster режим
+    </label>
+  </div>
+  <div class="row">
+    <button class="btn primary" id="gen" onclick="generate()">Анализировать</button>
+    <button class="btn ghost" id="pub" onclick="publish()" disabled>Опубликовать в Telegram</button>
+  </div>
+  <div class="muted">Анализирует удалённый GitHub-репозиторий по коммитам. Rooster-режим жжёт по коду, а не по авторам. Публикация — в свой Telegram.</div>
+</div>
+
+<div class="status" id="status"></div>
+<div class="out"><div class="md" id="out"><span class="muted">Результат появится здесь…</span></div></div>
+
+<script>
+marked.use({gfm:true,breaks:true});
+const $=id=>document.getElementById(id);
+function syncToxic(){$("title-h").textContent=$("toxic").checked?"🐓 Rooster GitHub-репозитория":"📰 AI-анализ GitHub-репозитория";}
+function setStatus(t,cls){const s=$("status");s.textContent=t;s.className="status"+(cls?" "+cls:"");}
+
+// токены — в localStorage, чтобы не вводить каждый раз
+const TOKEN_IDS=["deepseek_key","github_token","telegram_token","telegram_chat_id"];
+TOKEN_IDS.forEach(id=>{
+  const v=localStorage.getItem("day5_"+id);if(v)$(id).value=v;
+  $(id).addEventListener("input",()=>localStorage.setItem("day5_"+id,$(id).value));
+});
+
+async function generate(){
+  const repo=$("repo").value.trim();
+  if(!repo){setStatus("Укажите репозиторий",'err');return;}
+  if(!$("deepseek_key").value.trim()){setStatus("Укажите ключ DeepSeek (⚙ Токены)",'err');$("tokens").open=true;return;}
+  $("gen").disabled=true;$("pub").disabled=true;setStatus("Читаю коммиты и анализирую…");
+  const body={repo,last:$("last").value,toxic:$("toxic").checked,
+              deepseek_key:$("deepseek_key").value.trim(),github_token:$("github_token").value.trim()};
+  try{
+    const res=await fetch("/generate",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+    const data=await res.json();
+    if(!res.ok){setStatus(data.error||"Ошибка",'err');}
+    else{$("out").innerHTML=marked.parse(data.digest);setStatus(`Готово · ${data.source} · коммитов: ${data.commits}`,'ok');$("pub").disabled=false;}
+  }catch(e){setStatus("Сеть: "+e.message,'err');}
+  finally{$("gen").disabled=false;}
+}
+
+async function publish(){
+  if(!$("telegram_token").value.trim()||!$("telegram_chat_id").value.trim()){
+    setStatus("Укажите Telegram токен и chat_id (⚙ Токены)",'err');$("tokens").open=true;return;
+  }
+  $("pub").disabled=true;setStatus("Публикую в Telegram…");
+  const body={telegram_token:$("telegram_token").value.trim(),telegram_chat_id:$("telegram_chat_id").value.trim()};
+  try{
+    const res=await fetch("/publish",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+    const data=await res.json();
+    if(data.status==="sent")setStatus("✓ Опубликовано в Telegram",'ok');
+    else if(data.status==="skipped")setStatus("Пропущено: "+(data.reason||"нет токенов"),'err');
+    else setStatus("Ошибка публикации: "+(data.reason||JSON.stringify(data.response||{})),'err');
+  }catch(e){setStatus("Сеть: "+e.message,'err');}
+  finally{$("pub").disabled=false;}
+}
+
+syncToxic();
+</script>
+</body>
+</html>

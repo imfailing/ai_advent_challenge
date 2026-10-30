@@ -1,0 +1,653 @@
+{
+ "name": "tuned-v1-Q4_K_M-plain",
+ "gguf": "/home/asv1337/models/tuned-v1-Q4_K_M.gguf",
+ "mode": "plain",
+ "file_mb": 940,
+ "load_seconds": 0.81,
+ "rss_mb": 856.6,
+ "gpu_mem_mb": 1320.9,
+ "latency_mean_s": 0.073,
+ "latency_p95_s": 0.0933,
+ "tokens_per_s": 98.5,
+ "avg_new_tokens": 7.2,
+ "n": 104,
+ "accuracy": 0.654,
+ "strict_format": 1.0,
+ "macro_f1": 0.645,
+ "per_class_accuracy": {
+  "feat": 0.615,
+  "fix": 0.769,
+  "docs": 0.846,
+  "refactor": 0.385,
+  "test": 0.615,
+  "chore": 0.462,
+  "perf": 0.923,
+  "ci": 0.615
+ },
+ "rows": [
+  {
+   "pred": "fix",
+   "gold": "test",
+   "strict": true,
+   "reply": "{\"type\": \"fix\"}"
+  },
+  {
+   "pred": "feat",
+   "gold": "feat",
+   "strict": true,
+   "reply": "{\"type\": \"feat\"}"
+  },
+  {
+   "pred": "test",
+   "gold": "test",
+   "strict": true,
+   "reply": "{\"type\": \"test\"}"
+  },
+  {
+   "pred": "docs",
+   "gold": "docs",
+   "strict": true,
+   "reply": "{\"type\": \"docs\"}"
+  },
+  {
+   "pred": "feat",
+   "gold": "feat",
+   "strict": true,
+   "reply": "{\"type\": \"feat\"}"
+  },
+  {
+   "pred": "ci",
+   "gold": "ci",
+   "strict": true,
+   "reply": "{\"type\": \"ci\"}"
+  },
+  {
+   "pred": "chore",
+   "gold": "fix",
+   "strict": true,
+   "reply": "{\"type\": \"chore\"}"
+  },
+  {
+   "pred": "test",
+   "gold": "feat",
+   "strict": true,
+   "reply": "{\"type\": \"test\"}"
+  },
+  {
+   "pred": "refactor",
+   "gold": "docs",
+   "strict": true,
+   "reply": "{\"type\": \"refactor\"}"
+  },
+  {
+   "pred": "refactor",
+   "gold": "refactor",
+   "strict": true,
+   "reply": "{\"type\": \"refactor\"}"
+  },
+  {
+   "pred": "fix",
+   "gold": "fix",
+   "strict": true,
+   "reply": "{\"type\": \"fix\"}"
+  },
+  {
+   "pred": "feat",
+   "gold": "feat",
+   "strict": true,
+   "reply": "{\"type\": \"feat\"}"
+  },
+  {
+   "pred": "test",
+   "gold": "test",
+   "strict": true,
+   "reply": "{\"type\": \"test\"}"
+  },
+  {
+   "pred": "test",
+   "gold": "chore",
+   "strict": true,
+   "reply": "{\"type\": \"test\"}"
+  },
+  {
+   "pred": "fix",
+   "gold": "feat",
+   "strict": true,
+   "reply": "{\"type\": \"fix\"}"
+  },
+  {
+   "pred": "perf",
+   "gold": "perf",
+   "strict": true,
+   "reply": "{\"type\": \"perf\"}"
+  },
+  {
+   "pred": "docs",
+   "gold": "refactor",
+   "strict": true,
+   "reply": "{\"type\": \"docs\"}"
+  },
+  {
+   "pred": "chore",
+   "gold": "ci",
+   "strict": true,
+   "reply": "{\"type\": \"chore\"}"
+  },
+  {
+   "pred": "ci",
+   "gold": "ci",
+   "strict": true,
+   "reply": "{\"type\": \"ci\"}"
+  },
+  {
+   "pred": "perf",
+   "gold": "fix",
+   "strict": true,
+   "reply": "{\"type\": \"perf\"}"
+  },
+  {
+   "pred": "test",
+   "gold": "refactor",
+   "strict": true,
+   "reply": "{\"type\": \"test\"}"
+  },
+  {
+   "pred": "feat",
+   "gold": "feat",
+   "strict": true,
+   "reply": "{\"type\": \"feat\"}"
+  },
+  {
+   "pred": "test",
+   "gold": "test",
+   "strict": true,
+   "reply": "{\"type\": \"test\"}"
+  },
+  {
+   "pred": "perf",
+   "gold": "perf",
+   "strict": true,
+   "reply": "{\"type\": \"perf\"}"
+  },
+  {
+   "pred": "chore",
+   "gold": "chore",
+   "strict": true,
+   "reply": "{\"type\": \"chore\"}"
+  },
+  {
+   "pred": "feat",
+   "gold": "feat",
+   "strict": true,
+   "reply": "{\"type\": \"feat\"}"
+  },
+  {
+   "pred": "refactor",
+   "gold": "docs",
+   "strict": true,
+   "reply": "{\"type\": \"refactor\"}"
+  },
+  {
+   "pred": "fix",
+   "gold": "fix",
+   "strict": true,
+   "reply": "{\"type\": \"fix\"}"
+  },
+  {
+   "pred": "chore",
+   "gold": "chore",
+   "strict": true,
+   "reply": "{\"type\": \"chore\"}"
+  },
+  {
+   "pred": "test",
+   "gold": "test",
+   "strict": true,
+   "reply": "{\"type\": \"test\"}"
+  },
+  {
+   "pred": "perf",
+   "gold": "perf",
+   "strict": true,
+   "reply": "{\"type\": \"perf\"}"
+  },
+  {
+   "pred": "fix",
+   "gold": "fix",
+   "strict": true,
+   "reply": "{\"type\": \"fix\"}"
+  },
+  {
+   "pred": "test",
+   "gold": "test",
+   "strict": true,
+   "reply": "{\"type\": \"test\"}"
+  },
+  {
+   "pred": "feat",
+   "gold": "refactor",
+   "strict": true,
+   "reply": "{\"type\": \"feat\"}"
+  },
+  {
+   "pred": "docs",
+   "gold": "refactor",
+   "strict": true,
+   "reply": "{\"type\": \"docs\"}"
+  },
+  {
+   "pred": "perf",
+   "gold": "perf",
+   "strict": true,
+   "reply": "{\"type\": \"perf\"}"
+  },
+  {
+   "pred": "ci",
+   "gold": "ci",
+   "strict": true,
+   "reply": "{\"type\": \"ci\"}"
+  },
+  {
+   "pred": "fix",
+   "gold": "fix",
+   "strict": true,
+   "reply": "{\"type\": \"fix\"}"
+  },
+  {
+   "pred": "chore",
+   "gold": "chore",
+   "strict": true,
+   "reply": "{\"type\": \"chore\"}"
+  },
+  {
+   "pred": "fix",
+   "gold": "feat",
+   "strict": true,
+   "reply": "{\"type\": \"fix\"}"
+  },
+  {
+   "pred": "fix",
+   "gold": "test",
+   "strict": true,
+   "reply": "{\"type\": \"fix\"}"
+  },
+  {
+   "pred": "perf",
+   "gold": "perf",
+   "strict": true,
+   "reply": "{\"type\": \"perf\"}"
+  },
+  {
+   "pred": "fix",
+   "gold": "fix",
+   "strict": true,
+   "reply": "{\"type\": \"fix\"}"
+  },
+  {
+   "pred": "test",
+   "gold": "test",
+   "strict": true,
+   "reply": "{\"type\": \"test\"}"
+  },
+  {
+   "pred": "feat",
+   "gold": "refactor",
+   "strict": true,
+   "reply": "{\"type\": \"feat\"}"
+  },
+  {
+   "pred": "feat",
+   "gold": "refactor",
+   "strict": true,
+   "reply": "{\"type\": \"feat\"}"
+  },
+  {
+   "pred": "perf",
+   "gold": "perf",
+   "strict": true,
+   "reply": "{\"type\": \"perf\"}"
+  },
+  {
+   "pred": "ci",
+   "gold": "chore",
+   "strict": true,
+   "reply": "{\"type\": \"ci\"}"
+  },
+  {
+   "pred": "fix",
+   "gold": "fix",
+   "strict": true,
+   "reply": "{\"type\": \"fix\"}"
+  },
+  {
+   "pred": "perf",
+   "gold": "perf",
+   "strict": true,
+   "reply": "{\"type\": \"perf\"}"
+  },
+  {
+   "pred": "chore",
+   "gold": "chore",
+   "strict": true,
+   "reply": "{\"type\": \"chore\"}"
+  },
+  {
+   "pred": "fix",
+   "gold": "feat",
+   "strict": true,
+   "reply": "{\"type\": \"fix\"}"
+  },
+  {
+   "pred": "docs",
+   "gold": "docs",
+   "strict": true,
+   "reply": "{\"type\": \"docs\"}"
+  },
+  {
+   "pred": "feat",
+   "gold": "feat",
+   "strict": true,
+   "reply": "{\"type\": \"feat\"}"
+  },
+  {
+   "pred": "refactor",
+   "gold": "test",
+   "strict": true,
+   "reply": "{\"type\": \"refactor\"}"
+  },
+  {
+   "pred": "feat",
+   "gold": "refactor",
+   "strict": true,
+   "reply": "{\"type\": \"feat\"}"
+  },
+  {
+   "pred": "refactor",
+   "gold": "refactor",
+   "strict": true,
+   "reply": "{\"type\": \"refactor\"}"
+  },
+  {
+   "pred": "ci",
+   "gold": "ci",
+   "strict": true,
+   "reply": "{\"type\": \"ci\"}"
+  },
+  {
+   "pred": "docs",
+   "gold": "docs",
+   "strict": true,
+   "reply": "{\"type\": \"docs\"}"
+  },
+  {
+   "pred": "perf",
+   "gold": "test",
+   "strict": true,
+   "reply": "{\"type\": \"perf\"}"
+  },
+  {
+   "pred": "feat",
+   "gold": "feat",
+   "strict": true,
+   "reply": "{\"type\": \"feat\"}"
+  },
+  {
+   "pred": "docs",
+   "gold": "docs",
+   "strict": true,
+   "reply": "{\"type\": \"docs\"}"
+  },
+  {
+   "pred": "fix",
+   "gold": "fix",
+   "strict": true,
+   "reply": "{\"type\": \"fix\"}"
+  },
+  {
+   "pred": "refactor",
+   "gold": "refactor",
+   "strict": true,
+   "reply": "{\"type\": \"refactor\"}"
+  },
+  {
+   "pred": "docs",
+   "gold": "docs",
+   "strict": true,
+   "reply": "{\"type\": \"docs\"}"
+  },
+  {
+   "pred": "docs",
+   "gold": "chore",
+   "strict": true,
+   "reply": "{\"type\": \"docs\"}"
+  },
+  {
+   "pred": "docs",
+   "gold": "docs",
+   "strict": true,
+   "reply": "{\"type\": \"docs\"}"
+  },
+  {
+   "pred": "ci",
+   "gold": "perf",
+   "strict": true,
+   "reply": "{\"type\": \"ci\"}"
+  },
+  {
+   "pred": "chore",
+   "gold": "ci",
+   "strict": true,
+   "reply": "{\"type\": \"chore\"}"
+  },
+  {
+   "pred": "perf",
+   "gold": "chore",
+   "strict": true,
+   "reply": "{\"type\": \"perf\"}"
+  },
+  {
+   "pred": "docs",
+   "gold": "docs",
+   "strict": true,
+   "reply": "{\"type\": \"docs\"}"
+  },
+  {
+   "pred": "docs",
+   "gold": "docs",
+   "strict": true,
+   "reply": "{\"type\": \"docs\"}"
+  },
+  {
+   "pred": "docs",
+   "gold": "docs",
+   "strict": true,
+   "reply": "{\"type\": \"docs\"}"
+  },
+  {
+   "pred": "chore",
+   "gold": "ci",
+   "strict": true,
+   "reply": "{\"type\": \"chore\"}"
+  },
+  {
+   "pred": "perf",
+   "gold": "perf",
+   "strict": true,
+   "reply": "{\"type\": \"perf\"}"
+  },
+  {
+   "pred": "fix",
+   "gold": "fix",
+   "strict": true,
+   "reply": "{\"type\": \"fix\"}"
+  },
+  {
+   "pred": "perf",
+   "gold": "feat",
+   "strict": true,
+   "reply": "{\"type\": \"perf\"}"
+  },
+  {
+   "pred": "ci",
+   "gold": "chore",
+   "strict": true,
+   "reply": "{\"type\": \"ci\"}"
+  },
+  {
+   "pred": "chore",
+   "gold": "ci",
+   "strict": true,
+   "reply": "{\"type\": \"chore\"}"
+  },
+  {
+   "pred": "perf",
+   "gold": "perf",
+   "strict": true,
+   "reply": "{\"type\": \"perf\"}"
+  },
+  {
+   "pred": "docs",
+   "gold": "docs",
+   "strict": true,
+   "reply": "{\"type\": \"docs\"}"
+  },
+  {
+   "pred": "chore",
+   "gold": "ci",
+   "strict": true,
+   "reply": "{\"type\": \"chore\"}"
+  },
+  {
+   "pred": "feat",
+   "gold": "refactor",
+   "strict": true,
+   "reply": "{\"type\": \"feat\"}"
+  },
+  {
+   "pred": "ci",
+   "gold": "ci",
+   "strict": true,
+   "reply": "{\"type\": \"ci\"}"
+  },
+  {
+   "pred": "ci",
+   "gold": "ci",
+   "strict": true,
+   "reply": "{\"type\": \"ci\"}"
+  },
+  {
+   "pred": "test",
+   "gold": "test",
+   "strict": true,
+   "reply": "{\"type\": \"test\"}"
+  },
+  {
+   "pred": "ci",
+   "gold": "ci",
+   "strict": true,
+   "reply": "{\"type\": \"ci\"}"
+  },
+  {
+   "pred": "refactor",
+   "gold": "refactor",
+   "strict": true,
+   "reply": "{\"type\": \"refactor\"}"
+  },
+  {
+   "pred": "perf",
+   "gold": "perf",
+   "strict": true,
+   "reply": "{\"type\": \"perf\"}"
+  },
+  {
+   "pred": "docs",
+   "gold": "docs",
+   "strict": true,
+   "reply": "{\"type\": \"docs\"}"
+  },
+  {
+   "pred": "perf",
+   "gold": "perf",
+   "strict": true,
+   "reply": "{\"type\": \"perf\"}"
+  },
+  {
+   "pred": "fix",
+   "gold": "fix",
+   "strict": true,
+   "reply": "{\"type\": \"fix\"}"
+  },
+  {
+   "pred": "feat",
+   "gold": "feat",
+   "strict": true,
+   "reply": "{\"type\": \"feat\"}"
+  },
+  {
+   "pred": "refactor",
+   "gold": "fix",
+   "strict": true,
+   "reply": "{\"type\": \"refactor\"}"
+  },
+  {
+   "pred": "test",
+   "gold": "chore",
+   "strict": true,
+   "reply": "{\"type\": \"test\"}"
+  },
+  {
+   "pred": "ci",
+   "gold": "chore",
+   "strict": true,
+   "reply": "{\"type\": \"ci\"}"
+  },
+  {
+   "pred": "perf",
+   "gold": "perf",
+   "strict": true,
+   "reply": "{\"type\": \"perf\"}"
+  },
+  {
+   "pred": "chore",
+   "gold": "chore",
+   "strict": true,
+   "reply": "{\"type\": \"chore\"}"
+  },
+  {
+   "pred": "perf",
+   "gold": "test",
+   "strict": true,
+   "reply": "{\"type\": \"perf\"}"
+  },
+  {
+   "pred": "test",
+   "gold": "test",
+   "strict": true,
+   "reply": "{\"type\": \"test\"}"
+  },
+  {
+   "pred": "chore",
+   "gold": "chore",
+   "strict": true,
+   "reply": "{\"type\": \"chore\"}"
+  },
+  {
+   "pred": "fix",
+   "gold": "fix",
+   "strict": true,
+   "reply": "{\"type\": \"fix\"}"
+  },
+  {
+   "pred": "refactor",
+   "gold": "refactor",
+   "strict": true,
+   "reply": "{\"type\": \"refactor\"}"
+  },
+  {
+   "pred": "ci",
+   "gold": "ci",
+   "strict": true,
+   "reply": "{\"type\": \"ci\"}"
+  }
+ ]
+}

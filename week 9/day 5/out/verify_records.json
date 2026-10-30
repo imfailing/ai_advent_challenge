@@ -1,0 +1,42 @@
+{
+  "deepseek-v4-flash": {
+    "passed": true,
+    "reasons": [],
+    "accuracy": 0.663,
+    "strict_format": 1.0,
+    "macro_f1": 0.654,
+    "n": 104,
+    "latency_mean_s": 1.0721
+  },
+  "base-qwen-q8": {
+    "passed": false,
+    "reasons": [
+      "accuracy 0.279 < 0.6"
+    ],
+    "accuracy": 0.279,
+    "strict_format": 0.99,
+    "macro_f1": 0.169,
+    "n": 104,
+    "latency_mean_s": 0.1156
+  },
+  "tuned-v1": {
+    "passed": true,
+    "reasons": [],
+    "accuracy": 0.702,
+    "strict_format": 1.0,
+    "macro_f1": 0.699,
+    "n": 104,
+    "latency_mean_s": 0.1133
+  },
+  "tuned-v1-q4": {
+    "passed": false,
+    "reasons": [
+      "accuracy 0.673 хуже активной модели (0.702) более чем на 0.02"
+    ],
+    "accuracy": 0.673,
+    "strict_format": 1.0,
+    "macro_f1": 0.664,
+    "n": 104,
+    "latency_mean_s": 0.088
+  }
+}

@@ -1,18 +1,18 @@
 {
  "mode": "tuned",
  "n": 104,
- "accuracy": 0.721,
+ "accuracy": 0.692,
  "strict_format": 1.0,
- "macro_f1": 0.725,
+ "macro_f1": 0.69,
  "per_class_accuracy": {
-  "feat": 0.923,
+  "feat": 0.615,
   "fix": 0.692,
-  "docs": 0.769,
-  "refactor": 0.769,
-  "test": 0.769,
+  "docs": 0.846,
+  "refactor": 0.538,
+  "test": 0.692,
   "chore": 0.538,
-  "perf": 0.769,
-  "ci": 0.538
+  "perf": 0.923,
+  "ci": 0.692
  },
  "rows": [
   {
@@ -25,7 +25,7 @@
   },
   {
    "repo": "unocss/unocss",
-   "input": "Commit message:\nsupport not-data-* variants (#5378)\n\nCo-authored-by: autofix-ci[bot] <114827586+autofix-ci[bot]@users.noreply.github.com>",
+   "input": "Commit message:\nsupport not-data-* variants (#5378)",
    "gold": "feat",
    "pred": "feat",
    "strict": true,
@@ -49,7 +49,7 @@
   },
   {
    "repo": "googleapis/python-storage",
-   "input": "Commit message:\nimplement close (#1614)\n\nfeat(zb-experimental): implement close",
+   "input": "Commit message:\nimplement close (#1614)",
    "gold": "feat",
    "pred": "feat",
    "strict": true,
@@ -65,7 +65,7 @@
   },
   {
    "repo": "nestjs/nest",
-   "input": "Commit message:\nupdate dependency mongoose to v9.11.3 (#18236)\n\nCo-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>",
+   "input": "Commit message:\nupdate dependency mongoose to v9.11.3 (#18236)",
    "gold": "fix",
    "pred": "chore",
    "strict": true,
@@ -73,7 +73,7 @@
   },
   {
    "repo": "googleapis/python-storage",
-   "input": "Commit message:\nAdd micro-benchmarks for writes comparing standard (regional) vs rapid (zonal) buckets. (#1707)\n\n* Add performance microbenchmarking suite for Writes\n* This compares Regional (Standard Storage) with Zonal (Rapid Storage)\nbuckets.\n* Regional uses JSON wheres Zonal uses gRPC bidi\n\n---------\n\nCo-authored-by: gemini-code-assist[bot] <176961590+gemini-code-assist[bot]@users.noreply.github.com>",
+   "input": "Commit message:\nAdd micro-benchmarks for writes comparing standard (regional) vs rapid (zonal) buckets. (#1707)\n\n* Add performance microbenchmarking suite for Writes\n* This compares Regional (Standard Storage) with Zonal (Rapid Storage)\nbuckets.\n* Regional uses JSON wheres Zonal uses gRPC bidi\n\n---------",
    "gold": "feat",
    "pred": "test",
    "strict": true,
@@ -83,9 +83,9 @@
    "repo": "TanStack/query",
    "input": "Commit message:\nreplace numeric separators with 'N * 1000' in snippet durations (#12380)",
    "gold": "docs",
-   "pred": "fix",
+   "pred": "perf",
    "strict": true,
-   "reply": "{\"type\": \"fix\"}"
+   "reply": "{\"type\": \"perf\"}"
   },
   {
    "repo": "TanStack/query",
@@ -129,27 +129,27 @@
   },
   {
    "repo": "googleapis/python-storage",
-   "input": "Commit message:\nexpose finalized_time in blob.py applicable for GET_OBJECT in ZB (#1719)\n\nfeat: expose finalized_time in blob.py applicable for GET_OBJECT in ZB",
+   "input": "Commit message:\nexpose finalized_time in blob.py applicable for GET_OBJECT in ZB (#1719)",
    "gold": "feat",
-   "pred": "feat",
+   "pred": "fix",
    "strict": true,
-   "reply": "{\"type\": \"feat\"}"
+   "reply": "{\"type\": \"fix\"}"
   },
   {
    "repo": "unocss/unocss",
    "input": "Commit message:\ntrim the install footprint (#5342)",
    "gold": "perf",
-   "pred": "chore",
+   "pred": "perf",
    "strict": true,
-   "reply": "{\"type\": \"chore\"}"
+   "reply": "{\"type\": \"perf\"}"
   },
   {
    "repo": "TanStack/query",
    "input": "Commit message:\nmove the data layer of the pagination and infinite query examples into 'services/{domain}' with a query factory (#12351)",
    "gold": "refactor",
-   "pred": "docs",
+   "pred": "refactor",
    "strict": true,
-   "reply": "{\"type\": \"docs\"}"
+   "reply": "{\"type\": \"refactor\"}"
   },
   {
    "repo": "commitizen-tools/commitizen",
@@ -161,7 +161,7 @@
   },
   {
    "repo": "electron/electron",
-   "input": "Commit message:\ninclude analysis improvements (#55081)\n\n* ci: allow running include analysis via label and configure root filter\n\nAdding the `run-include-analysis` label to a PR now enables include\nanalysis on the linux-x64 build, mirroring `run-full-macos`. A new\n`include-analysis-root-filter` workflow_dispatch input (default\n`^electron/`) is threaded through to analyze_includes.py --root-filter.\n\nCo-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_01S5ed3Z28JjZpMNp9QSNc7P\n\n* ci: also run include analysis on macOS\n\nRun the include analysis on the darwin variant of the macos-arm64 buil",
+   "input": "Commit message:\ninclude analysis improvements (#55081)\n\nAdding the `run-include-analysis` label to a PR now enables include\nanalysis on the linux-x64 build, mirroring `run-full-macos`. A new\n`include-analysis-root-filter` workflow_dispatch input (default\n`^electron/`) is threaded through to analyze_includes.py --root-filter.\nClaude-Session: https://claude.ai/code/session_01S5ed3Z28JjZpMNp9QSNc7P\n\nRun the include analysis on the darwin variant of the macos-arm64 buil",
    "gold": "ci",
    "pred": "ci",
    "strict": true,
@@ -171,13 +171,13 @@
    "repo": "unocss/unocss",
    "input": "Commit message:\nrefactor virtual CSS loading to use structured filter and handler",
    "gold": "fix",
-   "pred": "refactor",
+   "pred": "perf",
    "strict": true,
-   "reply": "{\"type\": \"refactor\"}"
+   "reply": "{\"type\": \"perf\"}"
   },
   {
    "repo": "googleapis/python-storage",
-   "input": "Commit message:\nmove system tests to single event loop (#1714)\n\nrefactor: move system tests to single event loop. \n\n* Without this more adding more tests were \"shaky\" , some of them\ncrashed due to segmentation fault in underlying gRPC's c layer.",
+   "input": "Commit message:\nmove system tests to single event loop (#1714)\n\n* Without this more adding more tests were \"shaky\" , some of them\ncrashed due to segmentation fault in underlying gRPC's c layer.",
    "gold": "refactor",
    "pred": "test",
    "strict": true,
@@ -193,7 +193,7 @@
   },
   {
    "repo": "electron/electron",
-   "input": "Commit message:\nblock spellchecker dictionary downloads in specs (#55408)\n\nClaude-Session: https://claude.ai/code/session_01Vf2yMtuie1dvyPA7pNGXn4\n\nCo-authored-by: Claude <noreply@anthropic.com>",
+   "input": "Commit message:\nblock spellchecker dictionary downloads in specs (#55408)\n\nClaude-Session: https://claude.ai/code/session_01Vf2yMtuie1dvyPA7pNGXn4",
    "gold": "test",
    "pred": "test",
    "strict": true,
@@ -235,9 +235,9 @@
    "repo": "denoland/deno",
    "input": "Commit message:\npreserve AsyncLocalStorage exit context (#36464)",
    "gold": "fix",
-   "pred": "fix",
+   "pred": "perf",
    "strict": true,
-   "reply": "{\"type\": \"fix\"}"
+   "reply": "{\"type\": \"perf\"}"
   },
   {
    "repo": "unocss/unocss",
@@ -259,9 +259,9 @@
    "repo": "unocss/unocss",
    "input": "Commit message:\nbuild dynamic rule order with one reverse (#5394)",
    "gold": "perf",
-   "pred": "refactor",
+   "pred": "perf",
    "strict": true,
-   "reply": "{\"type\": \"refactor\"}"
+   "reply": "{\"type\": \"perf\"}"
   },
   {
    "repo": "nestjs/nest",
@@ -289,11 +289,11 @@
   },
   {
    "repo": "TanStack/query",
-   "input": "Commit message:\ndeclare '$props()' with 'let' and type them with 'Props', 'LayoutProps' and 'PageProps' in examples and tests (#12434)\n\n* refactor(examples/svelte): declare '$props()' with 'let' and type them with 'Props', 'LayoutProps' and 'PageProps'\n\n* test(svelte-query,svelte-query-persist-client): declare '$props()' with 'let' and type them with 'Props'\n\n* refactor(svelte-query/HydrationBoundary): declare '$props()' with 'let'",
+   "input": "Commit message:\ndeclare '$props()' with 'let' and type them with 'Props', 'LayoutProps' and 'PageProps' in examples and tests (#12434)",
    "gold": "refactor",
-   "pred": "refactor",
+   "pred": "docs",
    "strict": true,
-   "reply": "{\"type\": \"refactor\"}"
+   "reply": "{\"type\": \"docs\"}"
   },
   {
    "repo": "denoland/deno",
@@ -323,21 +323,21 @@
    "repo": "unocss/unocss",
    "input": "Commit message:\nupdate deps version for test",
    "gold": "chore",
-   "pred": "test",
+   "pred": "chore",
    "strict": true,
-   "reply": "{\"type\": \"test\"}"
+   "reply": "{\"type\": \"chore\"}"
   },
   {
    "repo": "googleapis/python-storage",
-   "input": "Commit message:\nexpose persisted size in mrd (#1671)\n\nfeat: expose persisted size in MRD (MultiRangeReader)",
+   "input": "Commit message:\nexpose persisted size in mrd (#1671)",
    "gold": "feat",
-   "pred": "feat",
+   "pred": "fix",
    "strict": true,
-   "reply": "{\"type\": \"feat\"}"
+   "reply": "{\"type\": \"fix\"}"
   },
   {
    "repo": "commitizen-tools/commitizen",
-   "input": "Commit message:\nnormalize argparse choice snapshots (#2000)\n\n* test: normalize argparse choice snapshots\n\n* test: normalize invalid command snapshots\n\n---------\n\nCo-authored-by: Puneet Dixit <236133619+puneetdixit200@users.noreply.github.com>\nCo-authored-by: Deepak kudi <deepakkudi23@adsl-172-10-9-116.dsl.sndg02.sbcglobal.net>",
+   "input": "Commit message:\nnormalize argparse choice snapshots (#2000)\n\n---------",
    "gold": "test",
    "pred": "test",
    "strict": true,
@@ -361,7 +361,7 @@
   },
   {
    "repo": "electron/electron",
-   "input": "Commit message:\nfix desktopCapturer restore-token specs on main (#55118)\n\nThe restore-token specs added in #54550 were written against a base that\npredated #54439, which dropped chai/chai-as-promised/dirty-chai in favour\nof vitest's own matchers and added the no-chai-assertions lint rule. On\nmain, `.to.be.eventually.rejectedWith()` and `.to.be.empty()` throw at\nruntime and every chai chain trips lint. Switch them to vitest matchers.\n\n\nClaude-Session: https://claude.ai/code/session_012AdLYu5PBMGgRbsE7frDma\n\nCo-authored-by: Claude <noreply@anthropic.com>",
+   "input": "Commit message:\nfix desktopCapturer restore-token specs on main (#55118)\n\nThe restore-token specs added in #54550 were written against a base that\npredated #54439, which dropped chai/chai-as-promised/dirty-chai in favour\nof vitest's own matchers and added the no-chai-assertions lint rule. On\nmain, `.to.be.eventually.rejectedWith()` and `.to.be.empty()` throw at\nruntime and every chai chain trips lint. Switch them to vitest matchers.\n\n\nClaude-Session: https://claude.ai/code/session_012AdLYu5PBMGgRbsE7frDma",
    "gold": "test",
    "pred": "test",
    "strict": true,
@@ -369,27 +369,27 @@
   },
   {
    "repo": "electron/electron",
-   "input": "Commit message:\ngenerate PreloadRealmGlobalScope IDL bindings in //electron (#55165)\n\n* refactor: use PreloadRealmGlobalScope for service worker preloads\n\nService worker preload scripts ran in Blink's ShadowRealmGlobalScope.\nThe ShadowRealm proposal has stalled, so Chromium may remove that class.\n\nA new Chromium patch adds PreloadRealmGlobalScope, a global scope that\nexposes the same interfaces without depending on any ShadowRealm code,\nand Electron now creates the preload context with it.\n\nUncaught errors and unhandled rejections in a service worker preload\nscript are now reported through the worker's console. Before, they hit\nNOTREACHED() in ShadowRealmGlobalScope.\n\nCalling g",
+   "input": "Commit message:\ngenerate PreloadRealmGlobalScope IDL bindings in //electron (#55165)\n\nService worker preload scripts ran in Blink's ShadowRealmGlobalScope.\nThe ShadowRealm proposal has stalled, so Chromium may remove that class.\n\nA new Chromium patch adds PreloadRealmGlobalScope, a global scope that\nexposes the same interfaces without depending on any ShadowRealm code,\nand Electron now creates the preload context with it.\n\nUncaught errors and unhandled rejections in a service worker preload\nscript are now reported through the worker's console. Before, they hit\nNOTREACHED() in ShadowRealmGlobalScope.\n\nCalling g",
    "gold": "refactor",
-   "pred": "refactor",
+   "pred": "feat",
    "strict": true,
-   "reply": "{\"type\": \"refactor\"}"
+   "reply": "{\"type\": \"feat\"}"
   },
   {
    "repo": "TanStack/query",
    "input": "Commit message:\ninline the 'useAlgolia' hook that only wraps 'useInfiniteQuery' (#12405)",
    "gold": "refactor",
-   "pred": "refactor",
+   "pred": "feat",
    "strict": true,
-   "reply": "{\"type\": \"refactor\"}"
+   "reply": "{\"type\": \"feat\"}"
   },
   {
    "repo": "denoland/deno",
    "input": "Commit message:\nsplit OpCtx into shared OpCommonCtx + borrowed op declarations (#36693)",
    "gold": "perf",
-   "pred": "refactor",
+   "pred": "perf",
    "strict": true,
-   "reply": "{\"type\": \"refactor\"}"
+   "reply": "{\"type\": \"perf\"}"
   },
   {
    "repo": "vuejs/core",
@@ -425,11 +425,11 @@
   },
   {
    "repo": "electron/electron",
-   "input": "Commit message:\nsupport chrome.storage.sync in extensions (#54088)\n\n* feat: support chrome.storage.sync in extensions\n\nRegister a ValueStoreCache for the SYNC settings namespace from\nElectronExtensionsAPIClient::AddAdditionalValueStoreCaches. Until now\nElectron never overrode that hook, so StorageFrontend only knew about\nLOCAL (and the in-memory SESSION area) and every chrome.storage.sync\ncall failed with '\"sync\" is not available in this instance of Chrome'.\n\nElectronSyncValueStoreCache mirrors Chromium's LocalValueStoreCache but\nuses settings_namespace::SYNC, which gives it its own LevelDB directory\nunder the partition path (kSyncExtensionSettingsDirectoryNam",
+   "input": "Commit message:\nsupport chrome.storage.sync in extensions (#54088)\n\nRegister a ValueStoreCache for the SYNC settings namespace from\nElectronExtensionsAPIClient::AddAdditionalValueStoreCaches. Until now\nElectron never overrode that hook, so StorageFrontend only knew about\nLOCAL (and the in-memory SESSION area) and every chrome.storage.sync\ncall failed with '\"sync\" is not available in this instance of Chrome'.\n\nElectronSyncValueStoreCache mirrors Chromium's LocalValueStoreCache but\nuses settings_namespace::SYNC, which gives it its own LevelDB directory\nunder the partition path (kSyncExtensionSettingsDirectoryNam",
    "gold": "feat",
-   "pred": "feat",
+   "pred": "fix",
    "strict": true,
-   "reply": "{\"type\": \"feat\"}"
+   "reply": "{\"type\": \"fix\"}"
   },
   {
    "repo": "TanStack/query",
@@ -441,7 +441,7 @@
   },
   {
    "repo": "commitizen-tools/commitizen",
-   "input": "Commit message:\nadd extensible commit filters\n\nCo-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>",
+   "input": "Commit message:\nadd extensible commit filters",
    "gold": "feat",
    "pred": "feat",
    "strict": true,
@@ -451,17 +451,17 @@
    "repo": "electron/electron",
    "input": "Commit message:\nmigrate cpp-heap specs to v8 heap snapshot helpers (#55243)\n\nSplit out of #55229 and extended per review there.\n\n- heapsnapshot-helpers.js reads V8's flat snapshot arrays:\n  takeHeapSnapshot()/parseHeapSnapshot(), countHeapSnapshotNodes(),\n  snapshotContainsRetainingPath() and countRetainingPathNodes(). Path\n  steps skip weak edges and can also match edge type, edge name, node\n  type and detachedness; each node counts once however many paths reach\n  it. The old object-graph containsRetainingPath() is removed.\n- Every recordState() + containsRetainingPath() check in cpp-heap.spec.ts\n  uses the new helpers, and --expose-internals is dropped.\n- The node-co",
    "gold": "test",
-   "pred": "test",
+   "pred": "refactor",
    "strict": true,
-   "reply": "{\"type\": \"test\"}"
+   "reply": "{\"type\": \"refactor\"}"
   },
   {
    "repo": "TanStack/query",
    "input": "Commit message:\nmove the data layer into 'services/tasks' with query and mutation factories (#12372)",
    "gold": "refactor",
-   "pred": "refactor",
+   "pred": "feat",
    "strict": true,
-   "reply": "{\"type\": \"refactor\"}"
+   "reply": "{\"type\": \"feat\"}"
   },
   {
    "repo": "TanStack/query",
@@ -473,7 +473,7 @@
   },
   {
    "repo": "electron/electron",
-   "input": "Commit message:\nadd a workflow to generate code coverage reports (#52784)\n\nAssisted-by: Claude Opus 5\n\nClaude-Session: https://claude.ai/code/session_01VhHDNf9qajjhk7SUKRR8EK\n\nCo-authored-by: Claude Opus 5.5 (1M context) <noreply@anthropic.com>",
+   "input": "Commit message:\nadd a workflow to generate code coverage reports (#52784)\n\nAssisted-by: Claude Opus 5\n\nClaude-Session: https://claude.ai/code/session_01VhHDNf9qajjhk7SUKRR8EK",
    "gold": "ci",
    "pred": "ci",
    "strict": true,
@@ -481,7 +481,7 @@
   },
   {
    "repo": "TanStack/query",
-   "input": "Commit message:\nadd 'auto-refetching', 'pagination', 'load-more-infinite-scroll', 'infinite-query-with-max-pages' and 'prefetching' examples (#12403)\n\n* docs(examples/preact): add 'auto-refetching', 'pagination', 'load-more-infinite-scroll', 'infinite-query-with-max-pages' and 'prefetching' examples\n\n* docs(examples/preact/auto-refetching): share the mocked list across tabs through 'localStorage'",
+   "input": "Commit message:\nadd 'auto-refetching', 'pagination', 'load-more-infinite-scroll', 'infinite-query-with-max-pages' and 'prefetching' examples (#12403)",
    "gold": "docs",
    "pred": "docs",
    "strict": true,
@@ -491,13 +491,13 @@
    "repo": "nestjs/nest",
    "input": "Commit message:\ncap sockets of the overlapping request-scope requests (#18342)\n\nThe spec opened a connection per request, 1000 at once. On a busy CI\nmachine that can overflow the listen queue, which resets some of the\nconnections (read ECONNRESET). The requests now share a keep-alive\nagent of at most 100 sockets.",
    "gold": "test",
-   "pred": "fix",
+   "pred": "perf",
    "strict": true,
-   "reply": "{\"type\": \"fix\"}"
+   "reply": "{\"type\": \"perf\"}"
   },
   {
    "repo": "googleapis/python-storage",
-   "input": "Commit message:\nAdd Async_appendable_object_writer.py (#1616)\n\nfeat(zb-experimental): Add Async_appendable_object_writer.py",
+   "input": "Commit message:\nAdd Async_appendable_object_writer.py (#1616)",
    "gold": "feat",
    "pred": "feat",
    "strict": true,
@@ -513,7 +513,7 @@
   },
   {
    "repo": "unocss/unocss",
-   "input": "Commit message:\n`pipeline.include` not matching paths relative to the project root (#5377)\n\nCo-authored-by: haigou-web <haigou@users.noreply.github.com>\nCo-authored-by: autofix-ci[bot] <114827586+autofix-ci[bot]@users.noreply.github.com>\nCo-authored-by: Chris <hizyyv@gmail.com>",
+   "input": "Commit message:\n`pipeline.include` not matching paths relative to the project root (#5377)",
    "gold": "fix",
    "pred": "fix",
    "strict": true,
@@ -537,7 +537,7 @@
   },
   {
    "repo": "TanStack/query",
-   "input": "Commit message:\nupdate 'react', 'react-dom' and their types across examples and integrations (#12414)\n\n* chore(deps): update 'react' and 'react-dom' to '^19.2.7' across examples and integrations\n\n* chore(examples/react/shadow-dom): update '@types/react' and '@types/react-dom' to match the catalog\n\n* chore(deps): update '@types/react' and '@types/react-dom' to '^19.3.0'\n\n* chore(deps): update 'react' and 'react-dom' to '^19.3.1' to match their types\n\n* chore(examples/react/react-native): pin 'react' and 'react-dom' to '19.2.3' to match Expo SDK 57",
+   "input": "Commit message:\nupdate 'react', 'react-dom' and their types across examples and integrations (#12414)",
    "gold": "chore",
    "pred": "chore",
    "strict": true,
@@ -555,9 +555,9 @@
    "repo": "denoland/deno",
    "input": "Commit message:\ndrop dead module-graph retention (#36683)",
    "gold": "perf",
-   "pred": "perf",
+   "pred": "ci",
    "strict": true,
-   "reply": "{\"type\": \"perf\"}"
+   "reply": "{\"type\": \"ci\"}"
   },
   {
    "repo": "commitizen-tools/commitizen",
@@ -601,11 +601,11 @@
   },
   {
    "repo": "commitizen-tools/commitizen",
-   "input": "Commit message:\nrestore changelog updates (#2074)\n\n* ci: restore changelog updates\n\nCo-authored-by: Copilot App <223556219+Copilot@users.noreply.github.com>\n\n* ci: configure changelog updates on bump\n\nCo-authored-by: Copilot App <223556219+Copilot@users.noreply.github.com>\n\n---------\n\nCo-authored-by: Copilot App <223556219+Copilot@users.noreply.github.com>",
+   "input": "Commit message:\nrestore changelog updates (#2074)\n\n---------",
    "gold": "ci",
-   "pred": "ci",
+   "pred": "chore",
    "strict": true,
-   "reply": "{\"type\": \"ci\"}"
+   "reply": "{\"type\": \"chore\"}"
   },
   {
    "repo": "denoland/deno",
@@ -619,25 +619,25 @@
    "repo": "electron/electron",
    "input": "Commit message:\nalign protocol.registerSource request handling with protocol.handle (#55172)\n\nShare the renderer request checks ElectronURLLoaderFactory performs with\nProtocolSourceURLLoaderFactory so both factories treat requests the same way.",
    "gold": "fix",
-   "pred": "refactor",
+   "pred": "fix",
    "strict": true,
-   "reply": "{\"type\": \"refactor\"}"
+   "reply": "{\"type\": \"fix\"}"
   },
   {
    "repo": "googleapis/python-storage",
-   "input": "Commit message:\nsend entire object checksum in the final api call of resumable upload (#1654)\n\nfeat: send entire object checksum in the final api call of resumable\nupload\n\nfixes b/461994245\n\n---------\n\nCo-authored-by: gemini-code-assist[bot] <176961590+gemini-code-assist[bot]@users.noreply.github.com>",
+   "input": "Commit message:\nsend entire object checksum in the final api call of resumable upload (#1654)\n\nupload\n\nfixes b/461994245\n\n---------",
    "gold": "feat",
-   "pred": "feat",
+   "pred": "perf",
    "strict": true,
-   "reply": "{\"type\": \"feat\"}"
+   "reply": "{\"type\": \"perf\"}"
   },
   {
    "repo": "googleapis/python-storage",
-   "input": "Commit message:\nlibrarian generate pull request: 20260326T175601Z (#1785)\n\nPR created by the Librarian CLI to generate Cloud Client Libraries code\nfrom protos.\n\nBEGIN_COMMIT\n\nBEGIN_NESTED_COMMIT\nfeat: Added a new field `ComposeObjectRequest.delete_source_objects`\nfield\n\n\nPiperOrigin-RevId: 863087065\nLibrary-IDs: google-cloud-storage\nSource-link:\n[googleapis/googleapis@51ff87f4](https://github.com/googleapis/googleapis/commit/51ff87f4)\nEND_NESTED_COMMIT\n\nBEGIN_NESTED_COMMIT\ndocs: Updated documentation for `BidiReadObject`, `ReadObjectRequest`,\nand `ObjectContexts`\n\n\nPiperOrigin-RevId: 863087065\nLibrary-IDs: google-cloud-storage\nSource-link:\n[googleapis/googleapis@51ff",
+   "input": "Commit message:\nlibrarian generate pull request: 20260326T175601Z (#1785)\n\nPR created by the Librarian CLI to generate Cloud Client Libraries code\nfrom protos.\n\nBEGIN_COMMIT\n\nBEGIN_NESTED_COMMIT\nfield\n\n\nPiperOrigin-RevId: 863087065\nLibrary-IDs: google-cloud-storage\nSource-link:\n[googleapis/googleapis@51ff87f4](https://github.com/googleapis/googleapis/commit/51ff87f4)\nEND_NESTED_COMMIT\n\nBEGIN_NESTED_COMMIT\nand `ObjectContexts`\n\n\nPiperOrigin-RevId: 863087065\nLibrary-IDs: google-cloud-storage\nSource-link:\n[googleapis/googleapis@51ff",
    "gold": "chore",
-   "pred": "chore",
+   "pred": "ci",
    "strict": true,
-   "reply": "{\"type\": \"chore\"}"
+   "reply": "{\"type\": \"ci\"}"
   },
   {
    "repo": "commitizen-tools/commitizen",
@@ -667,9 +667,9 @@
    "repo": "commitizen-tools/commitizen",
    "input": "Commit message:\nbump actions/setup-go from 6 to 7 (#2032)\n\nSigned-off-by: dependabot[bot] <support@github.com>",
    "gold": "ci",
-   "pred": "chore",
+   "pred": "ci",
    "strict": true,
-   "reply": "{\"type\": \"chore\"}"
+   "reply": "{\"type\": \"ci\"}"
   },
   {
    "repo": "TanStack/query",
@@ -683,13 +683,13 @@
    "repo": "commitizen-tools/commitizen",
    "input": "Commit message:\nbump codecov/codecov-action from 6 to 7 (#2013)\n\nSigned-off-by: dependabot[bot] <support@github.com>",
    "gold": "ci",
-   "pred": "chore",
+   "pred": "ci",
    "strict": true,
-   "reply": "{\"type\": \"chore\"}"
+   "reply": "{\"type\": \"ci\"}"
   },
   {
    "repo": "electron/electron",
-   "input": "Commit message:\ndrop angle commit-graph alongside alternates in fix-sync (#55201)\n\nci: drop angle commit-graph with alternates in fix-sync\n\nSince the build image bump to git 2.55, auto maintenance (which uses the\n\"geometric\" strategy by default since git 2.54) writes a commit-graph in\nthe angle checkout of the Linux-built src cache. That graph lists commits\nthat only exist in the alternates git cache, so once fix_angle_git removes\nthe alternates, git fetch aborts on mac and Windows with \"which is in the\ncommit graph file but not in the object database\". Remove the commit-graph\ntogether with the alternates.\n\n\nClaude-Session: https://claude.ai/code/session_01Xtmcutqr2Yx3gWuQ7L",
+   "input": "Commit message:\ndrop angle commit-graph alongside alternates in fix-sync (#55201)\n\nSince the build image bump to git 2.55, auto maintenance (which uses the\n\"geometric\" strategy by default since git 2.54) writes a commit-graph in\nthe angle checkout of the Linux-built src cache. That graph lists commits\nthat only exist in the alternates git cache, so once fix_angle_git removes\nthe alternates, git fetch aborts on mac and Windows with \"which is in the\ncommit graph file but not in the object database\". Remove the commit-graph\ntogether with the alternates.\n\n\nClaude-Session: https://claude.ai/code/session_01Xtmcutqr2Yx3gWuQ7L",
    "gold": "ci",
    "pred": "ci",
    "strict": true,
@@ -697,7 +697,7 @@
   },
   {
    "repo": "electron/electron",
-   "input": "Commit message:\nfix unload-IPC and protocol.handle 'is fast' flakes (#55083)\n\n* test: fix unload-IPC and protocol.handle 'is fast' flakes\n\nKeep renderers at foreground priority in the two tests that wait for an\nIPC sent from an unload handler after a cross-site navigation, so the\nbackgrounded old renderer does not miss Chromium's 500 ms unload timeout\nunder parallel spec load.\n\nRework protocol.handle 'is fast' to compare the native relay path against\nboth a direct fetch and the JS-pumped path, with a looser bound against\ndirect fetches and timings in the failure message.\n\nCo-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>\nClaude-Session: https://claude",
+   "input": "Commit message:\nfix unload-IPC and protocol.handle 'is fast' flakes (#55083)\n\nKeep renderers at foreground priority in the two tests that wait for an\nIPC sent from an unload handler after a cross-site navigation, so the\nbackgrounded old renderer does not miss Chromium's 500 ms unload timeout\nunder parallel spec load.\n\nRework protocol.handle 'is fast' to compare the native relay path against\nboth a direct fetch and the JS-pumped path, with a looser bound against\ndirect fetches and timings in the failure message.\nClaude-Session: https://claude",
    "gold": "test",
    "pred": "test",
    "strict": true,
@@ -707,13 +707,13 @@
    "repo": "TanStack/query",
    "input": "Commit message:\napply automated fixes",
    "gold": "ci",
-   "pred": "chore",
+   "pred": "ci",
    "strict": true,
-   "reply": "{\"type\": \"chore\"}"
+   "reply": "{\"type\": \"ci\"}"
   },
   {
    "repo": "unocss/unocss",
-   "input": "Commit message:\nunify virtualId handling (#5405)\n\nCo-authored-by: autofix-ci[bot] <114827586+autofix-ci[bot]@users.noreply.github.com>",
+   "input": "Commit message:\nunify virtualId handling (#5405)",
    "gold": "refactor",
    "pred": "refactor",
    "strict": true,
@@ -729,11 +729,11 @@
   },
   {
    "repo": "commitizen-tools/commitizen",
-   "input": "Commit message:\nfix setup-cz link\n\nCo-authored-by: Copilot App <223556219+Copilot@users.noreply.github.com>",
+   "input": "Commit message:\nfix setup-cz link",
    "gold": "docs",
-   "pred": "chore",
+   "pred": "docs",
    "strict": true,
-   "reply": "{\"type\": \"chore\"}"
+   "reply": "{\"type\": \"docs\"}"
   },
   {
    "repo": "denoland/deno",
@@ -747,9 +747,9 @@
    "repo": "nestjs/nest",
    "input": "Commit message:\nmap unsupported multipart content types to 415 (#18264)",
    "gold": "fix",
-   "pred": "docs",
+   "pred": "fix",
    "strict": true,
-   "reply": "{\"type\": \"docs\"}"
+   "reply": "{\"type\": \"fix\"}"
   },
   {
    "repo": "denoland/deno",
@@ -761,15 +761,15 @@
   },
   {
    "repo": "unocss/unocss",
-   "input": "Commit message:\nsort `unoVariables` class strings wrapped in `satisfies` (#5316)\n\nCo-authored-by: Cursor <cursoragent@cursor.com>",
+   "input": "Commit message:\nsort `unoVariables` class strings wrapped in `satisfies` (#5316)",
    "gold": "fix",
-   "pred": "fix",
+   "pred": "perf",
    "strict": true,
-   "reply": "{\"type\": \"fix\"}"
+   "reply": "{\"type\": \"perf\"}"
   },
   {
    "repo": "googleapis/python-storage",
-   "input": "Commit message:\noptimization to reduce number of open TCP connections while running zonal system tests (#1691)\n\nchore: optimization to reduce number of open TCP connections while\nrunning zonal system tests\n\n1. Increase `ulimit -n 10000` before ssh'ing into the VM where system\ntests for zonal buckets are running.\n2. Delete `mrd` and `writer` instance and trigger `gc.collect()` ( this\nalone should suffice but increasing doing the above optimization to\navoid future issues.",
+   "input": "Commit message:\noptimization to reduce number of open TCP connections while running zonal system tests (#1691)\n\nrunning zonal system tests\n\n1. Increase `ulimit -n 10000` before ssh'ing into the VM where system\ntests for zonal buckets are running.\n2. Delete `mrd` and `writer` instance and trigger `gc.collect()` ( this\nalone should suffice but increasing doing the above optimization to\navoid future issues.",
    "gold": "chore",
    "pred": "test",
    "strict": true,
@@ -779,9 +779,9 @@
    "repo": "googleapis/python-storage",
    "input": "Commit message:\nskip failing samples due to public access prevention enforcement (#1668)\n\nskip failing samples due to public access prevention enforcement. \n\nMore Details on b/469643064",
    "gold": "chore",
-   "pred": "test",
+   "pred": "ci",
    "strict": true,
-   "reply": "{\"type\": \"test\"}"
+   "reply": "{\"type\": \"ci\"}"
   },
   {
    "repo": "unocss/unocss",
@@ -793,7 +793,7 @@
   },
   {
    "repo": "nestjs/nest",
-   "input": "Commit message:\nupdate dependency @nestjs/schematics to v12.0.12 (#18322)\n\nCo-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>",
+   "input": "Commit message:\nupdate dependency @nestjs/schematics to v12.0.12 (#18322)",
    "gold": "chore",
    "pred": "chore",
    "strict": true,
@@ -809,7 +809,7 @@
   },
   {
    "repo": "electron/electron",
-   "input": "Commit message:\nmake configureHostResolver spec hermetic (#55409)\n\n* test: make configureHostResolver spec hermetic\n\nThe \"affects dns lookup behavior\" spec sent a HEAD request to\nwww.electronjs.org to prove name resolution worked before switching to a\ndead DoH server. Serve a made-up hostname from a local DoH server and a\nlocal HTTP server instead, so the spec needs no external network and also\nproves the configured resolver is actually used.\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_01Vf2yMt934Tt5KncFWXpm2G\n\n* test: answer DoH probe queries in configureHostResolver spec\n\nChromium probes configured",
+   "input": "Commit message:\nmake configureHostResolver spec hermetic (#55409)\n\nThe \"affects dns lookup behavior\" spec sent a HEAD request to\nwww.electronjs.org to prove name resolution worked before switching to a\ndead DoH server. Serve a made-up hostname from a local DoH server and a\nlocal HTTP server instead, so the spec needs no external network and also\nproves the configured resolver is actually used.\nClaude-Session: https://claude.ai/code/session_01Vf2yMt934Tt5KncFWXpm2G\n\nChromium probes configured",
    "gold": "test",
    "pred": "test",
    "strict": true,
@@ -841,7 +841,7 @@
   },
   {
    "repo": "electron/electron",
-   "input": "Commit message:\ncache Chromium DEPS in lint and fall back to googlesource (#55381)\n\n* ci: cache Chromium DEPS in lint and fall back to googlesource\n\nCo-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_01V8BVmCsTrqvXxeym666jbL\n\n* ci: store lint Chromium DEPS in the cross-instance cache\n\nThe Actions cache is close to full, so keep the per-revision copies of\nChromium's DEPS and buildtools/DEPS on the cross-instance cache share\nthat already holds the src cache, instead of actions/cache. The lint\ncontainer now mounts the share the same way the docs-only job does.\n\nOn a miss the files are still fetched via the GitHub c",
+   "input": "Commit message:\ncache Chromium DEPS in lint and fall back to googlesource (#55381)\n\nClaude-Session: https://claude.ai/code/session_01V8BVmCsTrqvXxeym666jbL\n\nThe Actions cache is close to full, so keep the per-revision copies of\nChromium's DEPS and buildtools/DEPS on the cross-instance cache share\nthat already holds the src cache, instead of actions/cache. The lint\ncontainer now mounts the share the same way the docs-only job does.\n\nOn a miss the files are still fetched via the GitHub c",
    "gold": "ci",
    "pred": "ci",
    "strict": true,

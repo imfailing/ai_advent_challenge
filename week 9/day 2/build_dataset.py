@@ -18,10 +18,21 @@ EVAL_REPOS = {
     "vuejs/core", "nestjs/nest", "googleapis/python-storage", "electron/electron",
     "TanStack/query", "denoland/deno", "commitizen-tools/commitizen", "unocss/unocss",
 }
-TRAIN_CAP_PER_CLASS = 250
+TRAIN_CAP_PER_CLASS = 150
 EVAL_CAP_PER_CLASS = 13
 VALID_FRACTION = 0.08
 NEAR_DUP_THRESHOLD = 0.8
+# {"repo/hash": "причина"} — вручную найденные при просмотре неверные метки
+REMOVED_PATH = DATA_DIR / "removed.json"
+LABEL_LINE_RE = re.compile(
+    r"(?mi)^\s*(?:[*-]\s+)?(?:feat|fix|docs|refactor|test|chore|perf|ci)(?:\([^)]*\))?!?:\s.*$\n?"
+)
+TRAILER_RE = re.compile(r"(?mi)^\s*co-authored-by:.*$\n?")
+
+
+def clean_body(body: str) -> str:
+    """Убрать из тела строки с префиксом Conventional Commits (утечка метки) и trailers автора."""
+    return TRAILER_RE.sub("", LABEL_LINE_RE.sub("", body)).strip()
 
 
 def user_prompt(subject: str, body: str) -> str:
@@ -91,6 +102,10 @@ def main() -> None:
     rng = random.Random(SEED)  # noqa: S311  — воспроизводимый сплит
     raw = [json.loads(line) for line in (DATA_DIR / "raw.jsonl").read_text("utf-8").splitlines()]
     rng.shuffle(raw)
+    removed = json.loads(REMOVED_PATH.read_text("utf-8")) if REMOVED_PATH.exists() else {}
+    raw = [r for r in raw if f"{r['repo']}/{r['hash']}" not in removed]
+    for r in raw:
+        r["body"] = clean_body(r["body"])
     rows = dedupe(raw)
     eval_rows = cap_per_class([r for r in rows if r["repo"] in EVAL_REPOS], EVAL_CAP_PER_CLASS, rng)
     train_all = cap_per_class(
@@ -101,8 +116,8 @@ def main() -> None:
     write_jsonl(DATA_DIR / "train.jsonl", [to_messages(r) for r in train_rows])
     write_jsonl(DATA_DIR / "valid.jsonl", [to_messages(r) for r in valid_rows])
     write_jsonl(DATA_DIR / "eval.jsonl", [to_messages(r) for r in eval_rows])
-    write_jsonl(DATA_DIR / "review_sample.jsonl", [to_messages(r) | {"subject": r["subject"]}
-                                                    for r in rng.sample(train_rows, 30)])
+    write_jsonl(DATA_DIR / "review_sample.jsonl", [to_messages(r) | {"hash": r["hash"]}
+                                                    for r in rng.sample(train_rows, 60)])
     print(f"raw={len(raw)} после дедупликации={len(rows)}")  # noqa: T201
     for name, part in (("train", train_rows), ("valid", valid_rows), ("eval", eval_rows)):
         print(f"{name}: {len(part)}", dict(Counter(r["type"] for r in part)))  # noqa: T201

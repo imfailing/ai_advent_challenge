@@ -1,0 +1,16 @@
+{
+ "vitejs/vite/0672bf8": "fix: update dependency preact — скорее chore",
+ "facebook/docusaurus/7c8cbc7": "test: rich admonition dogfooding — скорее docs",
+ "semantic-release/semantic-release/7172195": "refactor: remove obsolete tests — скорее test",
+ "supabase/supabase/8bcf4b3": "chore: add blog post — скорее docs",
+ "python-semantic-release/python-semantic-release/c74aa3b": "refactor: adjust dependency paradigm — скорее fix/chore",
+ "python-semantic-release/python-semantic-release/427af48": "test: upgrade monorepos to monitor external package files — скорее ci/chore",
+ "googleapis/python-bigquery/4f67ba2": "fix: add timeout parameter — скорее feat",
+ "vuejs/router/d378d37": "chore: simplify — бессодержательный заголовок",
+ "vuejs/router/5f9b748": "docs: improve — бессодержательный заголовок",
+ "nuxt/ui/84a48cb": "docs: allow crawlers on build assets — скорее chore",
+ "nuxt/ui/2b70204": "perf: skip the link when no to/href — скорее fix/refactor",
+ "sveltejs/svelte/5bd3e3c": "chore: add new method — скорее feat",
+ "sveltejs/svelte/6eb720a": "chore: scope.js stops importing — скорее refactor",
+ "oxc-project/oxc/30f59f4": "perf: factor object type opening brace — скорее refactor"
+}

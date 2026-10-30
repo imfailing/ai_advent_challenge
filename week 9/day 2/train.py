@@ -1,6 +1,7 @@
 """
 LoRA-обучение Qwen2.5-1.5B-Instruct на датасете «классификация git-коммита в JSON» (bf16, ROCm).
-Лосс считается только по ответу ассистента. Пишет out/loss_log.json, сохраняет адаптер в adapters/
+Лосс считается только по ответу ассистента; сохраняется чекпоинт с лучшим eval loss.
+Пишет out/loss_log.json, сохраняет адаптер в adapters/
 и параметры/время в out/run_info.json.
 """
 
@@ -29,7 +30,7 @@ CONFIG = {
     "lora_dropout": 0.05,
     "target_modules": ["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"],
     "learning_rate": 2e-4,
-    "epochs": 3,
+    "epochs": 2,
     "batch_size": 16,
     "seed": 42,
 }
@@ -100,7 +101,9 @@ def main() -> None:
         per_device_train_batch_size=CONFIG["batch_size"], per_device_eval_batch_size=16,
         learning_rate=CONFIG["learning_rate"], lr_scheduler_type="cosine", warmup_steps=15,
         bf16=True, logging_steps=5, eval_strategy="steps", eval_steps=25,
-        save_strategy="no", report_to="none", seed=CONFIG["seed"],
+        save_strategy="steps", save_steps=25, save_total_limit=1, load_best_model_at_end=True,
+        metric_for_best_model="eval_loss", greater_is_better=False, report_to="none",
+        seed=CONFIG["seed"],
         remove_unused_columns=False,
     )
     trainer = Trainer(model=model, args=args, train_dataset=train, eval_dataset=valid,
@@ -114,6 +117,8 @@ def main() -> None:
         "model": MODEL, "device": torch.cuda.get_device_name(0), "torch": torch.__version__,
         "train_examples": len(train), "valid_examples": len(valid), "max_len": MAX_LEN,
         "train_seconds": seconds,
+        "best_step": trainer.state.best_global_step,
+        "best_eval_loss": round(trainer.state.best_metric, 4),
         "peak_mem_gb": round(torch.cuda.max_memory_allocated() / 2**30, 2),
         **CONFIG,
     }

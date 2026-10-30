@@ -2,11 +2,13 @@
  "model": "Qwen/Qwen2.5-1.5B-Instruct",
  "device": "Radeon 8060S Graphics",
  "torch": "2.11.0+rocm7.13.0",
- "train_examples": 1354,
- "valid_examples": 118,
+ "train_examples": 981,
+ "valid_examples": 85,
  "max_len": 384,
- "train_seconds": 677.3,
- "peak_mem_gb": 31.81,
+ "train_seconds": 312.2,
+ "best_step": 124,
+ "best_eval_loss": 0.1198,
+ "peak_mem_gb": 37.15,
  "lora_r": 16,
  "lora_alpha": 32,
  "lora_dropout": 0.05,
@@ -20,7 +22,7 @@
   "down_proj"
  ],
  "learning_rate": 0.0002,
- "epochs": 3,
+ "epochs": 2,
  "batch_size": 16,
  "seed": 42
 }

@@ -1,5 +1,6 @@
 """Проверка собранного датасета: формат, баланс, отсутствие утечки eval→train (без сети)."""
 import json
+import re
 from pathlib import Path
 
 import build_dataset
@@ -34,6 +35,20 @@ def main() -> None:
     assert not {key(r) for r in ev} & {key(r) for r in train + valid}
     assert len({key(r) for r in train}) == len(train)
     print("✅ нет дублей внутри train и пересечений eval с train/valid")
+
+    types = "|".join(TYPES)
+    leak = re.compile(rf"(?mi)^\s*(?:[*-]\s+)?(?:{types})(?:\([^)]*\))?!?:\s")
+    for row in train + valid + ev:
+        body = row["messages"][0]["content"].split("\n", 1)[-1]
+        assert not leak.search(body), row["messages"][0]["content"][:80]
+        assert "o-authored" not in body
+    print("✅ в теле коммитов нет строк с префиксом типа (утечки метки) и trailers автора")
+
+    removed = json.loads((DATA_DIR / "removed.json").read_text("utf-8"))
+    raw = [json.loads(line) for line in (DATA_DIR / "raw.jsonl").read_text("utf-8").splitlines()]
+    raw_keys = {f"{r['repo']}/{r['hash']}" for r in raw}
+    assert set(removed) <= raw_keys and len(removed) >= 10
+    print(f"✅ вручную удалено {len(removed)} примеров с неверной меткой (data/removed.json)")
 
     counts = {t: sum(r["type"] == t for r in train) for t in TYPES}
     assert max(counts.values()) <= build_dataset.TRAIN_CAP_PER_CLASS and min(counts.values()) >= 50

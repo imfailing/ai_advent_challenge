@@ -1,0 +1,802 @@
+[
+ {
+  "id": 681,
+  "reply": "{\"category\":\"billing\",\"priority\":\"urgent\",\"sentiment\":\"negative\",\"product\":null,\"order_id\":null,\"action_required\":true,\"summary\":\"Двойное списание за подписку, просит проверить и оформить возврат\"}",
+  "error": null,
+  "prompt_tokens": 408,
+  "completion_tokens": 56,
+  "seconds": 1.327
+ },
+ {
+  "id": 27,
+  "reply": "{\"category\":\"billing\",\"priority\":\"urgent\",\"sentiment\":\"negative\",\"product\":null,\"order_id\":\"MH-93747\",\"action_required\":true,\"summary\":\"Двойное списание по заказу, статус неоплачен, просит разобраться\"}",
+  "error": null,
+  "prompt_tokens": 582,
+  "completion_tokens": 60,
+  "seconds": 1.217
+ },
+ {
+  "id": 720,
+  "reply": "{\"category\":\"billing\",\"priority\":\"urgent\",\"sentiment\":\"negative\",\"product\":\"Облачко Касса\",\"order_id\":null,\"action_required\":true,\"summary\":\"Двойное списание за подписку Кассы, не пришёл чек, просит срочный возврат\"}",
+  "error": null,
+  "prompt_tokens": 402,
+  "completion_tokens": 66,
+  "seconds": 1.134
+ },
+ {
+  "id": 100,
+  "reply": "{\"category\":\"billing\",\"priority\":\"urgent\",\"sentiment\":\"negative\",\"product\":\"Облачко Диск\",\"order_id\":null,\"action_required\":true,\"summary\":\"Двойное списание за Диск, нет счёта, подписка активна, но файлы не открываются\"}",
+  "error": null,
+  "prompt_tokens": 398,
+  "completion_tokens": 65,
+  "seconds": 1.212
+ },
+ {
+  "id": 200,
+  "reply": "{\"category\":\"billing\",\"priority\":\"urgent\",\"sentiment\":\"negative\",\"product\":\"Облачко Диск\",\"order_id\":null,\"action_required\":true,\"summary\":\"Двойное списание за подписку Облачко Диск, просит вернуть деньги и объяснить причину\"}",
+  "error": null,
+  "prompt_tokens": 450,
+  "completion_tokens": 66,
+  "seconds": 1.19
+ },
+ {
+  "id": 158,
+  "reply": "{\"category\":\"billing\",\"priority\":\"urgent\",\"sentiment\":\"negative\",\"product\":\"Облачко Видео\",\"order_id\":\"ND-23792\",\"action_required\":true,\"summary\":\"Двойное списание за подписку Облачко Видео, просит вернуть деньги\"}",
+  "error": null,
+  "prompt_tokens": 451,
+  "completion_tokens": 66,
+  "seconds": 1.158
+ },
+ {
+  "id": 577,
+  "reply": "{\"category\":\"billing\",\"priority\":\"urgent\",\"sentiment\":\"negative\",\"product\":\"Облачко Диск\",\"order_id\":null,\"action_required\":true,\"summary\":\"Двойное списание за подписку, нет места, требует возврат денег\"}",
+  "error": null,
+  "prompt_tokens": 363,
+  "completion_tokens": 57,
+  "seconds": 0.945
+ },
+ {
+  "id": 459,
+  "reply": "{\"category\":\"billing\",\"priority\":\"high\",\"sentiment\":\"negative\",\"product\":null,\"order_id\":null,\"action_required\":true,\"summary\":\"Клиент подозревает двойное списание оплаты, просит проверить счёт.\"}",
+  "error": null,
+  "prompt_tokens": 567,
+  "completion_tokens": 57,
+  "seconds": 1.167
+ },
+ {
+  "id": 58,
+  "reply": "{\"category\": \"billing\", \"priority\": \"urgent\", \"sentiment\": \"negative\", \"product\": \"Облачко Видео\", \"order_id\": null, \"action_required\": true, \"summary\": \"Двойное списание за подписку, нужен счёт на оплату, приложение подтормаживает\"}",
+  "error": null,
+  "prompt_tokens": 451,
+  "completion_tokens": 76,
+  "seconds": 1.226
+ },
+ {
+  "id": 405,
+  "reply": "{\"category\":\"billing\",\"priority\":\"high\",\"sentiment\":\"negative\",\"product\":null,\"order_id\":null,\"action_required\":true,\"summary\":\"Клиент сообщает о двойном списании за период и просит проверить начисления.\"}",
+  "error": null,
+  "prompt_tokens": 538,
+  "completion_tokens": 57,
+  "seconds": 1.112
+ },
+ {
+  "id": 601,
+  "reply": "{\"category\":\"billing\",\"priority\":\"urgent\",\"sentiment\":\"negative\",\"product\":\"Облачко Чат\",\"order_id\":\"ZE-31753\",\"action_required\":true,\"summary\":\"Двойное списание за подписку, просит вернуть лишнюю сумму\"}",
+  "error": null,
+  "prompt_tokens": 575,
+  "completion_tokens": 61,
+  "seconds": 0.928
+ },
+ {
+  "id": 685,
+  "reply": "{\"category\":\"billing\",\"priority\":\"urgent\",\"sentiment\":\"negative\",\"product\":\"Облачко Доски\",\"order_id\":null,\"action_required\":true,\"summary\":\"Двойное списание за подписку Облачко Доски, просит вернуть лишние деньги\"}",
+  "error": null,
+  "prompt_tokens": 337,
+  "completion_tokens": 64,
+  "seconds": 1.525
+ },
+ {
+  "id": 146,
+  "reply": "{\"category\": \"billing\", \"priority\": \"urgent\", \"sentiment\": \"negative\", \"product\": \"Облачко Доски\", \"order_id\": \"MS-46168\", \"action_required\": true, \"summary\": \"Двойное списание за подписку Облачко Доски, требует срочного возврата денег\"}",
+  "error": null,
+  "prompt_tokens": 403,
+  "completion_tokens": 78,
+  "seconds": 1.072
+ },
+ {
+  "id": 376,
+  "reply": "{\"category\":\"billing\",\"priority\":\"urgent\",\"sentiment\":\"negative\",\"product\":\"Облачко Чат\",\"order_id\":null,\"action_required\":true,\"summary\":\"Двойное списание за подписку Облачко Чат, просит возврат и чек\"}",
+  "error": null,
+  "prompt_tokens": 431,
+  "completion_tokens": 63,
+  "seconds": 1.391
+ },
+ {
+  "id": 607,
+  "reply": "{\"category\":\"billing\",\"priority\":\"urgent\",\"sentiment\":\"negative\",\"product\":\"Облачко Чат\",\"order_id\":\"BE-70548\",\"action_required\":true,\"summary\":\"Двойное списание по заказу, просит вернуть лишнюю сумму\"}",
+  "error": null,
+  "prompt_tokens": 346,
+  "completion_tokens": 61,
+  "seconds": 1.16
+ },
+ {
+  "id": 179,
+  "reply": "{\"category\":\"billing\",\"priority\":\"urgent\",\"sentiment\":\"negative\",\"product\":\"Облачко Касса\",\"order_id\":null,\"action_required\":true,\"summary\":\"Двойное списание за подписку, нет доступа и закрывающих документов, просит вернуть деньги\"}",
+  "error": null,
+  "prompt_tokens": 477,
+  "completion_tokens": 65,
+  "seconds": 1.213
+ },
+ {
+  "id": 184,
+  "reply": "{\"category\":\"technical\",\"priority\":\"urgent\",\"sentiment\":\"negative\",\"product\":\"Облачко Курьер\",\"order_id\":\"NP-26595\",\"action_required\":true,\"summary\":\"Приложение зависло, заказ не уехал, двойное списание — срочно разобраться\"}",
+  "error": null,
+  "prompt_tokens": 504,
+  "completion_tokens": 66,
+  "seconds": 1.505
+ },
+ {
+  "id": 99,
+  "reply": "{\"category\":\"technical\",\"priority\":\"high\",\"sentiment\":\"negative\",\"product\":\"Облачко Диск\",\"order_id\":\"NN-46766\",\"action_required\":true,\"summary\":\"Не загружаются файлы в Облачко Диск, ошибка на середине загрузки, срочные отчёты.\"}",
+  "error": null,
+  "prompt_tokens": 561,
+  "completion_tokens": 71,
+  "seconds": 1.291
+ },
+ {
+  "id": 149,
+  "reply": "{\"category\":\"technical\",\"priority\":\"urgent\",\"sentiment\":\"negative\",\"product\":\"Облачко Чат\",\"order_id\":\"KV-20230\",\"action_required\":true,\"summary\":\"У команды не работает Облачко Чат, ошибка connection timeout, нужен срочный ответ с ETA\"}",
+  "error": null,
+  "prompt_tokens": 455,
+  "completion_tokens": 67,
+  "seconds": 1.144
+ },
+ {
+  "id": 333,
+  "reply": "{\"category\":\"account\",\"priority\":\"high\",\"sentiment\":\"negative\",\"product\":null,\"order_id\":\"SG-35995\",\"action_required\":true,\"summary\":\"Не может войти в аккаунт, ошибка пароля, сброс не помогает, работа стоит\"}",
+  "error": null,
+  "prompt_tokens": 380,
+  "completion_tokens": 58,
+  "seconds": 1.3
+ },
+ {
+  "id": 119,
+  "reply": "{\"category\":\"technical\",\"priority\":\"urgent\",\"sentiment\":\"negative\",\"product\":\"Облачко Касса\",\"order_id\":null,\"action_required\":true,\"summary\":\"Ошибка фискализации чека в Кассе, смена не закрывается, работа стоит\"}",
+  "error": null,
+  "prompt_tokens": 333,
+  "completion_tokens": 58,
+  "seconds": 0.976
+ },
+ {
+  "id": 167,
+  "reply": "{\"category\":\"technical\",\"priority\":\"urgent\",\"sentiment\":\"negative\",\"product\":null,\"order_id\":\"PK-54501\",\"action_required\":true,\"summary\":\"Критический сбой: нет доступа к данным, сроки под угрозой, просит проверить заказ.\"}",
+  "error": null,
+  "prompt_tokens": 477,
+  "completion_tokens": 65,
+  "seconds": 1.263
+ },
+ {
+  "id": 134,
+  "reply": "{\"category\":\"technical\",\"priority\":\"high\",\"sentiment\":\"negative\",\"product\":\"Облачко Доски\",\"order_id\":\"LD-52072\",\"action_required\":true,\"summary\":\"Задачи в Облачко Доски пропадают через минуту, команда не видит задачи\"}",
+  "error": null,
+  "prompt_tokens": 428,
+  "completion_tokens": 62,
+  "seconds": 1.003
+ },
+ {
+  "id": 16,
+  "reply": "{\"category\":\"technical\",\"priority\":\"high\",\"sentiment\":\"negative\",\"product\":\"Облачко Чат\",\"order_id\":null,\"action_required\":true,\"summary\":\"Сбои уведомлений и подтормаживание интерфейса в Облачке Чат после обновления\"}",
+  "error": null,
+  "prompt_tokens": 506,
+  "completion_tokens": 64,
+  "seconds": 1.157
+ },
+ {
+  "id": 71,
+  "reply": "{\"category\":\"technical\",\"priority\":\"urgent\",\"sentiment\":\"negative\",\"product\":null,\"order_id\":null,\"action_required\":true,\"summary\":\"Сбой в сервисе: данные не сохраняются, ошибки, срываются сроки, нужна срочная помощь\"}",
+  "error": null,
+  "prompt_tokens": 479,
+  "completion_tokens": 61,
+  "seconds": 1.145
+ },
+ {
+  "id": 281,
+  "reply": "{\"category\": \"technical\", \"priority\": \"high\", \"sentiment\": \"negative\", \"product\": null, \"order_id\": \"EM-76295\", \"action_required\": true, \"summary\": \"Второй день сервис зависает при загрузке, клиент опоздал на встречу, просит починить\"}",
+  "error": null,
+  "prompt_tokens": 511,
+  "completion_tokens": 77,
+  "seconds": 1.347
+ },
+ {
+  "id": 440,
+  "reply": "{\"category\": \"delivery\", \"priority\": \"high\", \"sentiment\": \"negative\", \"product\": \"Облачко Курьер\", \"order_id\": \"MA-65748\", \"action_required\": true, \"summary\": \"Курьер опаздывает на 2 часа, заказ в пути, нет уведомлений, клиент требует объяснений\"}",
+  "error": null,
+  "prompt_tokens": 453,
+  "completion_tokens": 81,
+  "seconds": 1.263
+ },
+ {
+  "id": 308,
+  "reply": "{\"category\": \"technical\", \"priority\": \"urgent\", \"sentiment\": \"negative\", \"product\": null, \"order_id\": \"NM-69079\", \"action_required\": true, \"summary\": \"Не грузится личный кабинет, не приходят уведомления, пропущен платёж, статус заказа отображается неверно\"}",
+  "error": null,
+  "prompt_tokens": 526,
+  "completion_tokens": 83,
+  "seconds": 1.207
+ },
+ {
+  "id": 377,
+  "reply": "{\"category\":\"technical\",\"priority\":\"urgent\",\"sentiment\":\"negative\",\"product\":\"Облачко Чат\",\"order_id\":null,\"action_required\":true,\"summary\":\"Чат глючит, сообщения и файлы не работают, срывается дедлайн\"}",
+  "error": null,
+  "prompt_tokens": 473,
+  "completion_tokens": 59,
+  "seconds": 1.005
+ },
+ {
+  "id": 78,
+  "reply": "{\"category\":\"technical\",\"priority\":\"urgent\",\"sentiment\":\"negative\",\"product\":\"Облачко Диск\",\"order_id\":null,\"action_required\":true,\"summary\":\"Не работает загрузка файлов в Облачко Диск, ошибка 500, срочно нужны документы\"}",
+  "error": null,
+  "prompt_tokens": 403,
+  "completion_tokens": 65,
+  "seconds": 1.333
+ },
+ {
+  "id": 630,
+  "reply": "{\"category\": \"technical\", \"priority\": \"urgent\", \"sentiment\": \"negative\", \"product\": \"Облачко Бэкап\", \"order_id\": \"PT-81334\", \"action_required\": true, \"summary\": \"Не работает восстановление данных, ошибка, срочная сдача проекта\"}",
+  "error": null,
+  "prompt_tokens": 442,
+  "completion_tokens": 70,
+  "seconds": 1.321
+ },
+ {
+  "id": 559,
+  "reply": "{\"category\":\"technical\",\"priority\":\"urgent\",\"sentiment\":\"negative\",\"product\":\"Облачко Диск\",\"order_id\":\"EX-28209\",\"action_required\":true,\"summary\":\"Не открываются файлы в Облачко Диск, ошибка, срочно нужны отчёты\"}",
+  "error": null,
+  "prompt_tokens": 405,
+  "completion_tokens": 65,
+  "seconds": 1.379
+ },
+ {
+  "id": 262,
+  "reply": "{\"category\":\"delivery\",\"priority\":\"medium\",\"sentiment\":\"neutral\",\"product\":\"Облачко Курьер\",\"order_id\":null,\"action_required\":true,\"summary\":\"Клиент просит уточнить статус и сроки доставки заказа\"}",
+  "error": null,
+  "prompt_tokens": 574,
+  "completion_tokens": 57,
+  "seconds": 1.048
+ },
+ {
+  "id": 736,
+  "reply": "{\"category\": \"delivery\", \"priority\": \"high\", \"sentiment\": \"negative\", \"product\": \"Облачко Почта\", \"order_id\": null, \"action_required\": true, \"summary\": \"Клиент ждёт информацию о местонахождении и сроках доставки заказа, трек не обновляется\"}",
+  "error": null,
+  "prompt_tokens": 483,
+  "completion_tokens": 77,
+  "seconds": 1.386
+ },
+ {
+  "id": 92,
+  "reply": "{\"category\": \"delivery\", \"priority\": \"urgent\", \"sentiment\": \"negative\", \"product\": \"Облачко Диск\", \"order_id\": \"RM-95719\", \"action_required\": true, \"summary\": \"Клиент не получил заказ Облачко Диск, деньги списаны, требует ответа или возврата\"}",
+  "error": null,
+  "prompt_tokens": 388,
+  "completion_tokens": 80,
+  "seconds": 1.149
+ },
+ {
+  "id": 664,
+  "reply": "{\"category\": \"delivery\", \"priority\": \"medium\", \"sentiment\": \"neutral\", \"product\": \"Облачко Курьер\", \"order_id\": null, \"action_required\": true, \"summary\": \"Клиент ждёт обновления статуса и сроков доставки заказа курьером\"}",
+  "error": null,
+  "prompt_tokens": 402,
+  "completion_tokens": 71,
+  "seconds": 1.229
+ },
+ {
+  "id": 445,
+  "reply": "{\"category\":\"delivery\",\"priority\":\"high\",\"sentiment\":\"negative\",\"product\":\"Облачко Диск\",\"order_id\":\"LA-82911\",\"action_required\":true,\"summary\":\"Заказ LA-82911 не доставлен, хотя статус показывает завершение доставки\"}",
+  "error": null,
+  "prompt_tokens": 334,
+  "completion_tokens": 61,
+  "seconds": 1.145
+ },
+ {
+  "id": 472,
+  "reply": "{\"category\":\"delivery\",\"priority\":\"high\",\"sentiment\":\"negative\",\"product\":\"Облачко Доски\",\"order_id\":null,\"action_required\":true,\"summary\":\"Клиент не получил заказ Облачко Доски, требует сроки доставки и причины задержки\"}",
+  "error": null,
+  "prompt_tokens": 459,
+  "completion_tokens": 64,
+  "seconds": 1.185
+ },
+ {
+  "id": 506,
+  "reply": "{\"category\":\"delivery\",\"priority\":\"urgent\",\"sentiment\":\"negative\",\"product\":\"Облачко Доски\",\"order_id\":null,\"action_required\":true,\"summary\":\"Нет трекинга заказа, доставка к пятнице под угрозой; не сохраняется доска в Облачке Доски\"}",
+  "error": null,
+  "prompt_tokens": 452,
+  "completion_tokens": 69,
+  "seconds": 1.463
+ },
+ {
+  "id": 606,
+  "reply": "{\"category\":\"delivery\",\"priority\":\"high\",\"sentiment\":\"negative\",\"product\":\"Облачко Видео\",\"order_id\":null,\"action_required\":true,\"summary\":\"Клиент ждёт заказ Облачко Видео, трек не обновляется, просит сроки доставки.\"}",
+  "error": null,
+  "prompt_tokens": 382,
+  "completion_tokens": 71,
+  "seconds": 1.203
+ },
+ {
+  "id": 20,
+  "reply": "{\"category\":\"delivery\",\"priority\":\"urgent\",\"sentiment\":\"negative\",\"product\":\"Облачко Курьер\",\"order_id\":\"HN-85127\",\"action_required\":true,\"summary\":\"Клиент требует объяснить задержку доставки и назвать точное время.\"}",
+  "error": null,
+  "prompt_tokens": 360,
+  "completion_tokens": 62,
+  "seconds": 1.031
+ },
+ {
+  "id": 403,
+  "reply": "{\"category\": \"delivery\", \"priority\": \"urgent\", \"sentiment\": \"negative\", \"product\": \"Облачко Почта\", \"order_id\": \"ZH-78726\", \"action_required\": true, \"summary\": \"Клиент жалуется на задержку доставки заказа ZH-78726 и отсутствие ответа от поддержки.\"}",
+  "error": null,
+  "prompt_tokens": 429,
+  "completion_tokens": 83,
+  "seconds": 1.446
+ },
+ {
+  "id": 32,
+  "reply": "{\"category\":\"delivery\",\"priority\":\"urgent\",\"sentiment\":\"negative\",\"product\":\"Облачко Почта\",\"order_id\":\"PG-81033\",\"action_required\":true,\"summary\":\"Клиент ждёт трекинг и подтверждение отправки заказа PG-81033, срок поджимает.\"}",
+  "error": null,
+  "prompt_tokens": 460,
+  "completion_tokens": 69,
+  "seconds": 1.077
+ },
+ {
+  "id": 730,
+  "reply": "{\"category\":\"delivery\",\"priority\":\"high\",\"sentiment\":\"neutral\",\"product\":\"Облачко Чат\",\"order_id\":null,\"action_required\":true,\"summary\":\"Клиент просит уточнить сроки доставки заказа в Облачке Чат\"}",
+  "error": null,
+  "prompt_tokens": 400,
+  "completion_tokens": 60,
+  "seconds": 0.861
+ },
+ {
+  "id": 524,
+  "reply": "{\"category\": \"delivery\", \"priority\": \"high\", \"sentiment\": \"negative\", \"product\": \"Облачко Почта\", \"order_id\": null, \"action_required\": true, \"summary\": \"Клиент жалуется на застрявший статус доставки и просит уточнить сроки\"}",
+  "error": null,
+  "prompt_tokens": 456,
+  "completion_tokens": 74,
+  "seconds": 1.103
+ },
+ {
+  "id": 221,
+  "reply": "{\"category\":\"delivery\",\"priority\":\"urgent\",\"sentiment\":\"negative\",\"product\":\"Облачко Чат\",\"order_id\":null,\"action_required\":true,\"summary\":\"Клиент срочно ждет заказ сегодня, статус доставки не меняется\"}",
+  "error": null,
+  "prompt_tokens": 352,
+  "completion_tokens": 59,
+  "seconds": 1.172
+ },
+ {
+  "id": 37,
+  "reply": "{\"category\": \"delivery\", \"priority\": \"high\", \"sentiment\": \"negative\", \"product\": \"Облачко Касса\", \"order_id\": \"VR-22286\", \"action_required\": true, \"summary\": \"Клиент не получил заказ VR-22286, приложение зависло, чек не распечатался.\"}",
+  "error": null,
+  "prompt_tokens": 474,
+  "completion_tokens": 81,
+  "seconds": 1.188
+ },
+ {
+  "id": 347,
+  "reply": "{\"category\": \"delivery\", \"priority\": \"urgent\", \"sentiment\": \"negative\", \"product\": \"Облачко Курьер\", \"order_id\": null, \"action_required\": true, \"summary\": \"Клиент жалуется на просроченную доставку, требует статус и точную дату получения\"}",
+  "error": null,
+  "prompt_tokens": 475,
+  "completion_tokens": 74,
+  "seconds": 1.304
+ },
+ {
+  "id": 680,
+  "reply": "{\"category\":\"account\",\"priority\":\"high\",\"sentiment\":\"negative\",\"product\":null,\"order_id\":null,\"action_required\":true,\"summary\":\"Не может войти в аккаунт после смены пароля, письмо восстановления не приходит\"}",
+  "error": null,
+  "prompt_tokens": 513,
+  "completion_tokens": 55,
+  "seconds": 1.356
+ },
+ {
+  "id": 125,
+  "reply": "{\"category\":\"account\",\"priority\":\"urgent\",\"sentiment\":\"negative\",\"product\":\"Облачко Курьер\",\"order_id\":\"RH-76351\",\"action_required\":true,\"summary\":\"Не может войти в аккаунт, пароль и СМС не работают, заказ RH-76351 под угрозой срыва сроков\"}",
+  "error": null,
+  "prompt_tokens": 400,
+  "completion_tokens": 76,
+  "seconds": 1.297
+ },
+ {
+  "id": 353,
+  "reply": "{\"category\":\"account\",\"priority\":\"urgent\",\"sentiment\":\"negative\",\"product\":\"Облачко Бэкап\",\"order_id\":null,\"action_required\":true,\"summary\":\"Не может войти в аккаунт Облачко Бэкап, пароль не принимается, нужен срочный доступ\"}",
+  "error": null,
+  "prompt_tokens": 521,
+  "completion_tokens": 70,
+  "seconds": 1.283
+ },
+ {
+  "id": 723,
+  "reply": "{\"category\":\"account\",\"priority\":\"urgent\",\"sentiment\":\"negative\",\"product\":\"Облачко Касса\",\"order_id\":\"NP-17044\",\"action_required\":true,\"summary\":\"Не может войти в Облачко Касса, пароль не подходит, письмо для восстановления не приходит, работа стоит.\"}",
+  "error": null,
+  "prompt_tokens": 389,
+  "completion_tokens": 71,
+  "seconds": 1.107
+ },
+ {
+  "id": 159,
+  "reply": "{\"category\":\"account\",\"priority\":\"urgent\",\"sentiment\":\"negative\",\"product\":\"Облачко Бэкап\",\"order_id\":\"CM-55396\",\"action_required\":true,\"summary\":\"Не может войти в аккаунт Бэкап, пароль не подходит, смена данных с ошибкой, нужен срочный доступ\"}",
+  "error": null,
+  "prompt_tokens": 340,
+  "completion_tokens": 76,
+  "seconds": 0.963
+ },
+ {
+  "id": 643,
+  "reply": "{\"category\":\"account\",\"priority\":\"urgent\",\"sentiment\":\"negative\",\"product\":\"Облачко Касса\",\"order_id\":\"KV-59065\",\"action_required\":true,\"summary\":\"Не может войти в аккаунт Кассы, восстановление пароля не приходит, работа стоит\"}",
+  "error": null,
+  "prompt_tokens": 470,
+  "completion_tokens": 63,
+  "seconds": 1.376
+ },
+ {
+  "id": 639,
+  "reply": "{\"category\":\"account\",\"priority\":\"high\",\"sentiment\":\"negative\",\"product\":\"Облачко Курьер\",\"order_id\":\"NM-73302\",\"action_required\":true,\"summary\":\"Не может войти в аккаунт, сброс пароля не работает, нужен доступ к заказу\"}",
+  "error": null,
+  "prompt_tokens": 485,
+  "completion_tokens": 65,
+  "seconds": 1.125
+ },
+ {
+  "id": 687,
+  "reply": "{\"category\":\"account\",\"priority\":\"urgent\",\"sentiment\":\"negative\",\"product\":\"Облачко Касса\",\"order_id\":\"MH-38001\",\"action_required\":true,\"summary\":\"Не может войти в Облачко Касса, пароль не подходит, срочно нужен доступ для чеков\"}",
+  "error": null,
+  "prompt_tokens": 364,
+  "completion_tokens": 69,
+  "seconds": 1.286
+ },
+ {
+  "id": 219,
+  "reply": "{\"category\":\"account\",\"priority\":\"high\",\"sentiment\":\"negative\",\"product\":null,\"order_id\":\"DP-40503\",\"action_required\":true,\"summary\":\"Клиент не может войти в аккаунт, смена данных не работает, просит помощи\"}",
+  "error": null,
+  "prompt_tokens": 388,
+  "completion_tokens": 58,
+  "seconds": 1.386
+ },
+ {
+  "id": 60,
+  "reply": "{\"category\":\"account\",\"priority\":\"high\",\"sentiment\":\"negative\",\"product\":\"Облачко Касса\",\"order_id\":null,\"action_required\":true,\"summary\":\"Не может войти в аккаунт, письмо для восстановления пароля не приходит\"}",
+  "error": null,
+  "prompt_tokens": 464,
+  "completion_tokens": 57,
+  "seconds": 1.323
+ },
+ {
+  "id": 413,
+  "reply": "{\"category\":\"account\",\"priority\":\"high\",\"sentiment\":\"negative\",\"product\":\"Облачко Касса\",\"order_id\":\"GT-85230\",\"action_required\":true,\"summary\":\"Не может войти в Кассу после смены пароля, просит восстановить доступ\"}",
+  "error": null,
+  "prompt_tokens": 341,
+  "completion_tokens": 61,
+  "seconds": 1.293
+ },
+ {
+  "id": 692,
+  "reply": "{\"category\": \"account\", \"priority\": \"high\", \"sentiment\": \"negative\", \"product\": \"Облачко Чат\", \"order_id\": \"BH-87381\", \"action_required\": true, \"summary\": \"Не может войти в аккаунт, письмо для восстановления не приходит, нужно сменить телефон\"}",
+  "error": null,
+  "prompt_tokens": 486,
+  "completion_tokens": 76,
+  "seconds": 1.153
+ },
+ {
+  "id": 358,
+  "reply": "{\"category\": \"account\", \"priority\": \"high\", \"sentiment\": \"negative\", \"product\": \"Облачко Чат\", \"order_id\": \"ER-84193\", \"action_required\": true, \"summary\": \"Не может войти в аккаунт, восстановление не работает, заказ не отображается\"}",
+  "error": null,
+  "prompt_tokens": 474,
+  "completion_tokens": 73,
+  "seconds": 1.126
+ },
+ {
+  "id": 428,
+  "reply": "{\"category\":\"account\",\"priority\":\"urgent\",\"sentiment\":\"negative\",\"product\":\"Облачко Бэкап\",\"order_id\":null,\"action_required\":true,\"summary\":\"Не может войти в аккаунт, пароль не подходит, письмо для восстановления не приходит, срочно нужен доступ\"}",
+  "error": null,
+  "prompt_tokens": 417,
+  "completion_tokens": 71,
+  "seconds": 0.941
+ },
+ {
+  "id": 352,
+  "reply": "{\"category\": \"account\", \"priority\": \"high\", \"sentiment\": \"negative\", \"product\": \"Облачко Видео\", \"order_id\": \"GK-29131\", \"action_required\": true, \"summary\": \"Не может войти в аккаунт, письмо для восстановления не приходит, хочет сменить телефон\"}",
+  "error": null,
+  "prompt_tokens": 419,
+  "completion_tokens": 78,
+  "seconds": 1.33
+ },
+ {
+  "id": 401,
+  "reply": "{\"category\":\"technical\",\"priority\":\"high\",\"sentiment\":\"negative\",\"product\":\"Облачко Бэкап\",\"order_id\":\"KX-29366\",\"action_required\":true,\"summary\":\"После смены пароля сбои входа и неполное отображение данных, просит проверить аккаунт\"}",
+  "error": null,
+  "prompt_tokens": 521,
+  "completion_tokens": 73,
+  "seconds": 1.301
+ },
+ {
+  "id": 198,
+  "reply": "{\"category\":\"refund\",\"priority\":\"high\",\"sentiment\":\"negative\",\"product\":\"Облачко Почта\",\"order_id\":\"ZZ-82569\",\"action_required\":true,\"summary\":\"Клиент просит вернуть деньги за подписку на Облачко Почту, заказ ZZ-82569.\"}",
+  "error": null,
+  "prompt_tokens": 321,
+  "completion_tokens": 69,
+  "seconds": 0.969
+ },
+ {
+  "id": 456,
+  "reply": "{\"category\":\"refund\",\"priority\":\"urgent\",\"sentiment\":\"negative\",\"product\":\"Облачко Чат\",\"order_id\":null,\"action_required\":true,\"summary\":\"Двойное списание за подписку, чат не работает, требует возврат и срочную помощь\"}",
+  "error": null,
+  "prompt_tokens": 386,
+  "completion_tokens": 62,
+  "seconds": 1.437
+ },
+ {
+  "id": 250,
+  "reply": "{\"category\":\"refund\",\"priority\":\"urgent\",\"sentiment\":\"negative\",\"product\":null,\"order_id\":null,\"action_required\":true,\"summary\":\"Требует возврат за неработающую подписку, угрожает банком и отзывами\"}",
+  "error": null,
+  "prompt_tokens": 350,
+  "completion_tokens": 59,
+  "seconds": 1.144
+ },
+ {
+  "id": 668,
+  "reply": "{\"category\":\"refund\",\"priority\":\"urgent\",\"sentiment\":\"negative\",\"product\":null,\"order_id\":null,\"action_required\":true,\"summary\":\"Клиент требует срочного возврата денег из-за неработающего сервиса и сорванных сроков.\"}",
+  "error": null,
+  "prompt_tokens": 387,
+  "completion_tokens": 62,
+  "seconds": 1.356
+ },
+ {
+  "id": 690,
+  "reply": "{\"category\":\"refund\",\"priority\":\"urgent\",\"sentiment\":\"negative\",\"product\":\"Облачко Доски\",\"order_id\":null,\"action_required\":true,\"summary\":\"Клиент требует возврат за подписку из-за сбоев Досок и сорванных сроков.\"}",
+  "error": null,
+  "prompt_tokens": 462,
+  "completion_tokens": 65,
+  "seconds": 1.417
+ },
+ {
+  "id": 477,
+  "reply": "{\"category\":\"refund\",\"priority\":\"urgent\",\"sentiment\":\"negative\",\"product\":null,\"order_id\":\"FC-35062\",\"action_required\":true,\"summary\":\"Требует срочного возврата денег за заказ, сервис не работает\"}",
+  "error": null,
+  "prompt_tokens": 356,
+  "completion_tokens": 57,
+  "seconds": 1.44
+ },
+ {
+  "id": 235,
+  "reply": "{\"category\":\"billing\",\"priority\":\"urgent\",\"sentiment\":\"negative\",\"product\":\"Облачко Доски\",\"order_id\":null,\"action_required\":true,\"summary\":\"Двойное списание за подписку и недоступность досок, требует возврата средств\"}",
+  "error": null,
+  "prompt_tokens": 469,
+  "completion_tokens": 60,
+  "seconds": 1.454
+ },
+ {
+  "id": 59,
+  "reply": "{\"category\":\"refund\",\"priority\":\"urgent\",\"sentiment\":\"negative\",\"product\":\"Облачко Чат\",\"order_id\":null,\"action_required\":true,\"summary\":\"Клиент требует возврат за подписку Облачко Чат: доступ пропал, поддержка молчит.\"}",
+  "error": null,
+  "prompt_tokens": 325,
+  "completion_tokens": 65,
+  "seconds": 1.43
+ },
+ {
+  "id": 662,
+  "reply": "{\"category\":\"refund\",\"priority\":\"medium\",\"sentiment\":\"negative\",\"product\":\"Облачко Касса\",\"order_id\":\"TD-22398\",\"action_required\":true,\"summary\":\"Клиент отменил подписку на Кассу, ждёт возврат денег и сроки.\"}",
+  "error": null,
+  "prompt_tokens": 407,
+  "completion_tokens": 66,
+  "seconds": 1.417
+ },
+ {
+  "id": 689,
+  "reply": "{\"category\":\"refund\",\"priority\":\"medium\",\"sentiment\":\"negative\",\"product\":null,\"order_id\":null,\"action_required\":true,\"summary\":\"Клиент просит вернуть деньги за подписку и уточнить условия возврата.\"}",
+  "error": null,
+  "prompt_tokens": 335,
+  "completion_tokens": 54,
+  "seconds": 1.085
+ },
+ {
+  "id": 715,
+  "reply": "{\"category\":\"refund\",\"priority\":\"urgent\",\"sentiment\":\"negative\",\"product\":null,\"order_id\":null,\"action_required\":true,\"summary\":\"Клиент требует возврат: сервис не работает два дня, деньги списываются\"}",
+  "error": null,
+  "prompt_tokens": 308,
+  "completion_tokens": 53,
+  "seconds": 1.294
+ },
+ {
+  "id": 644,
+  "reply": "{\"category\":\"refund\",\"priority\":\"urgent\",\"sentiment\":\"negative\",\"product\":\"Облачко Видео\",\"order_id\":\"PZ-70312\",\"action_required\":true,\"summary\":\"Клиент требует возврат денег за неработающую подписку Облачко Видео\"}",
+  "error": null,
+  "prompt_tokens": 415,
+  "completion_tokens": 67,
+  "seconds": 1.358
+ },
+ {
+  "id": 520,
+  "reply": "{\"category\":\"refund\",\"priority\":\"urgent\",\"sentiment\":\"negative\",\"product\":\"Облачко Видео\",\"order_id\":\"VN-78735\",\"action_required\":true,\"summary\":\"Клиент требует возврат за сбойный сервис и списание денег при ошибке оплаты.\"}",
+  "error": null,
+  "prompt_tokens": 473,
+  "completion_tokens": 67,
+  "seconds": 1.094
+ },
+ {
+  "id": 571,
+  "reply": "{\"category\": \"refund\", \"priority\": \"high\", \"sentiment\": \"negative\", \"product\": null, \"order_id\": null, \"action_required\": true, \"summary\": \"Клиент просит вернуть деньги за подписку из-за нестабильной работы сервиса\"}",
+  "error": null,
+  "prompt_tokens": 328,
+  "completion_tokens": 67,
+  "seconds": 1.436
+ },
+ {
+  "id": 652,
+  "reply": "{\"category\":\"refund\",\"priority\":\"medium\",\"sentiment\":\"neutral\",\"product\":\"Облачко Почта\",\"order_id\":null,\"action_required\":true,\"summary\":\"Клиент просит вернуть деньги за случайно оформленную подписку на Почту.\"}",
+  "error": null,
+  "prompt_tokens": 517,
+  "completion_tokens": 60,
+  "seconds": 1.357
+ },
+ {
+  "id": 610,
+  "reply": "{\"category\":\"refund\",\"priority\":\"urgent\",\"sentiment\":\"negative\",\"product\":\"Облачко Почта\",\"order_id\":\"MK-31002\",\"action_required\":true,\"summary\":\"Требует возврат за заказ MK-31002: сбой синхронизации Почты, сорван отчёт\"}",
+  "error": null,
+  "prompt_tokens": 328,
+  "completion_tokens": 69,
+  "seconds": 1.231
+ },
+ {
+  "id": 115,
+  "reply": "{\"category\":\"feedback\",\"priority\":\"low\",\"sentiment\":\"positive\",\"product\":\"Облачко Касса\",\"order_id\":null,\"action_required\":false,\"summary\":\"Отзыв о Кассе: хвалит продукт, просит гибкий экспорт отчётов с фильтрами\"}",
+  "error": null,
+  "prompt_tokens": 474,
+  "completion_tokens": 65,
+  "seconds": 0.921
+ },
+ {
+  "id": 373,
+  "reply": "{\"category\":\"feedback\",\"priority\":\"low\",\"sentiment\":\"positive\",\"product\":null,\"order_id\":\"VX-28307\",\"action_required\":false,\"summary\":\"Клиент благодарит за сервис, заказ прошёл успешно, просит тёмную тему.\"}",
+  "error": null,
+  "prompt_tokens": 381,
+  "completion_tokens": 62,
+  "seconds": 1.145
+ },
+ {
+  "id": 528,
+  "reply": "{\"category\":\"feedback\",\"priority\":\"low\",\"sentiment\":\"positive\",\"product\":\"Облачко Чат\",\"order_id\":\"HL-54275\",\"action_required\":false,\"summary\":\"Положительный отзыв о Чате, пожелание гибкой настройки уведомлений\"}",
+  "error": null,
+  "prompt_tokens": 472,
+  "completion_tokens": 64,
+  "seconds": 1.511
+ },
+ {
+  "id": 285,
+  "reply": "{\"category\": \"feedback\", \"priority\": \"low\", \"sentiment\": \"positive\", \"product\": \"Облачко Касса\", \"order_id\": null, \"action_required\": false, \"summary\": \"Клиентка благодарит за сервис Облачко Касса и поддержку.\"}",
+  "error": null,
+  "prompt_tokens": 407,
+  "completion_tokens": 70,
+  "seconds": 1.282
+ },
+ {
+  "id": 258,
+  "reply": "{\"category\":\"feedback\",\"priority\":\"low\",\"sentiment\":\"positive\",\"product\":\"Облачко Почта\",\"order_id\":\"AD-30386\",\"action_required\":false,\"summary\":\"Клиент хвалит Почту и предлагает шаблоны писем и фильтры по домену\"}",
+  "error": null,
+  "prompt_tokens": 482,
+  "completion_tokens": 66,
+  "seconds": 1.324
+ },
+ {
+  "id": 424,
+  "reply": "{\"category\":\"technical\",\"priority\":\"high\",\"sentiment\":\"negative\",\"product\":\"Облачко Касса\",\"order_id\":null,\"action_required\":true,\"summary\":\"Приложение зависает при закрытии смены, просит исправить и улучшить отчёты\"}",
+  "error": null,
+  "prompt_tokens": 432,
+  "completion_tokens": 61,
+  "seconds": 1.085
+ },
+ {
+  "id": 638,
+  "reply": "{\"category\":\"feedback\",\"priority\":\"medium\",\"sentiment\":\"negative\",\"product\":\"Облачко Касса\",\"order_id\":\"XF-66290\",\"action_required\":true,\"summary\":\"Отзыв: задержка отчёта по сменам после обновления, просит ускорить или уведомлять\"}",
+  "error": null,
+  "prompt_tokens": 451,
+  "completion_tokens": 71,
+  "seconds": 1.155
+ },
+ {
+  "id": 322,
+  "reply": "{\"category\": \"technical\", \"priority\": \"high\", \"sentiment\": \"negative\", \"product\": \"Облачко Доски\", \"order_id\": \"CK-94467\", \"action_required\": true, \"summary\": \"Сбои в досках: пропадают задачи, съезжают карточки, задержка уведомлений, просьба тёмной темы\"}",
+  "error": null,
+  "prompt_tokens": 433,
+  "completion_tokens": 89,
+  "seconds": 1.38
+ },
+ {
+  "id": 121,
+  "reply": "{\"category\": \"technical\", \"priority\": \"medium\", \"sentiment\": \"neutral\", \"product\": \"Облачко Почта\", \"order_id\": \"PG-52239\", \"action_required\": true, \"summary\": \"Задержки уведомлений, фильтры работают некорректно, просит помощи и смены темы\"}",
+  "error": null,
+  "prompt_tokens": 486,
+  "completion_tokens": 81,
+  "seconds": 1.47
+ },
+ {
+  "id": 385,
+  "reply": "{\"category\":\"technical\",\"priority\":\"high\",\"sentiment\":\"negative\",\"product\":\"Облачко Диск\",\"order_id\":\"NS-37482\",\"action_required\":true,\"summary\":\"Баг синхронизации больших файлов после апдейта, просит фикс и обходной путь\"}",
+  "error": null,
+  "prompt_tokens": 466,
+  "completion_tokens": 65,
+  "seconds": 1.104
+ },
+ {
+  "id": 81,
+  "reply": "{\"category\":\"feedback\",\"priority\":\"low\",\"sentiment\":\"positive\",\"product\":\"Облачко Бэкап\",\"order_id\":null,\"action_required\":false,\"summary\":\"Клиент хвалит бэкап, просит сортировку или фильтр списка копий\"}",
+  "error": null,
+  "prompt_tokens": 532,
+  "completion_tokens": 65,
+  "seconds": 1.38
+ },
+ {
+  "id": 613,
+  "reply": "{\"category\": \"feedback\", \"priority\": \"high\", \"sentiment\": \"negative\", \"product\": \"Облачко Диск\", \"order_id\": null, \"action_required\": false, \"summary\": \"Жалоба на медленную загрузку, ошибки и синхронизацию в Облачко Диск, просьба о цветных папках\"}",
+  "error": null,
+  "prompt_tokens": 420,
+  "completion_tokens": 84,
+  "seconds": 1.289
+ },
+ {
+  "id": 429,
+  "reply": "{\"category\":\"feedback\",\"priority\":\"low\",\"sentiment\":\"neutral\",\"product\":\"Облачко Диск\",\"order_id\":null,\"action_required\":false,\"summary\":\"Отзыв о Диске: задержки синхронизации, нужны гибкие права доступа к папкам\"}",
+  "error": null,
+  "prompt_tokens": 444,
+  "completion_tokens": 64,
+  "seconds": 1.493
+ },
+ {
+  "id": 201,
+  "reply": "{\"category\":\"feedback\",\"priority\":\"low\",\"sentiment\":\"positive\",\"product\":\"Облачко Курьер\",\"order_id\":null,\"action_required\":false,\"summary\":\"Положительный отзыв о курьере с предложением показывать время прибытия с учётом пробок\"}",
+  "error": null,
+  "prompt_tokens": 469,
+  "completion_tokens": 62,
+  "seconds": 1.369
+ },
+ {
+  "id": 749,
+  "reply": "{\"category\":\"feedback\",\"priority\":\"low\",\"sentiment\":\"neutral\",\"product\":\"Облачко Видео\",\"order_id\":null,\"action_required\":false,\"summary\":\"Отзыв: сбрасываются настройки качества при смене устройств, интерфейс подтормаживает\"}",
+  "error": null,
+  "prompt_tokens": 457,
+  "completion_tokens": 66,
+  "seconds": 1.377
+ },
+ {
+  "id": 470,
+  "reply": "{\"category\":\"feedback\",\"priority\":\"low\",\"sentiment\":\"positive\",\"product\":null,\"order_id\":\"EA-23813\",\"action_required\":false,\"summary\":\"Клиент благодарит за сервис и заказ, просит улучшить интерфейс\"}",
+  "error": null,
+  "prompt_tokens": 469,
+  "completion_tokens": 58,
+  "seconds": 1.346
+ },
+ {
+  "id": 514,
+  "reply": "{\"category\":\"refund\",\"priority\":\"high\",\"sentiment\":\"negative\",\"product\":\"Облачко Касса\",\"order_id\":\"GD-27430\",\"action_required\":true,\"summary\":\"Клиент требует возврат за неработающую Кассу, чеки не пробиваются\"}",
+  "error": null,
+  "prompt_tokens": 379,
+  "completion_tokens": 62,
+  "seconds": 1.258
+ },
+ {
+  "id": 77,
+  "reply": "{\"category\":\"refund\",\"priority\":\"urgent\",\"sentiment\":\"negative\",\"product\":\"Облачко Диск\",\"order_id\":null,\"action_required\":true,\"summary\":\"Клиент требует возврат за подписку: сервис не работает второй день\"}",
+  "error": null,
+  "prompt_tokens": 316,
+  "completion_tokens": 57,
+  "seconds": 1.36
+ },
+ {
+  "id": 497,
+  "reply": "{\"category\":\"billing\",\"priority\":\"urgent\",\"sentiment\":\"negative\",\"product\":\"Облачко Касса\",\"order_id\":\"LR-28133\",\"action_required\":true,\"summary\":\"Двойное списание за подписку, требует срочного возврата денег\"}",
+  "error": null,
+  "prompt_tokens": 344,
+  "completion_tokens": 60,
+  "seconds": 1.065
+ },
+ {
+  "id": 598,
+  "reply": "{\"category\":\"billing\",\"priority\":\"urgent\",\"sentiment\":\"negative\",\"product\":null,\"order_id\":null,\"action_required\":true,\"summary\":\"Двойное списание за подписку, доступ не активирован, требует возврата денег\"}",
+  "error": null,
+  "prompt_tokens": 429,
+  "completion_tokens": 55,
+  "seconds": 1.236
+ }
+]

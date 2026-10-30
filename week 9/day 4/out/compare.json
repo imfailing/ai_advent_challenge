@@ -1,0 +1,142 @@
+{
+ "student_base": {
+  "n": 80,
+  "valid_json": 0.725,
+  "summary_ok": 0.75,
+  "full_match": 0.263,
+  "fields": {
+   "category": 0.725,
+   "sentiment": 0.8,
+   "product": 0.825,
+   "order_id": 0.8,
+   "amount_rub": 0.975,
+   "action_required": 0.925
+  },
+  "agree_with_teacher": {
+   "category": 0.725,
+   "sentiment": 0.863,
+   "product": 0.787,
+   "order_id": 0.8,
+   "amount_rub": 0.975,
+   "action_required": 0.925
+  },
+  "by_category_full": {
+   "account": 0.0,
+   "billing": 0.364,
+   "delivery": 0.167,
+   "feedback": 0.444,
+   "refund": 0.286,
+   "technical": 0.5
+  },
+  "latency_mean_s": 3.49,
+  "latency_p50_s": 3.47,
+  "latency_p95_s": 4.19,
+  "avg_new_tokens": 94,
+  "cost_per_request_usd": 9.7e-06
+ },
+ "student_tuned": {
+  "n": 80,
+  "valid_json": 1.0,
+  "summary_ok": 1.0,
+  "full_match": 0.85,
+  "fields": {
+   "category": 1.0,
+   "sentiment": 0.85,
+   "product": 1.0,
+   "order_id": 1.0,
+   "amount_rub": 1.0,
+   "action_required": 1.0
+  },
+  "agree_with_teacher": {
+   "category": 1.0,
+   "sentiment": 0.912,
+   "product": 0.963,
+   "order_id": 1.0,
+   "amount_rub": 1.0,
+   "action_required": 1.0
+  },
+  "by_category_full": {
+   "account": 0.812,
+   "billing": 0.909,
+   "delivery": 0.944,
+   "feedback": 1.0,
+   "refund": 0.786,
+   "technical": 0.667
+  },
+  "latency_mean_s": 5.34,
+  "latency_p50_s": 5.3,
+  "latency_p95_s": 6.12,
+  "avg_new_tokens": 81,
+  "cost_per_request_usd": 1.48e-05
+ },
+ "student_tuned_merged": {
+  "n": 80,
+  "valid_json": 1.0,
+  "summary_ok": 1.0,
+  "full_match": 0.863,
+  "fields": {
+   "category": 1.0,
+   "sentiment": 0.863,
+   "product": 1.0,
+   "order_id": 1.0,
+   "amount_rub": 1.0,
+   "action_required": 1.0
+  },
+  "agree_with_teacher": {
+   "category": 1.0,
+   "sentiment": 0.925,
+   "product": 0.963,
+   "order_id": 1.0,
+   "amount_rub": 1.0,
+   "action_required": 1.0
+  },
+  "by_category_full": {
+   "account": 0.812,
+   "billing": 1.0,
+   "delivery": 0.944,
+   "feedback": 1.0,
+   "refund": 0.786,
+   "technical": 0.667
+  },
+  "latency_mean_s": 3.01,
+  "latency_p50_s": 3.0,
+  "latency_p95_s": 3.46,
+  "avg_new_tokens": 81,
+  "cost_per_request_usd": 8.4e-06
+ },
+ "teacher": {
+  "n": 80,
+  "valid_json": 0.988,
+  "summary_ok": 0.988,
+  "full_match": 0.887,
+  "fields": {
+   "category": 1.0,
+   "sentiment": 0.912,
+   "product": 0.963,
+   "order_id": 1.0,
+   "amount_rub": 1.0,
+   "action_required": 1.0
+  },
+  "agree_with_teacher": {
+   "category": 1.0,
+   "sentiment": 1.0,
+   "product": 1.0,
+   "order_id": 1.0,
+   "amount_rub": 1.0,
+   "action_required": 1.0
+  },
+  "by_category_full": {
+   "account": 0.875,
+   "billing": 1.0,
+   "delivery": 0.833,
+   "feedback": 1.0,
+   "refund": 0.786,
+   "technical": 0.917
+  },
+  "latency_mean_s": 1.22,
+  "latency_p50_s": 1.22,
+  "latency_p95_s": 1.44,
+  "avg_new_tokens": 70,
+  "cost_per_request_usd": 8.48e-05
+ }
+}

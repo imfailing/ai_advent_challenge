@@ -1,0 +1,13 @@
+{
+ "pool": 695,
+ "kept": 600,
+ "train": 540,
+ "valid": 60,
+ "rejected": {
+  "расхождение: category": 48,
+  "расхождение: action_required": 23,
+  "расхождение: product": 15,
+  "схема: summary": 8,
+  "расхождение: order_id": 1
+ }
+}

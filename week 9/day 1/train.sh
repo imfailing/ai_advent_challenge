@@ -4,10 +4,10 @@
 # Параметры обучения зафиксированы в train.py (CONFIG) и в out/run_info.json.
 set -euo pipefail
 
-# окружение: uv venv --python 3.12 ~/ft-env
+# окружение: uv venv --python 3.12 ~/llm-env
 # uv pip install --index-url https://repo.amd.com/rocm/whl/gfx1151/ torch torchvision torchaudio
 # uv pip install transformers peft trl datasets accelerate
-source ~/ft-env/bin/activate
+source ~/llm-env/bin/activate
 
 python prepare_data.py     # data/train.jsonl (2000), data/valid.jsonl (100)
 python train.py            # ~22 мин, адаптер → adapters/, логи → out/

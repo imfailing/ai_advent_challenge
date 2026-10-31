@@ -16,7 +16,7 @@
 ## На чём обучали
 
 - Сервер Ubuntu 26.04.1, ядро 7.0.0-42, **AMD Ryzen AI Max+ 395 / Radeon 8060S (gfx1151)**, 122 ГБ общей памяти.
-- Python 3.12, PyTorch `2.11.0+rocm7.13.0` (индекс `repo.amd.com/rocm/whl/gfx1151`), transformers/peft без фиксации версий в этом отчёте (см. `pip freeze` на сервере, `~/ft-env`).
+- Python 3.12, PyTorch `2.11.0+rocm7.13.0` (индекс `repo.amd.com/rocm/whl/gfx1151`), transformers/peft без фиксации версий в этом отчёте (см. `pip freeze` на сервере, `~/llm-env`).
 - **Время обучения: 1298,9 с ≈ 21,6 мин** (500 шагов, ≈2,4–3,4 с/шаг).
 - Пик памяти `torch.cuda.max_memory_allocated`: 34,95 ГБ (память общая с CPU; батч 8 × до 768 токенов без gradient checkpointing).
 

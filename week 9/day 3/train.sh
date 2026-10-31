@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# Воспроизведение дня 8. Обучение и eval — на сервере с ROCm (окружение ~/ft-env, см. week 9/day 1/train.sh).
+# Воспроизведение дня 8. Обучение и eval — на сервере с ROCm (окружение ~/llm-env, см. week 9/day 1/train.sh).
 # Адаптеры дней 6 и 7 берутся из ../day 1/adapters и ../day 2/adapters (в git не хранятся).
 set -euo pipefail
 
 python facts.py                    # 40 выдуманных фактов → data/facts*.jsonl
 python test_day3.py                # офлайн-проверка наборов и автопроверок
 
-source ~/ft-env/bin/activate
+source ~/llm-env/bin/activate
 
 # 1. Знания: база / база+факты в промпте / тюн / тюн+факты
 python eval_knowledge.py base

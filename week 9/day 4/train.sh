@@ -11,7 +11,7 @@ set -euo pipefail
 # python build_train.py               # фильтр ответов учителя → data/train.jsonl, valid.jsonl
 
 # --- на сервере ---
-source ~/ft-env/bin/activate
+source ~/llm-env/bin/activate
 python eval_student.py base                                    # ученик до обучения
 python train_lora.py --train data/train.jsonl --valid data/valid.jsonl --out runs/student \
     --epochs 3 --batch 8 --lr 2e-4 --eval-steps 20 --max-len 768

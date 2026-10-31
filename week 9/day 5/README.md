@@ -41,7 +41,7 @@ curl -X POST localhost:5012/models/rollback
 
 ## Запуск
 ```bash
-# сервер: scripts/serve.sh start;  Mac: ssh -fN -L 8081:127.0.0.1:8081 -L 8082:127.0.0.1:8082 -L 8083:127.0.0.1:8083 ft-server
+# сервер: scripts/serve.sh start;  Mac: ssh -fN -L 8081:127.0.0.1:8081 -L 8082:127.0.0.1:8082 -L 8083:127.0.0.1:8083 llm-server
 PORT=5012 python app.py
 python scripts/verify_model.py tuned-v1       # проверка перед выкаткой, затем POST /models/activate
 python test_day5.py

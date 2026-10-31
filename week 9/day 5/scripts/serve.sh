@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Запуск llama-server для версий из registry/models.json (на сервере, GPU ROCm). Слушают только 127.0.0.1;
-# с Mac доступны через SSH-туннель: ssh -fN -L 8081:127.0.0.1:8081 -L 8082:127.0.0.1:8082 -L 8083:127.0.0.1:8083 ft-server
+# с Mac доступны через SSH-туннель: ssh -fN -L 8081:127.0.0.1:8081 -L 8082:127.0.0.1:8082 -L 8083:127.0.0.1:8083 llm-server
 # Использование: scripts/serve.sh start|stop|status
 set -euo pipefail
 MODELS="$HOME/models"

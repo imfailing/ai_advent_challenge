@@ -1463,3 +1463,9 @@ system = base_system_prompt + "\n\n" + extra
 
 ### Week 10 / Day 1 — injection_lab.py
 CLI-стенд (без Flask): `injection_lab.py` берёт `LLAMA_API_KEY` и `LLAMA_BASE_URL` из env, шлёт атаки в `$LLAMA_BASE_URL/chat/completions` через `urllib`, пишет отчёты в `reports/`; тест — `test_injection_lab.py` (mock.patch).
+
+### Week 10 / Day 2 — indirect injection
+CLI-стенд (без Flask): `attacks.py` (ловушки), `defense.py` (sanitize, wrap_untrusted, validate_output — чистые функции), `lab.py` (прогон L0–L3, отчёты в `reports/`), `llm.py` (клиент по `LLAMA_BASE_URL`/`LLAMA_API_KEY`); тест — `test_defense.py` (mock.patch).
+
+### Week 10 / Day 3 — LLM-шлюз
+Flask-сервис: `app.py` (маршруты) → `gateway.py` (оркестрация) → `ratelimit.py`, `input_guard.py`, `upstream.py`, `output_guard.py`, `costs.py`, `audit.py` (JSONL-журнал без секретов). Доменные модули без Flask; тесты — `test_input_guard.py`, `test_output_guard.py`, `test_gateway.py` (mock.patch).

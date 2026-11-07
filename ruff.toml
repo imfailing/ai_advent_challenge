@@ -1,7 +1,7 @@
 # Линтер проекта. Запуск: ruff check "week 8/day 1"
 target-version = "py313"
 line-length = 100
-src = ["week 8/day 1", "week 8/day 2", "week 8/day 3", "week 8/day 4", "week 8/day 5/harness", "week 9/day 1", "week 9/day 2", "week 9/day 3", "week 9/day 4", "week 9/day 5", "week 10/day 1"]   # локальные модули дня = first-party (для сортировки импортов)
+src = ["week 8/day 1", "week 8/day 2", "week 8/day 3", "week 8/day 4", "week 8/day 5/harness", "week 9/day 1", "week 9/day 2", "week 9/day 3", "week 9/day 4", "week 9/day 5", "week 10/day 1", "week 10/day 2", "week 10/day 3"]   # локальные модули дня = first-party (для сортировки импортов)
 extend-exclude = ["venv", "rules-experiment", "corpus", "week 1", "week 2", "week 3", "week 4", "week 5", "week 6", "week 8/day 4/fixtures", "week 8/day 4/results", "week 8/day 5/fixtures", "week 8/day 5/runs"]
 
 [lint]
@@ -14,6 +14,8 @@ ignore = ["S310"]   # urllib: URL'ы у нас только https-констан
 "week 8/day 4/*.py" = ["E501", "T201", "S603", "BLE001"]   # стенд замеров: длинные строки и подпроцессы — норма
 "week 8/day 5/harness/**/*.py" = ["E501", "T201", "S101", "S106", "S603", "S607", "BLE001", "E402"]   # стенд execution loop
 "week 10/day 1/*.py" = ["E501"]   # длинные строки промптов и атак — норма
+"week 10/day 2/*.py" = ["E501"]   # длинные строки ловушек и промптов — норма
+"week 10/day 3/*.py" = ["E501"]   # регулярки, тестовые данные и русские сообщения — длинные строки норма
 "week 9/day 5/*.py" = ["E501"]   # промпты и тесты с длинными строками
 "week 9/day 4/*.py" = ["E501"]   # длинные строки промптов и тестов
 "week 9/day 3/*.py" = ["E501"]   # таблицы промптов и тесты с длинными строками — норма

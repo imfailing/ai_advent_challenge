@@ -95,3 +95,5 @@ def get_gigachat_token(auth_key: str) -> str:
 
 `/stats`: `last` по умолчанию 15, зажимается в 1..100; ошибки — `{"error": "..."}` с кодом 400 (пустой `repo`, нечисловой `last`, ошибка GitHub).
 Пример ответа: `{"source":"o/r","total_commits":4,"top_authors":[{"author":"Ann","commits":3},{"author":"Bob","commits":1}],"commits_by_day":[{"date":"2024-01-01","commits":1},{"date":"2024-01-02","commits":3}],"busiest_day":{"date":"2024-01-02","commits":3}}`
+
+**Week 10 / Day 3 — LLM-шлюз (порт 5013).** `POST /chat` `{prompt|messages, mode: block|mask, max_tokens}` → `{content, usage, cost_usd, guard}`; 400 — заблокированный запрос (`findings` без секретов) или ошибка ввода, 429 — лимит 20/мин с `Retry-After`, 502 — апстрим недоступен. `GET /audit?last=15` (1..100), `GET /stats`, `GET /health`. Секреты апстрима — `LLAMA_API_KEY` и `LLAMA_BASE_URL` на стороне сервера, не в запросе.

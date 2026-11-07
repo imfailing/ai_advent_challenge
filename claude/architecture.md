@@ -1460,3 +1460,6 @@ blocks = [f"### Файл: {f['filename']}\n\n{f['content']}" for f in files]
 extra = "\n\n---\n\n".join(blocks)
 system = base_system_prompt + "\n\n" + extra
 ```
+
+### Week 10 / Day 1 — injection_lab.py
+CLI-стенд (без Flask): `injection_lab.py` берёт `LLAMA_API_KEY` и `LLAMA_BASE_URL` из env, шлёт атаки в `$LLAMA_BASE_URL/chat/completions` через `urllib`, пишет отчёты в `reports/`; тест — `test_injection_lab.py` (mock.patch).

@@ -80,7 +80,7 @@ class GuardResult:
 
 
 def normalize(text: str) -> str:
-    """Свернуть приёмы обхода: NFKC (полноширинные символы), zero-width, конкатенацию строковых литералов."""
+    """Нормализация: NFKC (полноширинные символы), zero-width, конкатенацию строковых литералов."""
     text = unicodedata.normalize("NFKC", text)
     text = _ZERO_WIDTH.sub("", text)
     return _CONCAT.sub("", text)

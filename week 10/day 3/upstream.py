@@ -18,13 +18,15 @@ class UpstreamError(Exception):
     """Апстрим недоступен или вернул ошибку."""
 
 
-def complete(messages: list[dict], max_tokens: int, timeout: int = 900) -> dict:
-    """Отправить диалог в апстрим; вернуть {"content", "model", "prompt_tokens", "completion_tokens"}."""
+def complete(messages: list[dict], max_tokens: int, thinking: bool = True, timeout: int = 900) -> dict:
+    """Отправить диалог в апстрим (thinking=False отключает рассуждение модели); вернуть {"content", "model", "prompt_tokens", "completion_tokens"}."""
     key = os.environ.get("LLAMA_API_KEY", "")
     base_url = os.environ.get("LLAMA_BASE_URL", "").rstrip("/")
     if not key or not base_url:
         raise UpstreamError("Шлюз не настроен: задайте LLAMA_API_KEY и LLAMA_BASE_URL на стороне сервера.")
-    body = {"model": MODEL, "messages": messages, "max_tokens": max_tokens, "temperature": 0.2}
+    body: dict = {"model": MODEL, "messages": messages, "max_tokens": max_tokens, "temperature": 0.2}
+    if not thinking:
+        body["chat_template_kwargs"] = {"enable_thinking": False}
     req = urllib.request.Request(
         f"{base_url}/chat/completions",
         data=json.dumps(body).encode(),

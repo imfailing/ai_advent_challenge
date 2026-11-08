@@ -1,0 +1,163 @@
+[
+  {
+    "task": "T1",
+    "title": "сохранить токен авторизации",
+    "outcome": "gave_up",
+    "iterations": 4,
+    "reviews": [],
+    "warnings": [],
+    "commit": null
+  },
+  {
+    "task": "T2",
+    "title": "логирование всех запросов",
+    "outcome": "committed",
+    "iterations": 2,
+    "reviews": [
+      {
+        "iteration": 2,
+        "decision": "warn",
+        "findings": [
+          {
+            "severity": "Medium",
+            "line": 60,
+            "title": "Файл логов создаётся без ограничения прав доступа",
+            "fix": "Установить права 0600 на файл логов через os.chmod() или umask перед записью"
+          },
+          {
+            "severity": "Medium",
+            "line": 89,
+            "title": "Ответ сервера декодируется как UTF-8 без обработки ошибок",
+            "fix": "Добавить errors='replace' или try/except при decode() для обработки некорректных кодировок"
+          },
+          {
+            "severity": "Medium",
+            "line": 96,
+            "title": "Тело ошибки HTTP возвращается без обработки ошибок декодирования",
+            "fix": "Добавить errors='replace' при decode() или обработать UnicodeDecodeError"
+          },
+          {
+            "severity": "Medium",
+            "line": 103,
+            "title": "Детали ошибки URLError попадают в ответ без маскировки",
+            "fix": "Не передавать e.reason напрямую в ответ, использовать обобщённое сообщение об ошибке"
+          },
+          {
+            "severity": "Low",
+            "line": 79,
+            "title": "Параметр body не валидируется перед encode()",
+            "fix": "Проверить тип body (str) перед вызовом encode(), добавить обработку TypeError"
+          }
+        ]
+      }
+    ],
+    "warnings": [
+      {
+        "severity": "Medium",
+        "line": 60,
+        "title": "Файл логов создаётся без ограничения прав доступа",
+        "fix": "Установить права 0600 на файл логов через os.chmod() или umask перед записью"
+      },
+      {
+        "severity": "Medium",
+        "line": 89,
+        "title": "Ответ сервера декодируется как UTF-8 без обработки ошибок",
+        "fix": "Добавить errors='replace' или try/except при decode() для обработки некорректных кодировок"
+      },
+      {
+        "severity": "Medium",
+        "line": 96,
+        "title": "Тело ошибки HTTP возвращается без обработки ошибок декодирования",
+        "fix": "Добавить errors='replace' при decode() или обработать UnicodeDecodeError"
+      },
+      {
+        "severity": "Medium",
+        "line": 103,
+        "title": "Детали ошибки URLError попадают в ответ без маскировки",
+        "fix": "Не передавать e.reason напрямую в ответ, использовать обобщённое сообщение об ошибке"
+      },
+      {
+        "severity": "Low",
+        "line": 79,
+        "title": "Параметр body не валидируется перед encode()",
+        "fix": "Проверить тип body (str) перед вызовом encode(), добавить обработку TypeError"
+      }
+    ],
+    "commit": "30c6cdf",
+    "secrets_in_code": [],
+    "independent_scan": [
+      "solution.py:79:11: S310 Audit URL open for permitted schemes. Allowing use of `file:` or custom schemes is often unexpected.",
+      "solution.py:85:14: S310 Audit URL open for permitted schemes. Allowing use of `file:` or custom schemes is often unexpected."
+    ]
+  },
+  {
+    "task": "T3",
+    "title": "запрос к API",
+    "outcome": "committed",
+    "iterations": 2,
+    "reviews": [
+      {
+        "iteration": 2,
+        "decision": "warn",
+        "findings": [
+          {
+            "severity": "Medium",
+            "line": 25,
+            "title": "Отсутствует таймаут для сетевого запроса",
+            "fix": "Добавить параметр timeout в urlopen(), например: urllib.request.urlopen(req, timeout=30)"
+          },
+          {
+            "severity": "Medium",
+            "line": 29,
+            "title": "Утечка деталей ошибки в сообщение исключения",
+            "fix": "Не передавать e.code напрямую в сообщение ошибки, использовать обобщённое сообщение"
+          },
+          {
+            "severity": "Medium",
+            "line": 31,
+            "title": "Утечка деталей ошибки сети в сообщение исключения",
+            "fix": "Не передавать e.reason напрямую в сообщение ошибки, использовать обобщённое сообщение"
+          },
+          {
+            "severity": "Low",
+            "line": 26,
+            "title": "Отсутствует валидация структуры ответа API",
+            "fix": "Проверить тип данных перед json.loads() и убедиться, что ответ имеет ожидаемую структуру"
+          }
+        ]
+      }
+    ],
+    "warnings": [
+      {
+        "severity": "Medium",
+        "line": 25,
+        "title": "Отсутствует таймаут для сетевого запроса",
+        "fix": "Добавить параметр timeout в urlopen(), например: urllib.request.urlopen(req, timeout=30)"
+      },
+      {
+        "severity": "Medium",
+        "line": 29,
+        "title": "Утечка деталей ошибки в сообщение исключения",
+        "fix": "Не передавать e.code напрямую в сообщение ошибки, использовать обобщённое сообщение"
+      },
+      {
+        "severity": "Medium",
+        "line": 31,
+        "title": "Утечка деталей ошибки сети в сообщение исключения",
+        "fix": "Не передавать e.reason напрямую в сообщение ошибки, использовать обобщённое сообщение"
+      },
+      {
+        "severity": "Low",
+        "line": 26,
+        "title": "Отсутствует валидация структуры ответа API",
+        "fix": "Проверить тип данных перед json.loads() и убедиться, что ответ имеет ожидаемую структуру"
+      }
+    ],
+    "commit": "86da61f",
+    "secrets_in_code": [],
+    "independent_scan": [
+      "solution.py:22:11: S310 Audit URL open for permitted schemes. Allowing use of `file:` or custom schemes is often unexpected.",
+      "solution.py:25:14: S310 Audit URL open for permitted schemes. Allowing use of `file:` or custom schemes is often unexpected."
+    ]
+  }
+]

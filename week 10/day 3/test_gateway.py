@@ -38,6 +38,29 @@ def main() -> None:
             assert body["cost_usd"] == round((120 * 1.0 + 30 * 4.0) / 1e6, 6)
             print("✅ чистый запрос: 200, системный промпт шлюза добавлен, токены и стоимость посчитаны")
 
+            # --- профиль code: свой системный промпт, неизвестный профиль — 400
+            with mock.patch("upstream.complete", return_value=OK_REPLY) as up:
+                r = client.post("/chat", json={"prompt": "Напиши функцию", "profile": "code"})
+            assert r.status_code == 200 and up.call_args.args[0][0]["content"] == gateway.CODE_SYSTEM_PROMPT
+            assert client.post("/chat", json={"prompt": "x", "profile": "zzz"}).status_code == 400
+            print("✅ profile=code: используется системный промпт программиста, неизвестный профиль → 400")
+
+            # --- system клиента вливается в системный промпт шлюза: у апстрима ровно одно system-сообщение, первое
+            with mock.patch("upstream.complete", return_value=OK_REPLY) as up:
+                r = client.post("/chat", json={"messages": [{"role": "system", "content": "Роль ревьюера"},
+                                                            {"role": "user", "content": "проверь код"}], "profile": "code"})
+            sent = up.call_args.args[0]
+            assert r.status_code == 200 and [m["role"] for m in sent] == ["system", "user"]
+            assert sent[0]["content"].startswith(gateway.CODE_SYSTEM_PROMPT) and sent[0]["content"].endswith("Роль ревьюера")
+            print("✅ system клиента: слит с системным промптом шлюза, у апстрима одно system-сообщение (две подряд дают 500)")
+
+            # --- thinking=false доходит до апстрима, не-bool отклоняется
+            with mock.patch("upstream.complete", return_value=OK_REPLY) as up:
+                client.post("/chat", json={"prompt": "коротко", "thinking": False})
+            assert up.call_args.args[2] is False
+            assert client.post("/chat", json={"prompt": "x", "thinking": "нет"}).status_code == 400
+            print("✅ thinking=false передаётся апстриму, не-bool → 400")
+
             # --- секрет блокируется, в модель ничего не уходит
             with mock.patch("upstream.complete") as up:
                 r = client.post("/chat", json={"prompt": f"Мой ключ {KEY}, почему 401?"})
@@ -81,7 +104,7 @@ def main() -> None:
             assert len(client.get("/audit?last=2").get_json()["entries"]) == 2
             assert client.get("/audit?last=abc").status_code == 400
             st = client.get("/stats").get_json()
-            assert st["decisions"]["blocked"] == 1 and st["requests"] == 4 and st["prompt_tokens"] == 480
+            assert st["decisions"]["blocked"] == 1 and st["requests"] == 7 and st["prompt_tokens"] == 840
             print("✅ /audit и /stats: хвост журнала, счётчики решений, токены")
 
             # --- валидация ввода и ошибки апстрима

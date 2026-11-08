@@ -1469,3 +1469,9 @@ CLI-стенд (без Flask): `attacks.py` (ловушки), `defense.py` (sani
 
 ### Week 10 / Day 3 — LLM-шлюз
 Flask-сервис: `app.py` (маршруты) → `gateway.py` (оркестрация) → `ratelimit.py`, `input_guard.py`, `upstream.py`, `output_guard.py`, `costs.py`, `audit.py` (JSONL-журнал без секретов). Доменные модули без Flask; тесты — `test_input_guard.py`, `test_output_guard.py`, `test_gateway.py` (mock.patch).
+
+### Week 10 / Day 4 — execution loop с security step
+CLI-цикл (без Flask): `loop.py` → `codegen.py` (промпт и разбор файлов) → `sandbox.py` (git-песочница, ruff E9/F, тесты, коммит) → `review.py` + `security_prompt.py` (второй вызов LLM, политика Critical/High → назад, Medium/Low → предупреждение, иначе fail closed) → `report.py`. Все вызовы LLM идут через шлюз day 3 (`gateway_client.py`, профиль `code`, режим `mask`); `gateway_launcher.py` поднимает шлюз с журналом в `runs/gateway/`. Тесты — `test_loop.py` (подмена шлюза).
+
+### Week 10 / Day 5 — пакет пайплайна
+Самодостаточная папка: `gateway/` (копия day 3 + `LLAMA_MODEL`), `loop/` (копия day 4 + `--task-text`, `--context-dir`, журнал шлюза по умолчанию в `../gateway/logs/`), `pipeline.sh` как единая точка входа. Общего пакета нет: код дублируется намеренно, чтобы папку можно было отдать целиком.

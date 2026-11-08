@@ -1,0 +1,29 @@
+[
+  {
+    "task": "T1",
+    "title": "сохранить токен авторизации",
+    "outcome": "gave_up",
+    "iterations": 3,
+    "reviews": [],
+    "warnings": [],
+    "commit": null
+  },
+  {
+    "task": "T2",
+    "title": "логирование всех запросов",
+    "outcome": "gave_up",
+    "iterations": 3,
+    "reviews": [],
+    "warnings": [],
+    "commit": null
+  },
+  {
+    "task": "T3",
+    "title": "запрос к API",
+    "outcome": "gave_up",
+    "iterations": 3,
+    "reviews": [],
+    "warnings": [],
+    "commit": null
+  }
+]

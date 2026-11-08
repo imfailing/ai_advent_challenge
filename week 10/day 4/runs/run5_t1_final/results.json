@@ -1,0 +1,108 @@
+[
+  {
+    "task": "T1",
+    "title": "сохранить токен авторизации",
+    "outcome": "gave_up",
+    "iterations": 4,
+    "reviews": [
+      {
+        "iteration": 1,
+        "decision": "fix",
+        "findings": [
+          {
+            "severity": "High",
+            "line": 24,
+            "title": "Токен хранится в открытом виде в файле",
+            "fix": "Использовать системное хранилище ключей (keyring) или зашифровать токен перед записью. Файл с правами 0600 допустим, но шифрование предпочтительнее."
+          },
+          {
+            "severity": "High",
+            "line": 24,
+            "title": "Гонка условий: файл создаётся до установки прав доступа",
+            "fix": "Создавать файл с правами 0600 сразу при открытии (os.open с mode) или использовать os.umask перед созданием файла."
+          },
+          {
+            "severity": "Medium",
+            "line": 29,
+            "title": "Ошибка chmod игнорируется без уведомления",
+            "fix": "Логировать предупреждение при неудаче chmod или выбрасывать исключение, чтобы приложение не работало с небезопасными правами."
+          }
+        ]
+      },
+      {
+        "iteration": 3,
+        "decision": "fix",
+        "findings": [
+          {
+            "severity": "Critical",
+            "line": 28,
+            "title": "Hardcoded encryption key in PBKDF2 derivation",
+            "fix": "Replace hardcoded string b\"report_service_token_key\" with key from environment variable or secure keyring"
+          },
+          {
+            "severity": "Critical",
+            "line": 34,
+            "title": "XOR encryption is cryptographically broken",
+            "fix": "Use proper encryption library (cryptography) with AES-GCM or ChaCha20-Poly1305"
+          },
+          {
+            "severity": "Medium",
+            "line": 79,
+            "title": "Inconsistent file mode for token file (text vs binary)",
+            "fix": "Use binary mode (\"rb\") for reading to match write mode and avoid encoding issues"
+          },
+          {
+            "severity": "Low",
+            "line": 84,
+            "title": "Silent failure on decryption errors",
+            "fix": "Log decryption failures for debugging while not exposing sensitive details"
+          }
+        ]
+      },
+      {
+        "iteration": 4,
+        "decision": "fix",
+        "findings": [
+          {
+            "severity": "Critical",
+            "line": 62,
+            "title": "XOR encryption is not secure for protecting secrets",
+            "fix": "Replace XOR encryption with a proper authenticated encryption algorithm like AES-GCM or ChaCha20-Poly1305 using the cryptography library"
+          },
+          {
+            "severity": "Critical",
+            "line": 99,
+            "title": "XOR decryption uses insecure algorithm matching line 62",
+            "fix": "Replace with proper authenticated decryption matching the encryption algorithm"
+          },
+          {
+            "severity": "High",
+            "line": 37,
+            "title": "Hardcoded fallback key material for encryption",
+            "fix": "Remove hardcoded fallback key. Require REPORT_SERVICE_KEY_MATERIAL environment variable to be set, or use a proper key management system (keyring, HSM)"
+          },
+          {
+            "severity": "Medium",
+            "line": 137,
+            "title": "File opened in text mode for encrypted binary data",
+            "fix": "Change open() mode from 'r' to 'rb' to properly handle binary encrypted data"
+          },
+          {
+            "severity": "Low",
+            "line": 53,
+            "title": "Misleading comment justifying insecure encryption",
+            "fix": "Update documentation to clearly state XOR is insecure and should not be used in production"
+          },
+          {
+            "severity": "Low",
+            "line": 79,
+            "title": "Misleading comment justifying insecure decryption",
+            "fix": "Update documentation to clearly state XOR is insecure and should not be used in production"
+          }
+        ]
+      }
+    ],
+    "warnings": [],
+    "commit": null
+  }
+]

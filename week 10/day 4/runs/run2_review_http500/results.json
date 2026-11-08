@@ -1,0 +1,32 @@
+[
+  {
+    "task": "T1",
+    "title": "сохранить токен авторизации",
+    "outcome": "review_failed",
+    "iterations": 1,
+    "reviews": [],
+    "warnings": [],
+    "commit": null,
+    "error": "Апстрим вернул ошибку 500."
+  },
+  {
+    "task": "T2",
+    "title": "логирование всех запросов",
+    "outcome": "review_failed",
+    "iterations": 2,
+    "reviews": [],
+    "warnings": [],
+    "commit": null,
+    "error": "Апстрим вернул ошибку 500."
+  },
+  {
+    "task": "T3",
+    "title": "запрос к API",
+    "outcome": "review_failed",
+    "iterations": 1,
+    "reviews": [],
+    "warnings": [],
+    "commit": null,
+    "error": "Апстрим вернул ошибку 500."
+  }
+]

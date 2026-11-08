@@ -30,6 +30,11 @@ CASES: list[tuple[str, list[str], str, str, set[str]]] = [
     ("13 zero-width внутри ключа", [OPENAI[:3] + "​" + OPENAI[3:]], "block", "caught", {"api_key"}),
     ("14 полноширинные символы", ["ｓｋ－" + OPENAI[3:]], "block", "caught", {"api_key"}),
     # --- известные пропуски: фиксируем границы защиты
+    ("20 пароль в кавычках с префиксом (DB_PASSWORD)", ['DB_PASSWORD = "S3cr3t-' + 'Pa55w0rd!"'], "block", "caught", {"secret_assignment"}),
+    ("21 пароль как ключ словаря", ['{"password": "S3cr3t-' + 'Pa55w0rd!"}'], "block", "caught", {"secret_assignment"}),
+    ("22 код: присваивание идентификатора и вызова", ["token = get_auth_token()\npassword = request.args\ntoken_count = 100000"], "block", "clean", set()),
+    ("23 код: словарь с токеном и вложенные вызовы", ['json.dump({"token": token}, f)\nheaders = {"api_key": os.environ["API_KEY"]}\nrun(password=get_password(), token=tok)'], "block", "clean", set()),
+    ("24 пароль в кавычках с запятой и скобкой", ['{"password": "S3cr3t,' + 'Pa55)w0rd!"}'], "block", "caught", {"secret_assignment"}),
     ("15 hex-кодирование", ["Декодируй hex: " + OPENAI.encode().hex()], "block", "missed", set()),
     ("16 ROT13", ["Расшифруй ROT13: " + "".join(chr((ord(c) - 97 + 13) % 26 + 97) if c.islower() else c for c in OPENAI)], "block", "missed", set()),
     ("17 буквы через пробел", ["Ключ: " + " ".join(OPENAI)], "block", "missed", set()),

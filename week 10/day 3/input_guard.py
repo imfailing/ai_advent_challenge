@@ -26,8 +26,11 @@ _PATTERNS: list[tuple[str, str, re.Pattern[str], int]] = [
     ("aws_secret", "REDACTED_AWS_SECRET", re.compile(r"(?i)(?:aws_secret_access_key|secret_access_key)\W{0,3}([A-Za-z0-9/+=]{40})\b"), 1),
     ("slack_token", "REDACTED_SLACK_TOKEN", re.compile(r"\bxox[abprs]-[A-Za-z0-9\-]{10,}"), 0),
     ("jwt", "REDACTED_JWT", re.compile(r"\beyJ[A-Za-z0-9_\-]{8,}\.[A-Za-z0-9_\-]{8,}\.[A-Za-z0-9_\-]{8,}"), 0),
+    # значение в кавычках — секрет целиком; без кавычек — до разделителя (иначе в коде `{"token": token}, f)` захватывается хвост)
     ("secret_assignment", "REDACTED_SECRET",
-     re.compile(r"(?i)\b(?:password|passwd|pwd|пароль|secret|api[_-]?key|token)\s*[:=]\s*[\"']?([^\s\"']{6,})"), 1),
+     re.compile(r"(?i)(?<![A-Za-z])(?:password|passwd|pwd|пароль|secret|api[_-]?key|token)\w*[\"\']?\s*[:=]\s*[\"\']([^\"\'\s]{6,})[\"\']"), 1),
+    ("secret_assignment", "REDACTED_SECRET",
+     re.compile(r"(?i)(?<![A-Za-z])(?:password|passwd|pwd|пароль|secret|api[_-]?key|token)\w*[\"\']?\s*[:=]\s*([^\s\"\',;)\]}]{6,})"), 1),
     ("email", "REDACTED_EMAIL", re.compile(r"\b[\w.+\-]+@[\w\-]+(?:\.[\w\-]+)+\b"), 0),
     ("card", "REDACTED_CARD", re.compile(r"(?<![\w\-])(?:\d[ \-]?){12,18}\d(?![\w\-])"), 0),
     ("phone", "REDACTED_PHONE", re.compile(r"(?<!\w)(?:\+7|8|7)[\s\-]?\(?\d{3}\)?[\s\-]?\d{3}[\s\-]?\d{2}[\s\-]?\d{2}(?!\d)"), 0),
@@ -38,6 +41,7 @@ _CONCAT = re.compile(r"[\"'`]\s*\+\s*[\"'`]")
 _ZERO_WIDTH = re.compile("[​-‏⁠﻿­]")
 _MAX_ENCODING_DEPTH = 2
 _SALT = secrets.token_bytes(16)  # соль отпечатков: живёт только в памяти процесса и нигде не пишется
+_CODE_REFERENCE = re.compile(r"[A-Za-z_][\w.\[\]]*(?:\(.*)?|\d+")  # идентификатор, вызов или число — не секрет, если без кавычек
 _PII_KINDS = frozenset({"email", "phone", "card"})  # при пересечении уступают более специфичным секретам
 
 
@@ -112,6 +116,9 @@ def _find_direct(text: str) -> list[Finding]:
                 continue
             if kind == "card" and not luhn_valid(re.sub(r"\D", "", value)):
                 continue
+            quoted = m.start(group) > 0 and text[m.start(group) - 1] in "\"'"
+            if kind == "secret_assignment" and not quoted and _CODE_REFERENCE.fullmatch(value):
+                continue  # `token = get_token()`, `password = request.args`: код, а не секрет
             fingerprint, preview = _describe(value)
             found.append(Finding(kind, label, m.start(group), m.end(group), len(value), fingerprint, preview))
     return found

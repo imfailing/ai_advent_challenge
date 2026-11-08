@@ -39,7 +39,40 @@ _PATTERNS: list[tuple[str, str, re.Pattern[str], int]] = [
 _BASE64 = re.compile(r"(?<![A-Za-z0-9+/=])[A-Za-z0-9+/]{24,}={0,2}(?![A-Za-z0-9+/=])")
 _CONCAT = re.compile(r"[\"'`]\s*\+\s*[\"'`]")
 _ZERO_WIDTH = re.compile("[​-‏⁠﻿­]")
+_CONFUSABLE_HYPHEN = re.compile("[‑‒–—]")  # non-breaking hyphen и тире — не дефис, но используются как обход "sk-"
 _MAX_ENCODING_DEPTH = 2
+
+# (вид, метка) инструкций-инъекций во вводе: нельзя замаскировать, блок в обоих режимах.
+_INSTRUCTION_PATTERNS: list[tuple[str, str, re.Pattern[str]]] = [
+    ("prompt_injection", "ignore previous instructions",
+     re.compile(r"\b(?:ignore|disregard|forget)\s+(?:all\s+|any\s+)?(?:previous|prior|above|earlier)\s+"
+                r"(?:instructions?|prompts?|rules?)", re.IGNORECASE)),
+    ("prompt_injection", "игнорируй предыдущие инструкции",
+     re.compile(r"(?:игнорир[а-яё]*|проигнорир[а-яё]*|забудь|забыть)\s+(?:все\s+)?"
+                r"(?:предыдущие|прошлые|выше(?:описанные|стоящие)?)\s+(?:инструкц[а-яё]*|указан[а-яё]*|правил[а-яё]*)",
+                re.IGNORECASE)),
+    ("exfil_request", "запрос системного промпта",
+     re.compile(r"\b(?:print|reveal|show|display|repeat|output)\s+(?:me\s+)?(?:your|the)\s+"
+                r"(?:system\s+(?:prompt|message|instructions)|initial\s+instructions?|hidden\s+rules?)",
+                re.IGNORECASE)),
+    ("exfil_request", "запрос системного промпта (RU)",
+     re.compile(r"(?:выведи|покажи|распечатай|повтори|напечатай|раскрой)\s+(?:свой\s+|твои?\s+)?"
+                r"(?:системн[а-яё]*\s+(?:промпт[а-яё]*|инструкц[а-яё]*|правил[а-яё]*)|скрытые?\s+правил[а-яё]*)",
+                re.IGNORECASE)),
+    ("prompt_injection", "обход security review",
+     re.compile(r"\b(?:skip|ignore|bypass)\s+(?:the\s+)?security\s+(?:review|check|scan)", re.IGNORECASE)),
+    ("prompt_injection", "обход security review (RU)",
+     re.compile(r"(?:пропусти|пропустить|не\s+делай)\s+(?:security\s*|безопасность,?\s*)?"
+                r"(?:ревью|review|проверку\s+безопасности)", re.IGNORECASE)),
+    ("role_spoof", "служебные токены чата в данных",
+     re.compile(r"<\|\s*im_start\s*\|>\s*(?:system|developer)\b|<\|\s*system\s*\|>|<<SYS>>|\[/?INST\]",
+                re.IGNORECASE)),
+    ("role_spoof", "подмена роли (you are the … approver/reviewer)",
+     re.compile(r"\byou\s+are\s+(?:now\s+)?the\s+(?:security\s+)?(?:approver|reviewer|admin)\b"
+                r"|\bapprove\s+everything\b", re.IGNORECASE)),
+    ("role_spoof", "подмена роли (ты теперь ревьюер/одобряй всё) (RU)",
+     re.compile(r"(?:ты\s+(?:теперь\s+)?(?:главный\s+)?(?:ревьюер|одобряющий|аппрувер)|одобряй\s+всё)", re.IGNORECASE)),
+]
 _SALT = secrets.token_bytes(16)  # соль отпечатков: живёт только в памяти процесса и нигде не пишется
 _CODE_REFERENCE = re.compile(r"[A-Za-z_][\w.\[\]]*(?:\(.*)?|\d+")  # идентификатор, вызов или число — не секрет, если без кавычек
 _PII_KINDS = frozenset({"email", "phone", "card"})  # при пересечении уступают более специфичным секретам
@@ -80,10 +113,37 @@ class GuardResult:
 
 
 def normalize(text: str) -> str:
-    """Нормализация: NFKC (полноширинные символы), zero-width, конкатенацию строковых литералов."""
+    """Нормализация: NFKC (полноширинные символы), zero-width, confusable-дефисы, конкатенация литералов."""
     text = unicodedata.normalize("NFKC", text)
     text = _ZERO_WIDTH.sub("", text)
+    text = _CONFUSABLE_HYPHEN.sub("-", text)
     return _CONCAT.sub("", text)
+
+
+def scan_instructions(messages: list[dict]) -> list[dict]:
+    """Найти инструкции-инъекции во вводе (любая роль, включая system от клиента): замаскировать их
+    нельзя, поэтому они блокируют запрос независимо от mode. Ищем в каждом сообщении и в склейке всех
+    сообщений (фраза может быть разрезана по границе между ними)."""
+    found: list[dict] = []
+    seen: set[str] = set()
+
+    def scan_text(text: str) -> None:
+        norm = normalize(text)
+        for kind, label, pattern in _INSTRUCTION_PATTERNS:
+            for m in pattern.finditer(norm):
+                key = f"{kind}|{label}|{m.group(0)[:40]}"
+                if key in seen:
+                    continue
+                seen.add(key)
+                preview = m.group(0).strip()
+                found.append({"kind": kind, "label": label,
+                              "preview": preview[:40] + ("…" if len(preview) > 40 else "")})
+
+    for msg in messages:
+        scan_text(str(msg.get("content") or ""))
+    if len(messages) > 1:
+        scan_text(" ".join(str(m.get("content") or "") for m in messages))
+    return found
 
 
 def luhn_valid(digits: str) -> bool:
@@ -176,6 +236,15 @@ def mask(norm_text: str, findings: list[Finding]) -> str:
 
 def guard_messages(messages: list[dict], mode: str = "block") -> GuardResult:
     """Проверить сообщения чата: заблокировать или замаскировать секреты (mode: block | mask)."""
+    instructions = scan_instructions(messages)
+    if instructions:
+        kinds = ", ".join(sorted({i["kind"] for i in instructions}))
+        return GuardResult(
+            "blocked", messages, instructions,
+            f"во вводе инструкции-инъекции ({kinds}); инструкции к модели должны идти через "
+            "role: system в самом шлюзе, а не через данные от клиента",
+        )
+
     all_findings: list[dict] = []
     new_messages: list[dict] = []
     seen: set[str] = set()

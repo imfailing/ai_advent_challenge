@@ -117,7 +117,7 @@ def process(data: dict, ip: str) -> tuple[int, dict]:
         **base, "action": guard.action, "output_action": out.action, "mode": mode, "profile": profile,
         "model": reply["model"],
         "input_findings": guard.findings, "output_findings": out.findings,
-        "prompt": guard.messages, "response": out.text,
+        "prompt_logged": False,  # сырой текст запроса/ответа в журнал не пишем, даже если guard его пропустил
         "prompt_tokens": prompt_tokens, "completion_tokens": completion_tokens, "cost_usd": cost,
         "latency_ms": latency_ms,
     })

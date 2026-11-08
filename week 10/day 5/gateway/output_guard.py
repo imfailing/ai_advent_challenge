@@ -8,6 +8,7 @@ Output Guard: проверка ответа модели перед отдаче
 Секреты маскируются, остальное блокирует ответ. Модуль чистый: без Flask и сети.
 """
 
+import ipaddress
 import re
 from dataclasses import dataclass
 from urllib.parse import urlparse
@@ -22,7 +23,33 @@ _SHORTENERS = frozenset({"bit.ly", "tinyurl.com", "t.co", "goo.gl", "is.gd", "cu
 _LOCAL_HOSTS = frozenset({"localhost", "127.0.0.1", "::1"})
 _URL = re.compile(r"https?://[^\s)\]>\"'<]+", re.IGNORECASE)
 _MD_IMAGE = re.compile(r"!\[[^\]]*\]\((https?://[^)\s]+)")
-_IPV4 = re.compile(r"^\d{1,3}(?:\.\d{1,3}){3}$")
+_WILDCARD_DNS_SUFFIX = re.compile(r"\.(?:nip|sslip|traefik\.me)\.io$|\.xip\.io$", re.IGNORECASE)
+_HEX_OCTET = re.compile(r"^0x[0-9a-fA-F]{1,2}$")
+
+
+def _is_ip_host(host: str) -> bool:
+    """IP-адрес в любом виде: точечный, decimal-int, hex-octet, IPv6 (в т.ч. с bracket'ами снятыми urlparse)."""
+    h = host.strip("[]")
+    try:
+        ipaddress.ip_address(h)
+        return True
+    except ValueError:
+        pass
+    if h.isdigit():  # decimal-int IPv4: 2130706433 == 127.0.0.1
+        try:
+            ipaddress.ip_address(int(h))
+            return True
+        except ValueError:
+            pass
+    octets = h.split(".")
+    if len(octets) == 4 and all(_HEX_OCTET.match(o) or o.isdigit() for o in octets):  # hex-octet: 0x7f.0x0.0x0.0x1
+        try:
+            nums = [int(o, 16) if o.lower().startswith("0x") else int(o) for o in octets]
+            ipaddress.ip_address(".".join(str(n) for n in nums))
+            return True
+        except ValueError:
+            pass
+    return False
 _COMMANDS: list[tuple[str, re.Pattern[str]]] = [
     ("загрузка и запуск скрипта (curl|wget … | sh)", re.compile(r"\b(?:curl|wget)\b[^\n|]*\|\s*(?:sudo\s+)?(?:ba|z)?sh\b", re.IGNORECASE)),
     ("рекурсивное удаление корня или домашней папки", re.compile(r"\brm\s+-[a-z]*r[a-z]*f?[a-z]*\s+(?:--no-preserve-root\s+)?(?:/|~|\$HOME)(?:\s|$|\*)", re.IGNORECASE)),
@@ -63,11 +90,18 @@ def suspicious_urls(text: str) -> list[dict]:
     """Найти подозрительные URL и описать, чем именно."""
     found: list[dict] = []
     for url in dict.fromkeys(_URL.findall(text)):
-        parsed = urlparse(url.rstrip(".,;"))
-        host = (parsed.hostname or "").lower()
+        try:
+            parsed = urlparse(url.rstrip(".,;"))
+            host = (parsed.hostname or "").lower()
+        except ValueError:
+            # битый URL (например несбалансированные скобки IPv6) — fail closed, не падать с 500
+            found.append({"kind": "suspicious_url", "url": url[:60], "reasons": ["URL не разбирается (возможна обфускация)"]})
+            continue
         reasons: list[str] = []
-        if _IPV4.match(host) and host not in _LOCAL_HOSTS:
-            reasons.append("IP-адрес вместо домена")
+        if _is_ip_host(host) and host not in _LOCAL_HOSTS:
+            reasons.append("IP-адрес вместо домена (включая decimal/hex/IPv6-формы)")
+        if _WILDCARD_DNS_SUFFIX.search(host):
+            reasons.append("wildcard-DNS, резолвится в произвольный (в т.ч. metadata) IP")
         if "xn--" in host:
             reasons.append("punycode-домен (возможная подмена символов)")
         if host in _SHORTENERS:
